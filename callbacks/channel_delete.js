@@ -1,16 +1,12 @@
 module.exports = {
     hook(global_context) {
         global_context.bot.on("channelDelete", async(channel) => {
-            try {
-                if(bot.isDatabaseReady === false || channel.type === "dm") {
-                    return;
-                }
-
-                bot.totalEvents += 1;
-                bot.processedEvents += 1;
-            } catch(e) {
-                console.error(e);
+            if(channel.type === "dm") {
+                return;
             }
+
+            global_context.data.total_events += 1;
+            global_context.data.processed_events += 1;
         });
     }
 }

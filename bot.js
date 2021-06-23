@@ -137,6 +137,9 @@ bot.on('ready', async() => {
     global_context.logger.log(`Finished loading shard (took ${(t_loading_end - t_logging_end).toFixed(1)}ms)...`);
     global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Users: ${bot.users.cache.size}] - [Channels: ${bot.channels.cache.size}]`);
 
+    bot.user.setStatus('available');
+    bot.user.setActivity("getting bullied by lamkas", { type: 'PLAYING' });
+
     /*bot.webupdates.refreshStatus(bot);
     console.log("Preparing the database...");
     setTimeout(postLoad, 1000);*/

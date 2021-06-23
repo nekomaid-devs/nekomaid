@@ -1,8 +1,7 @@
 class ServerStructureManager {
-    constructor(_bot, _sql, _conn) {
-        this.sql = _sql
-        this.sqlConn = _conn;
-        this.bot = _bot;
+    constructor(_global_context, _sql_connection) {
+        this.global_context = _global_context;
+        this.sql_connection = _sql_connection;
         
         this.server_add = require('./server_add');
         this.server_edit = require('./server_edit');

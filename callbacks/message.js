@@ -1,107 +1,99 @@
 module.exports = {
     hook(global_context) {
         global_context.bot.on("message", async(msg) => {
-            //Process the message
-            try {
-                bot.processMessage(bot, msg);
-                
-                bot.totalEvents += 1;
-                bot.processedEvents += 1;
-                bot.totalMessages += 1;
-                bot.processedMessages += 1;
-            } catch(e) {
-                bot.onError(msg.channel, e);
-            }
+            this.process_message(global_context, msg);
+            
+            global_context.data.total_events += 1;
+            global_context.data.processed_events += 1;
+            global_context.data.total_messages += 1;
+            global_context.data.processed_messages += 1;
         });
     },
 
-    async processMessage(bot, msg) {
+    async process_message(global_context, msg) {
         //Argument & Permission check
-        if(msg.guild == null || msg.member == null || msg.member.user.bot === true || bot.isDatabaseReady === false || msg.channel.type === "dm") {
+        if(msg.channel.type === "dm" || msg.author.bot === true) {
             return;
         }
-        let canSendMessages = msg.guild.me.permissionsIn(msg.channel).has("SEND_MESSAGES");
-        if(canSendMessages === false) {
+        let can_send_messages = msg.guild.me.permissionsIn(msg.channel).has("SEND_MESSAGES");
+        if(can_send_messages === false) {
             return;
         }
 
-        let managesGuild = msg.member.permissionsIn(msg.channel).has("MANAGE_GUILD");
+        let manages_guild = msg.member.permissionsIn(msg.channel).has("MANAGE_GUILD");
         let tagged = msg.mentions.members.array().length > 0;
-        let data = {
-            bot: bot,
+        let command_data = {
+            global_context: global_context,
             msg: msg,
-            guild: msg.guild,
-            channel: msg.channel,
-            authorUser: msg.member.user,
-            authorMember: msg.member,
-            authorTag: msg.member.user.tag,
 
-            taggedUsers: tagged ? msg.mentions.users.array() : [msg.member.user],
-            taggedUser: tagged ? msg.mentions.users.array()[0] : msg.member.user,
-            taggedUserTag: tagged ? msg.mentions.users.array()[0].tag : msg.member.user.tag,
+            args: [],
+            total_argument: "",
 
-            taggedMembers: tagged ? msg.mentions.members.array() : [msg.member],
-            taggedMember: tagged ? msg.mentions.members.array()[0] : msg.member,
+            tagged_users: tagged ? msg.mentions.users.array() : [msg.author],
+            tagged_user: tagged ? msg.mentions.users.array()[0] : msg.author,
 
-            serverConfig: await bot.ssm.server_fetch.fetch(bot, { type: "server_message", id: msg.guild.id }),
-            authorServerConfig: await bot.ssm.server_fetch.fetch(bot, { type: "serverUser", serverID: msg.guild.id, userID: msg.member.user.id }),
-            botConfig: bot.botConfig,
-            
-            reply: msg.reply
+            tagged_members: tagged ? msg.mentions.members.array() : [msg.member],
+            tagged_member: tagged ? msg.mentions.members.array()[0] : msg.member,
+
+            server_config: await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_message", id: msg.guild.id }),
+            server_bans: [],
+            server_mutes: [],
+            server_warns: [],
+
+            author_user_config: {},
+            author_server_user_config: await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", serverID: msg.guild.id, userID: msg.member.user.id }),
+        
+            tagged_user_config: {},
+            tagged_server_user_config: {}
         }
-        data.taggedServerUserConfig = data.authorServerConfig;
+        command_data.tagged_server_user_config = command_data.author_server_user_config;
 
-        bot.totalEvents += 1;
-        bot.processedEvents += 1;
-    
-        //Get server config
-        let prefix = data.serverConfig.prefix;
+        global_context.data.total_events += 1;
+        global_context.data.processed_events += 1;
 
-        let isBanned = false;
-        if(data.serverConfig.bannedWords.length > 0) {
-            data.serverConfig.bannedWords.forEach(bannedWord => {
-                if(msg.content.toLowerCase().includes(bannedWord.toLowerCase()) === true && managesGuild === false) {
+        let is_banned = false;
+        if(command_data.server_config.bannedWords.length > 0) {
+            command_data.server_config.bannedWords.forEach(banned_word => {
+                if(msg.content.toLowerCase().includes(banned_word.toLowerCase()) === true && manages_guild === false) {
                     msg.reply("That word isn't allowed on here-");
-                    msg.delete().catch(e => { console.log(e); });
-                    isBanned = true;
+                    msg.delete().catch(e => { global_context.logger.error(e); });
+                    is_banned = true;
                 }
             });
         }
-
-        if(isBanned === true) {
+        if(is_banned === true) {
             return;
         }
 
-        let isInvite = false;
-        if(data.serverConfig.invites === false) {
-            if((msg.content.toLowerCase().includes("discord.gg") === true || msg.content.toLowerCase().includes("discordapp.com/invite") === true || msg.content.toLowerCase().includes("discord.com/invite") === true) && managesGuild === false) {
+        let is_invite = false;
+        if(command_data.server_config.invites === false) {
+            if((msg.content.toLowerCase().includes("discord.gg") === true || msg.content.toLowerCase().includes("discordapp.com/invite") === true || msg.content.toLowerCase().includes("discord.com/invite") === true) && manages_guild === false) {
                 msg.reply("Sending invites isn't allowed on here-");
-                msg.delete().catch(e => { console.log(e); });
-                isInvite = true;
+                msg.delete().catch(e => { global_context.logger.error(e); });
+                is_invite = true;
             }
         }
-
-        if(isInvite === true) {
+        if(is_invite === true) {
             return;
         }
 
-        let logMesssages = true;
-        if(logMesssages === true) {
-            /*var serverLogs = await bot.ssm.server_fetch.fetchServerLogs(bot, msg.guild.id);
+        /*let log_messages = true;
+        if(log_messages === true) {
+            var serverLogs = await bot.ssm.server_fetch.fetchServerLogs(bot, msg.guild.id);
 
             var log = { guildID: msg.guild.id, type: "message", messageID: msg.id, userID: msg.author.id, tag: msg.author.tag, content: msg.content.split("\n").join("<br>"), time: Date.now() }
             serverLogs.logs.push(log);
-            bot.ssm.server_edit.editServerLogsInStructure(bot.ssm, msg.guild, serverLogs);*/
-        }
+            bot.ssm.server_edit.editServerLogsInStructure(bot.ssm, msg.guild, serverLogs);
+        }*/
 
         //Check marriage proposals
-        bot.mm.checkMarriageProposals(bot, msg);
+        //global_context.neko_modules.mm.checkMarriageProposals(global_context, msg);
 
         //Update user's server level
-        bot.lvl.updateServerLevel(data, data.serverConfig.module_level_message_exp);
+        //global_context.neko_modules.lvl.updateServerLevel(command_data, command_data.server_config.module_level_message_exp);
 
         if(msg.content === "<@!691398095841263678>") {
-            msg.channel.send("Prefix on this server is `" + prefix + "`-").catch(e => { console.log(e); });
+            msg.channel.send("Prefix on this server is `" + prefix + "`-").catch(e => { global_context.logger.error(e); });
             return;
         }
 
@@ -112,87 +104,78 @@ module.exports = {
                 "No problem~ >//<",
                 "You're welcome~ TwT",
             ]
-            let response = data.bot.pickRandom(responses);
+            let response = global_context.utils.pick_random(responses);
 
-            msg.channel.send(response).catch(e => { console.log(e); });
+            msg.channel.send(response).catch(e => { global_context.logger.error(e); });
             return;
         }
     
         //Check prefix
-        if(!msg.content.toLowerCase().startsWith(prefix.toLowerCase())) {
+        if(!msg.content.toLowerCase().startsWith(command_data.server_config.prefix.toLowerCase())) {
             return;
         }
 
         //Get user's config
-        data.args = msg.content.slice(prefix.length).split(' ');
-        data.serverConfig = await bot.ssm.server_fetch.fetch(bot, { type: "server", id: msg.guild.id });
-        data.serverBans = await bot.ssm.server_fetch.fetch(bot, { type: "serverBans", id: msg.guild.id });
-        data.serverMutes = await bot.ssm.server_fetch.fetch(bot, { type: "serverMutes", id: msg.guild.id });
-        data.serverWarns = await bot.ssm.server_fetch.fetch(bot, { type: "serverWarnings", id: msg.guild.id });
-        data.authorConfig = await bot.ssm.server_fetch.fetch(bot, { type: "globalUser", id: msg.author.id });
-        data.taggedServerUserConfig = msg.mentions.users.array().length < 1 ? data.authorServerConfig : await bot.ssm.server_fetch.fetch(bot, { type: "serverUser", serverID: msg.guild.id, userID: msg.mentions.users.array()[0].id });
-        data.taggedUserConfig = msg.mentions.users.array().length < 1 ? data.authorConfig : await bot.ssm.server_fetch.fetch(bot, { type: "globalUser", id: msg.mentions.users.array()[0].id });    
+        command_data.args = msg.content.slice(command_data.server_config.prefix.length).split(' ');
+        command_data.server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: msg.guild.id });
+        command_data.server_bans = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverBans", id: msg.guild.id });
+        command_data.server_mutes = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverMutes", id: msg.guild.id });
+        command_data.server_warns = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverWarnings", id: msg.guild.id });
+        command_data.author_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUser", id: msg.author.id });
+        command_data.tagged_server_user_config = msg.mentions.users.array().length < 1 ? command_data.author_server_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", serverID: msg.guild.id, userID: msg.mentions.users.array()[0].id });
+        command_data.tagged_user_config = msg.mentions.users.array().length < 1 ? command_data.author_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUser", id: msg.mentions.users.array()[0].id });    
         
         //Process message
-        let commandName = data.args.shift().toLowerCase();
-        data.totalArgument = data.args.join(" ");
+        let command_name = command_data.args.shift().toLowerCase();
+        command_data.total_argument = command_data.args.join(" ");
     
         //Translate alias
-        if(bot.aliases.has(commandName) === true) {
-            commandName = bot.aliases.get(commandName);
+        if(global_context.command_aliases.has(command_name) === true) {
+            command_name = global_context.command_aliases.get(command_name);
         }
 
         //Check if command exists
-        if(!bot.commands.has(commandName)) {
+        if(!global_context.commands.has(command_name)) {
             return;
         }
     
         //Add to command counter
-        bot.totalCommands += 1;
-        bot.processedCommands += 1;
+        global_context.data.total_commands += 1;
+        global_context.data.processed_commands += 1;
 
         //Update user's global level
-        bot.lvl.updateGlobalLevel(data);
+        //global_context.neko_modules.lvl.updateGlobalLevel(command_data);
 
-        console.log(`- [${msg.guild.name}] Called command: ${commandName}`);
-        let command = bot.commands.get(commandName);
+        global_context.logger.log(`[${msg.guild.name}] Called command: ${command_name}`);
+        let command = global_context.commands.get(command_name);
         let passed = true;
         command.permissionsNeeded.forEach(perm => {
             if(passed === true && perm.passes(data, msg) === false) {
                 passed = false;
             }
         });
-
         command.argumentsNeeded.forEach(arg => {
             if(passed === true && arg.passes(msg, data.args, command, prefix) === false) {
                 passed = false;
             }
         });
-
         if(command.nsfw === true && msg.channel.nsfw === false) {
             msg.reply("Cannot use this command in SFW channel-");
             passed = false;
         }
-
         if(passed === false) {
             return;
         }
 
-        let taggedUserTags = "";
-        msg.mentions.users.array().forEach(function(user, index) {
-            taggedUserTags += user.username + "#" + user.discriminator;
+        let tagged_user_tags = "";
+        msg.mentions.users.array().forEach((user, index) => {
+            tagged_user_tags += user.tag;
             if(msg.mentions.users.array().length - 1 > index) {
-                taggedUserTags += ", ";
+                tagged_user_tags += ", ";
             }
         });
-        data.taggedUserTags = taggedUserTags;
+        command_data.tagged_user_tags = tagged_user_tags;
 
-        try {
-            command.execute(data);
-        } catch (e) {
-            bot.onError(msg.channel, e);
-        }
-    
-        console.log(">");
+        command.execute(command_data);
     }
 }

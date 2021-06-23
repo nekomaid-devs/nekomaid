@@ -47,7 +47,7 @@ module.exports = {
 
         //Setup Nekomaid's modules
         global_context.neko_modules.ServerStructureManager = require('./scripts/data/server_structure_manager');
-        global_context.neko_modules_clients.ssm = new global_context.neko_modules.ServerStructureManager(global_context);
+        global_context.neko_modules_clients.ssm = new global_context.neko_modules.ServerStructureManager(global_context, sql_connection);
 
         global_context.neko_modules.Rule34API = require('./scripts/apis/rule34_api');
         global_context.neko_modules_clients.r34 = new global_context.neko_modules.Rule34API(global_context);
