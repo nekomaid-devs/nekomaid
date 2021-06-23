@@ -1,0 +1,14 @@
+nekomaid_bot/.env
+nekomaid_bot/node_modules
+nekomaid_bot/botData/config_persistent.json
+nekomaid_bot/commands/d_addserverxp.js
+nekomaid_bot/neko-log_*.txt
+nekomaid_bot/ffmpeg.exe
+nekomaid_bot/neko-error.txt
+nekomaid_bot/.VSCodeCounter/details.md
+nekomaid_bot/.VSCodeCounter/results.csv
+nekomaid_bot/.VSCodeCounter/results.md
+nekomaid_bot/.VSCodeCounter/results.txt
+nekomaid_bot/image.jpg
+nekomaid_bot/bonk.png
+nekomaid_bot/image.png
