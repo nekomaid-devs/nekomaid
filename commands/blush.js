@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'blush',
-    category: 'Emotes',
-    description: 'Posts a blushing gif-',
+    name: "blush",
+    category: "Emotes",
+    description: "Posts a blushing gif-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,20 +9,16 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        //Get random gif
-        var gif = data.bot.pickRandom(data.bot.vars.getBlushGifs())
-
-        //Construct embed
-        var embedBlush = {
-            title: `${data.authorTag} is blushing!`,
+    execute(command_data) {
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getBlushGifs());
+        let embedBlush = {
+            title: `${command_data.msg.author.tag} is blushing!`,
             color: 8388736,
             image: {
-                url: gif
+                url: url
             }
         }
 
-        //Send message
-        data.channel.send("", { embed: embedBlush }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedBlush }).catch(e => { console.log(e); });
     },
 };

@@ -2,9 +2,9 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'getemote',
-    category: 'Utility',
-    description: 'Copies emote on the server-',
+    name: "getemote",
+    category: "Utility",
+    description: "Copies emote on the server-",
     helpUsage: "[emote or emote url] [?name]` *(1 optional argument)*",
     exampleUsage: "",
     hidden: false,
@@ -18,17 +18,18 @@ module.exports = {
         new NeededPermission("me", "MANAGE_EMOJIS")
     ],
     nsfw: false,
-    async execute(data) {
-        var text = data.totalArgument;
+    async execute(command_data) {
+        // TODO: re-factor command
+        var text = command_data.total_argument;
 
-        if(data.args.length < 2 && text.includes("https://") === true) {
-            data.reply("You need to type in an emote name for links-");
+        if(command_data.args.length < 2 && text.includes("https://") === true) {
+            command_data.msg.reply("You need to type in an emote name for links-");
             return;
         }
 
-        data.args.shift();
-        var link = data.totalArgument.substring(0, data.totalArgument.indexOf(" "));
-        var emoteName = data.args.length > 0 ? data.args.join(" ") : text.substring(text.indexOf(":") + 1, text.indexOf(":", text.indexOf(":") + 1))
+        command_data.args.shift();
+        var link = command_data.total_argument.substring(0, command_data.total_argument.indexOf(" "));
+        var emoteName = command_data.args.length > 0 ? command_data.args.join(" ") : text.substring(text.indexOf(":") + 1, text.indexOf(":", text.indexOf(":") + 1))
         var a = text.indexOf(":", text.indexOf(":") + 1) + 1
         var emoteID = text.substring(a, text.indexOf(">", a))
 
@@ -38,10 +39,10 @@ module.exports = {
         }
 
         try {
-            var emote = await data.guild.emojis.create(link.includes("https://") === true ? link : "https://cdn.discordapp.com/emojis/" + emoteID, emoteName)
+            var emote = await command_data.msg.guild.emojis.create(link.includes("https://") === true ? link : "https://cdn.discordapp.com/emojis/" + emoteID, emoteName)
 
             //Construct message and send it
-            var embedEmote = {
+            let embedEmote = {
                 color: 6732650,
                 description: "Created new emote `" + emoteName + "` - " + emote.toString()
             }
@@ -51,9 +52,9 @@ module.exports = {
                 description: text
             }
 
-            data.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
         }
 
-        data.channel.send("", { embed: embedEmote }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedEmote }).catch(e => { console.log(e); });
     },
 };

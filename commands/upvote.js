@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'upvote',
-    category: 'Help & Information',
-    description: 'Upvote the bot to get extra features for free!',
+    name: "upvote",
+    category: "Help & Information",
+    description: "Upvote the bot to get extra features for free!",
     helpUsage: "`",
     hidden: false,
     aliases: ["vote"],
@@ -9,7 +9,8 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         var link0 = "https://top.gg/bot/691398095841263678/vote";
         var link = "https://discordbotlist.com/bots/nekomaid/upvote";
         var iconLink = "https://cdn.discordapp.com/app-icons/691398095841263678/cd4710d92ec10005b17d942c51c722d2.png";
@@ -26,8 +27,8 @@ module.exports = {
         var timeLeft2 = endNeeded2 - end;
         var voteIn = timeLeft2 <= 0 ? "now" : "in " + data.bot.tc.convertTime(timeLeft2)
 
-        var embedUpvote = {
-            title: ``,
+        let embedUpvote = {
+            title: "",
             color: 8388736,
             fields: [
                 {
@@ -44,6 +45,6 @@ module.exports = {
         }
     
         //Send message
-        data.channel.send("", { embed: embedUpvote }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedUpvote }).catch(e => { console.log(e); });
     },
 };

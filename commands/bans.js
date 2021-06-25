@@ -1,9 +1,9 @@
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'bans',
-    category: 'Moderation',
-    description: 'Displays all bans on this server-',
+    name: "bans",
+    category: "Moderation",
+    description: "Displays all bans on this server-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -14,22 +14,23 @@ module.exports = {
         new NeededPermission("me", "BAN_MEMBERS")
     ],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Get server config
         var now = Date.now();
 
         //Construct embed
         const embedBans = new data.bot.Discord.MessageEmbed()
         .setColor(8388736)
-        .setAuthor('❯ Bans (' + data.serverBans.length + ')', data.guild.iconURL({ format: 'png', dynamic: true, size: 1024 }));
+        .setAuthor('❯ Bans (' + data.serverBans.length + ')', command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
 
         if(data.serverBans.length < 1) {
-            data.channel.send("", { embed: embedBans }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedBans }).catch(e => { console.log(e); });
             return;
         }
 
         var serverBansByID = new Map();
-        data.guild.fetchBans().then(serverBansResult => {
+        command_data.msg.guild.fetchBans().then(serverBansResult => {
             serverBansResult.forEach(ban => {
                 serverBansByID.set(ban.user.id, ban);
             })
@@ -44,7 +45,7 @@ module.exports = {
                 }
             });
         
-            data.channel.send("", { embed: embedBans }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedBans }).catch(e => { console.log(e); });
         })
     },
 };

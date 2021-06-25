@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'poke',
-    category: 'Actions',
-    description: 'Pokes the tagged person-',
+    name: "poke",
+    category: "Actions",
+    description: "Pokes the tagged person-",
     helpUsage: "[mention]`",
     exampleUsage: "/userTag/",
     hidden: false,
@@ -14,20 +14,16 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        //Get random gif
-        var gif = data.bot.pickRandom(data.bot.vars.getPokeGifs())
-
-        //Construct embed
-        var embedPoke = {
-            title: `${data.authorTag} pokes ${data.taggedUserTags}!`,
+    execute(command_data) {
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getPokeGifs())
+        let embedPoke = {
+            title: `${command_data.msg.author.tag} pokes ${command_data.tagged_user_tags}!`,
             color: 8388736,
             image: {
-                url: gif
+                url: url
             }
         }
-
-        //Send message
-        data.channel.send("", { embed: embedPoke }).catch(e => { console.log(e); });
+        
+        command_data.msg.channel.send("", { embed: embedPoke }).catch(e => { console.log(e); });
     },
 };

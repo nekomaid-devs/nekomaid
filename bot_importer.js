@@ -29,8 +29,16 @@ module.exports = {
         global_context.modules_clients.neko = new global_context.modules.NekoClient();
 
         //Setup extra utils
-        global_context.modules.pick_random = (array) => {
+        global_context.utils.pick_random = (array) => {
             return array[Math.floor(Math.random() * array.length)];
+        }
+        global_context.utils.shuffle_array = (array) => {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
         }
 
         //Setup SQL
@@ -38,7 +46,7 @@ module.exports = {
             host: global_context.config.sql_host,
             user: global_context.config.sql_user,
             password: global_context.config.sql_password,
-            database: global_context.config.dev_mode === false ? "nekomaid_bot" : "nekomaid_bot_dev",
+            database: global_context.config.sql_database,
             charset: "utf8mb4"
         });
         await sql_connection.promise().connect().catch(e => {
@@ -120,13 +128,13 @@ module.exports = {
         bot.socketClient = bot.io("https://nekomaid.xyz");
         bot.socketClient.emit("login", { API_key: bot.globalPersistentConfig.nekoAPI_key })
         bot.socketClient.on("saveConfig", (data) => {
-            console.log("Saving config of guild - " + data.guild.id);
-            bot.ssm.server_edit.edit(bot.ssm, { type: "server", id: data.guild.id, server: data.guild.config });
+            console.log("Saving config of guild - " + command_data.msg.guild.id);
+            bot.ssm.server_edit.edit(bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.msg.guild.config });
         });
         bot.socketClient.on("getGuildDetailed", async(data, cb) => {
-            //console.log("Retrieving details of guild - " + data.guild.id);
+            //console.log("Retrieving details of guild - " + command_data.msg.guild.id);
             
-            let guild = await bot.guilds.fetch(data.guild.id).catch(e => { console.log(e); })
+            let guild = await bot.guilds.fetch(command_data.msg.guild.id).catch(e => { console.log(e); })
             if(guild === undefined) { cb({ status: -1 }); return; }
             let guildData = {
                 channels: Array.from(guild.channels.cache.values()).reduce((acc, curr) => { acc.push({ id: curr.id, name: curr.name, type: curr.type }); return acc; }, []),

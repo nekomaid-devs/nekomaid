@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'leveltop',
-    category: 'Leveling',
-    description: 'Displays people with highest level from this server-',
+    name: "leveltop",
+    category: "Leveling",
+    description: "Displays people with highest level from this server-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,10 +9,11 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         //Argument check
-        if(data.serverConfig.module_level_enabled == false) {
-            data.reply("Leveling isn't enabled on this server- (see `" + data.serverConfig.prefix + "leveling` for help)");
+        if(command_data.server_config.module_level_enabled == false) {
+            command_data.msg.reply("Leveling isn't enabled on this server- (see `" + command_data.server_config.prefix + "leveling` for help)");
             return;
         }
  
@@ -20,7 +21,7 @@ module.exports = {
         var topText = "⚡ Server Level"
 
         //Update top users
-        var top = await data.bot.sb.updateTopServerLevel(data.bot, data.serverConfig, data.guild);
+        var top = await data.bot.sb.updateTopServerLevel(data.bot, command_data.server_config, command_data.msg.guild);
 
         //Construst embed
         const embedTop = new data.bot.Discord.MessageEmbed()
@@ -56,9 +57,9 @@ module.exports = {
 
             const net = userConfig.level;
 
-            var levelXP = data.serverConfig.module_level_level_exp;
+            var levelXP = command_data.server_config.module_level_level_exp;
             for(var i2 = 1; i2 < userConfig.level; i2 += 1) {
-                levelXP *= data.serverConfig.module_level_level_multiplier;
+                levelXP *= command_data.server_config.module_level_level_multiplier;
             }
 
             const net2 = (userConfig.xp / levelXP) * 100;
@@ -73,6 +74,6 @@ module.exports = {
         }
         
         //Send message
-        data.channel.send("", { embed: embedTop }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedTop }).catch(e => { console.log(e); });
     }
 };

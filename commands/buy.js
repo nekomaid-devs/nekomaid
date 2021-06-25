@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'buy',
-    category: 'Profile',
-    description: 'Buys an item-',
+    name: "buy",
+    category: "Profile",
+    description: "Buys an item-",
     helpUsage: "[item name]`",
     exampleUsage: "Bank Upgrade I",
     hidden: false,
@@ -14,11 +14,12 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        var itemName = data.totalArgument;
+    execute(command_data) {
+        // TODO: re-factor command
+        var itemName = command_data.total_argument;
 
         var targetItem = -1;
-        data.botConfig.items.forEach(item => {
+        command_data.global_context.bot_config.items.forEach(item => {
             if(item.displayName.toLowerCase() === itemName.toLowerCase()) {
                 targetItem = item;
             }
@@ -30,7 +31,7 @@ module.exports = {
         }
 
         var targetItem2 = -1;
-        data.botConfig.shopItems.forEach(function (item2) {
+        command_data.global_context.bot_config.shopItems.forEach(function (item2) {
             if(item2.id === targetItem.id) {
                 targetItem2 = item2;
             }
@@ -52,11 +53,11 @@ module.exports = {
         //Edits and broadcasts the change
         data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
 
-        var embedBuy = {
+        let embedBuy = {
             color: 8388736,
             description: "Bought `1x " + targetItem.displayName + "` for `" + targetItem2.price + " 💵`-"
         }
 
-        data.channel.send("", { embed: embedBuy }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedBuy }).catch(e => { console.log(e); });
     },
 };

@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'clearqueue',
-    category: 'Music',
+    name: "clearqueue",
+    category: "Music",
     description: "Clears the current queue-",
     helpUsage: "`",
     hidden: false,
@@ -9,16 +9,17 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        if(data.bot.vm.connections.has(data.guild.id) === false) {
+    execute(command_data) {
+        // TODO: re-factor command
+        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false) {
             data.msg.reply("I'm not in a voice channel-");
             return;
         }
 
-        var voiceData = data.bot.vm.connections.get(data.guild.id);
-        voiceData.queue = []
-        voiceData.persistentQueue = []
+        let voiceData = data.bot.vm.connections.get(command_data.msg.guild.id);
+        voiceData.queue = [];
+        voiceData.persistentQueue = [];
 
-        data.channel.send("Cleared the current queue-").catch(e => { console.log(e); });
+        command_data.msg.channel.send("Cleared the current queue-").catch(e => { console.log(e); });
     },
 };

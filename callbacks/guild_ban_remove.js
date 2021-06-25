@@ -23,7 +23,7 @@ module.exports = {
                         const embedBan = {
                             author: {
                                 name: "Case " + serverConfig.caseID + "# | Unban | " + user.tag,
-                                icon_url: user.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
+                                icon_url: user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                             },
                             fields: [
                             {

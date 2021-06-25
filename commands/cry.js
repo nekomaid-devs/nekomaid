@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'cry',
-    category: 'Emotes',
-    description: 'Posts a crying gif-',
+    name: "cry",
+    category: "Emotes",
+    description: "Posts a crying gif-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,20 +9,16 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        //Get random gif
-        var gif = data.bot.pickRandom(data.bot.vars.getCryGifs())
-
-        //Construct embed
-        var embedCry = {
-            title: `${data.authorTag} is crying!`,
+    execute(command_data) {
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getCryGifs());
+        let embedCry = {
+            title: `${command_data.msg.author.tag} is crying!`,
             color: 8388736,
             image: {
-                url: gif
+                url: url
             }
         }
 
-        //Send message
-        data.channel.send("", { embed: embedCry }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedCry }).catch(e => { console.log(e); });
     },
 };

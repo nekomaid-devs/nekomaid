@@ -2,9 +2,9 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'd_addnetworth',
-    category: 'Testing',
-    description: 'Adds net worth to tagged user-',
+    name: "d_addnetworth",
+    category: "Testing",
+    description: "Adds net worth to tagged user-",
     helpUsage: "[mention] [ammount]`",
     hidden: true,
     aliases: [],
@@ -17,14 +17,15 @@ module.exports = {
         new NeededPermission("author", "BOT_OWNER")
     ],
     nsfw: false,
-    execute(data) {
-        var creditsAmmount = parseInt(data.args[1]);
-        data.taggedUserConfig.netWorth += creditsAmmount;
+    execute(command_data) {
+        // TODO: re-factor command
+        var creditsAmmount = parseInt(command_data.args[1]);
+        command_data.tagged_user_config.netWorth += creditsAmmount;
 
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.taggedUser.id, user: data.taggedUserConfig });
+        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         //Construct message and send it
-        data.channel.send("Added `" + creditsAmmount + "` net worth to `" + data.taggedUserTag + "`! (Current net worth: `" + data.taggedUserConfig.netWorth + "$`)").catch(e => { console.log(e); });
+        command_data.msg.channel.send("Added `" + creditsAmmount + "` net worth to `" + command_data.tagged_user.tag + "`! (Current net worth: `" + command_data.tagged_user_config.netWorth + "$`)").catch(e => { console.log(e); });
     },
 };

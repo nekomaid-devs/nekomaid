@@ -16,7 +16,7 @@ module.exports = {
                     const embedDeletedMessage = {
                         author: {
                             name: "Message Deleted | " + message.member.user.tag,
-                            icon_url: message.member.user.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
+                            icon_url: message.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                         },
                         fields: [
                         {

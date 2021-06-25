@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'serverinfo',
-    category: 'Utility',
+    name: "serverinfo",
+    category: "Utility",
     description: "Displays information about the server-",
     helpUsage: "`",
     hidden: false,
@@ -9,55 +9,56 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         var end = new Date();
         var start = new Date(data.msg.guild.createdAt.toUTCString());
         var elapsed = end - start;
         var createdAgo = data.bot.tc.convertTime(elapsed);
 
         //Construct embed
-        var avatarUrl = data.guild.iconURL({ format: 'png', dynamic: true, size: 1024 });
+        var avatarUrl = command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
 
-        var embedServer = {
+        let embedServer = {
             color: 8388736,
             author: {
-                name: "Information about server " + data.guild.name,
+                name: "Information about server " + command_data.msg.guild.name,
                 icon_url: avatarUrl
             },
             fields: [ 
                     {
                         name: '❯ Server ID',
-                        value: `${data.guild.id}`,
+                        value: `${command_data.msg.guild.id}`,
                         inline: true
                     },
                     {
                         name: '❯ Region',
-                        value: `${data.guild.region}`,
+                        value: `${command_data.msg.guild.region}`,
                         inline: true
                     },
                     {
                         name: '❯ Owner',
-                        value: `${data.guild.owner.user.username}#${data.guild.owner.user.discriminator}`,
+                        value: `${command_data.msg.guild.owner.user.username}#${command_data.msg.guild.owner.user.discriminator}`,
                         inline: true
                     },
                     {
                         name: '❯ Members',
-                        value: `${data.guild.memberCount}`,
+                        value: `${command_data.msg.guild.memberCount}`,
                         inline: true
                     },
                     {
                         name: '❯ Channels',
-                        value: `${data.guild.channels.cache.size}`,
+                        value: `${command_data.msg.guild.channels.cache.size}`,
                         inline: true
                     },
                     {
                         name: '❯ Roles',
-                        value: `${data.guild.roles.cache.size}`,
+                        value: `${command_data.msg.guild.roles.cache.size}`,
                         inline: true
                     },
                     {
                         name: '❯ Created',
-                        value: `${createdAgo} (${data.guild.createdAt.toUTCString()})`,
+                        value: `${createdAgo} (${command_data.msg.guild.createdAt.toUTCString()})`,
                         inline: true
                     }
             ],
@@ -65,11 +66,11 @@ module.exports = {
                 url: avatarUrl
             },
             footer: {
-                text: `Requested by ${data.authorTag}`
+                text: `Requested by ${command_data.msg.author.tag}`
             },
         }
 
         //Send message
-        data.channel.send("", { embed: embedServer }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedServer }).catch(e => { console.log(e); });
     },
 };

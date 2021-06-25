@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'nhentai',
-    category: 'NSFW',
-    description: 'Finds a doujinshi with id-',
+    name: "nhentai",
+    category: "NSFW",
+    description: "Finds a doujinshi with id-",
     helpUsage: "[sauce?]` *(optional argument)*",
     exampleUsage: "177013",
     hidden: false,
@@ -14,26 +14,27 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: true,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         //Get random image from rule34
-        var sauce = data.args[0];
+        var sauce = command_data.args[0];
 
         try {
             var postInfo = await data.bot.nhentai.nhentai_result(data.bot.nhentai, sauce);
         } catch(err) {
             console.error(err);
-            data.reply("There was an error in processing this request-");
+            command_data.msg.reply("There was an error in processing this request-");
             return;
         }
 
         switch(postInfo.status) {
             case 0:
-                data.reply("No results found-");
+                command_data.msg.reply("No results found-");
                 return;
         }
 
         if(postInfo.tags.includes("lolicon") === true || postInfo.tags.includes("shotacon") === true) {
-            data.reply("Sorry, I cannot show this due to chance of violating the Discord TOS- (`loli`/`shota` content)");
+            command_data.msg.reply("Sorry, I cannot show this due to chance of violating the Discord TOS- (`loli`/`shota` content)");
             return;
         }
 
@@ -56,7 +57,7 @@ module.exports = {
         })
 
         //Construct embed
-        var embedNHentai = {
+        let embedNHentai = {
             title: "Sauce for - " + sauce,
             color: 8388736,
             url: "https://nhentai.net/g/" + sauce,
@@ -86,11 +87,11 @@ module.exports = {
                 }
             ],
             footer: {
-                text: `Requested by ${data.authorTag}...`
+                text: `Requested by ${command_data.msg.author.tag}...`
             }
         }
 
         //Send message
-        data.channel.send("", { embed: embedNHentai }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedNHentai }).catch(e => { console.log(e); });
     },
 };

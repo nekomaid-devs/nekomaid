@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'roll',
-    category: 'Fun',
-    description: 'Rolls a dice- Also makes it possible to win credits by betting-',
+    name: "roll",
+    category: "Fun",
+    description: "Rolls a dice- Also makes it possible to win credits by betting-",
     helpUsage: "[numberOfSides?] [result?] [bet?]` *(all arguments optional)*",
     exampleUsage: "6 2 100",
     hidden: false,
@@ -10,11 +10,12 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Get roll type
         var rollType = 6;
-        if(data.args.length > 0) {
-            rollType = parseInt(data.args[0]);
+        if(command_data.args.length > 0) {
+            rollType = parseInt(command_data.args[0]);
         }
 
         //Get options set
@@ -22,7 +23,7 @@ module.exports = {
         switch(rollType) {
             default:
                 if(isNaN(rollType) || rollType <= 1) {
-                    data.reply("Invalid `numberOfSides` for `roll`- (number more than 1)");
+                    command_data.msg.reply("Invalid `numberOfSides` for `roll`- (number more than 1)");
                     return;
                 } else {
                     for(var i = 1; i <= rollType; i += 1) {
@@ -32,47 +33,47 @@ module.exports = {
         }
 
         //Get random result and image if exists
-        var result = data.bot.pickRandom(options);
+        var result = command_data.global_context.utils.pick_random(options);
 
         //Construct embed
-        var embedRoll = {
-            title: `${data.authorTag} rolled ${result}!`,
+        let embedRoll = {
+            title: `${command_data.msg.author.tag} rolled ${result}!`,
             color: 8388736
         }
 
-        if(data.args.length > 2) {
-            var betResult = parseInt(data.args[1]);
-            var betAmmount = parseInt(data.args[2]);
+        if(command_data.args.length > 2) {
+            var betResult = parseInt(command_data.args[1]);
+            var betAmmount = parseInt(command_data.args[2]);
 
             if(isNaN(betResult) || options.includes(betResult) === false) {
-                data.reply("Invalid `betResult` for `roll`- (" + options[0] + "-" + options[options.length - 1] + ")");
+                command_data.msg.reply("Invalid `betResult` for `roll`- (" + options[0] + "-" + options[options.length - 1] + ")");
                 return;
             }
 
             //Check author's config
             var authorCredits = data.authorConfig.credits;
 
-            if(data.args[2] === "all") {
+            if(command_data.args[2] === "all") {
                 if(authorCredits <= 0) {
-                    data.reply(`You don't have enough credits to do this-`);
+                    command_data.msg.reply(`You don't have enough credits to do this-`);
                     return;
                 } else {
                     betAmmount = authorCredits;
                 }
-            } else if(data.args[2] === "half") {
+            } else if(command_data.args[2] === "half") {
                 if(authorCredits <= 1) {
-                    data.reply(`You don't have enough credits to do this-`);
+                    command_data.msg.reply(`You don't have enough credits to do this-`);
                     return;
                 } else {
                     betAmmount = Math.round(authorCredits / 2);
                 }
             } else if(isNaN(betAmmount) || betAmmount <= 0) {
-                data.reply("Invalid `betAmmount` for `roll`- (number)");
+                command_data.msg.reply("Invalid `betAmmount` for `roll`- (number)");
                 return;
             }
 
             if(data.authorConfig.credits < betAmmount) {
-                data.reply(`You don't have enough credits to do this-`);
+                command_data.msg.reply(`You don't have enough credits to do this-`);
                 return;
             }
 
@@ -103,9 +104,9 @@ module.exports = {
                 embedRoll.description = "You lost `" + betAmmount + "` credits-";
             }
 
-            data.channel.send("", { embed: embedRoll }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedRoll }).catch(e => { console.log(e); });
         } else {
-            data.channel.send("", { embed: embedRoll }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedRoll }).catch(e => { console.log(e); });
         }
     },
 };

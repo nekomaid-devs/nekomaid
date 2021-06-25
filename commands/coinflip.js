@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'coinflip',
-    category: 'Fun',
-    description: 'Flips a coin- Also makes it possible to win credits by betting-',
+    name: "coinflip",
+    category: "Fun",
+    description: "Flips a coin- Also makes it possible to win credits by betting-",
     helpUsage: "[bet?] [heads/tails?]` *(both argument optional)*",
     exampleUsage: "100 tails",
     hidden: false,
@@ -10,20 +10,21 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Get random option
         var options = [ "heads", "tails" ];
-        var result = data.bot.pickRandom(options);
+        var result = command_data.global_context.utils.pick_random(options);
 
         //Construct embed
-        var embedCoinflip = {
-            title: `${data.authorTag} flipped ${result}!`,
+        let embedCoinflip = {
+            title: `${command_data.msg.author.tag} flipped ${result}!`,
             color: 8388736
         }
 
-        if(data.args.length > 0) {
-            var betResult = data.args.length > 1 ? data.args[1].toLowerCase() : "heads";
-            var betAmmount = parseInt(data.args[0]);
+        if(command_data.args.length > 0) {
+            var betResult = command_data.args.length > 1 ? command_data.args[1].toLowerCase() : "heads";
+            var betAmmount = parseInt(command_data.args[0]);
 
             if(typeof(betResult) != "string" || options.includes(betResult) === false) {
                 data.msg.reply("Invalid `betResult` for `coinflip`- (" + options + ")");
@@ -33,14 +34,14 @@ module.exports = {
             //Check author's config
             var authorCredits = data.authorConfig.credits;
 
-            if(data.args[0] === "all") {
+            if(command_data.args[0] === "all") {
                 if(authorCredits <= 0) {
                     data.msg.reply(`You don't have enough credits to do this-`);
                     return;
                 } else {
                     betAmmount = authorCredits;
                 }
-            } else if(data.args[0] === "half") {
+            } else if(command_data.args[0] === "half") {
                 if(authorCredits <= 1) {
                     data.msg.reply(`You don't have enough credits to do this-`);
                     return;
@@ -82,9 +83,9 @@ module.exports = {
                 embedCoinflip.description = "You lost `" + betAmmount + "` credits-";
             }
 
-            data.channel.send("", { embed: embedCoinflip }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { console.log(e); });
         } else {
-            data.channel.send("", { embed: embedCoinflip }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { console.log(e); });
         }
     },
 };

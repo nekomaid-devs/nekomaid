@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'ava',
-    category: 'Utility',
-    description: 'Displays avatar of the tagged person-',
+    name: "ava",
+    category: "Utility",
+    description: "Displays avatar of the tagged person-",
     helpUsage: "[mention?]` *(optional argument)*",
     exampleUsage: "/userTag/",
     hidden: false,
@@ -10,26 +10,25 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        //Construct embed
-        var avatarUrl = data.taggedUser.avatarURL({ format: 'png', dynamic: true, size: 1024 });
-        var embedAvatar = {
-            title: `Avatar Image of ${data.taggedUserTag}`,
+    execute(command_data) {
+        let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
+        let embedAvatar = {
+            title: `Avatar Image of ${command_data.tagged_user.tag}`,
             color: 8388736,
-            fields: [ {
-                        name: 'Avatar Link:',
-                        value: `[Click Here](${avatarUrl})`
-                    }
+            fields: [
+                {
+                    name: 'Avatar Link:',
+                    value: `[Click Here](${url})`
+                }
             ],
             image: {
-                url: avatarUrl
+                url: url
             },
             footer: {
-                text: `Requested by ${data.authorTag}`
+                text: `Requested by ${command_data.msg.author.tag}`
             },
         }
 
-        //Send message
-        data.channel.send("", { embed: embedAvatar }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedAvatar }).catch(e => { console.log(e); });
     },
 };

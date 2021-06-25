@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'info',
-    category: 'Help & Information',
-    description: 'Displays info about the bot-',
+    name: "info",
+    category: "Help & Information",
+    description: "Displays info about the bot-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,7 +9,8 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         var t0 = Date.now();
 
         //Get elapsed time between commit
@@ -114,11 +115,11 @@ module.exports = {
         var t1 = Date.now();
         var secTaken = ((t1 - t0) / 1000).toFixed(3);
 
-        var embedInfo = {
+        let embedInfo = {
             color: 8388736,
             author: {
                 name: `NekoMaid - Info`,
-                icon_url: data.botConfig.avatarUrl
+                icon_url: command_data.global_context.bot_config.avatarUrl
             },
             fields: [
                 {
@@ -145,7 +146,7 @@ module.exports = {
                 },
                 {
                     name: 'Version:',
-                    value: `${data.bot.ssm.version} (Updated ${commit_elapsedTime} ago)`,
+                    value: `${command_data.global_context.config.version} (Updated ${commit_elapsedTime} ago)`,
                     inline: false
                 },
                 {
@@ -165,6 +166,6 @@ module.exports = {
         }
 
         //Send message
-        data.channel.send("", { embed: embedInfo }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedInfo }).catch(e => { console.log(e); });
     },
 };

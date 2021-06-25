@@ -2,9 +2,9 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'removeserverxp',
-    category: 'Leveling',
-    description: 'Removes XP to the tagged user-',
+    name: "removeserverxp",
+    category: "Leveling",
+    description: "Removes XP to the tagged user-",
     helpUsage: "[mention] [ammount]`",
     exampleUsage: "/userTag/ 100",
     hidden: false,
@@ -18,18 +18,19 @@ module.exports = {
         new NeededPermission("author", "MANAGE_GUILD")
     ],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Argument check
-        if(data.serverConfig.module_level_enabled == false) {
-            data.reply("Leveling isn't enabled on this server- (see `" + data.serverConfig.prefix + "leveling` for help)");
+        if(command_data.server_config.module_level_enabled == false) {
+            command_data.msg.reply("Leveling isn't enabled on this server- (see `" + command_data.server_config.prefix + "leveling` for help)");
             return;
         }
 
         //Add the xp to database
-        var addXP = data.args[1];
+        var addXP = command_data.args[1];
         data.bot.lvl.updateServerLevel(data, -parseFloat(addXP));
 
         //Construct message and send it
-        data.channel.send("Removed `" + addXP + "` xp from `" + data.taggedUserTag + "`! (Current XP: `" + Math.round(data.taggedServerUserConfig.xp) + "`)").catch(e => { console.log(e); });
+        command_data.msg.channel.send("Removed `" + addXP + "` xp from `" + command_data.tagged_user.tag + "`! (Current XP: `" + Math.round(data.taggedServerUserConfig.xp) + "`)").catch(e => { console.log(e); });
     },
 };

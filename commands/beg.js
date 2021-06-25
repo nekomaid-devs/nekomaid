@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'beg',
-    category: 'Profile',
-    description: 'Gets credits by begging from other people-',
+    name: "beg",
+    category: "Profile",
+    description: "Gets credits by begging from other people-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,7 +9,8 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Get author's config, check for timeout and update the timeout
         var end = new Date();
         var start = new Date(data.authorConfig.lastBegTime);
@@ -29,15 +30,15 @@ module.exports = {
         data.authorConfig.lastBegTime = end.toUTCString();
 
         //Gets a random credit ammount
-        var minCredits = data.botConfig.minBegCredits;
-        var maxCredits = data.botConfig.maxBegCredits;
+        var minCredits = command_data.global_context.bot_config.minBegCredits;
+        var maxCredits = command_data.global_context.bot_config.maxBegCredits;
 
         var creditsAmmount = Math.floor((Math.random() * (maxCredits - minCredits + 1)) + minCredits);
         var creditsAmmountDisplay = creditsAmmount;
 
         //Gets a random state of crime
         var chance = Math.floor(Math.random() * 100) + 1;
-        var option = chance <= data.botConfig.begSuccessChance ? "success" : "failure";
+        var option = chance <= command_data.global_context.bot_config.begSuccessChance ? "success" : "failure";
 
         //Get a random answer depending on crime success
         var answers = -1;
@@ -45,21 +46,21 @@ module.exports = {
 
         switch(option) {
             case "success":
-                answers = data.botConfig.begSuccessAnswers;
+                answers = command_data.global_context.bot_config.begSuccessAnswers;
                 break;
 
             case "failure":
-                answers = data.botConfig.begFailedAnswers;
+                answers = command_data.global_context.bot_config.begFailedAnswers;
                 answerColor = 15483730;
                 creditsAmmount = 0;
                 break;
         }
 
-        var answer = data.bot.pickRandom(answers);
+        var answer = command_data.global_context.utils.pick_random(answers);
 
         //Get a random user
-        var members = data.guild.members.cache;
-        var member = data.bot.pickRandom(Array.from(members.values()));
+        var members = command_data.msg.guild.members.cache;
+        var member = command_data.global_context.utils.pick_random(Array.from(members.values()));
 
         //Edits the answer to correspond with the creditAmmount
         answer = answer.replace("<creditsAmmount>", "`" + creditsAmmountDisplay + "💵`");
@@ -75,16 +76,16 @@ module.exports = {
         //Construct embed
         var credits = data.authorConfig.credits;
 
-        var embedBeg = {
+        let embedBeg = {
             color: answerColor,
             description: answer + " (Current Credits: `" + credits + "$`)",
             footer: {
-                text: "Make sure to vote with " + data.serverConfig.prefix + "vote for free credits"
+                text: "Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
             }
         }
 
         //Construct message and send it
-        console.log("[beg] Added " + creditsAmmount + " credits to " + data.authorTag + " earned by begging on Server(id: " + data.guild.id + ")");
-        data.channel.send("", { embed: embedBeg }).catch(e => { console.log(e); });
+        console.log("[beg] Added " + creditsAmmount + " credits to " + command_data.msg.author.tag + " earned by begging on Server(id: " + command_data.msg.guild.id + ")");
+        command_data.msg.channel.send("", { embed: embedBeg }).catch(e => { console.log(e); });
     },
 };

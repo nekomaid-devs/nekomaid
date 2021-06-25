@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'transfer',
-    category: 'Profile',
-    description: 'Transfers credits to another user-',
+    name: "transfer",
+    category: "Profile",
+    description: "Transfers credits to another user-",
     helpUsage: "[ammount/all] [mention]`",
     exampleUsage: "100 /userTag/",
     hidden: false,
@@ -15,37 +15,38 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Argument & Permission check
-        if(data.authorUser.id === data.taggedUser.id) {
-            data.reply(`You can't tranfer credits to yourself-`);
+        if(data.authorUser.id === command_data.tagged_user.id) {
+            command_data.msg.reply(`You can't tranfer credits to yourself-`);
             return;
         }
 
-        var creditsAmmount = parseInt(data.args[0]);
+        var creditsAmmount = parseInt(command_data.args[0]);
 
-        if(data.args[0] === "all") {
+        if(command_data.args[0] === "all") {
             if(data.authorConfig.credits <= 0) {
-                data.reply(`You don't have enough credits to do this-`);
+                command_data.msg.reply(`You don't have enough credits to do this-`);
                 return;
             } else {
                 creditsAmmount = data.authorConfig.credits;
             }
-        } else if(data.args[0] === "half") {
+        } else if(command_data.args[0] === "half") {
             if(data.authorConfig.credits <= 1) {
-                data.reply(`You don't have enough credits to do this-`);
+                command_data.msg.reply(`You don't have enough credits to do this-`);
                 return;
             } else {
                 creditsAmmount = Math.round(data.authorConfig.credits / 2);
             }
         } else if(isNaN(creditsAmmount) || creditsAmmount <= 0) {
-            data.channel.send(`Invalid credits ammount-`).catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Invalid credits ammount-`).catch(e => { console.log(e); });
             return;
         }
 
         //Check if author has enough credits, transfer them
         if(data.authorConfig.credits - creditsAmmount < 0) {
-            data.reply(`You don't have enough credits to do this-`);
+            command_data.msg.reply(`You don't have enough credits to do this-`);
             return;
         }
 
@@ -54,18 +55,18 @@ module.exports = {
         //Edits and broadcasts the change
         data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
 
-        data.taggedUserConfig.credits += creditsAmmount;
+        command_data.tagged_user_config.credits += creditsAmmount;
 
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.taggedUser.id, user: data.taggedUserConfig });
+        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         //Construct message and send it
-        var embedTransfer = {
+        let embedTransfer = {
             color: 8388736,
-            description: "Transfered `" + creditsAmmount + "💵` from `" + data.authorTag + "` to `" + data.taggedUserTag + "` (Current Credits: `" + data.authorConfig.credits + "$`)"
+            description: "Transfered `" + creditsAmmount + "💵` from `" + command_data.msg.author.tag + "` to `" + command_data.tagged_user.tag + "` (Current Credits: `" + data.authorConfig.credits + "$`)"
         }
 
-        console.log("[transfer] Transfered " + creditsAmmount + " credits from " + data.authorTag + " to " + data.taggedUserTag + " on Server(id: " + data.guild.id + ")");
-        data.channel.send("", { embed: embedTransfer }).catch(e => { console.log(e); });
+        console.log("[transfer] Transfered " + creditsAmmount + " credits from " + command_data.msg.author.tag + " to " + command_data.tagged_user.tag + " on Server(id: " + command_data.msg.guild.id + ")");
+        command_data.msg.channel.send("", { embed: embedTransfer }).catch(e => { console.log(e); });
     },
 };

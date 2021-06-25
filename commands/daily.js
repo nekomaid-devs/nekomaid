@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'daily',
-    category: 'Profile',
-    description: 'Gets a daily reward to user-',
+    name: "daily",
+    category: "Profile",
+    description: "Gets a daily reward to user-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,7 +9,8 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         var end = new Date();
         var start = new Date(data.authorConfig.lastDailyTime);
 
@@ -21,15 +22,15 @@ module.exports = {
         diff = Math.abs(Math.round(diff));
 
         if(diff < 24) {
-            data.reply("You need to wait `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
+            command_data.msg.reply("You need to wait `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
             return;
         }
 
         data.authorConfig.lastDailyTime = end.toUTCString();
 
         //Changes credits and saves
-        data.authorConfig.credits += data.botConfig.dailyCredits;
-        data.authorConfig.netWorth += data.botConfig.dailyCredits;
+        data.authorConfig.credits += command_data.global_context.bot_config.dailyCredits;
+        data.authorConfig.netWorth += command_data.global_context.bot_config.dailyCredits;
 
         //Edits and broadcasts the change
         data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
@@ -37,15 +38,15 @@ module.exports = {
         //Construct message and send it
         var credits = data.authorConfig.credits;
 
-        var embedDaily = {
+        let embedDaily = {
             color: 6732650,
-            description: "Added daily reward of `" + data.botConfig.dailyCredits + "💵` to `" + data.authorTag + "`! (Current Credits: `" + credits + "$`)",
+            description: "Added daily reward of `" + command_data.global_context.bot_config.dailyCredits + "💵` to `" + command_data.msg.author.tag + "`! (Current Credits: `" + credits + "$`)",
             footer: {
-                text: "Make sure to vote with " + data.serverConfig.prefix + "vote for free credits"
+                text: "Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
             }
         }
 
-        console.log("[daily] Added DailyReward of " + data.botConfig.dailyCredits + " credits to " + data.authorTag + " on Server(id: " + data.guild.id + ")");
-        data.channel.send("", { embed: embedDaily }).catch(e => { console.log(e); });
+        console.log("[daily] Added DailyReward of " + command_data.global_context.bot_config.dailyCredits + " credits to " + command_data.msg.author.tag + " on Server(id: " + command_data.msg.guild.id + ")");
+        command_data.msg.channel.send("", { embed: embedDaily }).catch(e => { console.log(e); });
     },
 };

@@ -1,9 +1,9 @@
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'rr',
-    category: 'Utility',
-    description: 'Creates a reaction roles menu-',
+    name: "rr",
+    category: "Utility",
+    description: "Creates a reaction roles menu-",
     helpUsage: "`",
     hidden: false,
     aliases: ["reactionroles"],
@@ -15,14 +15,15 @@ module.exports = {
         new NeededPermission("me", "MANAGE_ROLES")
     ],
     nsfw: false,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         //Process message
-        var msg1 = await data.channel.send("Type in a role name or `stop` to finish the menu-").catch(e => { console.log(e); });
+        var msg1 = await command_data.msg.channel.send("Type in a role name or `stop` to finish the menu-").catch(e => { console.log(e); });
         var roles = new Map();
         var roleMessages = [];
         
-        data.serverConfig = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "server", id: data.guild.id, containExtra: true });
-        this.continueCollecting(data.bot, data.serverConfig, data.msg, msg1, roleMessages, roles, data.bot.Discord);
+        command_data.server_config = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "server", id: command_data.msg.guild.id, containExtra: true });
+        this.continueCollecting(data.bot, command_data.server_config, data.msg, msg1, roleMessages, roles, data.bot.Discord);
     },
 
     continueCollecting(bot, serverConfig, sourceMessage, msg, roleMessages, roles, Discord) {

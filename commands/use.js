@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'use',
-    category: 'Profile',
-    description: 'Uses an item, if possible-',
+    name: "use",
+    category: "Profile",
+    description: "Uses an item, if possible-",
     helpUsage: "[item name]`",
     exampleUsage: "Rare Box",
     hidden: false,
@@ -14,14 +14,15 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        if(data.args.length < 1) {
-            data.reply(`You need to type in an item name-`);
+    execute(command_data) {
+        // TODO: re-factor command
+        if(command_data.args.length < 1) {
+            command_data.msg.reply(`You need to type in an item name-`);
             return;
         }
 
         //Resolve item name
-        var itemName = data.totalArgument;
+        var itemName = command_data.total_argument;
         itemName = itemName.includes("<@") ? itemName.substring(0, itemName.indexOf("<@") - 1) : itemName;
 
         //Resolve item
@@ -29,7 +30,7 @@ module.exports = {
         var itemPrefab = -1;
         var targetIndex = -1;
 
-        data.botConfig.items.forEach(item => {
+        command_data.global_context.bot_config.items.forEach(item => {
             if(item.displayName.toLowerCase() === itemName.toLowerCase()) {
                 itemID = item.id;
                 itemPrefab = item;
@@ -43,7 +44,7 @@ module.exports = {
         });
 
         if(targetIndex === -1) {
-            data.reply("You don't have any item called `" + itemName + "`-");
+            command_data.msg.reply("You don't have any item called `" + itemName + "`-");
             return;
         }
 

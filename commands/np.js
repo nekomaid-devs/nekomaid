@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'np',
-    category: 'Music',
+    name: "np",
+    category: "Music",
     description: "Displays the current playing song-",
     helpUsage: "`",
     hidden: false,
@@ -9,18 +9,19 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
-        if(data.bot.vm.connections.has(data.guild.id) === false || data.bot.vm.connections.get(data.guild.id).current === -1) {
-            data.reply("There's nothing on the queue-");
+    async execute(command_data) {
+        // TODO: re-factor command
+        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false || data.bot.vm.connections.get(command_data.msg.guild.id).current === -1) {
+            command_data.msg.reply("There's nothing on the queue-");
             return;
         }
 
-        var voiceData = data.bot.vm.connections.get(data.guild.id);
+        var voiceData = data.bot.vm.connections.get(command_data.msg.guild.id);
 
         const embedNP = new data.bot.Discord.MessageEmbed();
         embedNP
         .setColor(8388736)
-        .setTitle('Current playing for `' + data.guild.name + '`')
+        .setTitle('Current playing for `' + command_data.msg.guild.name + '`')
         .setFooter(`Nekomaid`);
 
         var currentLength0b = data.bot.tc.convertString_yt2(data.bot.tc.decideConvertString_yt(voiceData.current.info.duration));
@@ -37,7 +38,7 @@ module.exports = {
             embedNP.addField("Title", descriptionText);
             embedNP.addField("Requested by", "`" + user.username + "#" + user.discriminator + "`");
             embedNP.addField("Remaining", "`" + totalLength + "`");
-            data.channel.send("", { embed: embedNP }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedNP }).catch(e => { console.log(e); });
         }
     },
 };

@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'e621',
-    category: 'NSFW',
-    description: 'Posts an image from e621 with specified tag (or filters out tag with at beginning of the tag !)',
+    name: "e621",
+    category: "NSFW",
+    description: "Posts an image from e621 with specified tag (or filters out tag with at beginning of the tag !)",
     helpUsage: "[?tag/!tag]`",
     hidden: false,
     aliases: [],
@@ -13,23 +13,24 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: true,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         //Get random image from safebooru
         try {
-            var postInfo = await data.bot.e621.e621_result(data.bot.danbooru, data.args);
+            var postInfo = await data.bot.e621.e621_result(data.bot.danbooru, command_data.args);
         } catch(err) {
             console.error(err);
-            data.reply("There was an error in processing this request-");
+            command_data.msg.reply("There was an error in processing this request-");
             return;
         }
 
         switch(postInfo.status) {
             case 0:
-                data.reply("No results found-");
+                command_data.msg.reply("No results found-");
                 return;
 
             case -1:
-                data.reply("Required tag doesn't exist-");
+                command_data.msg.reply("Required tag doesn't exist-");
                 return;
         }
 
@@ -38,8 +39,8 @@ module.exports = {
         var postNumber = postsNumber0 + postInfo.postNumber;
         var numOfPosts = postInfo.numOfPosts;
 
-        var embed621 = {
-            title: `Here is result for ${data.args.join(" ")}`,
+        let embed621 = {
+            title: `Here is result for ${command_data.args.join(" ")}`,
             color: 8388736,
             fields: [ 
                 {
@@ -56,6 +57,6 @@ module.exports = {
         }
 
         //Send message
-        data.channel.send("", { embed: embed621 }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embed621 }).catch(e => { console.log(e); });
     },
 };

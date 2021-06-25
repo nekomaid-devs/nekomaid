@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'work',
-    category: 'Profile',
-    description: 'Gets credits earned by working-',
+    name: "work",
+    category: "Profile",
+    description: "Gets credits earned by working-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,7 +9,8 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         var end = new Date();
         var start = new Date(data.authorConfig.lastWorkTime);
         
@@ -21,7 +22,7 @@ module.exports = {
         diff = Math.abs(Math.round(diff));
 
         if(diff < 180) {
-                data.reply("You need to wait more `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
+                command_data.msg.reply("You need to wait more `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
                 return;
         }
 
@@ -42,13 +43,13 @@ module.exports = {
         }
 
         //Gets a random credit ammount
-        var minCredits = data.botConfig.minWorkCredits;
-        var maxCredits = data.botConfig.maxWorkCredits;
+        var minCredits = command_data.global_context.bot_config.minWorkCredits;
+        var maxCredits = command_data.global_context.bot_config.maxWorkCredits;
         var creditsAmmount = Math.floor(((Math.random() * (maxCredits - minCredits + 1)) + minCredits) * multiplier);
 
         //Gets a random answer
-        var answers = data.botConfig.workAnswers;
-        var answer = data.bot.pickRandom(answers);
+        var answers = command_data.global_context.bot_config.workAnswers;
+        var answer = command_data.global_context.utils.pick_random(answers);
 
         //Edits the answer to correspond with the creditAmmount
         answer = answer.replace("<creditsAmmount>", "`" + creditsAmmount + "💵`");
@@ -61,15 +62,15 @@ module.exports = {
         data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
 
         //Construct message and send it
-        var embedWork = {
+        let embedWork = {
             color: 6732650,
             description: answer + " (Current Credits: `" + data.authorConfig.credits + "$`)",
             footer: {
-                text: "Reputation multiplier: " + multiplier + "x | Make sure to vote with " + data.serverConfig.prefix + "vote for free credits"
+                text: "Reputation multiplier: " + multiplier + "x | Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
             }
         }
 
-        console.log("[work] Added " + creditsAmmount + " credits to " + data.authorTag + " earned by working on Server(id: " + data.guild.id + ")");
-        data.channel.send("", { embed: embedWork }).catch(e => { console.log(e); });
+        console.log("[work] Added " + creditsAmmount + " credits to " + command_data.msg.author.tag + " earned by working on Server(id: " + command_data.msg.guild.id + ")");
+        command_data.msg.channel.send("", { embed: embedWork }).catch(e => { console.log(e); });
     },
 };

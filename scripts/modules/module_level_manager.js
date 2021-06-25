@@ -4,19 +4,19 @@ class LevelingManager {
     }
 
     /*async updateServerLevel(data, xpToAdd, sendLevelupMessage = true) {
-        if(data.msg.author.bot === true || data.serverConfig.module_level_enabled == false) {
+        if(data.msg.author.bot === true || command_data.server_config.module_level_enabled == false) {
             return;
         }
         
-        data.serverConfig = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "server", id: data.msg.guild.id, containRanks: true });
-        if(data.serverConfig.module_level_ignoredChannels.includes(data.msg.channel.id) === true) {
+        command_data.server_config = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "server", id: data.msg.guild.id, containRanks: true });
+        if(command_data.server_config.module_level_ignoredChannels.includes(data.msg.channel.id) === true) {
             return;
         }
 
-        var authorDisplayName = data.taggedMember.user.username + "#" + data.taggedMember.user.discriminator;
-        var levelXP = data.serverConfig.module_level_level_exp;
+        var authorDisplayName = command_data.tagged_member.user.username + "#" + command_data.tagged_member.user.discriminator;
+        var levelXP = command_data.server_config.module_level_level_exp;
         for(let i = 1; i < data.taggedServerUserConfig.level; i += 1) {
-            levelXP *= data.serverConfig.module_level_level_multiplier;
+            levelXP *= command_data.server_config.module_level_level_multiplier;
         }
 
         //Changes user's level
@@ -28,32 +28,32 @@ class LevelingManager {
 
         var processingRoles = [];
         var processRanks = async() => {
-            if(data.serverConfig.module_level_ranks.length > 0 && data.guild.me.hasPermission("MANAGE_ROLES") === false) {
-                var channel = await data.guild.channels.fetch(data.serverConfig.module_level_levelupMessages_channel).catch(e => { console.log(e); });
+            if(command_data.server_config.module_level_ranks.length > 0 && command_data.msg.guild.me.hasPermission("MANAGE_ROLES") === false) {
+                var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.module_level_levelupMessages_channel).catch(e => { console.log(e); });
                 channel.send("Ranks are setup, but the bot doesn't have required permissions - `Manage Roles`\nPlease add required permissions and try again-").catch(e => { console.log(e); });
                 return;
             }
 
-            data.serverConfig.module_level_ranks.forEach(function(rank) {
+            command_data.server_config.module_level_ranks.forEach(function(rank) {
                 if(rank.level <= data.taggedServerUserConfig.level) {
-                    const role = data.guild.roles.cache.find(r =>
+                    const role = command_data.msg.guild.roles.cache.find(r =>
                         r.id === rank.roleID
                     );
 
-                    if(data.taggedMember.roles.cache.has(rank.roleID) === false && processingRoles.includes(role.id) === false) {
-                        data.taggedMember.roles.add(role).catch(err => { console.error(err) });
+                    if(command_data.tagged_member.roles.cache.has(rank.roleID) === false && processingRoles.includes(role.id) === false) {
+                        command_data.tagged_member.roles.add(role).catch(err => { console.error(err) });
                         grantedRoles.push(role.name);
                         processingRoles.push(role.id);
                     }
                 }
 
                 if(data.taggedServerUserConfig.level < rank.level) {
-                    const role = data.guild.roles.cache.find(r =>
+                    const role = command_data.msg.guild.roles.cache.find(r =>
                         r.id === rank.roleID
                     );
 
-                    if(data.taggedMember.roles.cache.has(rank.roleID) === true && processingRoles.includes(role.id) === false) {
-                        data.taggedMember.roles.remove(role).catch(err => { console.error(err) });
+                    if(command_data.tagged_member.roles.cache.has(rank.roleID) === true && processingRoles.includes(role.id) === false) {
+                        command_data.tagged_member.roles.remove(role).catch(err => { console.error(err) });
                         removedRoles.push(role.name);
                         processingRoles.push(role.id);
                     }
@@ -71,9 +71,9 @@ class LevelingManager {
                 data.taggedServerUserConfig.xp -= levelXP;
                 data.taggedServerUserConfig.level += 1;
                 
-                levelXP = data.serverConfig.module_level_level_exp;
+                levelXP = command_data.server_config.module_level_level_exp;
                 for(let i = 1; i < data.taggedServerUserConfig.level; i += 1) {
-                    levelXP *= data.serverConfig.module_level_level_multiplier;
+                    levelXP *= command_data.server_config.module_level_level_multiplier;
                 }
             }
 
@@ -102,23 +102,23 @@ class LevelingManager {
 
             if(grantedRolesText != "") {
                 rankMessage += "You've been granted role(s) `" + grantedRolesText + "`-\n";
-                console.log("[server_leveling] Granted roles " + grantedRolesText + " to " + authorDisplayName + " on Server(id: " + data.guild.id + ")-");
+                console.log("[server_leveling] Granted roles " + grantedRolesText + " to " + authorDisplayName + " on Server(id: " + command_data.msg.guild.id + ")-");
             }
 
             if(removedRolesText != "") {
                 rankMessage += "You've been removed role(s) `" + removedRolesText + "`-\n";
-                console.log("[server_leveling] Removed roles " + removedRolesText + " from " + authorDisplayName + " on Server(id: " + data.guild.id + ")-");
+                console.log("[server_leveling] Removed roles " + removedRolesText + " from " + authorDisplayName + " on Server(id: " + command_data.msg.guild.id + ")-");
             }
 
             //Construct levelup message
-            var levelupMessage = data.serverConfig.module_level_levelupMessages_format;
-            var authorName = data.serverConfig.module_level_levelupMessages_ping == true ? data.taggedMember : authorDisplayName;
+            var levelupMessage = command_data.server_config.module_level_levelupMessages_format;
+            var authorName = command_data.server_config.module_level_levelupMessages_ping == true ? command_data.tagged_member : authorDisplayName;
             levelupMessage = levelupMessage.replace("%user%", authorName);
             levelupMessage = levelupMessage.replace("%level%", data.taggedServerUserConfig.level);
 
             //Send levelup message
-            if(data.serverConfig.module_level_levelupMessages == true && sendLevelupMessage == true) {
-                var channel = await data.guild.channels.fetch(data.serverConfig.module_level_levelupMessages_channel).catch(e => { console.log(e); });
+            if(command_data.server_config.module_level_levelupMessages == true && sendLevelupMessage == true) {
+                var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.module_level_levelupMessages_channel).catch(e => { console.log(e); });
                 if(channel !== undefined) {
                     channel.send(levelupMessage + rankMessage).catch(e => { console.log(e); });
                 }
@@ -129,15 +129,15 @@ class LevelingManager {
         data.taggedServerUserConfig.xp = Number(data.taggedServerUserConfig.xp.toFixed(2))
 
         //Saves user's config
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "serverUser", serverID: data.guild.id, userID: data.taggedMember.user.id, user: data.taggedServerUserConfig });
+        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "serverUser", serverID: command_data.msg.guild.id, userID: command_data.tagged_member.user.id, user: data.taggedServerUserConfig });
         //console.log("[server_leveling] Added " + messageXP + "xp to " + authorDisplayName + " on Server(id: " + msg.guild.id + ") (xp: " + authorConfig.xp + ")");
     }
 
     async updateGlobalLevel(data) {
         var authorDisplayName = data.authorUser.username + "#" + data.authorUser.discriminator;
 
-        var messageXP = data.botConfig.messageXP;
-        var levelXP = data.botConfig.levelXP;
+        var messageXP = command_data.global_context.bot_config.messageXP;
+        var levelXP = command_data.global_context.bot_config.levelXP;
 
         //Changes user's level
         data.authorConfig.xp += messageXP;
@@ -147,7 +147,7 @@ class LevelingManager {
             data.authorConfig.level += 1;
 
             //Send levelup message
-            data.channel.send("**" + authorDisplayName + "** is now global level " + data.authorConfig.level + "!").catch(e => { console.log(e); });
+            command_data.msg.channel.send("**" + authorDisplayName + "** is now global level " + data.authorConfig.level + "!").catch(e => { console.log(e); });
         }
 
         //Edits and broadcasts the change

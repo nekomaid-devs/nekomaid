@@ -2,9 +2,9 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'warns',
-    category: 'Moderation',
-    description: 'Displays warnings of tagged user-',
+    name: "warns",
+    category: "Moderation",
+    description: "Displays warnings of tagged user-",
     helpUsage: "[?mention]` *(optional argument)*",
     exampleUsage: "/userTag/",
     hidden: false,
@@ -15,16 +15,17 @@ module.exports = {
         new NeededPermission("author", "BAN_MEMBERS")
     ],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Get server config
         var warns = data.serverWarns.filter(warn =>
-            warn.userID === data.taggedUser.id
+            warn.userID === command_data.tagged_user.id
         )
 
         //Construct embed
         const embedWarns = new data.bot.Discord.MessageEmbed()
         .setColor(8388736)
-        .setAuthor('❯ Warnings for ' + data.taggedUserTag + ' (' + warns.length + ')', data.taggedUser.avatarURL({ format: 'png', dynamic: true, size: 1024 }));
+        .setAuthor('❯ Warnings for ' + command_data.tagged_user.tag + ' (' + warns.length + ')', command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }));
 
         warns.slice(-3).forEach((warn, index) => {
             var end = Date.now()
@@ -33,6 +34,6 @@ module.exports = {
             embedWarns.addField("Warn #" + (warns.length - index), "Warned for - " + warn.reason + " (" + elapsedTime + " ago)");
         });
 
-        data.channel.send("", { embed: embedWarns }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedWarns }).catch(e => { console.log(e); });
     }
 }

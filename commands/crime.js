@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'crime',
-    category: 'Profile',
-    description: 'Gets or loses credits by doing crimes-',
+    name: "crime",
+    category: "Profile",
+    description: "Gets or loses credits by doing crimes-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,7 +9,8 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         var end = new Date();
         var start = new Date(data.authorConfig.lastCrimeTime);
         
@@ -21,22 +22,22 @@ module.exports = {
         diff = Math.abs(Math.round(diff));
 
         if(diff < 180) {
-            data.reply("You need to wait more `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
+            command_data.msg.reply("You need to wait more `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
             return;
         }
 
         data.authorConfig.lastCrimeTime = end.toUTCString();
 
         //Gets a random credit ammount
-        var minCredits = data.botConfig.minCrimeCredits;
-        var maxCredits = data.botConfig.maxCrimeCredits;
+        var minCredits = command_data.global_context.bot_config.minCrimeCredits;
+        var maxCredits = command_data.global_context.bot_config.maxCrimeCredits;
 
         var creditsAmmount = Math.floor((Math.random() * (maxCredits - minCredits + 1)) + minCredits);
         var creditsAmmountDisplay = creditsAmmount;
 
         //Gets a random state of crime
         var chance = Math.floor(Math.random() * 100) + 1;
-        var option = chance <= data.botConfig.crimeSuccessChance ? "success" : "failure";
+        var option = chance <= command_data.global_context.bot_config.crimeSuccessChance ? "success" : "failure";
 
         //Get a random answer depending on crime success
         var answers = -1;
@@ -44,17 +45,17 @@ module.exports = {
 
         switch(option) {
             case "success":
-                answers = data.botConfig.crimeSuccessAnswers;
+                answers = command_data.global_context.bot_config.crimeSuccessAnswers;
                 break;
 
             case "failure":
-                answers = data.botConfig.crimeFailedAnswers;
+                answers = command_data.global_context.bot_config.crimeFailedAnswers;
                 answerColor = 15483730;
                 creditsAmmount = -creditsAmmount;
                 break;
         }
         
-        var answer = data.bot.pickRandom(answers);
+        var answer = command_data.global_context.utils.pick_random(answers);
 
         //Edits the answer to correspond with the creditAmmount
         answer = answer.replace("<creditsAmmount>", "`" + creditsAmmountDisplay + "💵`");
@@ -69,16 +70,16 @@ module.exports = {
         //Construct embed
         var credits = data.authorConfig.credits;
 
-        var embedCrime = {
+        let embedCrime = {
             color: answerColor,
             description: answer + " (Current Credits: `" + credits + "$`)",
             footer: {
-                text: "Make sure to vote with " + data.serverConfig.prefix + "vote for free credits"
+                text: "Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
             }
         }
 
         //Construct message and send it
-        console.log("[crime] Added " + creditsAmmount + " credits to " + data.authorTag + " earned by doing crimes on Server(id: " + data.guild.id + ")");
-        data.channel.send("", { embed: embedCrime }).catch(e => { console.log(e); });
+        console.log("[crime] Added " + creditsAmmount + " credits to " + command_data.msg.author.tag + " earned by doing crimes on Server(id: " + command_data.msg.guild.id + ")");
+        command_data.msg.channel.send("", { embed: embedCrime }).catch(e => { console.log(e); });
     },
 };

@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'customembed',
-    category: 'Utility',
-    description: 'Returns result of an embed json',
+    name: "customembed",
+    category: "Utility",
+    description: "Returns result of an embed json",
     helpUsage: "[json]`",
     exampleUsage: "{'title':'Test'}",
     hidden: false,
@@ -14,21 +14,21 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
         try {
-            var customEmbed = JSON.parse(data.totalArgument);
+            var custom_embed = JSON.parse(command_data.total_argument);
         } catch(err) {
-            const embedError = {
+            let embedError = {
                 title: "<:n_error:771852301413384192> Error when creating embed!",
                 description: "```" + err + "```"
             }
     
-            data.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
-            return
+            command_data.msg.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
+            return;
         }
 
-        data.channel.send("", { embed: customEmbed }).catch(err => {
-            data.channel.send("Error when creating embed -\n`" + err + "`").catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: custom_embed }).catch(err => {
+            command_data.msg.channel.send(`Error when creating embed -\n\`${err}\``).catch(e => { console.log(e); });
         });
     },
 };

@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'top',
-    category: 'Profile',
-    description: 'Displays the richest people from all servers (or current one if you type `-server` after the command)-',
+    name: "top",
+    category: "Profile",
+    description: "Displays the richest people from all servers (or current one if you type `-server` after the command)-",
     helpUsage: "[?property] [?-server]` *(all arguments optional)*",
     exampleUsage: "credits -server",
     hidden: false,
@@ -10,14 +10,15 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
-        //data.reply("This command is temporarily disabled-");
+    async execute(command_data) {
+        // TODO: re-factor command
+        //command_data.msg.reply("This command is temporarily disabled-");
         //return;
         //Get compared property and it's custom texts
         var prop = "credits"
-        if(data.args.length > 0) {
-            if(data.args[0] != "-server") {
-                prop = data.args[0];
+        if(command_data.args.length > 0) {
+            if(command_data.args[0] != "-server") {
+                prop = command_data.args[0];
             }
         }
 
@@ -57,16 +58,16 @@ module.exports = {
                 break;
             
             default:
-                data.reply("Property `" + prop + "` not found-")
+                command_data.msg.reply("Property `" + prop + "` not found-")
                 return;
         }
 
         //Update top users
         var top = {}
         var topText2 = ""
-        if(data.args.includes("-server") === true) {
-            topText2 = " in `" + data.guild.name + "`"
-            top = await data.bot.sb.updateTopServer(data.bot, data.guild, props, data.botConfig);
+        if(command_data.args.includes("-server") === true) {
+            topText2 = " in `" + command_data.msg.guild.name + "`"
+            top = await data.bot.sb.updateTopServer(data.bot, command_data.msg.guild, props, command_data.global_context.bot_config);
         } else {
             top = await data.bot.sb.updateTop(data.bot, props);
         }
@@ -83,7 +84,7 @@ module.exports = {
         for(var i = 0; i < top.items.length; i += 1) {
             var user = top.items[i];
             
-            if(user.userID === data.authorMember.id) {
+            if(user.userID === command_data.msg.member.id) {
                 authorPos = i;
                 authorConfig = user;
                 break;
@@ -122,6 +123,6 @@ module.exports = {
         }
         
         //Send message
-        data.channel.send("", { embed: embedTop }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedTop }).catch(e => { console.log(e); });
     }
 };

@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'bonk',
-    category: 'Utility',
-    description: 'Bonks somebody-',
+    name: "bonk",
+    category: "Utility",
+    description: "Bonks somebody-",
     helpUsage: "[mention/url]`",
     exampleUsage: "/userTag/",
     hidden: false,
@@ -14,7 +14,8 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         return;
         if(data.msg.guild.me.hasPermission("MANAGE_MESSAGES") === true) {
             data.msg.suppressEmbeds(true);
@@ -23,13 +24,13 @@ module.exports = {
         var imageURL = "";
 
         if(data.msg.mentions.users.array().length < 1) {
-            imageURL = data.args[0];
+            imageURL = command_data.args[0];
 
             if(imageURL.startsWith("<")) {
                 imageURL = imageURL.replace("<", "").replace(">", "")
             }
         } else {
-            imageURL = data.msg.mentions.users.array()[0].avatarURL({ format: 'png', dynamic: true, size: 1024 });
+            imageURL = data.msg.mentions.users.array()[0].avatarURL({ format: "png", dynamic: true, size: 1024 });
         }
 
         data.bot.jimp.read({
@@ -51,15 +52,15 @@ module.exports = {
                             var secTaken = ((t1 - t0) / 1000).toFixed(3);
 
                             //Construct embed
-                            var embedImage = new data.bot.Discord.MessageEmbed()
+                            let embedImage = new data.bot.Discord.MessageEmbed()
                             .setTitle("bonk-")
                             .setColor(8388736)
                             .attachFiles(['./image.jpg'])
                             .setImage('attachment://image.jpg')
-                            .setFooter(`Requested by ${data.authorTag} - Took ${secTaken}s...`);
+                            .setFooter(`Requested by ${command_data.msg.author.tag} - Took ${secTaken}s...`);
                     
                             //Send message
-                            data.channel.send("", { embed: embedImage });
+                            command_data.msg.channel.send("", { embed: embedImage });
                     });
             });
         })

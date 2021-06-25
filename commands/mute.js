@@ -2,9 +2,9 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'mute',
-    category: 'Moderation',
-    description: 'Mutes the tagged user-',
+    name: "mute",
+    category: "Moderation",
+    description: "Mutes the tagged user-",
     helpUsage: "[mention] [?time] [?reason]` *(2 optional arguments)*",
     exampleUsage: "/userTag/ 6h Posting invites",
     hidden: false,
@@ -19,27 +19,28 @@ module.exports = {
         new NeededPermission("me", "MANAGE_CHANNELS")
     ],
     nsfw: false,
-    async execute(data) {
-        var time = data.args.length < 2 ? -1 : (data.args[1] === -1 ? -1 : data.bot.tc.convertString(data.args[1]));
+    async execute(command_data) {
+        // TODO: re-factor command
+        var time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : data.bot.tc.convertString(command_data.args[1]));
         if(time != -1 && time.status != 1) {
-            data.reply("You entered invalid time format (ex. `1d2h3m4s` or `-1`)-");
+            command_data.msg.reply("You entered invalid time format (ex. `1d2h3m4s` or `-1`)-");
             return;
         }
 
-        if(data.taggedMember.bannable === false) {
-            data.reply("Couldn't mute `" + data.taggedUserTag + "` (Try moving Nekomaid's permissions above the user you want to mute)-");
+        if(command_data.tagged_member.bannable === false) {
+            command_data.msg.reply("Couldn't mute `" + command_data.tagged_user.tag + "` (Try moving Nekomaid's permissions above the user you want to mute)-");
             return;
         }
 
         var muteReason = "None";
-        if(data.args.length > 2) {
-            muteReason = data.msg.content.substring(data.msg.content.indexOf(data.args[1]) + data.args[1].length + 1)
+        if(command_data.args.length > 2) {
+            muteReason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1)
         }
 
         //Get server config
         var previousMute = -1;
         data.serverMutes.forEach(function(mute) {
-            if(mute.userID === data.taggedUser.id) {
+            if(mute.userID === command_data.tagged_user.id) {
                 previousMute = mute;
             }
         });
@@ -53,21 +54,21 @@ module.exports = {
             muteEnd = muteStart + extendedTime;
             const muteEndText = time === -1 ? "Forever" : data.bot.tc.convertTime(muteEnd - muteStart);
 
-            data.channel.send("Muted `" + data.taggedUserTag + "` for `" + extendedTimeText + "` (Reason: `" + muteReason + "`, Time: `" + muteEndText + "`)-").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Muted `" + command_data.tagged_user.tag + "` for `" + extendedTimeText + "` (Reason: `" + muteReason + "`, Time: `" + muteEndText + "`)-").catch(e => { console.log(e); });
 
-            if(data.serverConfig.audit_mutes == true && data.serverConfig.audit_channel != "-1") {
-                const channel = await data.guild.channels.fetch(data.serverConfig.audit_channel).catch(e => { console.log(e); });
+            if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
+                const channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
 
                 if(channel !== undefined) {
                     const embedMute = {
                         author: {
-                            name: "Case " + data.serverConfig.caseID + "# | Mute | " + data.taggedUserTag,
-                            icon_url: data.taggedUser.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
+                            name: "Case " + command_data.server_config.caseID + "# | Mute | " + command_data.tagged_user.tag,
+                            icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                         },
                         fields: [
                             {
                                 name: "User:",
-                                value: data.taggedUser,
+                                value: command_data.tagged_user,
                                 inline: true
                             },
                             {
@@ -87,8 +88,8 @@ module.exports = {
                     }
 
                     //Save edited config
-                    data.serverConfig.caseID += 1;
-                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: data.guild.id, server: data.serverConfig });
+                    command_data.server_config.caseID += 1;
+                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
                 }
@@ -98,21 +99,21 @@ module.exports = {
             const muteEnd0Text = previousMute.end === 1 ? "Forever" : data.bot.tc.convertTime(previousMute.end - muteStart);
             const muteEndText = time === -1 ? "Forever" : data.bot.tc.convertTime(muteEnd - muteStart);
             
-            data.channel.send("Extended mute of `" + data.taggedUserTag + "` by `" + extendedTimeText + "` (Reason: `" + muteReason + "`, Time: `" + muteEndText + "`)-").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Extended mute of `" + command_data.tagged_user.tag + "` by `" + extendedTimeText + "` (Reason: `" + muteReason + "`, Time: `" + muteEndText + "`)-").catch(e => { console.log(e); });
 
-            if(data.serverConfig.audit_mutes == true && data.serverConfig.audit_channel != "-1") {
-                var channel = await data.guild.channels.fetch(data.serverConfig.audit_channel).catch(e => { console.log(e); });
+            if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
+                var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
 
                 if(channel !== undefined) {
                     const embedMute = {
                         author: {
-                            name: "Case " + data.serverConfig.caseID + "# | Mute Extension | " + data.taggedUserTag,
-                            icon_url: data.taggedUser.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
+                            name: "Case " + command_data.server_config.caseID + "# | Mute Extension | " + command_data.tagged_user.tag,
+                            icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                         },
                         fields: [
                             {
                                 name: "User:",
-                                value: data.taggedUser,
+                                value: command_data.tagged_user,
                                 inline: true
                             },
                             {
@@ -132,8 +133,8 @@ module.exports = {
                     }
 
                     //Save edited config
-                    data.serverConfig.caseID += 1;
-                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: data.guild.id, server: data.serverConfig });
+                    command_data.server_config.caseID += 1;
+                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
                 }
@@ -143,22 +144,22 @@ module.exports = {
         //Construct serverMute
         var serverMute = {
             id: data.bot.crypto.randomBytes(16).toString("hex"),
-            serverID: data.guild.id,
-            userID: data.taggedUser.id,
+            serverID: command_data.msg.guild.id,
+            userID: command_data.tagged_user.id,
             start: muteStart,
             reason: muteReason,
             end: time === -1 ? -1 : muteEnd
         }
 
-        if(data.serverConfig.muteRoleID === "-1") {
-            this.createMuteRoleAndMute(data, data.msg, data.taggedMember);
+        if(command_data.server_config.muteRoleID === "-1") {
+            this.createMuteRoleAndMute(data, data.msg, command_data.tagged_member);
         } else {
-            var muteRole = await data.guild.roles.fetch(data.serverConfig.muteRoleID).catch(e => { console.log(e); });
+            var muteRole = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { console.log(e); });
 
             if(muteRole === undefined) {
-                this.createMuteRoleAndMute(data, data.msg, data.taggedMember);
+                this.createMuteRoleAndMute(data, data.msg, command_data.tagged_member);
             } else {
-                data.taggedMember.roles.add(muteRole);
+                command_data.tagged_member.roles.add(muteRole);
             }
         }
 
@@ -195,8 +196,8 @@ module.exports = {
 
             taggedUser.roles.add(muteRole)
             .then(function() {
-                data.serverConfig.muteRoleID = muteRole.id;
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: msg.guild.id, server: data.serverConfig });
+                command_data.server_config.muteRoleID = muteRole.id;
+                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: msg.guild.id, server: command_data.server_config });
             })
             .catch(err => {
                 console.error(err);

@@ -433,7 +433,7 @@ module.exports = {
         usage = usage.split("/userTag/").join("@" + msg.author.username)
         usage = usage.split("/username/").join(msg.author.username)
         const embedError = {
-            title: `❌ Wrong arguments`,
+            title: "❌ Wrong arguments",
             color: 8388736,
             fields: [ 
             {

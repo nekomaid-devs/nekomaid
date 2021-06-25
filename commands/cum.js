@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'cum',
-    category: 'NSFW',
-    description: 'Sends a random lewd cum image-',
+    name: "cum",
+    category: "NSFW",
+    description: "Sends a random lewd cum image-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,23 +9,19 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: true,
-    async execute(data) {
-        //Get random image
-        var lewdURL = await data.bot.akaneko.nsfw.cum().catch(e => { console.log(e); });
-    
-        //Construct embed
-            var embedCum = {
-            title: `Here are your lewds-`,
+    async execute(command_data) {
+        let url = await command_data.global_context.modules.akaneko.nsfw.cum().catch(e => { console.log(e); });
+        let embedCum = {
+            title: "Here are your lewds-",
             color: 8388736,
             image: {
-                url: lewdURL
+                url: url
             },
             footer: {
                 text: "Powered by Akaneko 💖"
             }
         }
-    
-        //Send message
-        data.channel.send("", { embed: embedCum }).catch(e => { console.log(e); });
+
+        command_data.msg.channel.send("", { embed: embedCum }).catch(e => { console.log(e); });
     },
 };

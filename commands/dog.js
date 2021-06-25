@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'dog',
-    category: 'Fun',
-    description: 'Sends a random image of a dog-',
+    name: "dog",
+    category: "Fun",
+    description: "Sends a random image of a dog-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,23 +9,19 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
-        //Get random image
-        var obj = await data.bot.neko.sfw.woof()
-
-        //Construct embed
-        var embedDog = {
-            title: `Here's a dog, just for you-`,
+    async execute(command_data) {
+        var obj = await data.bot.neko.sfw.woof();
+        let embedDog = {
+            title: "Here's a dog, just for you-",
             color: 8388736,
             image: {
                 url: obj.url
             },
             footer: {
-                text: "Requested by " + data.authorTag
+                text: "Requested by " + command_data.msg.author.tag
             }
         }
-
-        //Send message
-        data.channel.send("", { embed: embedDog }).catch(e => { console.log(e); });
+        
+        command_data.msg.channel.send("", { embed: embedDog }).catch(e => { console.log(e); });
     },
 };

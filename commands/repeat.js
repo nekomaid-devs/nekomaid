@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'repeat',
-    category: 'Music',
+    name: "repeat",
+    category: "Music",
     description: "Repeats the current queue of songs-",
     helpUsage: "`",
     hidden: false,
@@ -9,21 +9,22 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        if(data.bot.vm.connections.has(data.guild.id) === false || data.bot.vm.connections.get(data.guild.id).current === -1) {
-            data.reply("There's nothing playing-");
+    execute(command_data) {
+        // TODO: re-factor command
+        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false || data.bot.vm.connections.get(command_data.msg.guild.id).current === -1) {
+            command_data.msg.reply("There's nothing playing-");
             return;
         }
 
-        var voiceData = data.bot.vm.connections.get(data.guild.id);
+        var voiceData = data.bot.vm.connections.get(command_data.msg.guild.id);
         voiceData.mode = voiceData.mode === 0 ? 1 : 0;
 
         if(voiceData.mode === 1) {
-            data.channel.send("Repeating current queue-").catch(e => { console.log(e); });
-            console.log("- [voice] Set mode to 1 in VoiceConnection(id: " + data.guild.id + ")");
+            command_data.msg.channel.send("Repeating current queue-").catch(e => { console.log(e); });
+            console.log("- [voice] Set mode to 1 in VoiceConnection(id: " + command_data.msg.guild.id + ")");
         } else {
-            data.channel.send("Stopped repeating current queue-").catch(e => { console.log(e); });
-            console.log("- [voice] Set mode to 0 in VoiceConnection(id: " + data.guild.id + ")");
+            command_data.msg.channel.send("Stopped repeating current queue-").catch(e => { console.log(e); });
+            console.log("- [voice] Set mode to 0 in VoiceConnection(id: " + command_data.msg.guild.id + ")");
         }
     },
 };

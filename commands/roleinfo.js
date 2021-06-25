@@ -1,8 +1,8 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'roleinfo',
-    category: 'Utility',
+    name: "roleinfo",
+    category: "Utility",
     description: "Displays information about a role-",
     helpUsage: "[role name/mention]`",
     exampleUsage: "Owner",
@@ -14,28 +14,25 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
         let role = -1;
         if(data.msg.mentions.roles.size > 0) {
             role = Array.from(data.msg.mentions.roles.values())[0];
         } else {
-            const roleName = data.args.join(" ");
-            role = data.guild.roles.cache.find(roleTemp =>
-                roleTemp.name === roleName || roleTemp.id === roleName
+            role = command_data.msg.guild.roles.cache.find(roleTemp =>
+                roleTemp.name === command_data.total_argument || roleTemp.id === command_data.total_argument
             );
             if(role === undefined) {
-                data.reply("No role with name `" + roleName + "` found-");
+                command_data.msg.reply(`No role with name \`${command_data.total_argument}\` found-`);
                 return;
             }
         }
-        
-        var end = new Date();
-        var start = new Date(role.createdAt.toUTCString());
-        var elapsed = end - start;
-        var createdAgo = data.bot.tc.convertTime(elapsed);
 
-        var permissions = ""
-        var permissionsArray = role.permissions.toArray();
+        let elapsed = new Date() - new Date(role.createdAt.toUTCString());
+        let createdAgo = data.bot.tc.convertTime(elapsed);
+
+        let permissions = ""
+        let permissionsArray = role.permissions.toArray();
         permissionsArray.forEach((permission, index) => {
             permissions += "`" + permission + "`"
 
@@ -44,8 +41,7 @@ module.exports = {
             }
         });
 
-        //Construct embed
-        var embedRole = {
+        let embedRole = {
             color: 8388736,
             author: {
                 name: "Information about role " + role.name
@@ -91,11 +87,10 @@ module.exports = {
                     }
             ],
             footer: {
-                    text: `Requested by ${data.authorTag}`
+                    text: `Requested by ${command_data.msg.author.tag}`
             },
         }
 
-        //Send message
-        data.channel.send("", { embed: embedRole }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedRole }).catch(e => { console.log(e); });
     },
 };

@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'ping',
-    category: 'Help & Information',
+    name: "ping",
+    category: "Help & Information",
     description: "Checks the bot's ping",
     helpUsage: "`",
     hidden: false,
@@ -9,16 +9,14 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
-        //Send message
-        const m = await data.channel.send("Ping?").catch(e => { console.log(e); });
-
-        var embedPing = {
+    async execute(command_data) {
+        let m = await command_data.msg.channel.send("Ping?").catch(e => { console.log(e); });
+        let embedPing = {
             color: 8388736,
             fields: [
                 {
                     name: "🏓 Ping",
-                    value: `${m.createdTimestamp - data.msg.createdTimestamp}ms`
+                    value: `${(m.createdTimestamp - data.msg.createdTimestamp)}ms`
                 },
                 {
                     name: "🏠 API",

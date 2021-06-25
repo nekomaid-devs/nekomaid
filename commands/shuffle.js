@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'shuffle',
-    category: 'Music',
+    name: "shuffle",
+    category: "Music",
     description: "Randomizes the current queue-",
     helpUsage: "`",
     hidden: false,
@@ -9,13 +9,14 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        if(data.bot.vm.connections.has(data.guild.id) === false || data.bot.vm.connections.get(data.guild.id).current === -1) {
-            data.reply("There's nothing playing-");
+    execute(command_data) {
+        // TODO: re-factor command
+        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false || data.bot.vm.connections.get(command_data.msg.guild.id).current === -1) {
+            command_data.msg.reply("There's nothing playing-");
             return;
         }
 
-        var voiceData = data.bot.vm.connections.get(data.guild.id);
+        var voiceData = data.bot.vm.connections.get(command_data.msg.guild.id);
 
         if(voiceData.mode === 0) {
             voiceData.queue = voiceData.queue
@@ -34,9 +35,9 @@ module.exports = {
                 voiceData.persistentQueue.push(voiceRequest)
             })
 
-            data.channel.send("Shuffled `" + voiceData.queue.length + "` songs-").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Shuffled `" + voiceData.queue.length + "` songs-").catch(e => { console.log(e); });
         } else {
-            var voiceData2 = data.bot.vm.connections.get(data.guild.id);
+            var voiceData2 = data.bot.vm.connections.get(command_data.msg.guild.id);
             voiceData2.persistentQueue = voiceData2.persistentQueue
             .map(a =>
                 ({ sort: Math.random(), value: a })
@@ -63,9 +64,9 @@ module.exports = {
                 i1 += 1;
             })
 
-            data.channel.send("Shuffled `" + voiceData.persistentQueue.length + "` songs-").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Shuffled `" + voiceData.persistentQueue.length + "` songs-").catch(e => { console.log(e); });
         }
 
-        console.log("- [voice] Shuffled VoiceRequests in VoiceConnection(id: " + data.guild.id + ", size: " + voiceData.queue.length + ")");
+        console.log("- [voice] Shuffled VoiceRequests in VoiceConnection(id: " + command_data.msg.guild.id + ", size: " + voiceData.queue.length + ")");
     },
 };

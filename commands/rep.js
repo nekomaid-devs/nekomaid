@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'rep',
-    category: 'Profile',
-    description: 'Adds a reputation point to the tagged user-',
+    name: "rep",
+    category: "Profile",
+    description: "Adds a reputation point to the tagged user-",
     helpUsage: "[mention]`",
     exampleUsage: "/userTag/",
     hidden: false,
@@ -14,10 +14,11 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Argument check
-        if(data.taggedUser.id === data.authorUser.id) {
-            data.reply("You can't give reputation to yourself-");
+        if(command_data.tagged_user.id === data.authorUser.id) {
+            command_data.msg.reply("You can't give reputation to yourself-");
             return;
         }
 
@@ -33,7 +34,7 @@ module.exports = {
         diff = Math.abs(Math.round(diff));
 
         if(diff < 60) {
-            data.reply("You need to wait `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
+            command_data.msg.reply("You need to wait `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
             return;
         }
 
@@ -43,13 +44,13 @@ module.exports = {
         data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
 
         //Get tagged user's config and changes rep value
-        data.taggedUserConfig.rep += 1;
+        command_data.tagged_user_config.rep += 1;
 
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.taggedUser.id, user: data.taggedUserConfig });
+        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         //Construct message and send it
-        console.log("[rep] Added rep to " + data.taggedUserTag + " on Server(id: " + data.guild.id + ")");
-        data.channel.send("Added `1` reputation to `" + data.taggedUserTag + "`! (Current reputation: `" + data.taggedUserConfig.rep + "`)").catch(e => { console.log(e); });
+        console.log("[rep] Added rep to " + command_data.tagged_user.tag + " on Server(id: " + command_data.msg.guild.id + ")");
+        command_data.msg.channel.send("Added `1` reputation to `" + command_data.tagged_user.tag + "`! (Current reputation: `" + command_data.tagged_user_config.rep + "`)").catch(e => { console.log(e); });
     },
 };

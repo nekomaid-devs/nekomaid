@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'foxgirl',
-    category: 'Fun',
-    description: 'Sends a random image of a foxgirl-',
+    name: "foxgirl",
+    category: "Fun",
+    description: "Sends a random image of a foxgirl-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,23 +9,19 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
-        //Get random image
-        const imageURL = await data.bot.akaneko.foxgirl().catch(e => { console.log(e); });
-
-        //Construct embed
-        var embedFoxgirl = {
-            title: `Here's a foxgirl, just for you-`,
+    async execute(command_data) {
+        let url = await command_data.global_context.modules.akaneko.foxgirl().catch(e => { console.log(e); });
+        let embedFoxgirl = {
+            title: "Here's a foxgirl, just for you-",
             color: 8388736,
             image: {
-                url: imageURL
+                url: url
             },
             footer: {
                 text: "Powered by Akaneko 💖"
             }
         }
-
-        //Send message
-        data.channel.send("", { embed: embedFoxgirl }).catch(e => { console.log(e); });
+        
+        command_data.msg.channel.send("", { embed: embedFoxgirl }).catch(e => { console.log(e); });
     },
 };

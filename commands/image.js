@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'image',
-    category: 'Utility',
-    description: 'Edits an image-',
+    name: "image",
+    category: "Utility",
+    description: "Edits an image-",
     helpUsage:
     "[mention/url] [action]`\n" +
     "Available actions: `bonk`, `brightness`, `blur`, `contrast`, `crop`, `chop`, `flip`, `flop`, `greyscale`, `invert`, `jpeg`, `loli-license`, `magnify`, `negate`, `resize`, `rotate`, `scale`, `scaleToFit`, `swirl`",
@@ -16,9 +16,10 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         return;
-        if(data.guild.me.hasPermission("MANAGE_MESSAGES") === true) {
+        if(command_data.msg.guild.me.hasPermission("MANAGE_MESSAGES") === true) {
             data.msg.suppressEmbeds(true);
         }
 
@@ -26,33 +27,33 @@ module.exports = {
         var action = "";
 
         if(data.msg.mentions.users.array().length < 1) {
-            if(data.args.length < 1) {
-                data.reply("You need to mention somebody/type an url-")
+            if(command_data.args.length < 1) {
+                command_data.msg.reply("You need to mention somebody/type an url-")
                 return;
             }
 
-            if(data.args.length < 2) {
-                    data.reply("You need to type in an action-")
+            if(command_data.args.length < 2) {
+                    command_data.msg.reply("You need to type in an action-")
                     return;
             }
 
-            imageURL = data.args[0];
-            action = data.args[1];
+            imageURL = command_data.args[0];
+            action = command_data.args[1];
 
             if(imageURL.startsWith("<")) {
                 imageURL = imageURL.replace("<", "").replace(">", "")
             }
         } else {
-            if(data.args.length < 2) {
-                data.reply("You need to type in an action-")
+            if(command_data.args.length < 2) {
+                command_data.msg.reply("You need to type in an action-")
                 return;
             }
 
-            imageURL = data.msg.mentions.users.array()[0].avatarURL({ format: 'png', dynamic: true, size: 1024 });
-            action = data.args[1];
+            imageURL = data.msg.mentions.users.array()[0].avatarURL({ format: "png", dynamic: true, size: 1024 });
+            action = command_data.args[1];
         }
 
-        //Get extra data.args
+        //Get extra command_data.args
         data.bot.jimp.read({
                 url: imageURL,
                 headers: {}
@@ -61,53 +62,53 @@ module.exports = {
 
             switch(action) {
                 case "brightness": {
-                    if(data.args.length < 3) {
-                            data.reply("You need to type in a brightness value-")
+                    if(command_data.args.length < 3) {
+                            command_data.msg.reply("You need to type in a brightness value-")
                             return;
                     }
 
-                    const f = parseInt(data.args[2]);
+                    const f = parseInt(command_data.args[2]);
 
                     image.brightness(f);
                     break;
                 }
 
                 case "blur": {
-                    if(data.args.length < 2) {
-                            data.reply("You need to type in a blur radius-")
+                    if(command_data.args.length < 2) {
+                            command_data.msg.reply("You need to type in a blur radius-")
                             return;
                     }
 
-                    const v = parseInt(data.args[2]);
+                    const v = parseInt(command_data.args[2]);
 
                     image.blur(v);
                     break;
                 }
 
                 case "contrast": {
-                    if(data.args.length < 3) {
-                            data.reply("You need to type in a contrast value-")
+                    if(command_data.args.length < 3) {
+                            command_data.msg.reply("You need to type in a contrast value-")
                             return;
                     }
 
-                    const f = parseInt(data.args[2]);
+                    const f = parseInt(command_data.args[2]);
 
                     image.contrast(f);
                     break;
                 }
 
                 case "crop": {
-                    if(data.args.length < 3) {
-                            data.reply("You need to type in width and height-")
+                    if(command_data.args.length < 3) {
+                            command_data.msg.reply("You need to type in width and height-")
                             return;
                     }
 
-                    const w = parseInt(data.args[2]);
-                    const h = parseInt(data.args[3]);
+                    const w = parseInt(command_data.args[2]);
+                    const h = parseInt(command_data.args[3]);
 
-                    if(data.args.length > 4) {
-                            const x = parseInt(data.args[4]);
-                            const y = parseInt(data.args[5]);
+                    if(command_data.args.length > 4) {
+                            const x = parseInt(command_data.args[4]);
+                            const y = parseInt(command_data.args[5]);
 
                             image.crop(x, y, w, h);
                     } else {
@@ -118,17 +119,17 @@ module.exports = {
                 }
 
                 case "chop": {
-                    if(data.args.length < 3) {
-                            data.reply("You need to type in width and height-")
+                    if(command_data.args.length < 3) {
+                            command_data.msg.reply("You need to type in width and height-")
                             return;
                     }
 
-                    const w = parseInt(data.args[2]);
-                    const h = parseInt(data.args[3]);
+                    const w = parseInt(command_data.args[2]);
+                    const h = parseInt(command_data.args[3]);
 
-                    if(data.args.length > 4) {
-                            const x = parseInt(data.args[4]);
-                            const y = parseInt(data.args[5]);
+                    if(command_data.args.length > 4) {
+                            const x = parseInt(command_data.args[4]);
+                            const y = parseInt(command_data.args[5]);
 
                             image.chop(x, y, w, h);
                     } else {
@@ -159,18 +160,18 @@ module.exports = {
                 }
 
                 case "jpeg": {
-                    if(data.args.length < 2) {
-                            data.reply("You need to type in a quality value- (0-100)")
+                    if(command_data.args.length < 2) {
+                            command_data.msg.reply("You need to type in a quality value- (0-100)")
                             return;
                     }
 
-                    image.quality(data.args[2]);
+                    image.quality(command_data.args[2]);
                     break;
                 }
 
                 case "magnify": {
-                    if(data.args.length > 2) {
-                            image.magnify(data.args[2]);
+                    if(command_data.args.length > 2) {
+                            image.magnify(command_data.args[2]);
                     } else {
                             image.magnify();
                     }
@@ -183,62 +184,62 @@ module.exports = {
                 }
 
                 case "resize": {
-                    if(data.args.length < 3) {
-                            data.reply("You need to type in width and height-")
+                    if(command_data.args.length < 3) {
+                            command_data.msg.reply("You need to type in width and height-")
                             return;
                     }
 
-                    const w = parseInt(data.args[2]);
-                    const h = parseInt(data.args[3]);
+                    const w = parseInt(command_data.args[2]);
+                    const h = parseInt(command_data.args[3]);
 
                     image.resize(w, h);
                     break;
                 }
 
                 case "rotate": {
-                    if(data.args.length < 2) {
-                            data.reply("You need to type in a number for the rotation-")
+                    if(command_data.args.length < 2) {
+                            command_data.msg.reply("You need to type in a number for the rotation-")
                             return;
                     }
 
-                    const d = parseInt(data.args[2]);
+                    const d = parseInt(command_data.args[2]);
 
                     image.rotate(d);
                     break;
                 }
 
                 case "scale": {
-                    if(data.args.length < 3) {
-                            data.reply("You need to type in a scale multiplier-")
+                    if(command_data.args.length < 3) {
+                            command_data.msg.reply("You need to type in a scale multiplier-")
                             return;
                     }
 
-                    const f = parseInt(data.args[2]);
+                    const f = parseInt(command_data.args[2]);
 
                     image.scale(f);
                     break;
                 }
 
                 case "scaleToFit": {
-                    if(data.args.length < 3) {
-                        data.reply("You need to type in width and height-")
+                    if(command_data.args.length < 3) {
+                        command_data.msg.reply("You need to type in width and height-")
                         return;
                     }
 
-                    const w = parseInt(data.args[2]);
-                    const h = parseInt(data.args[3]);
+                    const w = parseInt(command_data.args[2]);
+                    const h = parseInt(command_data.args[3]);
 
                     image.scaleToFit(w, h);
                     break;
                 }
 
                 case "swirl": {
-                    if(data.args.length < 3) {
-                        data.reply("You need to type in a swirl value-")
+                    if(command_data.args.length < 3) {
+                        command_data.msg.reply("You need to type in a swirl value-")
                         return;
                     }
 
-                    const v = parseInt(data.args[2]);
+                    const v = parseInt(command_data.args[2]);
 
                     image.swirl(v);
                     break;
@@ -249,7 +250,7 @@ module.exports = {
                     break;
 
                 default:
-                    data.reply("Unknown action-")
+                    command_data.msg.reply("Unknown action-")
                     return;
             }
 
@@ -268,15 +269,15 @@ module.exports = {
                             var secTaken = ((t1 - t0) / 1000).toFixed(3);
 
                             //Construct embed
-                            var embedImage = new data.bot.Discord.MessageEmbed()
+                            let embedImage = new data.bot.Discord.MessageEmbed()
                             .setTitle("Here's your edited image-")
                             .setColor(8388736)
                             .attachFiles(['./image.jpg'])
                             .setImage('attachment://image.jpg')
-                            .setFooter(`Requested by ${data.authorTag} - Took ${secTaken}s...`);
+                            .setFooter(`Requested by ${command_data.msg.author.tag} - Took ${secTaken}s...`);
                 
                             //Send message
-                            data.channel.send("", { embed: embedImage });
+                            command_data.msg.channel.send("", { embed: embedImage });
                         });
                         break;
 
@@ -292,15 +293,15 @@ module.exports = {
                                 var secTaken = ((t1 - t0) / 1000).toFixed(3);
 
                                 //Construct embed
-                                var embedImage = new data.bot.Discord.MessageEmbed()
+                                let embedImage = new data.bot.Discord.MessageEmbed()
                                 .setTitle("Here's your edited image-")
                                 .setColor(8388736)
                                 .attachFiles(['./image.jpg'])
                                 .setImage('attachment://image.jpg')
-                                .setFooter(`Requested by ${data.authorTag} - Took ${secTaken}s...`);
+                                .setFooter(`Requested by ${command_data.msg.author.tag} - Took ${secTaken}s...`);
                     
                                 //Send message
-                                data.channel.send("", { embed: embedImage });
+                                command_data.msg.channel.send("", { embed: embedImage });
                             });
                             break;
 
@@ -309,21 +310,21 @@ module.exports = {
                             var secTaken = ((t1 - t0) / 1000).toFixed(3);
                             
                             //Construct embed
-                            var embedImage = new data.bot.Discord.MessageEmbed()
+                            let embedImage = new data.bot.Discord.MessageEmbed()
                             .setTitle("Here's your edited image-")
                             .setColor(8388736)
                             .attachFiles(['./image.jpg'])
                             .setImage('attachment://image.jpg')
-                            .setFooter(`Requested by ${data.authorTag} - Took ${secTaken}s...`);
+                            .setFooter(`Requested by ${command_data.msg.author.tag} - Took ${secTaken}s...`);
                 
                             //Send message
-                            data.channel.send("", { embed: embedImage });
+                            command_data.msg.channel.send("", { embed: embedImage });
                     }
                 });
         })
         .catch(err => {
             console.error(err);
-            data.reply("Sorry, couldn't process that image-");
+            command_data.msg.reply("Sorry, couldn't process that image-");
         })
     },
 };

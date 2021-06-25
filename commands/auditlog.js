@@ -1,9 +1,9 @@
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'auditlog',
-    category: 'Modules',
-    description: 'Changes logging settings of the server-',
+    name: "auditlog",
+    category: "Modules",
+    description: "Changes logging settings of the server-",
     helpUsage: "[action?] [property?] [value?]` *(arguments depend on action)*",
     exampleUsage: "set bans true",
     hidden: false,
@@ -22,17 +22,18 @@ module.exports = {
         new NeededPermission("me", "VIEW_AUDIT_LOG")
     ],
     nsfw: false,
-    execute(data) {
-        if(data.args.length < 1) {
-            var channel0 = "<#" + data.serverConfig.audit_channel + ">";
-            if(data.serverConfig.audit_channel === "-1") {
+    execute(command_data) {
+        // TODO: re-factor command
+        if(command_data.args.length < 1) {
+            var channel0 = "<#" + command_data.server_config.audit_channel + ">";
+            if(command_data.server_config.audit_channel === "-1") {
                 channel0 = "`None`";
             }
 
             //Contruct embed
-            var embedConfig = {
-                title: `Audit Logs`,
-                description: "To set values see - `" + data.serverConfig.prefix + "help auditlog set`",
+            let embedConfig = {
+                title: "Audit Logs",
+                description: "To set values see - `" + command_data.server_config.prefix + "help auditlog set`",
                 color: 8388736,
                 fields: [
                     {
@@ -41,57 +42,57 @@ module.exports = {
                     },
                     {
                         name: "Bans:",
-                        value: "`" + data.serverConfig.audit_bans + "`",
+                        value: "`" + command_data.server_config.audit_bans + "`",
                         inline: true
                     },
                     {
                         name: "Kicks:",
-                        value:  "`" + data.serverConfig.audit_kicks + "`",
+                        value:  "`" + command_data.server_config.audit_kicks + "`",
                         inline: true
                     },
                     {
                         name: "Mutes:",
-                        value:  "`" + data.serverConfig.audit_mutes + "`",
+                        value:  "`" + command_data.server_config.audit_mutes + "`",
                         inline: true
                     },
                     {
                         name: "Warns:",
-                        value:  "`" + data.serverConfig.audit_warns + "`",
+                        value:  "`" + command_data.server_config.audit_warns + "`",
                         inline: true
                     },
                     {
                         name: "Nicknames:",
-                        value:  "`" + data.serverConfig.audit_nicknames + "`",
+                        value:  "`" + command_data.server_config.audit_nicknames + "`",
                         inline: true
                     },
                     {
                         name: "Deleted Messages:",
-                        value:  "`" + data.serverConfig.audit_deletedMessages + "`",
+                        value:  "`" + command_data.server_config.audit_deletedMessages + "`",
                         inline: true
                     }
                 ]
             }
 
             //Send message
-            data.channel.send("", { embed: embedConfig }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedConfig }).catch(e => { console.log(e); });
         } else {
             //Get action
-            var action = data.args[0];
+            var action = command_data.args[0];
 
             switch(action) {
                 case "set": {
                     //Argument check
-                    if(data.args.length < 2) {
-                        data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "You need to enter a `property` to set `value` to- (Check `" + data.serverConfig.prefix + "help config set` for help)", "set bans true") }).catch(e => { console.log(e); });
+                    if(command_data.args.length < 2) {
+                        data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "You need to enter a `property` to set `value` to- (Check `" + command_data.server_config.prefix + "help config set` for help)", "set bans true") }).catch(e => { console.log(e); });
                         return;
                     }
-                    var property = data.args[1];
+                    var property = command_data.args[1];
 
-                    if(data.args.length < 3) {
-                        data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "You need to enter a new value for `" + property + "`-", "set " + property + " <newValue>") }).catch(e => { console.log(e); });
+                    if(command_data.args.length < 3) {
+                        data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "You need to enter a new value for `" + property + "`-", "set " + property + " <newValue>") }).catch(e => { console.log(e); });
                         return;
                     }
-                    var value = data.args[2];
+                    var value = command_data.args[2];
                     //var valueText = msg.content.substring(msg.content.indexOf(value));
 
                     //Edit property's value (and check if value is valid)
@@ -100,11 +101,11 @@ module.exports = {
                             const bool2 = value === 'true' ? true : (value === 'false' ? false : value);
 
                             if(typeof bool2 !== "boolean") {
-                                data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
+                                data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
                                 return;
                             }
 
-                            data.serverConfig.audit_bans = bool2;
+                            command_data.server_config.audit_bans = bool2;
                             break;
                         }
 
@@ -112,11 +113,11 @@ module.exports = {
                             const bool2 = value === 'true' ? true : (value === 'false' ? false : value);
 
                             if(typeof bool2 !== "boolean") {
-                                data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
+                                data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
                                 return;
                             }
 
-                            data.serverConfig.audit_kicks = bool2;
+                            command_data.server_config.audit_kicks = bool2;
                             break;
                         }
 
@@ -124,11 +125,11 @@ module.exports = {
                             const bool2 = value === 'true' ? true : (value === 'false' ? false : value);
 
                             if(typeof bool2 !== "boolean") {
-                                data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
+                                data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
                                 return;
                             }
 
-                            data.serverConfig.audit_mutes = bool2;
+                            command_data.server_config.audit_mutes = bool2;
                             break;
                         }
 
@@ -136,11 +137,11 @@ module.exports = {
                             const bool2 = value === 'true' ? true : (value === 'false' ? false : value);
 
                             if(typeof bool2 !== "boolean") {
-                                data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
+                                data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
                                 return;
                             }
 
-                            data.serverConfig.audit_nicknames = bool2;
+                            command_data.server_config.audit_nicknames = bool2;
                             break;
                         }
 
@@ -148,11 +149,11 @@ module.exports = {
                             const bool2 = value === 'true' ? true : (value === 'false' ? false : value);
 
                             if(typeof bool2 !== "boolean") {
-                                data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
+                                data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
                                 return;
                             }
 
-                            data.serverConfig.audit_deletedMessages = bool2;
+                            command_data.server_config.audit_deletedMessages = bool2;
                             break;
                         }
 
@@ -160,11 +161,11 @@ module.exports = {
                             const bool2 = value === 'true' ? true : (value === 'false' ? false : value);
 
                             if(typeof bool2 !== "boolean") {
-                                data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
+                                data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
                                 return;
                             }
 
-                            data.serverConfig.audit_editedMessages = bool2;
+                            command_data.server_config.audit_editedMessages = bool2;
                             break;
                         }
 
@@ -172,11 +173,11 @@ module.exports = {
                             const bool2 = value === 'true' ? true : (value === 'false' ? false : value);
 
                             if(typeof bool2 !== "boolean") {
-                                data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
+                                data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
                                 return;
                             }
 
-                            data.serverConfig.audit_warns = bool2;
+                            command_data.server_config.audit_warns = bool2;
                             break;
                         }
 
@@ -184,26 +185,26 @@ module.exports = {
                             value = value.includes("<#") ? value.replace("<#", "").replace(">", "") : value;
 
                             if(data.msg.guild.channels.cache.has(value) === false) {
-                                data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid value to set for `" + property + "`- (channel mention)", "set " + property + " #" + data.msg.channel.name) }).catch(e => { console.log(e); });
+                                data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (channel mention)", "set " + property + " #" + data.msg.channel.name) }).catch(e => { console.log(e); });
                                 return;
                             }
 
-                            data.serverConfig.audit_channel = value;
+                            command_data.server_config.audit_channel = value;
                             break;
 
                         default:
-                            data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid property for `set`- (Check `" + data.serverConfig.prefix + "help auditlog set` for help)", "set bans true") }).catch(e => { console.log(e); });
+                            data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid property for `set`- (Check `" + command_data.server_config.prefix + "help auditlog set` for help)", "set bans true") }).catch(e => { console.log(e); });
                             return;
                     }
 
                     //Save edited config
-                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: data.guild.id, server: data.serverConfig });
-                    data.channel.send("Set bot's property `" + property + "` to `" + value + "`").catch(e => { console.log(e); });
+                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                    command_data.msg.channel.send("Set bot's property `" + property + "` to `" + value + "`").catch(e => { console.log(e); });
                     break;
                 }
 
                 default:
-                    data.msg.channel.send("", { embed: data.bot.vars.getErrorEmbed(data.msg, data.serverConfig.prefix, this, "Invalid action- (Actions: `set`)", "set bans true") }).catch(e => { console.log(e); });
+                    data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `set`)", "set bans true") }).catch(e => { console.log(e); });
                     break;
             }
         }

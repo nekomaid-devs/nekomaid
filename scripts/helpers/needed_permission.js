@@ -9,7 +9,7 @@ class NeededPermission {
             case "author": {
                 let pass = true;
                 if(this.permission === "BOT_OWNER") {
-                    pass = data.botConfig.botOwners.includes(msg.author.id);
+                    pass = command_data.global_context.bot_config.botOwners.includes(msg.author.id);
                     if(pass === false) { msg.reply("You can't use this Command (permission: `" + this.permission + "`)-") }
                 } else {
                     pass = msg.member.permissionsIn(msg.channel).has(this.permission);

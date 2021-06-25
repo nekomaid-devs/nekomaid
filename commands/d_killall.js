@@ -2,9 +2,9 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'd_killall',
-    category: 'Testing',
-    description: 'Kills all shards-',
+    name: "d_killall",
+    category: "Testing",
+    description: "Kills all shards-",
     helpUsage: "`",
     hidden: true,
     aliases: [],
@@ -14,8 +14,9 @@ module.exports = {
         new NeededPermission("author", "BOT_OWNER")
     ],
     nsfw: false,
-    async execute(data) {
-        await data.channel.send("Killing all " + data.bot.shard.count + " shards...").catch(e => { console.log(e); });
+    async execute(command_data) {
+        // TODO: re-factor command
+        await command_data.msg.channel.send("Killing all " + data.bot.shard.count + " shards...").catch(e => { console.log(e); });
         data.bot.shard.respawnAll();
     },
 };

@@ -155,7 +155,7 @@ module.exports = {
             }
         });
         command.argumentsNeeded.forEach(arg => {
-            if(passed === true && arg.passes(msg, data.args, command, prefix) === false) {
+            if(passed === true && arg.passes(msg, command_data.args, command, prefix) === false) {
                 passed = false;
             }
         });

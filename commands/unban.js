@@ -2,9 +2,9 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'unban',
-    category: 'Moderation',
-    description: 'Unbans the tagged user-',
+    name: "unban",
+    category: "Moderation",
+    description: "Unbans the tagged user-",
     helpUsage: "[username]`",
     exampleUsage: "/username/",
     hidden: false,
@@ -18,13 +18,14 @@ module.exports = {
         new NeededPermission("me", "BAN_MEMBERS")
     ],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Get server config
         var usernames = []
         var banInfo = -1
 
-        var taggedUserDisplayName = data.totalArgument;
-        data.guild.fetchBans().then(serverBansResult => {
+        var taggedUserDisplayName = command_data.total_argument;
+        command_data.msg.guild.fetchBans().then(serverBansResult => {
             serverBansResult.forEach(ban => {
                 var taggedUserDisplayNameModded = taggedUserDisplayName.endsWith("#" + ban.user.discriminator) ? taggedUserDisplayName : taggedUserDisplayName + "#" + ban.user.discriminator
                 if(ban.user.username + "#" + ban.user.discriminator === taggedUserDisplayNameModded) {
@@ -34,13 +35,13 @@ module.exports = {
             });
 
             if(usernames.length > 1) {
-                data.reply("There are more than 1 user with this discriminator, so you need to specify which one (" + usernames + ")-");
+                command_data.msg.reply("There are more than 1 user with this discriminator, so you need to specify which one (" + usernames + ")-");
             } else if(usernames.length < 1) {
-                data.reply("`" + taggedUserDisplayName + "` isn't banned-");
+                command_data.msg.reply("`" + taggedUserDisplayName + "` isn't banned-");
             } else {
-                data.guild.members.unban(banInfo.user, "None").catch(err => {
+                command_data.msg.guild.members.unban(banInfo.user, "None").catch(err => {
                     console.error(err);
-                    data.reply("Couldn't unban `" + banInfo.user.username + "#" + banInfo.user.discriminator + "` (Try moving Nekomaid's permissions above the user you want to unban-")
+                    command_data.msg.reply("Couldn't unban `" + banInfo.user.username + "#" + banInfo.user.discriminator + "` (Try moving Nekomaid's permissions above the user you want to unban-")
                 })
 
                 var previousBan = -1;
@@ -50,10 +51,10 @@ module.exports = {
                     }
                 });
 
-                data.channel.send("Unbanned `" + banInfo.user.username + "#" + banInfo.user.discriminator + "`-").catch(e => { console.log(e); });
+                command_data.msg.channel.send("Unbanned `" + banInfo.user.username + "#" + banInfo.user.discriminator + "`-").catch(e => { console.log(e); });
                 
                 if(previousBan != -1) {
-                    data.bot.lastModeratorIDs.set(data.guild.id, data.authorUser.id);
+                    data.bot.lastModeratorIDs.set(command_data.msg.guild.id, data.authorUser.id);
                     data.bot.ssm.server_remove.removeServerBan(data.bot.ssm, previousBan.id);
                 }
             }

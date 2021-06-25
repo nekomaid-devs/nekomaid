@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'thighs',
-    category: 'NSFW',
-    description: 'Sends a random lewd picture of thighs-',
+    name: "thighs",
+    category: "NSFW",
+    description: "Sends a random lewd picture of thighs-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,23 +9,19 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: true,
-    async execute(data) {
-        //Get random image
-        var lewdURL = await data.bot.akaneko.nsfw.thighs().catch(e => { console.log(e); });
-
-        //Construct embed
-        var embedThighs = {
-            title: `Here are your lewds-`,
+    async execute(command_data) {
+        let url = await command_data.global_context.modules.akaneko.nsfw.thighs().catch(e => { console.log(e); });
+        let embedThighs = {
+            title: "Here are your lewds-",
             color: 8388736,
             image: {
-                url: lewdURL
+                url: url
             },
             footer: {
                 text: "Powered by Akaneko 💖"
             }
         }
-
-        //Send message
-        data.channel.send("", { embed: embedThighs }).catch(e => { console.log(e); });
+        
+        command_data.msg.channel.send("", { embed: embedThighs }).catch(e => { console.log(e); });
     },
 };

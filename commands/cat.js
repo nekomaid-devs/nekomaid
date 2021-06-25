@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'cat',
-    category: 'Fun',
-    description: 'Sends a random image of a cat-',
+    name: "cat",
+    category: "Fun",
+    description: "Sends a random image of a cat-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -12,7 +12,7 @@ module.exports = {
     async execute(command_data) {
         let obj = await command_data.global_context.modules_clients.neko.sfw.meow();
         let embedCat = {
-            title: `Here's a cat, just for you-`,
+            title: "Here's a cat, just for you-",
             color: 8388736,
             image: {
                 url: obj.url

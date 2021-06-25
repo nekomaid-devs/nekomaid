@@ -16,7 +16,7 @@ module.exports = {
                     const embedMessageEdit = {
                         author: {
                             name: "Message edited | " + newMessage.member.user.tag,
-                            icon_url: newMessage.member.user.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
+                            icon_url: newMessage.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                         },
                         fields: [
                         {

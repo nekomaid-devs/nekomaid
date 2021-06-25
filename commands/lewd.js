@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'lewd',
-    category: 'Emotes',
-    description: 'Posts a lewd reaction gif-',
+    name: "lewd",
+    category: "Emotes",
+    description: "Posts a lewd reaction gif-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,20 +9,16 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        //Get random gif
-        var gif = data.bot.pickRandom(data.bot.vars.getLewdGifs())
-
-        //Construct embed
-        var embedLewd = {
-            title: `${data.authorTag} thinks thats lewd!`,
+    execute(command_data) {
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getLewdGifs())
+        let embedLewd = {
+            title: `${command_data.msg.author.tag} thinks thats lewd!`,
             color: 8388736,
             image: {
-                url: gif
+                url: url
             }
         }
-
-        //Send message
-        data.channel.send("", { embed: embedLewd }).catch(e => { console.log(e); });
+        
+        command_data.msg.channel.send("", { embed: embedLewd }).catch(e => { console.log(e); });
     },
 };

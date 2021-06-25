@@ -2,9 +2,9 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'd_giveinserver',
-    category: 'Testing',
-    description: 'Adds an item to all users in a server-',
+    name: "d_giveinserver",
+    category: "Testing",
+    description: "Adds an item to all users in a server-",
     helpUsage: "[ammount] [itemID]`",
     hidden: true,
     aliases: [],
@@ -17,17 +17,18 @@ module.exports = {
         new NeededPermission("author", "BOT_OWNER")
     ],
     nsfw: false,
-    execute(data) {
-        var ammount = parseInt(data.args[0]);
-        var itemID = parseInt(data.args[1]);
+    execute(command_data) {
+        // TODO: re-factor command
+        var ammount = parseInt(command_data.args[0]);
+        var itemID = parseInt(command_data.args[1]);
 
-        var targetItem = data.botConfig.items.has(itemID) === true ? data.botConfig.items.get(itemID) : -1;
+        var targetItem = command_data.global_context.bot_config.items.has(itemID) === true ? command_data.global_context.bot_config.items.get(itemID) : -1;
         if(targetItem === -1) {
-            data.reply("There isn't any item with id `" + itemID + "`-");
+            command_data.msg.reply("There isn't any item with id `" + itemID + "`-");
             return;
         }
 
-        data.guild.members.cache.forEach(member => {
+        command_data.msg.guild.members.cache.forEach(member => {
             //Add an item to a database
             var globalUserConfig = data.bot.ssm.globalUserConfigCache.get(member.id);
             for(var i = 0; i < ammount; i += 1) {
@@ -39,7 +40,7 @@ module.exports = {
         });
 
         //Construct message and send it
-        console.log("[d_giveinserver] Added " + targetItem.displayName + " to " + data.guild.members.cache.size + " members on Server(id: " + data.guild.id + ")");
-        data.channel.send("Added `" + ammount + "x " + targetItem.displayName + "` to `" + data.guild.members.cache.size + "` members-").catch(e => { console.log(e); });
+        console.log("[d_giveinserver] Added " + targetItem.displayName + " to " + command_data.msg.guild.members.cache.size + " members on Server(id: " + command_data.msg.guild.id + ")");
+        command_data.msg.channel.send("Added `" + ammount + "x " + targetItem.displayName + "` to `" + command_data.msg.guild.members.cache.size + "` members-").catch(e => { console.log(e); });
     },
 };

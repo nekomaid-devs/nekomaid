@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'userinfo',
-    category: 'Utility',
+    name: "userinfo",
+    category: "Utility",
     description: "Displays information about the tagged user-",
     helpUsage: "[mention?]` *(optional argument)*",
     hidden: false,
@@ -9,89 +9,79 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        var end = new Date();
-        var start = new Date(data.taggedUser.createdAt.toUTCString());
-        var elapsed = end - start;
-        var createdAgo = data.bot.tc.convertTime(elapsed);
+    execute(command_data) {
+        let elapsedCreated = new Date() - new Date(command_data.tagged_user.createdAt.toUTCString());
+        let createdAgo = data.bot.tc.convertTime(elapsedCreated);
 
-        start = new Date(data.taggedMember.joinedAt.toUTCString());
-        elapsed = end - start;
-        var joinedAgo = data.bot.tc.convertTime(elapsed);
+        let elapsedJoined = new Date() - new Date(command_data.tagged_member.joinedAt.toUTCString());
+        let joinedAgo = data.bot.tc.convertTime(elapsedJoined);
 
-        var roles = ""
-        var rolesArray = Array.from(data.taggedMember.roles.cache.values())
+        let roles = "";
+        let rolesArray = Array.from(command_data.tagged_member.roles.cache.values());
         rolesArray.forEach((role, index) => {
             roles += role.toString();
-
             if(rolesArray.length - 1 > index) {
                 roles += ", ";
             }
         });
 
-        var presence = ""
-        switch(data.taggedUser.presence.status) {
+        let presence = "";
+        switch(command_data.tagged_user.presence.status) {
             case "online": {
-                presence = "Online <:n_online:725010541352976414>"
+                presence = "Online <:n_online:725010541352976414>";
                 break;
             }
 
             case "idle": {
-                presence = "Idle <:n_idle:725010594222178395>"
+                presence = "Idle <:n_idle:725010594222178395>";
                 break;
             }
 
             case "offline": {
-                presence = "Offline <:n_offline:725010693526388738>"
+                presence = "Offline <:n_offline:725010693526388738>";
                 break;
             }
 
             case "dnd": {
-                presence = "Do not Disturb <:n_dnd:725010643366707333>"
+                presence = "Do not Disturb <:n_dnd:725010643366707333>";
                 break;
             }
         }
 
-        var joinedScoreArray = Array.from(data.guild.members.cache.values()).sort(function(a, b) { return a.joinedTimestamp - b.joinedTimestamp })
-        var joinScore = -1;
-        var joinScore2 = "th";
-        var joinScoreMax = data.guild.members.cache.size;
-        var i = 1;
-        joinedScoreArray.forEach(member => {
-            if(member.user.id === data.taggedMember.user.id) {
-                joinScore = i
+        let join_score_array = Array.from(command_data.msg.guild.members.cache.values()).sort(function(a, b) { return a.joinedTimestamp - b.joinedTimestamp });
+        let join_score = -1;
+        let join_score_suffix = "th";
+        let join_score_max = command_data.msg.guild.members.cache.size;
+        join_score_array.forEach((member, i) => {
+            if(member.user.id === command_data.tagged_member.user.id) {
+                join_score = i;
             }
-
-            i += 1;
         });
-
-        switch(joinScore) {
+        switch(join_score_suffix) {
             case 1:
-                joinScore2 = "st";
+                join_score_suffix = "st";
                 break;
 
             case 2:
-                joinScore2 = "nd";
+                join_score_suffix = "nd";
                 break;
 
             case 3:
-                joinScore2 = "rd";
+                join_score_suffix = "rd";
                 break;
         }
 
-        //Construct embed
-        var avatarUrl = data.taggedUser.avatarURL({ format: 'png', dynamic: true, size: 1024 });
-
-        var embedMember = {
+        let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
+        let embedMember = {
             color: 8388736,
             author: {
-                name: "Information about user " + data.taggedUserTag,
+                name: "Information about user " + command_data.tagged_user.tag,
                 icon_url: avatarUrl
             },
             fields: [ 
                     {
                         name: '❯ User ID',
-                        value: `${data.taggedUser.id}`,
+                        value: `${command_data.tagged_user.id}`,
                         inline: true
                     },
                     {
@@ -101,35 +91,34 @@ module.exports = {
                     },
                     {
                         name: '❯ Is Bot?',
-                        value: `${data.taggedUser.bot}`,
+                        value: `${command_data.tagged_user.bot}`,
                         inline: true
                     },
                     {
                         name: '❯ Registered',
-                        value: `${createdAgo} (${data.taggedUser.createdAt.toUTCString()})`
+                        value: `${createdAgo} (${command_data.tagged_user.createdAt.toUTCString()})`
                     },
                     {
                         name: '❯ Joined',
-                        value: `${joinedAgo} (${data.taggedMember.joinedAt.toUTCString()})`
+                        value: `${joinedAgo} (${command_data.tagged_member.joinedAt.toUTCString()})`
                     },
                     {
                         name: '❯ Join Score',
-                        value: `${joinScore} (${joinScore}${joinScore2} out of ${joinScoreMax})`
+                        value: `${join_score} (${join_score}${join_score_suffix} out of ${join_score_max})`
                     },
                     {
-                        name: '❯ Roles [' + data.taggedMember.roles.cache.size + ']',
+                        name: '❯ Roles [' + data.tagged_member.roles.cache.size + ']',
                         value: `${roles}`
                     }
             ],
             thumbnail: {
-                url: avatarUrl
+                url: url
             },
             footer: {
-                text: `Requested by ${data.authorTag}`
+                text: `Requested by ${command_data.msg.author.tag}`
             },
         }
 
-        //Send message
-        data.channel.send("", { embed: embedMember }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedMember }).catch(e => { console.log(e); });
     },
 };

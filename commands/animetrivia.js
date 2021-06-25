@@ -1,9 +1,9 @@
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'animetrivia',
-    category: 'Fun',
-    description: 'Starts an anime opening/ending trivia in current channel~',
+    name: "animetrivia",
+    category: "Fun",
+    description: "Starts an anime opening/ending trivia in current channel~",
     helpUsage: "`",
     exampleUsage: "",
     hidden: true,
@@ -15,136 +15,127 @@ module.exports = {
         new NeededPermission("me", "SPEAK")
     ],
     nsfw: false,
-    async execute(data) {
-        //Check
-        if(data.authorMember.voice.channel == null) {
-            data.reply("You need to join a voice channel-");
+    async execute(command_data) {
+        if(command_data.msg.member.voice.channel == null) {
+            command_data.msg.reply("You need to join a voice channel-");
+            return;
+        }
+        if(command_data.msg.member.voice.channel.joinable === false || command_data.msg.member.voice.channel.speakable === false) {
+            command_data.msg.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again-");
+            return;
+        }
+        if(command_data.args.length > 0) { return; }
+        if(command_data.msg.guild.voice !== undefined) {
+            command_data.msg.channel.send("Please make sure there are no other running games or music playing and try again~").catch(e => { console.log(e); });
             return;
         }
 
-        if(data.authorMember.voice.channel.joinable === false || data.authorMember.voice.channel.speakable === false) {
-            data.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again-");
-            return;
-        }
-
-        if(data.args.length > 0) { return; }
-        if(data.guild.voice !== undefined) { data.channel.send("Please make sure there are no other running games or music playing and try again~").catch(e => { console.log(e); }); return; }
-
-        var embedSong = {
+        let embedSong = {
             title: "<:n_poll:771902338646278174> How to play?",
             description: 
             "You will be given an anime opening/ending and you'll have to guess which one it is from~" +
             "\n Once you decide, just type the number of the option in this channel~" +
             "\n\nCommands: " +
-            "\n`" + data.serverConfig.prefix + "animetrivia start` - starts the game" +
-            "\n`" + data.serverConfig.prefix + "animetrivia skip` - skips the round" +
-            "\n`" + data.serverConfig.prefix + "animetrivia end` - ends the game",
-            footer: { text: "Start the game by typing " + data.serverConfig.prefix + "animetrivia start" }
+            `\n\`${command_data.server_config.prefix}animetrivia start\` - starts the game` +
+            `\n\`${command_data.server_config.prefix}animetrivia skip\` - skips the round` +
+            `\n\`${command_data.server_config.prefix}animetrivia end\` - ends the game`,
+            footer: {
+                text: `Start the game by typing ${command_data.server_config.prefix}animetrivia start`
+            }
         }
-        data.channel.send({ embed: embedSong }).catch(e => { console.log(e); });
+        command_data.msg.channel.send({ embed: embedSong }).catch(e => { console.log(e); });
 
-        let collector = data.channel.createMessageCollector(m => m.author.bot === false);
+        let collector = command_data.msg.channel.createMessageCollector(m => m.author.bot === false);
         collector.on('collect', async(m) => {
-            if(m.content === data.serverConfig.prefix + "animetrivia start") {
-                var connection = await data.authorMember.voice.channel.join();
-                this.playNext(data, connection);
+            if(m.content === command_data.server_config.prefix + "animetrivia start") {
+                let connection = await command_data.msg.member.voice.channel.join();
+                this.play_next(command_data, connection);
                 collector.stop();
             } else {
-                data.channel.send("Cancelled the game~ Try again once you change your mind~").catch(e => { console.log(e); });
+                command_data.msg.channel.send("Cancelled the game~ Try again once you change your mind~").catch(e => { console.log(e); });
                 collector.stop();
             }
         });
     },
 
-    async playNext(data, connection) {
-        let options = data.bot.openings;
-        var opening = data.bot.pickRandom(data.bot.openings);
-        options.splice(options.indexOf(opening), 1);
+    async play_next(command_data, connection) {
+        let all_options = command_data.global_context.data.openings;
 
-        var fakeOpening1 = data.bot.pickRandom(options);
-        options.splice(options.indexOf(fakeOpening1), 1);
-        var fakeOpening2 = data.bot.pickRandom(options);
-        options.splice(options.indexOf(fakeOpening2), 1);
-        var fakeOpening3 = data.bot.pickRandom(options);
-        options.splice(options.indexOf(fakeOpening3), 1);
+        let opening = command_data.global_context.utils.pick_random(all_options);
+        all_options.splice(all_options.indexOf(opening), 1);
+        let fake_opening_1 = command_data.global_context.utils.pick_random(all_options);
+        all_options.splice(all_options.indexOf(fake_opening_1), 1);
+        let fake_opening_2 = command_data.global_context.utils.pick_random(all_options);
+        all_options.splice(all_options.indexOf(fake_opening_2), 1);
+        let fake_opening_3 = command_data.global_context.utils.pick_random(all_options);
+        all_options.splice(all_options.indexOf(fake_opening_3), 1);
 
-        var finalOptions = [opening, fakeOpening1, fakeOpening2, fakeOpening3]
-        var leftFinalOptions = finalOptions;
+        let final_options = [ opening, fake_opening_1, fake_opening_2, fake_opening_3 ];
+        command_data.global_context.utils.shuffle_array(final_options);
 
-        var option1 = data.bot.pickRandom(leftFinalOptions);
-        leftFinalOptions.splice(leftFinalOptions.indexOf(option1), 1);
+        let answered_IDs = [];
+        let correct_option = final_options.indexOf(opening) + 1;
+        let dispatcher;
 
-        var option2 = data.bot.pickRandom(leftFinalOptions);
-        leftFinalOptions.splice(leftFinalOptions.indexOf(option2), 1);
-
-        var option3 = data.bot.pickRandom(leftFinalOptions);
-        leftFinalOptions.splice(leftFinalOptions.indexOf(option3), 1);
-
-        var option4 = data.bot.pickRandom(leftFinalOptions);
-        leftFinalOptions.splice(leftFinalOptions.indexOf(option4), 1);
-
-        let randomizedOptions = [option1, option2, option3, option4]
-        let correctOption = randomizedOptions.indexOf(opening) + 1;
-
-        var answeredIDs = [];
-        var dispatcher;
-        var file = opening.file;
-        var a = file.substring(0, file.indexOf("-"));
+        let file = opening.file;
+        let a = file.substring(0, file.indexOf("-"));
         a = a.replace("Opening", "OP");
         a = a.replace("Ending", "ED");
         a = a.length >= 4 ? a : a.substring(0, 2) + "0" + a.substring(2);
-        var b = file.substring(file.indexOf("-") + 1, file.lastIndexOf("."));
-        var finalFile_a = b + "-" + a + "-NCOLD.mp4";
-        var finalFile_b = b + "-" + a + "-NCBD.mp4";
+        let b = file.substring(file.indexOf("-") + 1, file.lastIndexOf("."));
+        let final_file_a = b + "-" + a + "-NCOLD.mp4";
+        let final_file_b = b + "-" + a + "-NCBD.mp4";
 
-        var check_a = true;
-        var check_b = true;
-        await data.bot.axios.get("https://openings.moe/video/" + finalFile_a, { maxContentLength: 248 }).catch(e => { if(e.response && e.response.status === 404) { check_a = false; } });
-        await data.bot.axios.get("https://openings.moe/video/" + finalFile_b, { maxContentLength: 248 }).catch(e => { if(e.response && e.response.status === 404) { check_b = false; } });
+        let check_a = true;
+        let check_b = true;
+        await command_data.global_context.modules.axios.get("https://openings.moe/video/" + final_file_a, { maxContentLength: 248 }).catch(e => { if(e.response && e.response.status === 404) { check_a = false; } });
+        await command_data.global_context.modules.axios.get("https://openings.moe/video/" + final_file_b, { maxContentLength: 248 }).catch(e => { if(e.response && e.response.status === 404) { check_b = false; } });
         if(check_a === true) {
-            dispatcher = connection.play("https://openings.moe/video/" + finalFile_a);
+            dispatcher = connection.play("https://openings.moe/video/" + final_file_a);
         } else if(check_b === true) {
-            dispatcher = connection.play("https://openings.moe/video/" + finalFile_b);
+            dispatcher = connection.play("https://openings.moe/video/" + final_file_b);
         } else {
-            this.playNext(data, connection);
+            this.play_next(command_data, connection);
             return;
         }
 
-        var embedSong = {
+        let embedSong = {
             title: "❓ New song is playing~ Make a guess!~",
-            description: "1) " + randomizedOptions[0].source + "\n2) " + randomizedOptions[1].source + "\n3) " + randomizedOptions[2].source + "\n4) " + randomizedOptions[3].source + "\n",
-            footer: { text: "You have 45 seconds to answer~ | or end the game with " + data.serverConfig.prefix + "animetrivia end" }
+            description: "1) " + final_options[0].source + "\n2) " + final_options[1].source + "\n3) " + final_options[2].source + "\n4) " + final_options[3].source + "\n",
+            footer: {
+                text: `You have 45 seconds to answer~ | or end the game with ${command_data.server_config.prefix}animetrivia end`
+            }
         }
-        data.channel.send({ embed: embedSong }).catch(e => { console.log(e); });
+        command_data.msg.channel.send({ embed: embedSong }).catch(e => { console.log(e); });
 
         let timeout = -1;
         let answered = false;
-        let collector = data.channel.createMessageCollector(m => m.author.bot === false);
+        let collector = command_data.msg.channel.createMessageCollector(m => m.author.bot === false);
         collector.on('collect', m => {
             if(answered === false) {
-                if(m.content.startsWith(data.serverConfig.prefix + 'animetrivia skip')) {
+                if(m.content.startsWith(command_data.server_config.prefix + "animetrivia skip")) {
                     answered = true;
                     dispatcher.end();
-                    data.channel.send("Skipped this opening~ The anime was: `" + opening.source + "`").catch(e => { console.log(e); });
+                    command_data.msg.channel.send(`Skipped this opening~ The anime was: \`${opening.source}\``).catch(e => { console.log(e); });
 
-                    this.playNext(data, connection);
-                } else if(m.content.startsWith(data.serverConfig.prefix + 'animetrivia end')) {
+                    this.play_next(command_data, connection);
+                } else if(m.content.startsWith(command_data.server_config.prefix + "animetrivia end")) {
                     answered = true;
                     connection.disconnect();
-                    data.channel.send("<@" + m.author.id + "> ended the trivia~").catch(e => { console.log(e); });
+                    command_data.msg.channel.send(`<@${m.author.id}> ended the trivia~`).catch(e => { console.log(e); });
                 } else {
                     let guess = parseInt(m.content);
-                    if(isNaN(guess) === false && answeredIDs.includes(m.author.id) === false) {
-                        if(guess === correctOption) {
+                    if(isNaN(guess) === false && answered_IDs.includes(m.author.id) === false) {
+                        if(guess === correct_option) {
                             answered = true;
                             dispatcher.end();
-                            data.channel.send("<@" + m.author.id + "> got it correct! The anime was: `" + opening.source + "`~").catch(e => { console.log(e); });
+                            command_data.msg.channel.send(`<@${m.author.id}> got it correct! The anime was: \`${opening.source}\`~`).catch(e => { console.log(e); });
 
-                            this.playNext(data, connection);
+                            this.play_next(command_data, connection);
                             clearTimeout(timeout);
                         } else {
-                            answeredIDs.push(m.author.id);
-                            data.channel.send("<@" + m.author.id + "> was wrong! The answer isn't `" + guess + "`~").catch(e => { console.log(e); });
+                            answered_IDs.push(m.author.id);
+                            command_data.msg.channel.send(`<@${m.author.id}> was wrong! The answer isn't \`${guess}\`~`).catch(e => { console.log(e); });
                         }
                     }
                 }
@@ -169,8 +160,8 @@ module.exports = {
             answered = true;
             dispatcher.end();
 
-            data.channel.send("Nobody got it correct~ The anime was: `" + opening.source + "`~").catch(e => { console.log(e); });
-            this.playNext(data, connection);
+            command_data.msg.channel.send(`Nobody got it correct~ The anime was: \`${opening.source}\`~`).catch(e => { console.log(e); });
+            this.play_next(command_data, connection);
         }, 45 * 1000);
     }
 };

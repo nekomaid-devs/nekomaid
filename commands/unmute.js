@@ -2,9 +2,9 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'unmute',
-    category: 'Moderation',
-    description: 'Unmutes the tagged user-',
+    name: "unmute",
+    category: "Moderation",
+    description: "Unmutes the tagged user-",
     helpUsage: "[mention] [?reason]` *(optional argument)*",
     exampleUsage: "/userTag/",
     hidden: false,
@@ -18,52 +18,53 @@ module.exports = {
         new NeededPermission("me", "MANAGE_ROLES")
     ],
     nsfw: false,
-    async execute(data) {
-        if(data.taggedUser.bannable === false) {
-            data.reply("Couldn't unmute `" + data.taggedUserTag + "` (Try moving Nekomaid's permissions above the user you want to unmute)-");
+    async execute(command_data) {
+        // TODO: re-factor command
+        if(command_data.tagged_user.bannable === false) {
+            command_data.msg.reply("Couldn't unmute `" + command_data.tagged_user.tag + "` (Try moving Nekomaid's permissions above the user you want to unmute)-");
             return;
         }
 
         var unmuteReason = "None";
-        if(data.args.length > 1) {
-            unmuteReason = data.msg.content.substring(data.msg.content.indexOf(data.args[1]))
+        if(command_data.args.length > 1) {
+            unmuteReason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[1]))
         }
 
         //Get server config
         var previousMuteID = -1;
         data.serverMutes.forEach(function(mute) {
-            if(mute.userID === data.taggedUser.id) {
+            if(mute.userID === command_data.tagged_user.id) {
                 previousMuteID = mute.id;
             }
         });
 
         if(previousMuteID === -1) {
-            data.reply("`" + data.taggedUserTag + "` isn't muted-");
+            command_data.msg.reply("`" + command_data.tagged_user.tag + "` isn't muted-");
         } else {
-            if(data.guild.roles.cache.has(data.serverConfig.muteRoleID) === false) {
-                data.reply("Couldn't find the Muted role- (Did somebody delete it?)-");
+            if(command_data.msg.guild.roles.cache.has(command_data.server_config.muteRoleID) === false) {
+                command_data.msg.reply("Couldn't find the Muted role- (Did somebody delete it?)-");
                 return;
             }
             
-            var muteRole = await data.guild.roles.fetch(data.serverConfig.muteRoleID).catch(e => { console.log(e); });
-            data.taggedMember.roles.remove(muteRole);
+            var muteRole = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { console.log(e); });
+            command_data.tagged_member.roles.remove(muteRole);
 
-            data.channel.send("Unmuted `" + data.taggedUserTag + "` (Reason: `" + unmuteReason + "`)").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Unmuted `" + command_data.tagged_user.tag + "` (Reason: `" + unmuteReason + "`)").catch(e => { console.log(e); });
             data.bot.ssm.server_remove.removeServerMute(data.bot.ssm, previousMuteID);
 
-            if(data.serverConfig.audit_mutes == true && data.serverConfig.audit_channel != "-1") {
-                var channel = await data.guild.channels.fetch(data.serverConfig.audit_channel).catch(e => { console.log(e); });
+            if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
+                var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
 
                 if(channel !== undefined) {
-                    var embedMute = {
+                    let embedMute = {
                         author: {
-                            name: "Case " + data.serverConfig.caseID + "# | Unmute | " + data.taggedUserTag,
-                            icon_url: data.taggedUser.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
+                            name: "Case " + command_data.server_config.caseID + "# | Unmute | " + command_data.tagged_user.tag,
+                            icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                         },
                         fields: [
                             {
                                 name: "User:",
-                                value: data.taggedUser,
+                                value: command_data.tagged_user,
                                 inline: true
                             },
                             {
@@ -79,8 +80,8 @@ module.exports = {
                     }
 
                     //Save edited config
-                    data.serverConfig.caseID += 1;
-                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: data.guild.id, server: data.serverConfig });
+                    command_data.server_config.caseID += 1;
+                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
                 }

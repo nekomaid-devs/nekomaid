@@ -8,7 +8,7 @@ class InventoryManager {
             case "box": {
                 let payoutAmmount = 0;
                 for(var i = 0; i < targetIndexes.length; i += 1) {
-                    payoutAmmount += data.bot.pickRandom(itemPrefab.boxPayouts);
+                    payoutAmmount += command_data.global_context.utils.pick_random(itemPrefab.boxPayouts);
                 }
 
                 data.authorConfig.credits += payoutAmmount;
@@ -16,10 +16,10 @@ class InventoryManager {
     
                 const embedBox = {
                     color: 8388736,
-                    description: "`" + data.authorTag + "` opened `" + targetIndexes.length + "x " + itemPrefab.displayName + "` and got `" + payoutAmmount + "💵` (Current Credits: `" + data.authorConfig.credits + "$`)"
+                    description: "`" + command_data.msg.author.tag + "` opened `" + targetIndexes.length + "x " + itemPrefab.displayName + "` and got `" + payoutAmmount + "💵` (Current Credits: `" + data.authorConfig.credits + "$`)"
                 }
     
-                data.channel.send("", { embed: embedBox }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: embedBox }).catch(e => { console.log(e); });
                 break;
             }
     
@@ -28,41 +28,41 @@ class InventoryManager {
                 data.authorConfig.credits += payoutAmmount;
                 data.authorConfig.netWorth += payoutAmmount;
     
-                var embedCash = {
+                let embedCash = {
                     color: 8388736,
-                    description: "`" + data.authorTag + "` opened `" + targetIndexes.length + "x " + itemPrefab.displayName + "` and got `" + payoutAmmount + "💵` (Current Credits: `" + data.authorConfig.credits + "$`)"
+                    description: "`" + command_data.msg.author.tag + "` opened `" + targetIndexes.length + "x " + itemPrefab.displayName + "` and got `" + payoutAmmount + "💵` (Current Credits: `" + data.authorConfig.credits + "$`)"
                 }
     
-                data.channel.send("", { embed: embedCash }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: embedCash }).catch(e => { console.log(e); });
                 break;
             }
     
             case "cash_others": {
-                var taggedUser = data.taggedUsers[0];
+                var taggedUser = command_data.tagged_users[0];
                 if(taggedUser.id === data.authorUser.id) {
-                    data.reply("You can't give credits from this item to yourself (mention somebody else)-");
+                    command_data.msg.reply("You can't give credits from this item to yourself (mention somebody else)-");
                     return;
                 }
     
                 //Get tagged user's config
                 const payoutAmmount = itemPrefab.cashPayout * targetIndexes.length;
-                data.taggedUserConfig.credits += payoutAmmount;
-                data.taggedUserConfig.netWorth += payoutAmmount;
+                command_data.tagged_user_config.credits += payoutAmmount;
+                command_data.tagged_user_config.netWorth += payoutAmmount;
     
-                var embedCashOthers = {
+                let embedCashOthers = {
                     color: 8388736,
-                    description: "`" + data.authorTag + "` gave `" + targetIndexes.length + "x " + itemPrefab.displayName + "` to `" + data.taggedUserTag + "` and they got `" + payoutAmmount + "💵` (Current Credits: `" + data.taggedUserConfig.credits + "$`)"
+                    description: "`" + command_data.msg.author.tag + "` gave `" + targetIndexes.length + "x " + itemPrefab.displayName + "` to `" + command_data.tagged_user.tag + "` and they got `" + payoutAmmount + "💵` (Current Credits: `" + command_data.tagged_user_config.credits + "$`)"
                 }
     
-                data.channel.send("", { embed: embedCashOthers }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: embedCashOthers }).catch(e => { console.log(e); });
     
                 //Edits and broadcasts the change
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.taggedUser.id, user: data.taggedUserConfig });
+                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
                 break;
             }
             
             default:
-                data.reply("This item can't be used-");
+                command_data.msg.reply("This item can't be used-");
                 return;
         }
     

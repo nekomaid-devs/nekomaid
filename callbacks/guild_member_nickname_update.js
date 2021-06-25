@@ -12,7 +12,7 @@ module.exports = {
                     const embedNicknameChange = {
                         author: {
                             name: "Nickname changed | " + newMember.user.tag,
-                            icon_url: newMember.user.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
+                            icon_url: newMember.user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                         },
                         fields: [
                         {

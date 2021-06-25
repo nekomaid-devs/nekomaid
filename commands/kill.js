@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'kill',
-    category: 'Actions',
-    description: 'Kills the tagged person-',
+    name: "kill",
+    category: "Actions",
+    description: "Kills the tagged person-",
     helpUsage: "[mention]`",
     exampleUsage: "/userTag/",
     hidden: false,
@@ -14,32 +14,33 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         var isAllowed = true;
-        data.taggedUsers.forEach(function(user) {
+        command_data.tagged_users.forEach(function(user) {
             if(user.id === data.authorUser.id) {
                 isAllowed = false;
             }
         });
 
         if(isAllowed === false) {
-            data.reply(`Let's not do that ;-;`);
+            command_data.msg.reply(`Let's not do that ;-;`);
             return;
         }
 
         //Get random gif
-        var gif = data.bot.pickRandom(data.bot.vars.getKillGifs())
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getKillGifs())
 
         //Construct embed
-        var embedKill = {
-            title: `${data.authorTag} kills ${data.taggedUserTags}!`,
+        let embedKill = {
+            title: `${command_data.msg.author.tag} kills ${command_data.tagged_user_tags}!`,
             color: 8388736,
             image: {
-                url: gif
+                url: url
             }
         }
 
         //Send message
-        data.channel.send("", { embed: embedKill }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedKill }).catch(e => { console.log(e); });
     },
 };

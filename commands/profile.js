@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'profile',
-    category: 'Profile',
+    name: "profile",
+    category: "Profile",
     description: "Displays the tagged user's profile-",
     helpUsage: "[mention?]` *(optional argument)*",
     exampleUsage: "/userTag/",
@@ -10,8 +10,9 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
-        var marriedText = data.taggedUserConfig.marriedID;
+    async execute(command_data) {
+        // TODO: re-factor command
+        var marriedText = command_data.tagged_user_config.marriedID;
 
         if(marriedText === "-1") {
             marriedText = "Nobody";
@@ -21,23 +22,23 @@ module.exports = {
             if(marriedUser !== undefined && marriedUser !== null) {
                 marriedText = marriedUser.username + "#" + marriedUser.discriminator;
 
-                if(data.taggedUserConfig.canDivorce == false) {
+                if(command_data.tagged_user_config.canDivorce == false) {
                     marriedText += " (🔒)"
                 }
             }
         }
 
         //Construct embed
-        var avatarUrl = data.taggedUser.avatarURL({ format: 'png', dynamic: true, size: 1024 });
+        var avatarUrl = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
 
-        var credits = data.taggedUserConfig.credits;
-        var bank = data.taggedUserConfig.bank;
-        var level = data.taggedUserConfig.level;
-        var xp = data.taggedUserConfig.xp;
-        var neededXP = data.botConfig.levelXP;
-        var rep = data.taggedUserConfig.rep;
+        var credits = command_data.tagged_user_config.credits;
+        var bank = command_data.tagged_user_config.bank;
+        var level = command_data.tagged_user_config.level;
+        var xp = command_data.tagged_user_config.xp;
+        var neededXP = command_data.global_context.bot_config.levelXP;
+        var rep = command_data.tagged_user_config.rep;
 
-        var inventory = data.taggedUserConfig.inventory;
+        var inventory = command_data.tagged_user_config.inventory;
         var inventoryText = ""
 
         if(inventory.length < 1) {
@@ -52,8 +53,8 @@ module.exports = {
                 let count = inventoryMap.get(id);
 
                 if(inventoryText != "") { inventoryText += ", " }
-                if(data.botConfig.items.has(id) === true) {
-                    var item2 = data.botConfig.items.get(id);
+                if(command_data.global_context.bot_config.items.has(id) === true) {
+                    var item2 = command_data.global_context.bot_config.items.get(id);
                     inventoryText += "`" + count + "x " + item2.displayName + "`";
                 }
             });
@@ -70,18 +71,18 @@ module.exports = {
         var premiumText = diff < 3600 ? " (Premium ⭐)" : "";
 
         var bankUpgrade = 0;
-        data.taggedUserConfig.inventory.forEach(item => {
-            data.botConfig.items.forEach(item2 => {
+        command_data.tagged_user_config.inventory.forEach(item => {
+            command_data.global_context.bot_config.items.forEach(item2 => {
                 if(item2.id === item && item2.type === "bankLimit") {
                     bankUpgrade += item2.limit;
                 }
             });
         });
 
-        var embedProfile = {
+        let embedProfile = {
             color: 8388736,
             author: {
-                name: `${data.taggedUserTag}'s Profile` + premiumText,
+                name: `${command_data.tagged_user.tag}'s Profile` + premiumText,
                 icon_url: avatarUrl
             },
             fields: [ 
@@ -92,7 +93,7 @@ module.exports = {
                     },
                     {
                         name: '🏦    Bank:',
-                        value: `$ ${bank}/${data.botConfig.bankLimit + bankUpgrade}`,
+                        value: `$ ${bank}/${command_data.global_context.bot_config.bankLimit + bankUpgrade}`,
                         inline: true
                     },
                     {
@@ -116,11 +117,11 @@ module.exports = {
                 url: avatarUrl
             },
             footer: {
-                text: `Requested by ${data.authorTag} | Cool stuff on the support server releasing soon!`
+                text: `Requested by ${command_data.msg.author.tag} | Cool stuff on the support server releasing soon!`
             },
         }
 
         //Send message
-        data.channel.send("", { embed: embedProfile }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedProfile }).catch(e => { console.log(e); });
     },
 };

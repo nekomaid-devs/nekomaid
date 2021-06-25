@@ -2,9 +2,9 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'slowmode',
-    category: 'Moderation',
-    description: 'Set a slowmode for current channel-',
+    name: "slowmode",
+    category: "Moderation",
+    description: "Set a slowmode for current channel-",
     helpUsage: "[seconds]`",
     exampleUsage: "10",
     hidden: false,
@@ -18,9 +18,9 @@ module.exports = {
         new NeededPermission("me", "MANAGE_CHANNELS"),
     ],
     nsfw: false,
-    execute(data) {
-        var time = parseInt(data.args[0]);
-        data.channel.setRateLimitPerUser(time);
-        data.channel.send("Set current channel's slowmode to `" + time + "` s").catch(e => { console.log(e); });
+    execute(command_data) {
+        let time = parseInt(command_data.args[0]);
+        command_data.msg.channel.setRateLimitPerUser(time);
+        command_data.msg.channel.send(`Set current channel's slowmode to \`${time}\` s.`).catch(e => { console.log(e); });
     },
 };

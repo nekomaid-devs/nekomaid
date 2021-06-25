@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'shop',
-    category: 'Profile',
+    name: "shop",
+    category: "Profile",
     description: "Displays all buyable items-",
     helpUsage: "[page?]` *(optional argument)*",
     hidden: false,
@@ -9,17 +9,18 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Construst embed
         const embedShop = new data.bot.Discord.MessageEmbed()
         .setColor(8388736)
         .setTitle('NekoMaid - Shop')
-        .setFooter(`Requested by ${data.authorTag}`);
+        .setFooter(`Requested by ${command_data.msg.author.tag}`);
 
-        var items = data.botConfig.shopItems;
+        var items = command_data.global_context.bot_config.shopItems;
 
         items.forEach(function (item) {
-            data.botConfig.items.forEach(item2 => {
+            command_data.global_context.bot_config.items.forEach(item2 => {
                 if(item.id === item2.id) {
                     embedShop.addField("#" + item.id + " - " + item2.displayName, item.price + " credits");
                 }
@@ -27,6 +28,6 @@ module.exports = {
         })
 
         //Send message
-        data.channel.send("", { embed: embedShop }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedShop }).catch(e => { console.log(e); });
     },
 };

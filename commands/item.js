@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'item',
-    category: 'Profile',
-    description: 'Displays info about an item-',
+    name: "item",
+    category: "Profile",
+    description: "Displays info about an item-",
     helpUsage: "[item name]`",
     exampleUsage: "Rare Box",
     hidden: false,
@@ -14,28 +14,29 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        var itemName = data.totalArgument;
+    execute(command_data) {
+        // TODO: re-factor command
+        var itemName = command_data.total_argument;
         var targetItem = -1;
 
-        data.botConfig.items.forEach(item => {
+        command_data.global_context.bot_config.items.forEach(item => {
             if(item.displayName.toLowerCase() === itemName.toLowerCase()) {
                 targetItem = item;
             }
         });
 
         if(targetItem === -1) {
-            data.reply("Haven't found any item with name `" + itemName + "`-");
+            command_data.msg.reply("Haven't found any item with name `" + itemName + "`-");
             return;
         }
 
-        var embedItem = {
+        let embedItem = {
             color: 8388736,
             title: "Info about `" + targetItem.displayName + "`",
             description: targetItem.description,
-            footer: "Requested by " + data.authorTag
+            footer: "Requested by " + command_data.msg.author.tag
         }
 
-        data.channel.send("", { embed: embedItem }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedItem }).catch(e => { console.log(e); });
     },
 };

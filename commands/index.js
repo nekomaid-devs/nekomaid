@@ -9,7 +9,6 @@ module.exports = {
     d_tagged: require('./d_tagged'),
     update: require('./update'),
     botconfig: require('./botconfig'),
-    sql: require('./sql'),
     customembed: require('./customembed'),
     eval: require('./eval'),
     d_give: require('./d_give'),

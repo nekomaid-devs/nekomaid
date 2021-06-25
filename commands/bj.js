@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'bj',
-    category: 'NSFW',
-    description: 'Sends a random lewd blowjob image-',
+    name: "bj",
+    category: "NSFW",
+    description: "Sends a random lewd blowjob image-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,23 +9,19 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: true,
-    async execute(data) {
-        //Get random image
-        var lewdURL = await data.bot.akaneko.nsfw.blowjob().catch(e => { console.log(e); });
-    
-        //Construct embed
-        var embedBj = {
-            title: `Here are your lewds-`,
+    async execute(command_data) {
+        let url = await command_data.global_context.modules.akaneko.nsfw.blowjob().catch(e => { console.log(e); });
+        let embedBJ = {
+            title: "Here are your lewds-",
             color: 8388736,
             image: {
-                url: lewdURL
+                url: url
             },
             footer: {
                 text: "Powered by Akaneko 💖"
             }
         }
-    
-        //Send message
-        data.channel.send("", { embed: embedBj }).catch(e => { console.log(e); });
+
+        command_data.msg.channel.send("", { embed: embedBJ }).catch(e => { console.log(e); });
     },
 };

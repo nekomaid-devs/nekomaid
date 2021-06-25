@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'hhelp',
-    category: 'Utility',
-    description: '-',
+    name: "hhelp",
+    category: "Utility",
+    description: "-",
     helpUsage: "`",
     hidden: true,
     aliases: [],
@@ -9,8 +9,7 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        //Send message
-        data.channel.send("Help yourself-").catch(e => { console.log(e); });
+    execute(command_data) {
+        command_data.msg.channel.send("Help yourself-").catch(e => { console.log(e); });
     },
 };

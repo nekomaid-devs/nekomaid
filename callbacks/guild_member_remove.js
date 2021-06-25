@@ -49,7 +49,7 @@ module.exports = {
                         const embedKick = {
                             author: {
                                 name: "Kick | " + lastAudit.target.tag,
-                                icon_url: lastAudit.target.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
+                                icon_url: lastAudit.target.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                             },
                             fields: [
                                 {

@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: '8ball',
-    category: 'Fun',
-    description: 'Answers the given question-',
+    name: "8ball",
+    category: "Fun",
+    description: "Answers the given question-",
     helpUsage: "[question]`",
     exampleUsage: "Am I cute?",
     hidden: false,
@@ -14,35 +14,31 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        //Construct question and answer
-        var question = data.totalArgument;
+    execute(command_data) {
+        let question = command_data.total_argument;
         if(question.endsWith("?") === false) {
             question += "?";
         }
 
-        var answer = data.bot.pickRandom(data.bot.vars.get8BallAnswers())
-
-        //Construct embed
-        var embed8Ball = {
-            title: `🎱 | 8Ball`,
+        let answer = command_data.global_context.bot.pickRandom(command_data.global_context.bot.vars.get8BallAnswers());
+        let embed8Ball = {
+            title: "🎱 | 8Ball",
             color: 8388736,
             fields: [ 
                 {
-                    name: 'Question:',
+                    name: "Question:",
                     value: `${question}`
                 },
                 {
-                    name: 'Answer:',
+                    name: "Answer:",
                     value: `${answer}`
                 }
             ],
             footer: {
-                text: `Requested by ${data.authorTag}`
+                text: `Requested by ${command_data.msg.author.tag}`
             }
         }
 
-        //Send message
-        data.channel.send("", { embed: embed8Ball }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embed8Ball }).catch(e => { console.log(e); });
     },
 };

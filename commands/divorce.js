@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'divorce',
-    category: 'Profile',
-    description: 'Divorces married user-',
+    name: "divorce",
+    category: "Profile",
+    description: "Divorces married user-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,24 +9,25 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         if(data.msg.mentions.users.array().length > 0) {
             //Permission check
-            if(data.botConfig.botOwners.includes(data.authorUser.id) === false) {
-                data.reply("You aren't the bot owner- (use `" + data.serverConfig.prefix + "divorce` if you want to divorce)");
+            if(command_data.global_context.bot_config.botOwners.includes(data.authorUser.id) === false) {
+                command_data.msg.reply("You aren't the bot owner- (use `" + command_data.server_config.prefix + "divorce` if you want to divorce)");
                 return;
             }
 
-            if(data.taggedUserConfig.marriedID === "-1") {
-                data.reply(`This user isn't married-`);
+            if(command_data.tagged_user_config.marriedID === "-1") {
+                command_data.msg.reply(`This user isn't married-`);
                 return;
             }
 
-            var marriedUser0 = await data.bot.users.fetch(data.taggedUserConfig.marriedID).catch(e => { console.log(e); });
+            var marriedUser0 = await data.bot.users.fetch(command_data.tagged_user_config.marriedID).catch(e => { console.log(e); });
             if(marriedUser0 === undefined) {
-                data.reply(`There was an error in fetching User-`);
+                command_data.msg.reply(`There was an error in fetching User-`);
             } else {
-                var taggedUserConfig = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "globalUser", id: data.taggedUser.id });    
+                var taggedUserConfig = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "globalUser", id: command_data.tagged_user.id });    
                 var globalUserConfig0 = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "globalUser", id: marriedUser0.id });    
 
                 //Changes the data in the structure
@@ -34,7 +35,7 @@ module.exports = {
                 taggedUserConfig.canDivorce = true;
 
                 //Edits and broadcasts the change
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.taggedUser.id, user: taggedUserConfig });
+                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: taggedUserConfig });
 
                 //Changes the data in the structure
                 globalUserConfig0.marriedID = "-1";
@@ -44,14 +45,14 @@ module.exports = {
                 data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: marriedUser0.id, user: globalUserConfig0 });
 
                 //Construct message and send it
-                data.channel.send("Force divorced `" + data.taggedUserTag + "` and `" + marriedUser0.tag + "`!").catch(e => { console.log(e); });
+                command_data.msg.channel.send("Force divorced `" + command_data.tagged_user.tag + "` and `" + marriedUser0.tag + "`!").catch(e => { console.log(e); });
             }
 
             return;
         }
 
         if(data.authorConfig.marriedID === "-1") {
-            data.reply(`You're not married-`);
+            command_data.msg.reply(`You're not married-`);
             return;
         }
 
@@ -64,7 +65,7 @@ module.exports = {
 
         //Check if author can divorce
         if(data.authorConfig.canDivorce == false) {
-            data.reply("You can't divorce `" + marriedUser.tag + ", because you're going be with them forever...");
+            command_data.msg.reply("You can't divorce `" + marriedUser.tag + ", because you're going be with them forever...");
             return;
         }
 
@@ -83,6 +84,6 @@ module.exports = {
         }
 
         //Construct message and send it
-        data.channel.send("`" + data.authorTag + "` divorced `" + marriedUser.tag + "`!").catch(e => { console.log(e); });
+        command_data.msg.channel.send("`" + command_data.msg.author.tag + "` divorced `" + marriedUser.tag + "`!").catch(e => { console.log(e); });
     },
 };

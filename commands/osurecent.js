@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'osurecent',
-    category: 'Utility',
-    description: 'Shows osu! recent plays-',
+    name: "osurecent",
+    category: "Utility",
+    description: "Shows osu! recent plays-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,22 +9,23 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         if(data.authorConfig.osuUsername === "-1") {
-            data.reply("You haven't set an osu! profile yet- Set it by typing `" + data.serverConfig.prefix + "osuset <username>`-")
+            command_data.msg.reply("You haven't set an osu! profile yet- Set it by typing `" + command_data.server_config.prefix + "osuset <username>`-")
             return;
         }
 
         var user = await data.bot.osu.getUser({ u: data.authorConfig.osuUsername }).catch(e => { console.log(e); });
         if(user.id === undefined) {
-            data.reply("No osu! profile found- Try setting a new one with `" + data.serverConfig.prefix + "osuset <username>`-");
+            command_data.msg.reply("No osu! profile found- Try setting a new one with `" + command_data.server_config.prefix + "osuset <username>`-");
             return;
         }
 
         var t0 = Date.now();
         var top = await data.bot.osu.getUserRecent({ u: data.authorConfig.osuUsername }).catch(e => { console.log(e); });
         if(top.length === undefined || top.length < 1) {
-            data.reply("There was an error in processing this request-");
+            command_data.msg.reply("There was an error in processing this request-");
             return;
         }
         
@@ -69,7 +70,7 @@ module.exports = {
         var secTaken = ((t1 - t0) / 1000).toFixed(3);
 
         //Construct embed
-        var embedOsu = {
+        let embedOsu = {
             color: 8388736,
             author: {
                 name: `osu! recent plays for ${data.authorConfig.osuUsername}`,
@@ -86,6 +87,6 @@ module.exports = {
         }
 
         //Send message
-        data.channel.send("", { embed: embedOsu }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedOsu }).catch(e => { console.log(e); });
     },
 };

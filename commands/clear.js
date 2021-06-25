@@ -2,9 +2,9 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'clear',
-    category: 'Moderation',
-    description: 'Deletes messages in current channel-',
+    name: "clear",
+    category: "Moderation",
+    description: "Deletes messages in current channel-",
     helpUsage: "[numberOfMessages] [mention?]` *(1 optional argument)*",
     exampleUsage: "99 /userTag/",
     hidden: false,
@@ -18,10 +18,11 @@ module.exports = {
         new NeededPermission("me", "MANAGE_MESSAGES"),
     ],
     nsfw: false,
-    execute(data) {
-        var numOfMessages = parseInt(data.args[0]);
+    execute(command_data) {
+        // TODO: re-factor command
+        var numOfMessages = parseInt(command_data.args[0]);
         if(numOfMessages > 99) {
-            data.reply(`Cannot delete more than 99 messages~`);
+            command_data.msg.reply(`Cannot delete more than 99 messages~`);
             return;
         }
 
@@ -42,23 +43,23 @@ module.exports = {
             
             //Get number of filtered messages
             targetMessages = targetMessages.slice(targetMessages.length - numOfMessages, targetMessages.length + 1);
-            console.log(`[clear] Deleting ${targetMessages.length} messages from User(id: ${targetUser.id}) in ${data.channel.name}...`);
+            console.log(`[clear] Deleting ${targetMessages.length} messages from User(id: ${targetUser.id}) in ${command_data.msg.channel.name}...`);
 
             //Remove last one (clear command) and then targetMessages
-            data.channel.bulkDelete(1, true).catch(e => { console.log(e) })
-            data.channel.bulkDelete(targetMessages, true).then(messages => {
-                data.channel.send("Deleted `" + messages.size + "` messages from **" + targetDisplayName + "**-").then(message => 
+            command_data.msg.channel.bulkDelete(1, true).catch(e => { console.log(e) })
+            command_data.msg.channel.bulkDelete(targetMessages, true).then(messages => {
+                command_data.msg.channel.send("Deleted `" + messages.size + "` messages from **" + targetDisplayName + "**-").then(message => 
                     message.delete({ timeout: 3000 }).catch(e => { console.log(e) })
                 ).catch(e => { console.log(e); });
             }).catch(e => { console.log(e) })
         } else {
             //Regular deleting without mention
-            console.log(`[clear] Deleting ${numOfMessages} messages in ${data.channel.name}...`);
+            console.log(`[clear] Deleting ${numOfMessages} messages in ${command_data.msg.channel.name}...`);
 
             //Remove last one (clear command) and then numOfMessages
-            data.channel.bulkDelete(numOfMessages + 1, true).then(messages => {
+            command_data.msg.channel.bulkDelete(numOfMessages + 1, true).then(messages => {
                 var deleteMessagesSize = messages.size - 1;
-                data.channel.send("Deleted `" + deleteMessagesSize + "` messages-").then(message => 
+                command_data.msg.channel.send("Deleted `" + deleteMessagesSize + "` messages-").then(message => 
                     message.delete({ timeout: 3000 }).catch(e => { console.log(e) })
                 ).catch(e => { console.log(e); });
             }).catch(e => { console.log(e) })

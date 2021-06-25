@@ -1,9 +1,9 @@
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'mutes',
-    category: 'Moderation',
-    description: 'Displays all mutes on this server-',
+    name: "mutes",
+    category: "Moderation",
+    description: "Displays all mutes on this server-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -13,17 +13,18 @@ module.exports = {
         new NeededPermission("author", "BAN_MEMBERS")
     ],
     nsfw: false,
-    execute(data) {
+    execute(command_data) {
+        // TODO: re-factor command
         //Get server config
         var now = Date.now();
 
         //Construct embed
         const embedMutes = new data.bot.Discord.MessageEmbed()
         .setColor(8388736)
-        .setAuthor('❯ Mutes (' + data.serverMutes.length + ')', data.guild.iconURL({ format: 'png', dynamic: true, size: 1024 }));
+        .setAuthor('❯ Mutes (' + data.serverMutes.length + ')', command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
 
         if(data.serverMutes.length < 1) {
-            data.channel.send("", { embed: embedMutes }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedMutes }).catch(e => { console.log(e); });
             return;
         }
 
@@ -40,7 +41,7 @@ module.exports = {
 
             loadedMutes += 1;
             if(loadedMutes >= expectedMutes) {
-                data.channel.send("", { embed: embedMutes }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: embedMutes }).catch(e => { console.log(e); });
             }
         });
     },

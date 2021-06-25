@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'bal',
-    category: 'Profile',
+    name: "bal",
+    category: "Profile",
     description: "Displays the tagged user's balance-",
     helpUsage: "[mention?]` *(optional argument)*",
     exampleUsage: "/userTag/",
@@ -10,48 +10,46 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        //Construct embed
-        var avatarUrl = data.taggedUser.avatarURL({ format: 'png', dynamic: true, size: 1024 });
-        var credits = data.taggedUserConfig.credits;
-        var bank = data.taggedUserConfig.bank;
+    execute(command_data) {
+        let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
+        let credits = command_data.tagged_user_config.credits;
+        let bank = command_data.tagged_user_config.bank;
 
-        var bankUpgrade = 0;
-        data.taggedUserConfig.inventory.forEach(item => {
-            data.botConfig.items.forEach(item2 => {
-                if(item2.id === item && item2.type === "bankLimit") {
-                    bankUpgrade += item2.limit;
+        let bankUpgrade = 0;
+        command_data.tagged_user_config.inventory.forEach(item => {
+            command_data.global_context.bot_config.items.forEach(item_2 => {
+                if(item_2.id === item && item_2.type === "bankLimit") {
+                    bankUpgrade += item_2.limit;
                 }
             });
         });
 
-        var embedBalance = {
+        let embedBalance = {
             color: 8388736,
             author: {
-                name: `${data.taggedUserTag}'s Balance`,
-                icon_url: avatarUrl
+                name: `${command_data.tagged_user.tag}'s Balance`,
+                icon_url: url
             },
             fields: [ 
-                    {
-                            name: '💵    Credits:',
-                            value: `$ ${credits}`,
-                            inline: true
-                    },
-                    {
-                        name: '🏦    Bank:',
-                        value: `$ ${bank}/${data.botConfig.bankLimit + bankUpgrade}`,
-                        inline: true
-                    }
+                {
+                    name: '💵    Credits:',
+                    value: `$ ${credits}`,
+                    inline: true
+                },
+                {
+                    name: '🏦    Bank:',
+                    value: `$ ${bank}/${(command_data.global_context.bot_config.bankLimit + bankUpgrade)}`,
+                    inline: true
+                }
             ],
             thumbnail: {
-                    url: avatarUrl
+                url: url
             },
             footer: {
-                    text: `Requested by ${data.authorTag} | Cool stuff on the support server releasing soon!`
+                text: `Requested by ${command_data.msg.author.tag} | Cool stuff on the support server releasing soon!`
             },
         }
 
-        //Send message
-        data.channel.send("", { embed: embedBalance }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedBalance }).catch(e => { console.log(e); });
     },
 };

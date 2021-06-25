@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'queue',
-    category: 'Music',
+    name: "queue",
+    category: "Music",
     description: "Displays the queue-",
     helpUsage: "`",
     hidden: false,
@@ -9,13 +9,14 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
-        if(data.bot.vm.connections.has(data.guild.id) === false || data.bot.vm.connections.get(data.guild.id).current === -1) {
-            data.reply("There's nothing on the queue-");
+    async execute(command_data) {
+        // TODO: re-factor command
+        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false || data.bot.vm.connections.get(command_data.msg.guild.id).current === -1) {
+            command_data.msg.reply("There's nothing on the queue-");
             return;
         }
 
-        var voiceData = data.bot.vm.connections.get(data.guild.id);
+        var voiceData = data.bot.vm.connections.get(command_data.msg.guild.id);
         const embedQueue = new data.bot.Discord.MessageEmbed();
 
         var descriptionText = "";
@@ -24,7 +25,7 @@ module.exports = {
             case 0:
                 embedQueue
                 .setColor(8388736)
-                .setTitle('Queue for `' + data.guild.name + '` (' + voiceData.queue.length + ' songs)')
+                .setTitle('Queue for `' + command_data.msg.guild.name + '` (' + voiceData.queue.length + ' songs)')
                 .setFooter(`Nekomaid`);
 
                 for(var i = 1; i <= 5; i += 1) {
@@ -66,7 +67,7 @@ module.exports = {
             case 1:
                 embedQueue
                 .setColor(8388736)
-                .setTitle('Queue for `' + data.guild.name + '` (repeating ' + voiceData.persistentQueue.length + ' songs)')
+                .setTitle('Queue for `' + command_data.msg.guild.name + '` (repeating ' + voiceData.persistentQueue.length + ' songs)')
                 .setFooter(`Nekomaid`);
 
                 var i0 = 0;
@@ -129,6 +130,6 @@ module.exports = {
                 break;
         }
 
-        data.channel.send("", { embed: embedQueue }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedQueue }).catch(e => { console.log(e); });
     },
 };

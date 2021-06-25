@@ -1,9 +1,9 @@
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: 'nickletterrequest',
-    category: 'Fun',
-    description: 'Try it and see~',
+    name: "nickletterrequest",
+    category: "Fun",
+    description: "Try it and see~",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -14,18 +14,19 @@ module.exports = {
         new NeededPermission("me", "MANAGE_NICKNAMES")
     ],
     nsfw: false,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         //Process message
-        var message = await data.channel.send("<@" + data.authorMember.id +  "> is requesting letters.\n\nReact to donate a letter.").catch(e => { console.log(e); });
+        var message = await command_data.msg.channel.send("<@" + command_data.msg.member.id +  "> is requesting letters.\n\nReact to donate a letter.").catch(e => { console.log(e); });
         await message.react('✅')
 
         const filter = (reaction, user) => reaction.emoji.name === '✅' && user.id !== message.author.id;
         var collector = message.createReactionCollector(filter)
         collector.on('collect', async(r, u) => {
-            let author = data.authorMember;
+            let author = command_data.msg.member;
             let authorNickname = author.nickname == null ? author.user.username : author.nickname;
 
-            let reacted = await data.guild.members.fetch(u.id).catch(e => { console.log(e); });
+            let reacted = await command_data.msg.guild.members.fetch(u.id).catch(e => { console.log(e); });
             let reactedNickname = reacted.nickname == null ? reacted.user.username : reacted.nickname;
             
             let authorIndex = Math.floor(Math.random() * ((authorNickname.length - 1) - 0 + 1) + 0);

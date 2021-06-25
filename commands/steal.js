@@ -1,9 +1,9 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
-    name: 'steal',
-    category: 'Profile',
-    description: 'Steals credits from other people-',
+    name: "steal",
+    category: "Profile",
+    description: "Steals credits from other people-",
     helpUsage: "[mention]`",
     exampleUsage: "/userTag/",
     hidden: false,
@@ -14,9 +14,10 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(data) {
-        if(data.taggedUser.id === data.authorUser.id) {
-            data.reply(`You can't steal from yourself silly-`);
+    execute(command_data) {
+        // TODO: re-factor command
+        if(command_data.tagged_user.id === data.authorUser.id) {
+            command_data.msg.reply(`You can't steal from yourself silly-`);
             return;
         }
 
@@ -31,7 +32,7 @@ module.exports = {
         diff = Math.abs(Math.round(diff));
 
         if(diff < 360) {
-            data.reply("You need to wait more `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
+            command_data.msg.reply("You need to wait more `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
             return;
         }
 
@@ -39,29 +40,29 @@ module.exports = {
 
         //Gets a random credit ammount
         var minCredits = 0;
-        var maxCredits = Math.round((data.taggedUserConfig.credits / 100) * data.botConfig.stealPercentage);
+        var maxCredits = Math.round((command_data.tagged_user_config.credits / 100) * command_data.global_context.bot_config.stealPercentage);
         var creditsAmmount = Math.floor((Math.random() * (maxCredits - minCredits + 1)) + minCredits);
-        creditsAmmount = creditsAmmount > data.botConfig.maxStealCredits ? data.botConfig.maxStealCredits : creditsAmmount;
+        creditsAmmount = creditsAmmount > command_data.global_context.bot_config.maxStealCredits ? command_data.global_context.bot_config.maxStealCredits : creditsAmmount;
 
         //Changes credits and saves
         data.authorConfig.credits += creditsAmmount;
         data.authorConfig.netWorth += creditsAmmount;
-        data.taggedUserConfig.credits -= creditsAmmount;
-        data.taggedUserConfig.netWorth -= creditsAmmount;
+        command_data.tagged_user_config.credits -= creditsAmmount;
+        command_data.tagged_user_config.netWorth -= creditsAmmount;
 
         //Edits and broadcasts the change
         data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
 
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.taggedUser.id, user: data.taggedUserConfig });
+        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         //Construct embed
-        var embedSteal = {
+        let embedSteal = {
             color: 8388736,
-            description: "You stole `" + creditsAmmount + "💵` from `" + data.taggedUserTag + "` (Current Credits: `" + data.authorConfig.credits + "$`)"
+            description: "You stole `" + creditsAmmount + "💵` from `" + command_data.tagged_user.tag + "` (Current Credits: `" + data.authorConfig.credits + "$`)"
         }
 
         //Construct message and send it
-        console.log("[steal] Added " + creditsAmmount + " credits to " + data.authorTag + " earned by stealing on Server(id: " + data.guild.id + ")");
-        data.channel.send("", { embed: embedSteal }).catch(e => { console.log(e); });
+        console.log("[steal] Added " + creditsAmmount + " credits to " + command_data.msg.author.tag + " earned by stealing on Server(id: " + command_data.msg.guild.id + ")");
+        command_data.msg.channel.send("", { embed: embedSteal }).catch(e => { console.log(e); });
     },
 };

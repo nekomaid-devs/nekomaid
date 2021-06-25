@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'osulast',
-    category: 'Utility',
-    description: 'Shows latest osu! play-',
+    name: "osulast",
+    category: "Utility",
+    description: "Shows latest osu! play-",
     helpUsage: "`",
     hidden: false,
     aliases: [],
@@ -9,22 +9,23 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    async execute(data) {
+    async execute(command_data) {
+        // TODO: re-factor command
         if(data.authorConfig.osuUsername === "-1") {
-            data.reply("You haven't set an osu! profile yet- Set it by typing `" + data.serverConfig.prefix + "osuset <username>`-")
+            command_data.msg.reply("You haven't set an osu! profile yet- Set it by typing `" + command_data.server_config.prefix + "osuset <username>`-")
             return;
         }
 
         var user = await data.bot.osu.getUser({ u: data.authorConfig.osuUsername }).catch(e => { console.log(e); });
         if(user.id === undefined) {
-            data.reply("No osu! profile found- Try setting a new one with `" + data.serverConfig.prefix + "osuset <username>`-");
+            command_data.msg.reply("No osu! profile found- Try setting a new one with `" + command_data.server_config.prefix + "osuset <username>`-");
             return;
         }
 
         var t0 = Date.now();
         var last = await data.bot.osu.getUserRecent({ u: data.authorConfig.osuUsername }).catch(e => { console.log(e); });
         if(last.length === undefined || last.length < 1) {
-            data.reply("There was an error in processing this request-");
+            command_data.msg.reply("There was an error in processing this request-");
             return;
         }
 
@@ -64,7 +65,7 @@ module.exports = {
             playsDescription += "▸ " + play.score + " ▸ " + play.maxCombo + "/" + play.beatmap.maxCombo + "x ▸ [" + play.counts['300'] + "/" + play.counts['100'] + "/" + play.counts['50'] + "/" + play.counts.miss + "]\n"
             playsDescription += "▸ " + ago + " ago\n"
         } else {
-            data.reply("Haven't found any score newer than 24h-");
+            command_data.msg.reply("Haven't found any score newer than 24h-");
             return;
         }
 
@@ -72,7 +73,7 @@ module.exports = {
         var secTaken = ((t1 - t0) / 1000).toFixed(3);
 
         //Construct embed
-        var embedOsu = {
+        let embedOsu = {
             color: 8388736,
             author: {
                 name: `osu! latest play for ${data.authorConfig.osuUsername}`,
@@ -89,6 +90,6 @@ module.exports = {
         }
 
         //Send message
-        data.channel.send("", { embed: embedOsu }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedOsu }).catch(e => { console.log(e); });
     },
 };
