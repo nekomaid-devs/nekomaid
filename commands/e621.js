@@ -40,7 +40,7 @@ module.exports = {
         var numOfPosts = postInfo.numOfPosts;
 
         let embed621 = {
-            title: `Here is result for ${command_data.args.join(" ")}`,
+            title: `Here is result for ${command_data.total_argument}`,
             color: 8388736,
             fields: [ 
                 {

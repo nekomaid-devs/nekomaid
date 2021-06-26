@@ -29,7 +29,7 @@ module.exports = {
         }
 
         let elapsed = new Date() - new Date(role.createdAt.toUTCString());
-        let createdAgo = data.bot.tc.convertTime(elapsed);
+        let createdAgo = command_data.global_context.neko_modules_clients.tc.convertTime(elapsed);
 
         let permissions = ""
         let permissionsArray = role.permissions.toArray();

@@ -51,7 +51,7 @@ module.exports = {
             }
 
             //Check author's config
-            var authorCredits = data.authorConfig.credits;
+            var authorCredits = command_data.author_config.credits;
 
             if(command_data.args[2] === "all") {
                 if(authorCredits <= 0) {
@@ -72,7 +72,7 @@ module.exports = {
                 return;
             }
 
-            if(data.authorConfig.credits < betAmmount) {
+            if(command_data.author_config.credits < betAmmount) {
                 command_data.msg.reply(`You don't have enough credits to do this-`);
                 return;
             }
@@ -82,11 +82,11 @@ module.exports = {
                 var multiplierText = (1 + multiplier).toFixed(2);
                 var wonAmmount = Math.floor(betAmmount * multiplier);
                 var wonAmmountText = betAmmount + wonAmmount;
-                data.authorConfig.credits += wonAmmount;
-                data.authorConfig.netWorth += wonAmmount;
+                command_data.author_config.credits += wonAmmount;
+                command_data.author_config.netWorth += wonAmmount;
 
                 //Edits and broadcasts the change
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
                 //Construct message and send it
                 embedRoll.description = "You won `" + wonAmmountText + "` credits-";
@@ -94,11 +94,11 @@ module.exports = {
                     text: "Win multiplier: " + multiplierText + "x"
                 }
             } else {
-                data.authorConfig.credits -= betAmmount;
-                data.authorConfig.credits -= betAmmount;
+                command_data.author_config.credits -= betAmmount;
+                command_data.author_config.credits -= betAmmount;
 
                 //Edits and broadcasts the change
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
                 //Construct message and send it
                 embedRoll.description = "You lost `" + betAmmount + "` credits-";

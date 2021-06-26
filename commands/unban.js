@@ -54,8 +54,8 @@ module.exports = {
                 command_data.msg.channel.send("Unbanned `" + banInfo.user.username + "#" + banInfo.user.discriminator + "`-").catch(e => { console.log(e); });
                 
                 if(previousBan != -1) {
-                    data.bot.lastModeratorIDs.set(command_data.msg.guild.id, data.authorUser.id);
-                    data.bot.ssm.server_remove.removeServerBan(data.bot.ssm, previousBan.id);
+                    data.bot.lastModeratorIDs.set(command_data.msg.guild.id, command_data.msg.author.id);
+                    command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerBan(command_data.global_context.neko_modules_clients.ssm, previousBan.id);
                 }
             }
         })

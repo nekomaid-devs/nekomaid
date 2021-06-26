@@ -11,12 +11,12 @@ class InventoryManager {
                     payoutAmmount += command_data.global_context.utils.pick_random(itemPrefab.boxPayouts);
                 }
 
-                data.authorConfig.credits += payoutAmmount;
-                data.authorConfig.netWorth += payoutAmmount;
+                command_data.author_config.credits += payoutAmmount;
+                command_data.author_config.netWorth += payoutAmmount;
     
                 const embedBox = {
                     color: 8388736,
-                    description: "`" + command_data.msg.author.tag + "` opened `" + targetIndexes.length + "x " + itemPrefab.displayName + "` and got `" + payoutAmmount + "💵` (Current Credits: `" + data.authorConfig.credits + "$`)"
+                    description: "`" + command_data.msg.author.tag + "` opened `" + targetIndexes.length + "x " + itemPrefab.displayName + "` and got `" + payoutAmmount + "💵` (Current Credits: `" + command_data.author_config.credits + "$`)"
                 }
     
                 command_data.msg.channel.send("", { embed: embedBox }).catch(e => { console.log(e); });
@@ -25,12 +25,12 @@ class InventoryManager {
     
             case "cash": {
                 const payoutAmmount = itemPrefab.cashPayout * targetIndexes.length;
-                data.authorConfig.credits += payoutAmmount;
-                data.authorConfig.netWorth += payoutAmmount;
+                command_data.author_config.credits += payoutAmmount;
+                command_data.author_config.netWorth += payoutAmmount;
     
                 let embedCash = {
                     color: 8388736,
-                    description: "`" + command_data.msg.author.tag + "` opened `" + targetIndexes.length + "x " + itemPrefab.displayName + "` and got `" + payoutAmmount + "💵` (Current Credits: `" + data.authorConfig.credits + "$`)"
+                    description: "`" + command_data.msg.author.tag + "` opened `" + targetIndexes.length + "x " + itemPrefab.displayName + "` and got `" + payoutAmmount + "💵` (Current Credits: `" + command_data.author_config.credits + "$`)"
                 }
     
                 command_data.msg.channel.send("", { embed: embedCash }).catch(e => { console.log(e); });
@@ -39,7 +39,7 @@ class InventoryManager {
     
             case "cash_others": {
                 var taggedUser = command_data.tagged_users[0];
-                if(taggedUser.id === data.authorUser.id) {
+                if(taggedUser.id === command_data.msg.author.id) {
                     command_data.msg.reply("You can't give credits from this item to yourself (mention somebody else)-");
                     return;
                 }
@@ -57,7 +57,7 @@ class InventoryManager {
                 command_data.msg.channel.send("", { embed: embedCashOthers }).catch(e => { console.log(e); });
     
                 //Edits and broadcasts the change
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
                 break;
             }
             
@@ -67,11 +67,11 @@ class InventoryManager {
         }
     
         targetIndexes.forEach(index => {
-            data.authorConfig.inventory.splice(index, 1);
+            command_data.author_config.inventory.splice(index, 1);
         });
     
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
     }*/
 }
 

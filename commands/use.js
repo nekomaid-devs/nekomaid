@@ -15,39 +15,35 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
         if(command_data.args.length < 1) {
             command_data.msg.reply(`You need to type in an item name-`);
             return;
         }
 
-        //Resolve item name
-        var itemName = command_data.total_argument;
-        itemName = itemName.includes("<@") ? itemName.substring(0, itemName.indexOf("<@") - 1) : itemName;
+        let item_name = command_data.total_argument;
+        item_name = item_name.includes("<@") ? item_name.substring(0, item_name.indexOf("<@") - 1) : item_name;
 
-        //Resolve item
-        var itemID = -1;
-        var itemPrefab = -1;
-        var targetIndex = -1;
+        let item_ID = -1;
+        let item_prefab = -1;
+        let target_index = -1;
 
         command_data.global_context.bot_config.items.forEach(item => {
             if(item.displayName.toLowerCase() === itemName.toLowerCase()) {
-                itemID = item.id;
-                itemPrefab = item;
+                item_ID = item.id;
+                item_prefab = item;
             }
         });
 
-        data.authorConfig.inventory.forEach(function(id, index) {
-            if(id === itemID) {
-                targetIndex = index;
+        command_data.author_config.inventory.forEach((id, index) => {
+            if(id === item_ID) {
+                target_index = index;
             }
         });
-
-        if(targetIndex === -1) {
-            command_data.msg.reply("You don't have any item called `" + itemName + "`-");
+        if(target_index === -1) {
+            command_data.msg.reply(`You don't have any item called \`${itemName}\`-`);
             return;
         }
 
-        data.bot.im.useItem(data.bot.im, data, itemPrefab, [ targetIndex ]);
+        command_data.global_context.neko_modules_clients.im.useItem(command_data.global_context.neko_modules_clients.im, command_data, item_prefab, [ target_index ]);
     },
 };

@@ -42,16 +42,16 @@ module.exports = {
             return;
         }
 
-        if(data.authorConfig.credits < targetItem2.price) {
+        if(command_data.author_config.credits < targetItem2.price) {
             data.msg.reply(`You don't have enough credits to do this-`);
             return;
         }
 
-        data.authorConfig.credits -= targetItem2.price;
-        data.authorConfig.inventory.push(targetItem2.id)
+        command_data.author_config.credits -= targetItem2.price;
+        command_data.author_config.inventory.push(targetItem2.id)
 
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedBuy = {
             color: 8388736,

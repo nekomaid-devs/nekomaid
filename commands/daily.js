@@ -10,43 +10,32 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var end = new Date();
-        var start = new Date(data.authorConfig.lastDailyTime);
-
-        var endNeeded = new Date(start.getTime() + 86400000);
-        var timeLeft = endNeeded - end;
-
-        var diff = (end.getTime() - start.getTime()) / 1000;
+        let end = new Date();
+        let start = new Date(command_data.author_config.lastDailyTime);
+        let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= (60 * 60);
         diff = Math.abs(Math.round(diff));
 
         if(diff < 24) {
-            command_data.msg.reply("You need to wait `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
+            let end_needed = new Date(start.getTime() + (3600000 * 24));
+            let time_left = end_needed - end;
+            command_data.msg.reply(`You need to wait more \`${command_data.global_context.neko_modules_clients.tc.convertTime(time_left)}\` before doing this-`);
             return;
         }
 
-        data.authorConfig.lastDailyTime = end.toUTCString();
+        command_data.author_config.lastDailyTime = end.toUTCString();
 
-        //Changes credits and saves
-        data.authorConfig.credits += command_data.global_context.bot_config.dailyCredits;
-        data.authorConfig.netWorth += command_data.global_context.bot_config.dailyCredits;
-
-        //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
-
-        //Construct message and send it
-        var credits = data.authorConfig.credits;
+        command_data.author_config.credits += command_data.global_context.bot_config.dailyCredits;
+        command_data.author_config.netWorth += command_data.global_context.bot_config.dailyCredits;
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedDaily = {
             color: 6732650,
-            description: "Added daily reward of `" + command_data.global_context.bot_config.dailyCredits + "💵` to `" + command_data.msg.author.tag + "`! (Current Credits: `" + credits + "$`)",
+            description: `Picked up daily reward of \`${command_data.global_context.bot_config.dailyCredits} 💵\`! (Current Credits: \`${credits}$\`)`,
             footer: {
                 text: "Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
             }
         }
-
-        console.log("[daily] Added DailyReward of " + command_data.global_context.bot_config.dailyCredits + " credits to " + command_data.msg.author.tag + " on Server(id: " + command_data.msg.guild.id + ")");
         command_data.msg.channel.send("", { embed: embedDaily }).catch(e => { console.log(e); });
     },
 };

@@ -15,60 +15,53 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var creditsAmmount = parseInt(command_data.args[0]);
-
+        let credits_ammount = parseInt(command_data.args[0]);
         if(command_data.args[0] === "all") {
-            if(data.authorConfig.credits <= 0) {
+            if(command_data.author_config.credits <= 0) {
                 command_data.msg.reply(`You don't have enough credits to do this-`);
                 return;
             } else {
-                creditsAmmount = data.authorConfig.credits;
+                credits_ammount = command_data.author_config.credits;
             }
         } else if(command_data.args[0] === "half") {
-            if(data.authorConfig.credits <= 1) {
+            if(command_data.author_config.credits <= 1) {
                 command_data.msg.reply(`You don't have enough credits to do this-`);
                 return;
             } else {
-                creditsAmmount = Math.round(data.authorConfig.credits / 2);
+                credits_ammount = Math.round(command_data.author_config.credits / 2);
             }
-        } else if(isNaN(creditsAmmount) || creditsAmmount <= 0) {
+        } else if(isNaN(credits_ammount) || credits_ammount <= 0) {
             command_data.msg.reply(`Invalid credits ammount-`);
             return;
         }
 
-        //Check if author has enough credits, deposit them
-        if(data.authorConfig.credits - creditsAmmount < 0) {
+        if(command_data.author_config.credits - credits_ammount < 0) {
             command_data.msg.reply(`You don't have enough credits to do this-`);
             return;
         }
 
-        var bankUpgrade = 0;
-        data.authorConfig.inventory.forEach(item => {
-            command_data.global_context.bot_config.items.forEach(item2 => {
-                if(item2.id === item && item2.type === "bankLimit") {
-                    bankUpgrade += item2.limit;
+        let bank_upgrade = 0;
+        command_data.author_config.inventory.forEach(item => {
+            command_data.global_context.bot_config.items.forEach(item_2 => {
+                if(item_2.id === item && item_2.type === "bankLimit") {
+                    bank_upgrade += item_2.limit;
                 }
             });
         });
 
-        if(data.authorConfig.bank + creditsAmmount > command_data.global_context.bot_config.bankLimit + bankUpgrade) {
+        if(command_data.author_config.bank + credits_ammount > command_data.global_context.bot_config.bankLimit + bank_upgrade) {
             command_data.msg.reply(`You can't transfer that much-`);
             return;
         }
 
-        data.authorConfig.credits -= creditsAmmount;
-        data.authorConfig.bank += creditsAmmount;
+        command_data.author_config.credits -= credits_ammount;
+        command_data.author_config.bank += credits_ammount;
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
-        //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
-
-        //Construct message and send it
         let embedDeposit = {
             color: 8388736,
-            description: "Deposited `" + creditsAmmount + "💵` to bank of `" + command_data.msg.author.tag + "` (Current Credits: `" + data.authorConfig.credits + "$`)"
+            description: `Deposited \`${creditsAmmount} 💵\` to bank of \`${command_data.msg.author.tag}\` (Current Credits: \`${command_data.author_config.credits}$\`)`
         }
-
         command_data.msg.channel.send("", { embed: embedDeposit }).catch(e => { console.log(e); });
     },
 };

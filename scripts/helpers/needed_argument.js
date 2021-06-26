@@ -1,13 +1,13 @@
 class NeededArgument {
-    constructor(pos, reply, type, invalidReply) {
+    constructor(pos, reply, type, invalid_reply) {
         this.position = pos;
         this.reply = reply;
         this.type = type;
-        this.invalidReply = invalidReply;
+        this.invalid_reply = invalid_reply;
     }
 
-    passes(msg, args, command, prefix) {
-        const embedError = this.getEmbed(msg, args, command, prefix);
+    passes(command_data, command) {
+        let embedError = this.getEmbed(command_data, command);
         if(args.length < this.position) {
             msg.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
             return false;
@@ -16,7 +16,7 @@ class NeededArgument {
         switch(this.type) {
             case "mention1":
                 if(Array.from(msg.mentions.members.values()).length < this.position) {
-                    msg.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
+                    command_data.msg.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
                     return false;
                 }
                 break;
@@ -25,23 +25,22 @@ class NeededArgument {
         return true;
     }
 
-    getEmbed(msg, args, command, prefix) {
-        //Construct embed
-        let usage = "`" + prefix + command.name + " " + command.helpUsage + "\n`" + prefix + command.name + " " + command.exampleUsage + "`"
-        usage = usage.split("/userTag/").join("@" + msg.author.username)
-        usage = usage.split("/username/").join(msg.author.username)
+    getEmbed(command_data, command) {
+        let usage = `\`${command_data.server_config.prefix}${command.name} ${command.helpUsage}\n\`${command_data.server_config.prefix}${command.name} ${command.exampleUsage}\``;
+        usage = usage.split("/userTag/").join("@" + msg.author.username);
+        usage = usage.split("/username/").join(msg.author.username);
         const embedError = {
             title: "❌ Wrong arguments",
             color: 8388736,
             fields: [ 
-            {
-                name: 'Problem:',
-                value: `${this.reply}`
-            },
-            {
-                name: 'Usage:',
-                value: usage
-            }
+                {
+                    name: 'Problem:',
+                    value: `${this.reply}`
+                },
+                {
+                    name: 'Usage:',
+                    value: usage
+                }
             ]
         }
 

@@ -30,13 +30,13 @@ module.exports = {
 
         command_data.msg.guild.members.cache.forEach(member => {
             //Add an item to a database
-            var globalUserConfig = data.bot.ssm.globalUserConfigCache.get(member.id);
+            var globalUserConfig = command_data.global_context.neko_modules_clients.ssm.globalUserConfigCache.get(member.id);
             for(var i = 0; i < ammount; i += 1) {
                 globalUserConfig.inventory.push({ id: itemID });
             }
 
             //Edits and broadcasts the change
-            data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: member.id, user: globalUserConfig });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: member.id, user: globalUserConfig });
         });
 
         //Construct message and send it

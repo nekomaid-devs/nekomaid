@@ -30,14 +30,14 @@ module.exports = {
             return;
         }
 
-        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false) {
+        if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false) {
             var connection = await command_data.msg.member.voice.channel.join();
             var voiceData0 = new data.bot.VoiceData();
             voiceData0.id = command_data.msg.guild.id;
             voiceData0.connection = connection;
             voiceData0.joinedMessageChannelID = command_data.msg.channel.id;
 
-            data.bot.vm.addConnection(data.bot, command_data.msg.guild.id, voiceData0);
+            command_data.global_context.neko_modules_clients.vm.addConnection(data.bot, command_data.msg.guild.id, voiceData0);
             command_data.msg.channel.send("Joined channel `" + command_data.msg.member.voice.channel.name + "`-").catch(e => { console.log(e); });
         }
 
@@ -55,13 +55,13 @@ module.exports = {
 
                 for(let i = 0; i < result.items.length; i++) {
                     let item = result.items[i];
-                    await data.bot.vm.playOnConnection(data.bot, data.msg, item.url, item, false);
+                    await command_data.global_context.neko_modules_clients.vm.playOnConnection(data.bot, data.msg, item.url, item, false);
                 }
 
                 command_data.msg.channel.send("Added `" + result.items.length + "` songs to the queue-").catch(e => { console.log(e); });
             } else if(data.bot.ytdl.validateURL(url) === true) {
                 url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
-                data.bot.vm.playOnConnection(data.bot, data.msg, url);
+                command_data.global_context.neko_modules_clients.vm.playOnConnection(data.bot, data.msg, url);
             } else {
                 var max = 5;
                 const embedPlay = new data.bot.Discord.MessageEmbed()
@@ -86,8 +86,8 @@ module.exports = {
                     } else {
                         infosByID.set(i, item);
 
-                        var currentLength1 = data.bot.tc.decideConvertString_yt(item.duration);
-                        var currentLength2 = data.bot.tc.convertString_yt2(currentLength1);
+                        var currentLength1 = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(item.duration);
+                        var currentLength2 = command_data.global_context.neko_modules_clients.tc.convertString_yt2(currentLength1);
                         descriptionText += "**" + i + ")** " + item.title + " *(" + currentLength2 + ")*\n";
                     }
                 }
@@ -102,7 +102,7 @@ module.exports = {
                     }
 
                     const pos = parseInt(m.content);
-                    data.bot.vm.playOnConnection(data.bot, m, infosByID.get(pos).url, infosByID.get(pos));
+                    command_data.global_context.neko_modules_clients.vm.playOnConnection(data.bot, m, infosByID.get(pos).url, infosByID.get(pos));
                 });
 
                 embedPlay.setDescription(descriptionText);

@@ -19,47 +19,31 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var numOfMessages = parseInt(command_data.args[0]);
-        if(numOfMessages > 99) {
+        let num_messages = parseInt(command_data.args[0]);
+        if(isNaN(num_messages) || num_messages > 99) {
             command_data.msg.reply(`Cannot delete more than 99 messages~`);
             return;
         }
 
-        //Check for deleteType
         if(data.msg.mentions.users.array().length > 0) {
-            //Deleting with filtering
-            var targetUser = data.msg.mentions.users.array()[0];
-            var targetDisplayName = targetUser.username + "#" + targetUser.discriminator
-
-            //Get messages and remove last one (clear command)
-            var messages = Array.from(data.msg.channel.messages.cache.values());
+            let target_user = data.msg.mentions.users.array()[0];
+            let messages = Array.from(data.msg.channel.messages.cache.values());
             messages.pop();
-
-            //Filter messages
-            var targetMessages = messages.filter(m =>
+            let target_messages = messages.filter(m =>
                 m.author.id === targetUser.id
-            )
-            
-            //Get number of filtered messages
-            targetMessages = targetMessages.slice(targetMessages.length - numOfMessages, targetMessages.length + 1);
-            console.log(`[clear] Deleting ${targetMessages.length} messages from User(id: ${targetUser.id}) in ${command_data.msg.channel.name}...`);
+            );
+            target_messages = target_messages.slice(target_messages.length - num_messages, target_messages.length + 1);
 
-            //Remove last one (clear command) and then targetMessages
             command_data.msg.channel.bulkDelete(1, true).catch(e => { console.log(e) })
-            command_data.msg.channel.bulkDelete(targetMessages, true).then(messages => {
-                command_data.msg.channel.send("Deleted `" + messages.size + "` messages from **" + targetDisplayName + "**-").then(message => 
+            command_data.msg.channel.bulkDelete(target_messages, true).then(messages => {
+                command_data.msg.channel.send(`Deleted \`${messages.size}\` messages from **${target_user.tag}**-`).then(message => 
                     message.delete({ timeout: 3000 }).catch(e => { console.log(e) })
                 ).catch(e => { console.log(e); });
             }).catch(e => { console.log(e) })
         } else {
-            //Regular deleting without mention
-            console.log(`[clear] Deleting ${numOfMessages} messages in ${command_data.msg.channel.name}...`);
-
-            //Remove last one (clear command) and then numOfMessages
-            command_data.msg.channel.bulkDelete(numOfMessages + 1, true).then(messages => {
-                var deleteMessagesSize = messages.size - 1;
-                command_data.msg.channel.send("Deleted `" + deleteMessagesSize + "` messages-").then(message => 
+            command_data.msg.channel.bulkDelete(num_messages + 1, true).then(messages => {
+                let delete_messages_size = messages.size - 1;
+                command_data.msg.channel.send(`Deleted \`${delete_messages_size}\` messages-`).then(message => 
                     message.delete({ timeout: 3000 }).catch(e => { console.log(e) })
                 ).catch(e => { console.log(e); });
             }).catch(e => { console.log(e) })

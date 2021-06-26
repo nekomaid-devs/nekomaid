@@ -13,7 +13,7 @@ module.exports = {
         // TODO: re-factor command
         if(data.msg.mentions.users.array().length > 0) {
             //Permission check
-            if(command_data.global_context.bot_config.botOwners.includes(data.authorUser.id) === false) {
+            if(command_data.global_context.bot_config.botOwners.includes(command_data.msg.author.id) === false) {
                 command_data.msg.reply("You aren't the bot owner- (use `" + command_data.server_config.prefix + "divorce` if you want to divorce)");
                 return;
             }
@@ -27,22 +27,22 @@ module.exports = {
             if(marriedUser0 === undefined) {
                 command_data.msg.reply(`There was an error in fetching User-`);
             } else {
-                var taggedUserConfig = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "globalUser", id: command_data.tagged_user.id });    
-                var globalUserConfig0 = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "globalUser", id: marriedUser0.id });    
+                var taggedUserConfig = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(data.bot, { type: "globalUser", id: command_data.tagged_user.id });    
+                var globalUserConfig0 = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(data.bot, { type: "globalUser", id: marriedUser0.id });    
 
                 //Changes the data in the structure
                 taggedUserConfig.marriedID = "-1";
                 taggedUserConfig.canDivorce = true;
 
                 //Edits and broadcasts the change
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: taggedUserConfig });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: taggedUserConfig });
 
                 //Changes the data in the structure
                 globalUserConfig0.marriedID = "-1";
                 globalUserConfig0.canDivorce = true;
 
                 //Edits and broadcasts the change
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: marriedUser0.id, user: globalUserConfig0 });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: marriedUser0.id, user: globalUserConfig0 });
 
                 //Construct message and send it
                 command_data.msg.channel.send("Force divorced `" + command_data.tagged_user.tag + "` and `" + marriedUser0.tag + "`!").catch(e => { console.log(e); });
@@ -51,36 +51,36 @@ module.exports = {
             return;
         }
 
-        if(data.authorConfig.marriedID === "-1") {
+        if(command_data.author_config.marriedID === "-1") {
             command_data.msg.reply(`You're not married-`);
             return;
         }
 
         //Get the married user and config
-        var marriedUser = await data.bot.users.fetch(data.authorConfig.marriedID).catch(e => { console.log(e); });
+        var marriedUser = await data.bot.users.fetch(command_data.author_config.marriedID).catch(e => { console.log(e); });
         var globalUserConfig = -1;
         if(marriedUser !== undefined) {
-            globalUserConfig = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "globalUser", id: marriedUser.id });    
+            globalUserConfig = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(data.bot, { type: "globalUser", id: marriedUser.id });    
         }
 
         //Check if author can divorce
-        if(data.authorConfig.canDivorce == false) {
+        if(command_data.author_config.canDivorce == false) {
             command_data.msg.reply("You can't divorce `" + marriedUser.tag + ", because you're going be with them forever...");
             return;
         }
 
         //Changes the data in the structure
-        data.authorConfig.marriedID = "-1";
+        command_data.author_config.marriedID = "-1";
 
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         if(globalUserConfig != -1) {
             globalUserConfig.marriedID = "-1";
             globalUserConfig.canDivorce = true;
 
             //Edits and broadcasts the change
-            data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: marriedUser.id, user: globalUserConfig });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: marriedUser.id, user: globalUserConfig });
         }
 
         //Construct message and send it

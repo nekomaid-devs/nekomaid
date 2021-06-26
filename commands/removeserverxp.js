@@ -19,18 +19,14 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        //Argument check
         if(command_data.server_config.module_level_enabled == false) {
-            command_data.msg.reply("Leveling isn't enabled on this server- (see `" + command_data.server_config.prefix + "leveling` for help)");
+            command_data.msg.reply(`Leveling isn't enabled on this server- (see \`${command_data.server_config.prefix}leveling\` for help)`);
             return;
         }
 
-        //Add the xp to database
-        var addXP = command_data.args[1];
-        data.bot.lvl.updateServerLevel(data, -parseFloat(addXP));
+        let add_XP = parseFloat(command_data.args[1]);
+        command_data.global_context.neko_modules_clients.lvl.updateServerLevel(command_data, -add_XP);
 
-        //Construct message and send it
-        command_data.msg.channel.send("Removed `" + addXP + "` xp from `" + command_data.tagged_user.tag + "`! (Current XP: `" + Math.round(data.taggedServerUserConfig.xp) + "`)").catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Removed \`${add_XP}\` XP from \`${command_data.tagged_user.tag}\`! (Current XP: \`${Math.round(command_data.taggedServerUserConfig.xp)}\`)`).catch(e => { console.log(e); });
     },
 };

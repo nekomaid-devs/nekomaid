@@ -15,39 +15,39 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        let embedPrefix = {
-            title: "",
-            color: 8388736
-        }
-
         if(command_data.args.length < 1) {
-            embedPrefix.fields = [ {
-                name: "Current prefix is ",
-                value: command_data.server_config.prefix
-            }]
-            embedPrefix.footer = "to change the prefix type `" + command_data.server_config.prefix + "prefix <newPrefix>`)";
+            let embedPrefix = {
+                title: "",
+                color: 8388736,
+                fields: [
+                    {
+                        name: "Current prefix is ",
+                        value: command_data.server_config.prefix
+                    }
+                ],
+                footer: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`
+            }
+            command_data.msg.channel.send("", { embed: embedPrefix }).catch(e => { console.log(e); });
         } else {
-            //Set prefix
-            var newPrefix = data.msg.content.substring((command_data.server_config.prefix + "prefix").length + 1);
-            if(newPrefix.length > 10) {
+            if(command_data.total_argument.length > 10) {
                 command_data.msg.reply("Prefix can't be longer than 10 characters-");
                 return;
             }
 
-            command_data.server_config.prefix = newPrefix;
-            try {
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
-            } catch(err) {
-                console.error(err);
+            command_data.server_config.prefix = command_data.total_argument;
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+
+            let embedPrefix = {
+                title: "",
+                color: 8388736,
+                fields: [
+                    {
+                        name: "Set bot's prefix to",
+                        value: command_data.server_config.prefix
+                    }
+                ]
             }
-
-            embedPrefix.fields = [ {
-                name: "Set bot's prefix to",
-                value: newPrefix
-            }]
+            command_data.msg.channel.send("", { embed: embedPrefix }).catch(e => { console.log(e); });
         }
-
-        command_data.msg.channel.send("", { embed: embedPrefix }).catch(e => { console.log(e); });
     },
 };

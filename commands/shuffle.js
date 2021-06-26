@@ -11,12 +11,12 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         // TODO: re-factor command
-        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false || data.bot.vm.connections.get(command_data.msg.guild.id).current === -1) {
+        if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false || command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).current === -1) {
             command_data.msg.reply("There's nothing playing-");
             return;
         }
 
-        var voiceData = data.bot.vm.connections.get(command_data.msg.guild.id);
+        var voiceData = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
 
         if(voiceData.mode === 0) {
             voiceData.queue = voiceData.queue
@@ -37,7 +37,7 @@ module.exports = {
 
             command_data.msg.channel.send("Shuffled `" + voiceData.queue.length + "` songs-").catch(e => { console.log(e); });
         } else {
-            var voiceData2 = data.bot.vm.connections.get(command_data.msg.guild.id);
+            var voiceData2 = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
             voiceData2.persistentQueue = voiceData2.persistentQueue
             .map(a =>
                 ({ sort: Math.random(), value: a })

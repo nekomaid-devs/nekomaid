@@ -15,22 +15,20 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
-        //Get poll parts
-        const a = (command_data.total_argument.match(/"/g) || []).length;
+        let a = (command_data.total_argument.match(/"/g) || []).length;
         if(a === 0 || a % 2 != 0) {
             command_data.msg.channel.send("Check your syntax before trying to create a poll again-").catch(e => { console.log(e); });
             return;
         }
 
-        let totalArg = command_data.total_argument;
-        var parts = [];
-        while((totalArg.match(/"/g) || []).length > 0) {
-            const b = totalArg.indexOf('"') + '"'.length;
-            const content = totalArg.substring(b, totalArg.indexOf('"', b));
-            totalArg = totalArg.slice(content.length + b + 1);
+        let total_argument = command_data.total_argument;
+        let parts = [];
+        while((total_argument.match(/"/g) || []).length > 0) {
+            let b = total_argument.indexOf('"') + '"'.length;
+            let part = total_argument.substring(b, total_argument.indexOf('"', b));
+            total_argument = total_argument.slice(part.length + b + 1);
 
-            parts.push(content);
+            parts.push(part);
         }
 
         if(parts.length > 11) {
@@ -39,22 +37,18 @@ module.exports = {
         } else if(parts.length === 1) {
             parts = [parts.shift(), "A", "B", "C"]
         }
+        
+        let question = parts.shift();
+        let description = parts.reduce((acc, curr) => {
+            acc += "**" + (i + 1) + ")** " + curr + "\n"; return acc;
+        }, "");
 
-        //Construct embed
-        const question = parts.shift();
-        let desc = "";
-        parts.forEach((part, i) => {
-            desc += "**" + (i + 1) + ")** " + part + "\n";
-        });
-
-        const embedPoll = {
-            title: "<:n_poll:771902338646278174> Poll: " + question,
-            description: desc
+        let embedPoll = {
+            title: `<:n_poll:771902338646278174> Poll: ${question}`,
+            description: description
         }
-
-        //Send and add reactions
-        var message = await command_data.msg.channel.send("", { embed: embedPoll }).catch(e => { console.log(e); });
-        const reactions = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
+        let message = await command_data.msg.channel.send("", { embed: embedPoll }).catch(e => { console.log(e); });
+        let reactions = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
         parts.forEach((part, i) => {
             message.react(reactions[i]);
         });

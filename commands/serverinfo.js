@@ -10,20 +10,15 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var end = new Date();
-        var start = new Date(data.msg.guild.createdAt.toUTCString());
-        var elapsed = end - start;
-        var createdAgo = data.bot.tc.convertTime(elapsed);
+        let elapsed = new Date() - new Date(data.msg.guild.createdAt.toUTCString());
+        let createdAgo = command_data.global_context.neko_modules_clients.tc.convertTime(elapsed);
 
-        //Construct embed
-        var avatarUrl = command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
-
+        let url = command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
         let embedServer = {
             color: 8388736,
             author: {
-                name: "Information about server " + command_data.msg.guild.name,
-                icon_url: avatarUrl
+                name: `Information about server ${command_data.msg.guild.name}`,
+                icon_url: url
             },
             fields: [ 
                     {
@@ -69,8 +64,6 @@ module.exports = {
                 text: `Requested by ${command_data.msg.author.tag}`
             },
         }
-
-        //Send message
         command_data.msg.channel.send("", { embed: embedServer }).catch(e => { console.log(e); });
     },
 };

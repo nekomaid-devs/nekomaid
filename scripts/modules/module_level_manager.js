@@ -8,7 +8,7 @@ class LevelingManager {
             return;
         }
         
-        command_data.server_config = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "server", id: data.msg.guild.id, containRanks: true });
+        command_data.server_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(data.bot, { type: "server", id: data.msg.guild.id, containRanks: true });
         if(command_data.server_config.module_level_ignoredChannels.includes(data.msg.channel.id) === true) {
             return;
         }
@@ -129,29 +129,29 @@ class LevelingManager {
         data.taggedServerUserConfig.xp = Number(data.taggedServerUserConfig.xp.toFixed(2))
 
         //Saves user's config
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "serverUser", serverID: command_data.msg.guild.id, userID: command_data.tagged_member.user.id, user: data.taggedServerUserConfig });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "serverUser", serverID: command_data.msg.guild.id, userID: command_data.tagged_member.user.id, user: data.taggedServerUserConfig });
         //console.log("[server_leveling] Added " + messageXP + "xp to " + authorDisplayName + " on Server(id: " + msg.guild.id + ") (xp: " + authorConfig.xp + ")");
     }
 
     async updateGlobalLevel(data) {
-        var authorDisplayName = data.authorUser.username + "#" + data.authorUser.discriminator;
+        var authorDisplayName = command_data.msg.author.username + "#" + command_data.msg.author.discriminator;
 
         var messageXP = command_data.global_context.bot_config.messageXP;
         var levelXP = command_data.global_context.bot_config.levelXP;
 
         //Changes user's level
-        data.authorConfig.xp += messageXP;
+        command_data.author_config.xp += messageXP;
 
-        if(data.authorConfig.xp > levelXP) {
-            data.authorConfig.xp -= levelXP;
-            data.authorConfig.level += 1;
+        if(command_data.author_config.xp > levelXP) {
+            command_data.author_config.xp -= levelXP;
+            command_data.author_config.level += 1;
 
             //Send levelup message
-            command_data.msg.channel.send("**" + authorDisplayName + "** is now global level " + data.authorConfig.level + "!").catch(e => { console.log(e); });
+            command_data.msg.channel.send("**" + authorDisplayName + "** is now global level " + command_data.author_config.level + "!").catch(e => { console.log(e); });
         }
 
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
         //console.log("[global_leveling] Added " + messageXP + "xp to " + authorDisplayName + " (xp: " + authorConfig.xp + ")");
     }*/
 }

@@ -21,7 +21,7 @@ module.exports = {
     execute(command_data) {
         // TODO: re-factor command
         //Argument & Permission check
-        var time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : data.bot.tc.convertString(command_data.args[1]));
+        var time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : command_data.global_context.neko_modules_clients.tc.convertString(command_data.args[1]));
         if(time != -1 && time.status != 1) {
             command_data.msg.reply("You entered invalid time format (ex. `1d2h3m4s` or `-1`)-");
             return;
@@ -52,7 +52,7 @@ module.exports = {
 
         if(previousBan === -1) {
             banEnd = banStart + extendedTime;
-            const banEndText = time === -1 ? "Forever" : data.bot.tc.convertTime(banEnd - banStart);
+            const banEndText = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(banEnd - banStart);
             command_data.msg.channel.send("Banned `" + command_data.tagged_user.tag + "` for `" + extendedTimeText + "` (Reason: `" + banReason + "`, Time: `" + banEndText + "`)-").catch(e => { console.log(e); });
         } else {
             data.msg.reply("`" + command_data.tagged_user.tag + "` is already banned-");
@@ -70,7 +70,7 @@ module.exports = {
         }
 
         command_data.tagged_member.ban({ reason: banReason });
-        data.bot.lastModeratorIDs.set(command_data.msg.guild.id, data.authorUser.id);
-        data.bot.ssm.server_add.addServerBan(data.bot.ssm, serverBan);
+        data.bot.lastModeratorIDs.set(command_data.msg.guild.id, command_data.msg.author.id);
+        command_data.global_context.neko_modules_clients.ssm.server_add.addServerBan(command_data.global_context.neko_modules_clients.ssm, serverBan);
     }
 };

@@ -35,7 +35,7 @@ module.exports = {
 
             if(mutedUser !== undefined) {
                 var mutedUserDisplayName = mutedUser.username + "#" + mutedUser.discriminator;
-                var remainingText = mute.end === -1 ? "Forever" : data.bot.tc.convertTime(mute.end - now);
+                var remainingText = mute.end === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(mute.end - now);
                 embedMutes.addField("Mute - " + mutedUserDisplayName, "Remaining: `" + remainingText + "`");
             }
 

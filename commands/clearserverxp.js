@@ -20,7 +20,7 @@ module.exports = {
             return;
         }
 
-        var serverUserConfigs = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "serverUsers", id: command_data.msg.guild.id })
+        var serverUserConfigs = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(data.bot, { type: "serverUsers", id: command_data.msg.guild.id })
         serverUserConfigs.forEach(async(serverUserConfig) => {
             //Add the xp to database
             serverUserConfig.level = 1;

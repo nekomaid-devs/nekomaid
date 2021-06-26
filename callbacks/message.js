@@ -92,12 +92,13 @@ module.exports = {
         //Update user's server level
         //global_context.neko_modules.lvl.updateServerLevel(command_data, command_data.server_config.module_level_message_exp);
 
-        if(msg.content === "<@!691398095841263678>") {
-            msg.channel.send("Prefix on this server is `" + prefix + "`-").catch(e => { global_context.logger.error(e); });
+        let bot_id = global_context.bot.user.id;
+        if(msg.content === `<@!${bot_id}>`) {
+            msg.channel.send(`Prefix on this server is \`${command_data.server_config.prefix}\`-`).catch(e => { global_context.logger.error(e); });
             return;
         }
 
-        if(msg.content.toLowerCase() === "thanks <@!691398095841263678>" || msg.content.toLowerCase() === "thanks nekomaid"  || msg.content.toLowerCase() === "thanks neko") {
+        if(msg.content.toLowerCase() === `thanks <@!${bot_id}>` || msg.content.toLowerCase() === "thanks nekomaid"  || msg.content.toLowerCase() === "thanks neko") {
             let responses = [
                 "You're welcome~ I guess- >~<",
                 "W-What did I do?~",
@@ -123,7 +124,7 @@ module.exports = {
         command_data.server_warns = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverWarnings", id: msg.guild.id });
         command_data.author_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUser", id: msg.author.id });
         command_data.tagged_server_user_config = msg.mentions.users.array().length < 1 ? command_data.author_server_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", serverID: msg.guild.id, userID: msg.mentions.users.array()[0].id });
-        command_data.tagged_user_config = msg.mentions.users.array().length < 1 ? command_data.author_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUser", id: msg.mentions.users.array()[0].id });    
+        command_data.tagged_user_config = msg.mentions.users.array().length < 1 ? command_data.msg.author_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUser", id: msg.mentions.users.array()[0].id });    
         
         //Process message
         let command_name = command_data.args.shift().toLowerCase();
@@ -150,12 +151,12 @@ module.exports = {
         let command = global_context.commands.get(command_name);
         let passed = true;
         command.permissionsNeeded.forEach(perm => {
-            if(passed === true && perm.passes(data, msg) === false) {
+            if(passed === true && perm.passes(command_data, command) === false) {
                 passed = false;
             }
         });
         command.argumentsNeeded.forEach(arg => {
-            if(passed === true && arg.passes(msg, command_data.args, command, prefix) === false) {
+            if(passed === true && arg.passes(command_data, command) === false) {
                 passed = false;
             }
         });

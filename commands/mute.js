@@ -21,7 +21,7 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         // TODO: re-factor command
-        var time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : data.bot.tc.convertString(command_data.args[1]));
+        var time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : command_data.global_context.neko_modules_clients.tc.convertString(command_data.args[1]));
         if(time != -1 && time.status != 1) {
             command_data.msg.reply("You entered invalid time format (ex. `1d2h3m4s` or `-1`)-");
             return;
@@ -48,11 +48,11 @@ module.exports = {
         var muteStart = Date.now();
         var muteEnd = -1;
         var extendedTime = (time.days * 86400000) + (time.hrs * 3600000) + (time.mins * 60000) + (time.secs * 1000);
-        var extendedTimeText = time === -1 ? "Forever" : data.bot.tc.convertTime(extendedTime);
+        var extendedTimeText = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(extendedTime);
 
         if(previousMute === -1) {
             muteEnd = muteStart + extendedTime;
-            const muteEndText = time === -1 ? "Forever" : data.bot.tc.convertTime(muteEnd - muteStart);
+            const muteEndText = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(muteEnd - muteStart);
 
             command_data.msg.channel.send("Muted `" + command_data.tagged_user.tag + "` for `" + extendedTimeText + "` (Reason: `" + muteReason + "`, Time: `" + muteEndText + "`)-").catch(e => { console.log(e); });
 
@@ -73,7 +73,7 @@ module.exports = {
                             },
                             {
                                 name: "Moderator:",
-                                value: data.authorUser,
+                                value: command_data.msg.author,
                                 inline: true
                             },
                             {
@@ -89,15 +89,15 @@ module.exports = {
 
                     //Save edited config
                     command_data.server_config.caseID += 1;
-                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
                 }
             }
         } else {
             muteEnd = previousMute.end + extendedTime;
-            const muteEnd0Text = previousMute.end === 1 ? "Forever" : data.bot.tc.convertTime(previousMute.end - muteStart);
-            const muteEndText = time === -1 ? "Forever" : data.bot.tc.convertTime(muteEnd - muteStart);
+            const muteEnd0Text = previousMute.end === 1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(previousMute.end - muteStart);
+            const muteEndText = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(muteEnd - muteStart);
             
             command_data.msg.channel.send("Extended mute of `" + command_data.tagged_user.tag + "` by `" + extendedTimeText + "` (Reason: `" + muteReason + "`, Time: `" + muteEndText + "`)-").catch(e => { console.log(e); });
 
@@ -118,7 +118,7 @@ module.exports = {
                             },
                             {
                                 name: "Moderator:",
-                                value: data.authorUser,
+                                value: command_data.msg.author,
                                 inline: true
                             },
                             {
@@ -134,7 +134,7 @@ module.exports = {
 
                     //Save edited config
                     command_data.server_config.caseID += 1;
-                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
                 }
@@ -163,7 +163,7 @@ module.exports = {
             }
         }
 
-        data.bot.ssm.server_add.addServerMute(data.bot.ssm, serverMute);
+        command_data.global_context.neko_modules_clients.ssm.server_add.addServerMute(command_data.global_context.neko_modules_clients.ssm, serverMute);
     },
 
     createMuteRoleAndMute(data, msg, taggedUser) {
@@ -197,7 +197,7 @@ module.exports = {
             taggedUser.roles.add(muteRole)
             .then(function() {
                 command_data.server_config.muteRoleID = muteRole.id;
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: msg.guild.id, server: command_data.server_config });
             })
             .catch(err => {
                 console.error(err);

@@ -18,20 +18,19 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
         if(command_data.tagged_member.kickable === false) {
-            command_data.msg.reply("Couldn't kick `" + command_data.tagged_user.tag + "` (Try moving Nekomaid's permissions above the user you want to kick)-");
+            command_data.msg.reply(`Couldn't kick \`${command_data.tagged_user.tag}\` (Try moving Nekomaid's permissions above the user you want to kick)-`);
             return;
         }
 
-        var kickReason = "None";
+        let kick_reason = "None";
         if(command_data.args.length > 1) {
-            kickReason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1)
+            kick_reason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1);
         }
 
-        command_data.msg.channel.send("Kicked `" + command_data.tagged_user.tag + "` (Reason: `" + kickReason + "`)-").catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Kicked \`${command_data.tagged_user.tag}\` (Reason: \`${kick_reason}\`)-`).catch(e => { console.log(e); });
 
-        data.bot.lastModeratorIDs.set(command_data.msg.guild.id, data.authorUser.id);
-        command_data.tagged_member.kick(kickReason);
+        command_data.global_context.data.last_moderator_IDs.set(command_data.msg.guild.id, command_data.msg.author.id);
+        command_data.tagged_member.kick(kick_reason);
     }
 };

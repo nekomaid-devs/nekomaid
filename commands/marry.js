@@ -13,7 +13,7 @@ module.exports = {
     execute(command_data) {
         // TODO: re-factor command
         //Argument & Permission check
-        if(data.authorUser.id === command_data.tagged_user.id) {
+        if(command_data.msg.author.id === command_data.tagged_user.id) {
             command_data.msg.reply(`You can't marry yourself silly-`);
             return;
         }
@@ -22,7 +22,7 @@ module.exports = {
         var forceMarry = false;
 
         if(command_data.args.length > 1 && command_data.args[1] === "-fm") {
-            if(command_data.global_context.bot_config.botOwners.includes(data.authorUser.id) === false) {
+            if(command_data.global_context.bot_config.botOwners.includes(command_data.msg.author.id) === false) {
                 command_data.msg.reply("You aren't the bot owner-");
                 return;
             }
@@ -31,7 +31,7 @@ module.exports = {
         }
 
         //Check author's and user's configs
-        if(data.authorConfig.marriedID != "-1") {
+        if(command_data.author_config.marriedID != "-1") {
             command_data.msg.reply(`You need to divorce first-`);
             return;
         }
@@ -43,10 +43,10 @@ module.exports = {
 
         //Send the marriage proposal
         if(forceMarry === true) {
-            data.bot.mm.addMarriageProposal(data.bot, command_data.msg.channel, data.authorUser, command_data.tagged_user, 0);
-            data.bot.mm.acceptMarryProposal(data.bot, data.msg, data.authorUser, command_data.tagged_user, 2);
+            data.bot.mm.addMarriageProposal(data.bot, command_data.msg.channel, command_data.msg.author, command_data.tagged_user, 0);
+            data.bot.mm.acceptMarryProposal(data.bot, data.msg, command_data.msg.author, command_data.tagged_user, 2);
         } else {
-            data.bot.mm.addMarriageProposal(data.bot, command_data.msg.channel, data.authorUser, command_data.tagged_user);
+            data.bot.mm.addMarriageProposal(data.bot, command_data.msg.channel, command_data.msg.author, command_data.tagged_user);
         }
     },
 };

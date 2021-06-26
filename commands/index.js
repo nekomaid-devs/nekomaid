@@ -13,8 +13,6 @@ module.exports = {
     eval: require('./eval'),
     d_give: require('./d_give'),
     d_giveinserver: require('./d_giveinserver'),
-    d_setupnews: require('./d_setupnews'),
-    d_killall: require('./d_killall'),
     rr: require('./rr'),
 
     //Unhidden
@@ -146,7 +144,6 @@ module.exports = {
     clearwarns: require('./clearwarns'),
     warns: require('./warns'),
     slowmode: require('./slowmode'),
-    zahando: require('./zahando'),
 
     config: require('./config'),
     leveling: require('./leveling'),

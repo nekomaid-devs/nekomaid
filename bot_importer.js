@@ -142,10 +142,10 @@ module.exports = {
             }
 
             cb(guildData);
-        });
+        });*/
 
-        bot.webupdates = require('./scripts/webupdates/webupdates');
-        bot.vars = require('./scripts/utils/util_vars');*/
+        //global_context.neko_modules.webupdates = require('./scripts/webupdates/webupdates');
+        global_context.neko_modules.vars = require('./scripts/utils/util_vars');
 
         //Setup other stupid stuff
         global_context.data.uptime_start = new Date().getTime();

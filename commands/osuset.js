@@ -15,16 +15,16 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         // TODO: re-factor command
-        var user = await data.bot.osu.getUser({ u: command_data.total_argument }).catch(e => { console.log(e); });
+        var user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.total_argument }).catch(e => { console.log(e); });
         if(user.id === undefined) {
             command_data.msg.reply("Haven't found any osu! account with username `" + command_data.total_argument + "`-");
             return;
         }
 
-        data.authorConfig.osuUsername = command_data.total_argument;
+        command_data.author_config.osuUsername = command_data.total_argument;
 
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         //Send message
         command_data.msg.channel.send("Set username as `" + command_data.total_argument + "`-").catch(e => { console.log(e); });

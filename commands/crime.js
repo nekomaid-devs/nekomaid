@@ -10,76 +10,50 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var end = new Date();
-        var start = new Date(data.authorConfig.lastCrimeTime);
-        
-        var endNeeded = new Date(start.getTime() + (3600000 * 3));
-        var timeLeft = endNeeded - end;
-
-        var diff = (end.getTime() - start.getTime()) / 1000;
+        let end = new Date();
+        let start = new Date(command_data.author_config.lastCrimeTime);
+        let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
         diff = Math.abs(Math.round(diff));
 
         if(diff < 180) {
-            command_data.msg.reply("You need to wait more `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
+            let end_needed = new Date(start.getTime() + (3600000 * 3));
+            let time_left = end_needed - end;
+            command_data.msg.reply(`You need to wait more \`${command_data.global_context.neko_modules_clients.tc.convertTime(time_left)}\` before doing this-`);
             return;
         }
 
-        data.authorConfig.lastCrimeTime = end.toUTCString();
+        command_data.author_config.lastCrimeTime = end.toUTCString();
 
-        //Gets a random credit ammount
-        var minCredits = command_data.global_context.bot_config.minCrimeCredits;
-        var maxCredits = command_data.global_context.bot_config.maxCrimeCredits;
+        let min_credits = command_data.global_context.bot_config.minCrimeCredits;
+        let max_credits = command_data.global_context.bot_config.maxCrimeCredits;
+        let credits_ammount = Math.floor((Math.random() * (max_credits - min_credits + 1)) + min_credits);
 
-        var creditsAmmount = Math.floor((Math.random() * (maxCredits - minCredits + 1)) + minCredits);
-        var creditsAmmountDisplay = creditsAmmount;
-
-        //Gets a random state of crime
-        var chance = Math.floor(Math.random() * 100) + 1;
-        var option = chance <= command_data.global_context.bot_config.crimeSuccessChance ? "success" : "failure";
-
-        //Get a random answer depending on crime success
-        var answers = -1;
-        var answerColor = 6732650;
-
-        switch(option) {
-            case "success":
-                answers = command_data.global_context.bot_config.crimeSuccessAnswers;
-                break;
-
-            case "failure":
-                answers = command_data.global_context.bot_config.crimeFailedAnswers;
-                answerColor = 15483730;
-                creditsAmmount = -creditsAmmount;
-                break;
+        let chance = Math.floor(Math.random() * 100) + 1;
+        let answers = [];
+        let answer_color = 6732650;
+        if(chance <= command_data.global_context.bot_config.crimeSuccessChance) {
+            answers = command_data.global_context.bot_config.crimeSuccessAnswers;
+        } else {
+            answers = command_data.global_context.bot_config.crimeFailedAnswers;
+            answer_color = 15483730;
+            creditsAmmount = -creditsAmmount;
         }
         
-        var answer = command_data.global_context.utils.pick_random(answers);
+        let answer = command_data.global_context.utils.pick_random(answers);
+        answer = answer.replace("<creditsAmmount>", "`" + credits_ammount + "💵`");
 
-        //Edits the answer to correspond with the creditAmmount
-        answer = answer.replace("<creditsAmmount>", "`" + creditsAmmountDisplay + "💵`");
-
-        //Changes credits and saves
-        data.authorConfig.credits += creditsAmmount;
-        data.authorConfig.netWorth += creditsAmmount;
-
-        //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
-
-        //Construct embed
-        var credits = data.authorConfig.credits;
+        command_data.author_config.credits += credits_ammount;
+        command_data.author_config.netWorth += credits_ammount;
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedCrime = {
-            color: answerColor,
-            description: answer + " (Current Credits: `" + credits + "$`)",
+            color: answer_color,
+            description: `${answer} (Current Credits: \`${command_data.author_config.credits}$\`)`,
             footer: {
-                text: "Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
+                text: `Make sure to vote with ${command_data.server_config.prefix}vote for free credits`
             }
         }
-
-        //Construct message and send it
-        console.log("[crime] Added " + creditsAmmount + " credits to " + command_data.msg.author.tag + " earned by doing crimes on Server(id: " + command_data.msg.guild.id + ")");
         command_data.msg.channel.send("", { embed: embedCrime }).catch(e => { console.log(e); });
     },
 };

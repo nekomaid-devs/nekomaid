@@ -11,12 +11,12 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         // TODO: re-factor command
-        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false || data.bot.vm.connections.get(command_data.msg.guild.id).current === -1) {
+        if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false || command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).current === -1) {
             command_data.msg.reply("There's nothing on the queue-");
             return;
         }
 
-        var voiceData = data.bot.vm.connections.get(command_data.msg.guild.id);
+        var voiceData = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
         const embedQueue = new data.bot.Discord.MessageEmbed();
 
         var descriptionText = "";
@@ -34,7 +34,7 @@ module.exports = {
                         var user = await data.bot.users.fetch(voiceRequest.requestUserID).catch(e => { console.log(e); });
 
                         if(user !== undefined) {
-                            var currentLength0 = data.bot.tc.convertString_yt2(data.bot.tc.decideConvertString_yt(voiceRequest.info.duration));
+                            var currentLength0 = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceRequest.info.duration));
     
                             descriptionText += i + ") [" + voiceRequest.info.title + "](" + voiceRequest.info.link + ") *(" + currentLength0 + ")* by *[" + user.username + "]*\n";
                         }
@@ -48,18 +48,18 @@ module.exports = {
 
                 embedQueue.setDescription(descriptionText);
 
-                var totalLength = data.bot.tc.decideConvertString_yt(voiceData.current.info.duration);
-                var elapsedLength = data.bot.tc.convertString(data.bot.tc.convertTime(voiceData.elapsedMilis));
-                totalLength = data.bot.tc.substractTimes(totalLength, elapsedLength);
+                var totalLength = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceData.current.info.duration);
+                var elapsedLength = command_data.global_context.neko_modules_clients.tc.convertString(command_data.global_context.neko_modules_clients.tc.convertTime(voiceData.elapsedMilis));
+                totalLength = command_data.global_context.neko_modules_clients.tc.substractTimes(totalLength, elapsedLength);
 
                 voiceData.queue.forEach(voiceRequest => {
-                    var currentLength = data.bot.tc.decideConvertString_yt(voiceRequest.info.duration);
-                    totalLength = data.bot.tc.sumTimes(totalLength, currentLength);
+                    var currentLength = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceRequest.info.duration);
+                    totalLength = command_data.global_context.neko_modules_clients.tc.sumTimes(totalLength, currentLength);
                 });
-                totalLength = data.bot.tc.convertTime_inconsistent(totalLength);
-                var totalLength2 = data.bot.tc.convertString_yt2(totalLength);
+                totalLength = command_data.global_context.neko_modules_clients.tc.convertTime_inconsistent(totalLength);
+                var totalLength2 = command_data.global_context.neko_modules_clients.tc.convertString_yt2(totalLength);
 
-                var currentLength1 = data.bot.tc.convertString_yt2(data.bot.tc.decideConvertString_yt(voiceData.current.info.duration));
+                var currentLength1 = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceData.current.info.duration));
                 embedQueue.addField("Currenly playing", "[" + voiceData.current.info.title + "](" + voiceData.current.info.link + ") *(" + currentLength1 + ")*", false);
                 embedQueue.addField("Total queue time", "`" + totalLength2 + "`", true);
                 break;
@@ -97,7 +97,7 @@ module.exports = {
                         var user2 = await data.bot.users.fetch(voiceRequest2.requestUserID).catch(e => { console.log(e); });
 
                         if(user2 !== undefined) {
-                            var currentLength0b = data.bot.tc.convertString_yt2(data.bot.tc.decideConvertString_yt(voiceRequest2.info.duration));
+                            var currentLength0b = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceRequest2.info.duration));
     
                             descriptionText += i2 === currentPersistentIndex 
                             ? "**" + i3 + ")** [" + voiceRequest2.info.title + "](" + voiceRequest2.info.url + ") *(" + currentLength0b + ")* - by [" + user2.username + "]\n"
@@ -112,19 +112,19 @@ module.exports = {
 
                 embedQueue.setDescription(descriptionText);
 
-                var totalLength2b = data.bot.tc.decideConvertString_yt(voiceData.current.info.duration);
+                var totalLength2b = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceData.current.info.duration);
 
-                var elapsedLength2b = data.bot.tc.convertString(data.bot.tc.convertTime(voiceData.elapsedMilis));
-                totalLength2b = data.bot.tc.substractTimes(totalLength2b, elapsedLength2b);
+                var elapsedLength2b = command_data.global_context.neko_modules_clients.tc.convertString(command_data.global_context.neko_modules_clients.tc.convertTime(voiceData.elapsedMilis));
+                totalLength2b = command_data.global_context.neko_modules_clients.tc.substractTimes(totalLength2b, elapsedLength2b);
 
                 voiceData.persistentQueue.forEach(voiceRequest => {
-                    var currentLength = data.bot.tc.decideConvertString_yt(voiceRequest.info.duration);
-                    totalLength2b = data.bot.tc.sumTimes(totalLength2b, currentLength);
+                    var currentLength = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceRequest.info.duration);
+                    totalLength2b = command_data.global_context.neko_modules_clients.tc.sumTimes(totalLength2b, currentLength);
                 });
-                totalLength2b = data.bot.tc.convertTime_inconsistent(totalLength2b);
-                var totalLength2c = data.bot.tc.convertString_yt2(totalLength2b);
+                totalLength2b = command_data.global_context.neko_modules_clients.tc.convertTime_inconsistent(totalLength2b);
+                var totalLength2c = command_data.global_context.neko_modules_clients.tc.convertString_yt2(totalLength2b);
 
-                var currentLength1b = data.bot.tc.convertString_yt2(data.bot.tc.decideConvertString_yt(voiceData.persistentQueue[currentPersistentIndex].info.duration));
+                var currentLength1b = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceData.persistentQueue[currentPersistentIndex].info.duration));
                 embedQueue.addField("Currenly playing", "[" + voiceData.persistentQueue[currentPersistentIndex].info.title + "](" + voiceData.persistentQueue[currentPersistentIndex].info.link + ") *(" + currentLength1b + ")*", false);
                 embedQueue.addField("Total queue time", "`" + totalLength2c + "`", true);
                 break;

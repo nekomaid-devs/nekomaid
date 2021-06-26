@@ -89,7 +89,7 @@ module.exports = {
                 }
 
                 //Save edited config
-                data.bot.ssm.server_edit.edit(data.bot, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(data.bot, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
 
                 console.log("[botconfig] Added " + taggedUserDisplayName + " to bot's property " + property);
                 command_data.msg.channel.send("Added `" + taggedUserDisplayName + "` to bot's property `" + property + "`").catch(e => { console.log(e); });
@@ -137,7 +137,7 @@ module.exports = {
                 }
 
                 //Save edited config
-                data.bot.ssm.server_edit.edit(data.bot, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(data.bot, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
 
                 console.log("[botconfig] Removed " + taggedUserDisplayName + " from bot's property " + property);
                 command_data.msg.channel.send("Removed `" + taggedUserDisplayName + "` from bot's property `" + property + "`").catch(e => { console.log(e); });

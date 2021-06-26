@@ -18,7 +18,7 @@ module.exports = {
         // TODO: re-factor command
         var isAllowed = true;
         command_data.tagged_users.forEach(function(user) {
-            if(user.id === data.authorUser.id) {
+            if(user.id === command_data.msg.author.id) {
                 isAllowed = false;
             }
         });

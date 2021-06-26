@@ -11,12 +11,12 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         // TODO: re-factor command
-        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false) {
+        if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false) {
             data.msg.reply("I'm not in a voice channel-");
             return;
         }
 
-        let voiceData = data.bot.vm.connections.get(command_data.msg.guild.id);
+        let voiceData = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
         voiceData.queue = [];
         voiceData.persistentQueue = [];
 

@@ -14,10 +14,10 @@ module.exports = {
         var t0 = Date.now();
 
         //Get elapsed time between commit
-        var start = new Date(data.bot.ssm.lastCommit);
+        var start = new Date(command_data.global_context.neko_modules_clients.ssm.lastCommit);
         var end = new Date();
         var elapsed = end - start;
-        var commit_elapsedTime = data.bot.tc.convertTime(elapsed);
+        var commit_elapsedTime = command_data.global_context.neko_modules_clients.tc.convertTime(elapsed);
 
         //Get memory usage
         var managerProcess = await data.bot.processUsage(process.ppid);
@@ -71,8 +71,8 @@ module.exports = {
         shard_cpu = shard_cpu.toFixed(2);
 
         //Get elapsed time between start
-        var shard_elapsedTime = data.bot.tc.convertTime(shardProcess.elapsed);
-        var manager_elapsedTime = data.bot.tc.convertTime(managerProcess.elapsed);
+        var shard_elapsedTime = command_data.global_context.neko_modules_clients.tc.convertTime(shardProcess.elapsed);
+        var manager_elapsedTime = command_data.global_context.neko_modules_clients.tc.convertTime(managerProcess.elapsed);
 
         //Get number of servers
         var shard_guilds = data.bot.guilds.cache.size;
@@ -104,7 +104,7 @@ module.exports = {
         })
 
         //Get voice connections
-        var shard_vc = data.bot.vm.connections.size;
+        var shard_vc = command_data.global_context.neko_modules_clients.vm.connections.size;
         var manager_vc = 0;
         await data.bot.shard.broadcastEval('this.vm.connections.size').then(results => {
             results.forEach(result => {

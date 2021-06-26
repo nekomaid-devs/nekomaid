@@ -22,7 +22,7 @@ module.exports = {
         var roles = new Map();
         var roleMessages = [];
         
-        command_data.server_config = await data.bot.ssm.server_fetch.fetch(data.bot, { type: "server", id: command_data.msg.guild.id, containExtra: true });
+        command_data.server_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(data.bot, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         this.continueCollecting(data.bot, command_data.server_config, data.msg, msg1, roleMessages, roles, data.bot.Discord);
     },
 

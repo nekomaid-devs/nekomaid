@@ -22,7 +22,7 @@ module.exports = {
         command_data.tagged_user_config.credits += creditsAmmount;
 
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         //Construct message and send it
         command_data.msg.channel.send("Added `" + creditsAmmount + "` credits to `" + command_data.tagged_user.tag + "`! (Current Credits: `" + command_data.tagged_user_config.credits + "$`)").catch(e => { console.log(e); });

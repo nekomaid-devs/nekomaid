@@ -198,7 +198,7 @@ module.exports = {
                     }
 
                     //Save edited config
-                    data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                     command_data.msg.channel.send("Set bot's property `" + property + "` to `" + value + "`").catch(e => { console.log(e); });
                     break;
                 }

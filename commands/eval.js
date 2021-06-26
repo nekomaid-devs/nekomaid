@@ -17,15 +17,13 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var evalQuery = command_data.total_argument;
-
-        data.bot.shard.broadcastEval(evalQuery)
+        let eval_query = command_data.total_argument;
+        command_data.bot.shard.broadcastEval(eval_query)
         .then(result =>
-            command_data.msg.channel.send('Result for `' + evalQuery + '`\n' + result).catch(e => { console.log(e); })
+            command_data.msg.channel.send(`Result for \`${eval_query}\`\n${result}`).catch(e => { console.log(e); })
         )
         .catch(err =>
-            command_data.msg.channel.send('Error for `' + evalQuery + '`\n' + err).catch(e => { console.log(e); })
+            command_data.msg.channel.send(`Error for \`${eval_query}\`\n${err}`).catch(e => { console.log(e); })
         )
     },
 };

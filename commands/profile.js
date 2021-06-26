@@ -62,7 +62,7 @@ module.exports = {
 
         //Get premium state
         var end = new Date();
-        var start = new Date(data.authorConfig.lastUpvotedTime);
+        var start = new Date(command_data.author_config.lastUpvotedTime);
 
         var diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;

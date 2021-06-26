@@ -35,7 +35,7 @@ module.exports = {
         for(var i = 0; i < top.items.length; i += 1) {
             var user = top.items[i];
             
-            if(user.userID === data.authorUser.id) {
+            if(user.userID === command_data.msg.author.id) {
                 authorPos = i;
                 authorConfig = user;
                 break;

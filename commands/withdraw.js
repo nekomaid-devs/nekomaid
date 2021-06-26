@@ -15,39 +15,32 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var creditsAmmount = parseInt(command_data.args[0]);
-
+        let credits_ammount = parseInt(command_data.args[0]);
         if(command_data.args[0] === "all") {
-            if(data.authorConfig.bank <= 0) {
+            if(command_data.author_config.bank <= 0) {
                 command_data.msg.reply(`Your bank account doesn't have enough credits to do this-`);
                 return;
             } else {
-                creditsAmmount = data.authorConfig.bank;
+                credits_ammount = command_data.author_config.bank;
             }
-        } else if(isNaN(creditsAmmount) || creditsAmmount <= 0) {
+        } else if(isNaN(credits_ammount) || credits_ammount <= 0) {
             command_data.msg.reply(`Invalid credits ammount-`);
             return;
         }
 
-        //Check if author's bank has enough credits, withdraw them
-        if(data.authorConfig.bank - creditsAmmount < 0) {
+        if(command_data.author_config.bank - credits_ammount < 0) {
             command_data.msg.reply(`You don't have enough credits in bank to do this-`);
             return;
         }
 
-        data.authorConfig.bank -= creditsAmmount;
-        data.authorConfig.credits += creditsAmmount;
+        command_data.author_config.bank -= credits_ammount;
+        command_data.author_config.credits += credits_ammount;
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
-        //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
-
-        //Construct message and send it
         let embedWithdraw = {
             color: 8388736,
-            description: "Withdrew `" + creditsAmmount + "💵` from bank to `" + command_data.msg.author.tag + "` (Current Credits: `" + data.authorConfig.credits + "$`)"
+            description: `Withdrew \`${credits_ammount} 💵\` from bank to \`${command_data.msg.author.tag}\` (Current Credits: \`${command_data.author_config.credits}$\`)`
         }
-        
         command_data.msg.channel.send("", { embed: embedWithdraw }).catch(e => { console.log(e); });
     },
 };

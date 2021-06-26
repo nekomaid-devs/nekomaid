@@ -11,12 +11,12 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         // TODO: re-factor command
-        if(data.bot.vm.connections.has(command_data.msg.guild.id) === false || data.bot.vm.connections.get(command_data.msg.guild.id).current === -1) {
+        if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false || command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).current === -1) {
             command_data.msg.reply("There's nothing playing-");
             return;
         }
 
-        var voiceData = data.bot.vm.connections.get(command_data.msg.guild.id);
+        var voiceData = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
 
         if(voiceData.connection.dispatcher.paused === false) {
             voiceData.connection.dispatcher.pause();

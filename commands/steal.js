@@ -16,13 +16,13 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         // TODO: re-factor command
-        if(command_data.tagged_user.id === data.authorUser.id) {
+        if(command_data.tagged_user.id === command_data.msg.author.id) {
             command_data.msg.reply(`You can't steal from yourself silly-`);
             return;
         }
 
         var end = new Date();
-        var start = new Date(data.authorConfig.lastStealTime);
+        var start = new Date(command_data.author_config.lastStealTime);
         
         var endNeeded = new Date(start.getTime() + (3600000 * 6));
         var timeLeft = endNeeded - end;
@@ -32,11 +32,11 @@ module.exports = {
         diff = Math.abs(Math.round(diff));
 
         if(diff < 360) {
-            command_data.msg.reply("You need to wait more `" + data.bot.tc.convertTime(timeLeft) + "` before doing this-");
+            command_data.msg.reply("You need to wait more `" + command_data.global_context.neko_modules_clients.tc.convertTime(timeLeft) + "` before doing this-");
             return;
         }
 
-        data.authorConfig.lastStealTime = end.toUTCString();
+        command_data.author_config.lastStealTime = end.toUTCString();
 
         //Gets a random credit ammount
         var minCredits = 0;
@@ -45,20 +45,20 @@ module.exports = {
         creditsAmmount = creditsAmmount > command_data.global_context.bot_config.maxStealCredits ? command_data.global_context.bot_config.maxStealCredits : creditsAmmount;
 
         //Changes credits and saves
-        data.authorConfig.credits += creditsAmmount;
-        data.authorConfig.netWorth += creditsAmmount;
+        command_data.author_config.credits += creditsAmmount;
+        command_data.author_config.netWorth += creditsAmmount;
         command_data.tagged_user_config.credits -= creditsAmmount;
         command_data.tagged_user_config.netWorth -= creditsAmmount;
 
         //Edits and broadcasts the change
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: data.authorUser.id, user: data.authorConfig });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
-        data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         //Construct embed
         let embedSteal = {
             color: 8388736,
-            description: "You stole `" + creditsAmmount + "💵` from `" + command_data.tagged_user.tag + "` (Current Credits: `" + data.authorConfig.credits + "$`)"
+            description: "You stole `" + creditsAmmount + "💵` from `" + command_data.tagged_user.tag + "` (Current Credits: `" + command_data.author_config.credits + "$`)"
         }
 
         //Construct message and send it

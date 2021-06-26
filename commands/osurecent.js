@@ -10,33 +10,31 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
-        if(data.authorConfig.osuUsername === "-1") {
-            command_data.msg.reply("You haven't set an osu! profile yet- Set it by typing `" + command_data.server_config.prefix + "osuset <username>`-")
+        if(command_data.author_config.osuUsername === "-1") {
+            command_data.msg.channel.send(`You haven't set an osu! profile yet~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)`)
             return;
         }
 
-        var user = await data.bot.osu.getUser({ u: data.authorConfig.osuUsername }).catch(e => { console.log(e); });
+        let user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.author_config.osuUsername }).catch(e => { console.log(e); });
         if(user.id === undefined) {
-            command_data.msg.reply("No osu! profile found- Try setting a new one with `" + command_data.server_config.prefix + "osuset <username>`-");
+            command_data.msg.channel.send(`No osu! profile found~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)-`);
             return;
         }
 
-        var t0 = Date.now();
-        var top = await data.bot.osu.getUserRecent({ u: data.authorConfig.osuUsername }).catch(e => { console.log(e); });
+        let top = await command_data.global_context.modules_clients.osu.getUserRecent({ u: command_data.author_config.osuUsername }).catch(e => { console.log(e); });
         if(top.length === undefined || top.length < 1) {
             command_data.msg.reply("There was an error in processing this request-");
             return;
         }
         
-        var start = new Date();
-        var playsDescription = "";
+        let start = new Date();
+        let plays_description = "";
         for(var i = 0; i < 5; i += 1) {
-            var play = top[i];
-            var elapsed = start - play.date;
-            var ago = data.bot.tc.convertTime(elapsed);
+            let play = top[i];
+            let elapsed = start - play.date;
+            let ago = command_data.global_context.neko_modules_clients.tc.convertTime(elapsed);
             
-            var mods = "";
+            let mods = "";
             /*eslint no-bitwise: 0*/
             mods += play.raw_mods & 1 ? "NF" : "";
             mods += play.raw_mods & 2 ? "EZ" : "";
@@ -50,7 +48,7 @@ module.exports = {
             mods += play.raw_mods & 4096 ? "SO" : "";
             mods += mods === "" ? "NoMod" : "";
 
-            var rank = ""
+            let rank = ""
             rank = play.rank === "SS" ? "<:n_SS:725012761959989340>" : rank;
             rank = play.rank === "SH" ? "<:n_SH:725012762312573012>" : rank;
             rank = play.rank === "S" ? "<:n_S:725012761700204596>" : rank;
@@ -60,33 +58,27 @@ module.exports = {
             rank = play.rank === "D" ? "<:n_D:725012762316636200>" : rank;
             rank = play.rank === "F" ? "<:n_F:725012761465061531>" : rank;
 
-            playsDescription += "**" + (i + 1) + ") [" + play.beatmap.title + "](https://osu.ppy.sh/beatmaps/" + play.beatmap.id + ") +" + mods + "** [" + parseFloat(play.beatmap.difficulty.rating).toFixed(2) + "★]\n"
-            playsDescription += "**▸ " + rank + " ▸ ??pp ▸** " + parseFloat(play.accuracy * 100).toFixed(2) + "%\n"
-            playsDescription += "▸ " + play.score + " ▸ " + play.maxCombo + "/" + play.beatmap.maxCombo + "x ▸ [" + play.counts['300'] + "/" + play.counts['100'] + "/" + play.counts['50'] + "/" + play.counts.miss + "]\n"
-            playsDescription += "▸ " + ago + " ago\n"
+            plays_description += `**[${play.beatmap.title}](https://osu.ppy.sh/beatmaps/${play.beatmap.id}) ${mods}** [${parseFloat(play.beatmap.difficulty.rating).toFixed(2)}★]\n`;
+            plays_description += `**▸ ${rank} ▸ ??pp ▸** ${parseFloat(play.accuracy * 100).toFixed(2)}%\n`;
+            plays_description += `▸ ${play.score} ▸ ${play.maxCombo}/${play.beatmap.maxCombo}x ▸ [${play.counts['300']}/${play.counts['100']}/${play.counts['50']}/${play.counts.miss}]\n`;
+            plays_description += `▸ ${ago} ago\n`;
         }
 
-        var t1 = Date.now();
-        var secTaken = ((t1 - t0) / 1000).toFixed(3);
-
-        //Construct embed
         let embedOsu = {
             color: 8388736,
             author: {
-                name: `osu! recent plays for ${data.authorConfig.osuUsername}`,
-                icon_url: "http://s.ppy.sh/a/" + user.id,
-                url: "https://osu.ppy.sh/users/" + user.id
+                name: `osu! recent plays for ${command_data.author_config.osuUsername}`,
+                icon_url: `http://s.ppy.sh/a/${user.id}`,
+                url: `https://osu.ppy.sh/users/${user.id}`
             },
-            description: playsDescription,
+            description: plays_description,
             thumbnail: {
-                url: "http://s.ppy.sh/a/" + user.id
+                url: `http://s.ppy.sh/a/${user.id}`
             },
             footer: {
-                text: `Requested by ${data.authorUser.tag} | Took ${secTaken}s...`
+                text: `Requested by ${command_data.msg.author.tag}`
             }
         }
-
-        //Send message
         command_data.msg.channel.send("", { embed: embedOsu }).catch(e => { console.log(e); });
     },
 };

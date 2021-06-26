@@ -15,41 +15,36 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
         if(command_data.args.length < 1) {
             command_data.msg.reply(`You need to type in an item name-`);
             return;
         }
 
-        //Resolve item name
-        var itemName = command_data.total_argument;
-        itemName = itemName.includes("<@") ? itemName.substring(0, itemName.indexOf("<@") - 1) : itemName;
+        let item_name = command_data.total_argument;
+        item_name = item_name.includes("<@") ? item_name.substring(0, item_name.indexOf("<@") - 1) : item_name;
 
-        //Resolve items
-        var itemID = -1;
-        var itemPrefab = -1;
-        var targetIndexes = [];
+        let item_ID = -1;
+        let item_prefab = -1;
+        let target_indexes = [];
 
         command_data.global_context.bot_config.items.forEach(item => {
             if(item.displayName.toLowerCase() === itemName.toLowerCase()) {
-                itemID = item.id;
-                itemPrefab = item;
+                item_ID = item.id;
+                item_prefab = item;
             }
         });
 
-        data.authorConfig.inventory.forEach(function(id, index) {
-            if(id === itemID) {
-                targetIndexes.push(index);
+        command_data.author_config.inventory.forEach((id, index) => {
+            if(id === item_ID) {
+                target_indexes.push(index);
             }
         });
-
-        targetIndexes.reverse();
-
-        if(targetIndexes.length < 1) {
-            command_data.msg.reply("You don't have any items called `" + itemName + "`-");
+        target_indexes.reverse();
+        if(target_indexes.length < 1) {
+            command_data.msg.reply(`You don't have any items called \`${itemName}\`-`);
             return;
         }
 
-        data.bot.im.useItem(data.bot.im, data, itemPrefab, targetIndexes);
+        command_data.global_context.neko_modules_clients.im.useItem(command_data.global_context.neko_modules_clients.im, command_data, item_prefab, target_indexes);
     },
 };

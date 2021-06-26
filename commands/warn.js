@@ -48,7 +48,7 @@ module.exports = {
                         },
                         {
                             name: "Moderator:",
-                            value: data.authorUser,
+                            value: command_data.msg.author,
                             inline: true
                         },
                         {
@@ -64,7 +64,7 @@ module.exports = {
 
                 //Save edited config
                 command_data.server_config.caseID += 1;
-                data.bot.ssm.server_edit.edit(data.bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                 channel.send("", { embed: embedWarn }).catch(e => { console.log(e); });
             }
@@ -79,6 +79,6 @@ module.exports = {
             reason: warnReason
         }
 
-        data.bot.ssm.server_add.addServerWarning(data.bot.ssm, serverWarn, command_data.msg.guild);
+        command_data.global_context.neko_modules_clients.ssm.server_add.addServerWarning(command_data.global_context.neko_modules_clients.ssm, serverWarn, command_data.msg.guild);
     }
 };
