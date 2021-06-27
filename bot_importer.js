@@ -40,6 +40,10 @@ module.exports = {
                 array[j] = temp;
             }
         }
+        global_context.utils.shuffle_playlist = (playlist) => {
+            playlist = playlist.map(a => { return { sort: Math.random(), value: a }; }).sort((a, b) => { return a.sort - b.sort; }).map(a => { a.value });
+            return playlist;
+        }
 
         //Setup SQL
         let sql_connection = global_context.modules.sql.createConnection({

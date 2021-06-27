@@ -108,7 +108,7 @@ module.exports = {
                                 case "ranks": {
                                     //Construct serverMute
                                     var ranks = command_data.server_config.module_level_ranks;
-                                    const embedRanks = new data.bot.Discord.MessageEmbed()
+                                    const embedRanks = new command_data.global_context.modules.Discord.MessageEmbed()
                                     .setColor(8388736)
                                     .setTitle('❯ Ranks (' + ranks.length + ')');
 

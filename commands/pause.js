@@ -10,22 +10,18 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false || command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).current === -1) {
             command_data.msg.reply("There's nothing playing-");
             return;
         }
 
-        var voiceData = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
-
-        if(voiceData.connection.dispatcher.paused === false) {
-            voiceData.connection.dispatcher.pause();
+        let voice_data = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
+        if(voice_data.connection.dispatcher.paused === false) {
+            voice_data.connection.dispatcher.pause();
             command_data.msg.channel.send("Paused current song-").catch(e => { console.log(e); });
-            console.log("- [voice] Paused VoiceRequest in VoiceConnection(id: " + command_data.msg.guild.id + ")");
         } else {
-            voiceData.connection.dispatcher.resume();
+            voice_data.connection.dispatcher.resume();
             command_data.msg.channel.send("Resuming current song-").catch(e => { console.log(e); });
-            console.log("- [voice] Resumed VoiceRequest in VoiceConnection(id: " + command_data.msg.guild.id + ")");
         }
     },
 };

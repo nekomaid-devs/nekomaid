@@ -10,7 +10,6 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false) {
             data.msg.reply("I'm not in a voice channel-");
             return;

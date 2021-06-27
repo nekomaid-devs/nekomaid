@@ -12,7 +12,7 @@ module.exports = {
     execute(command_data) {
         // TODO: re-factor command
         //Construst embed
-        const embedShop = new data.bot.Discord.MessageEmbed()
+        const embedShop = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
         .setTitle('NekoMaid - Shop')
         .setFooter(`Requested by ${command_data.msg.author.tag}`);

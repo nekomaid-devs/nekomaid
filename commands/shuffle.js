@@ -10,63 +10,38 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false || command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).current === -1) {
             command_data.msg.reply("There's nothing playing-");
             return;
         }
 
-        var voiceData = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
-
-        if(voiceData.mode === 0) {
-            voiceData.queue = voiceData.queue
-            .map(a =>
-                ({ sort: Math.random(), value: a })
-            )
-            .sort((a, b) =>
-                a.sort - b.sort
-            )
-            .map(a =>
-                a.value
-            )
-
-            voiceData.persistentQueue = [ voiceData.current ];
-            voiceData.queue.forEach(voiceRequest => {
-                voiceData.persistentQueue.push(voiceRequest)
+        let voice_data = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
+        if(voice_data.mode === 0) {
+            voice_data.queue = command_data.global_context.utils.shuffle_playlist(voice_data.queue);
+            voice_data.persistentQueue = [ voice_data.current ];
+            voice_data.queue.forEach(voiceRequest => {
+                voice_data.persistentQueue.push(voiceRequest);
             })
 
-            command_data.msg.channel.send("Shuffled `" + voiceData.queue.length + "` songs-").catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Shuffled \`${voiceData.queue.length}\` songs-`).catch(e => { console.log(e); });
         } else {
-            var voiceData2 = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
-            voiceData2.persistentQueue = voiceData2.persistentQueue
-            .map(a =>
-                ({ sort: Math.random(), value: a })
-            )
-            .sort((a, b) =>
-                a.sort - b.sort
-            )
-            .map(a =>
-                a.value
-            )
+            voice_data.persistentQueue = command_data.global_context.utils.shuffle_playlist(voice_data.persistentQueue);
 
-            var currentPersistentIndex = voiceData.persistentQueue.length;
-            var i1 = 0;
-            voiceData.queue = []
-            voiceData.persistentQueue.forEach(voiceRequest => {
-                if(voiceRequest.uuid === voiceData.current.uuid) {
-                    currentPersistentIndex = i1;
+            let currentPersistentIndex = voice_data.persistentQueue.length;
+            let i = 0;
+            voice_data.queue = []
+            voice_data.persistentQueue.forEach(voiceRequest => {
+                if(voiceRequest.uuid === voice_data.current.uuid) {
+                    currentPersistentIndex = i;
+                }
+                if(currentPersistentIndex < i) {
+                    voice_data.queue.push(voiceRequest);
                 }
 
-                if(currentPersistentIndex < i1) {
-                    voiceData.queue.push(voiceRequest)
-                }
+                i += 1;
+            });
 
-                i1 += 1;
-            })
-
-            command_data.msg.channel.send("Shuffled `" + voiceData.persistentQueue.length + "` songs-").catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Shuffled \`${voiceData.persistentQueue.length}\` songs-`).catch(e => { console.log(e); });
         }
-
-        console.log("- [voice] Shuffled VoiceRequests in VoiceConnection(id: " + command_data.msg.guild.id + ", size: " + voiceData.queue.length + ")");
     },
 };

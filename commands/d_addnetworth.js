@@ -18,14 +18,10 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var creditsAmmount = parseInt(command_data.args[1]);
-        command_data.tagged_user_config.netWorth += creditsAmmount;
-
-        //Edits and broadcasts the change
+        let credits_ammount = parseInt(command_data.args[1]);
+        command_data.tagged_user_config.netWorth += credits_ammount;
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
-        //Construct message and send it
-        command_data.msg.channel.send("Added `" + creditsAmmount + "` net worth to `" + command_data.tagged_user.tag + "`! (Current net worth: `" + command_data.tagged_user_config.netWorth + "$`)").catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Added \`${credits_ammount}\` net worth to \`${command_data.tagged_user.tag}\`! (Current net worth: \`${command_data.tagged_user_config.netWorth}$\`)`).catch(e => { console.log(e); });
     },
 };

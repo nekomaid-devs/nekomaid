@@ -13,6 +13,7 @@ let global_context = {
 
     utils: {},
     logger: {},
+    bot_config: {}
 }
 
 //Import modules

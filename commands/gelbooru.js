@@ -14,17 +14,16 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: true,
     async execute(command_data) {
-        // TODO: re-factor command
-        //Get random image from rule34
+        let post_info = -1;
         try {
-            var postInfo = await data.bot.gelbooru.gelbooru_result(data.bot.r34, command_data.args);
+            post_info = await data.bot.gelbooru.gelbooru_result(data.bot.r34, command_data.args);
         } catch(err) {
             console.log(err);
             command_data.msg.reply("There was an error in processing this request-");
             return;
         }
 
-        switch(postInfo.status) {
+        switch(post_info.status) {
             case 0:
                 command_data.msg.reply("No results found-");
                 return;
@@ -34,30 +33,25 @@ module.exports = {
                 return;
         }
 
-        //Construct embed
-        var postsNumber0 = (postInfo.pageNumber - 1) * 42;
-        var postNumber = postsNumber0 + postInfo.postNumber;
-
-        var numOfPosts = postInfo.numOfPages * 42;
-
-        let embedRule34 = {
+        let posts_number_0 = (postInfo.pageNumber - 1) * 42;
+        let post_number = posts_number_0 + postInfo.postNumber;
+        let num_of_posts = postInfo.numOfPosts * 42;
+        let embedGelbooru = {
             title: `Here is result for ${command_data.args[0]}`,
             color: 8388736,
             fields: [ 
                 {
-                    name: 'Image Link:',
-                    value: `[Click Here](${postInfo.link})`
+                    name: "Image Link:",
+                    value: `[Click Here](${post_info.link})`
                 }
             ],
             image: {
                 url: postInfo.link
             },
             footer: {
-                text: `Page: ${postInfo.pageNumber}/${postInfo.numOfPages} Post: ${postNumber}/${numOfPosts}`
+                text: `Page: ${postInfo.pageNumber}/${postInfo.numOfPages} Post: ${post_number}/${num_of_posts}`
             }
         }
-
-        //Send message
-        command_data.msg.channel.send("", { embed: embedRule34 }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedGelbooru }).catch(e => { console.log(e); });
     },
 };

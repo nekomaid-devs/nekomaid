@@ -15,33 +15,27 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        //Get server config
-        var now = Date.now();
-
-        //Construct embed
-        const embedBans = new data.bot.Discord.MessageEmbed()
+        let now = Date.now();
+        let embedBans = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
-        .setAuthor('❯ Bans (' + data.serverBans.length + ')', command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
+        .setAuthor(`❯ Bans (${data.serverBans.length})`, command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
 
         if(data.serverBans.length < 1) {
             command_data.msg.channel.send("", { embed: embedBans }).catch(e => { console.log(e); });
             return;
         }
 
-        var serverBansByID = new Map();
+        let serverBansByID = new Map();
         command_data.msg.guild.fetchBans().then(serverBansResult => {
             serverBansResult.forEach(ban => {
                 serverBansByID.set(ban.user.id, ban);
-            })
+            });
 
             data.serverBans.slice(-25).forEach(ban => {
-                var bannedUser = serverBansByID.get(ban.userID);
-
-                if(bannedUser !== undefined) {
-                    var bannedUserDisplayName = bannedUser.user.username + "#" + bannedUser.user.discriminator;
-                    var remainingText = ban.end === -1 ? "Forever" : data.tc.convertTime(ban.end - now);
-                    embedBans.addField("Ban - " + bannedUserDisplayName, "Remaining: `" + remainingText + "`");
+                let bannedMember = serverBansByID.get(ban.userID);
+                if(bannedMember !== undefined) {
+                    let remainingText = ban.end === -1 ? "Forever" : data.tc.convertTime(ban.end - now);
+                    embedBans.addField(`Ban - ${bannedMember.user.tag}`, `Remaining: \`${remainingText}\``);
                 }
             });
         

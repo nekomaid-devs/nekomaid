@@ -73,7 +73,7 @@ module.exports = {
         }
 
         //Construst embed
-        const embedTop = new data.bot.Discord.MessageEmbed()
+        const embedTop = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
         .setTitle('❯    Top - `' + topText + '`' + topText2)
         .setFooter(`Update took ${top.elapsed}s...`);

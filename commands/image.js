@@ -269,7 +269,7 @@ module.exports = {
                             var secTaken = ((t1 - t0) / 1000).toFixed(3);
 
                             //Construct embed
-                            let embedImage = new data.bot.Discord.MessageEmbed()
+                            let embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
                             .setTitle("Here's your edited image-")
                             .setColor(8388736)
                             .attachFiles(['./image.jpg'])
@@ -293,7 +293,7 @@ module.exports = {
                                 var secTaken = ((t1 - t0) / 1000).toFixed(3);
 
                                 //Construct embed
-                                let embedImage = new data.bot.Discord.MessageEmbed()
+                                let embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
                                 .setTitle("Here's your edited image-")
                                 .setColor(8388736)
                                 .attachFiles(['./image.jpg'])
@@ -310,7 +310,7 @@ module.exports = {
                             var secTaken = ((t1 - t0) / 1000).toFixed(3);
                             
                             //Construct embed
-                            let embedImage = new data.bot.Discord.MessageEmbed()
+                            let embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
                             .setTitle("Here's your edited image-")
                             .setColor(8388736)
                             .attachFiles(['./image.jpg'])

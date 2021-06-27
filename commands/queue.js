@@ -17,7 +17,7 @@ module.exports = {
         }
 
         var voiceData = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
-        const embedQueue = new data.bot.Discord.MessageEmbed();
+        const embedQueue = new command_data.global_context.modules.Discord.MessageEmbed();
 
         var descriptionText = "";
 

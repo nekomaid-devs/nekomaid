@@ -20,7 +20,7 @@ module.exports = {
             data.bot.jimp.loadFont('./data/font.fnt').then(async(font) => {
                 image.print(font, 325 - data.bot.jimp.measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
 
-                let embedImage = new data.bot.Discord.MessageEmbed()
+                let embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
                 .setTitle(command_data.tagged_user.tag + " was " + (impostor ? "" : "not ") + "the impostor-")
                 .setColor(8388736)
                 .attachFiles([{ attachment: await image.getBufferAsync("image/png"), name: "image.png" }])

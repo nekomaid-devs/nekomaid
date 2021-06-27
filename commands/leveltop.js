@@ -24,7 +24,7 @@ module.exports = {
         var top = await data.bot.sb.updateTopServerLevel(data.bot, command_data.server_config, command_data.msg.guild);
 
         //Construst embed
-        const embedTop = new data.bot.Discord.MessageEmbed()
+        const embedTop = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
         .setTitle('❯    Top - `' + topText + '`')
         .setFooter(`Update took ${top.elapsed}s...`);

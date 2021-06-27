@@ -64,7 +64,7 @@ module.exports = {
                 command_data.global_context.neko_modules_clients.vm.playOnConnection(data.bot, data.msg, url);
             } else {
                 var max = 5;
-                const embedPlay = new data.bot.Discord.MessageEmbed()
+                const embedPlay = new command_data.global_context.modules.Discord.MessageEmbed()
                 .setColor(8388736)
                 .setTitle("Select a song to play (type 1-" + max + ")-")
 

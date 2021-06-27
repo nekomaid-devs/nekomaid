@@ -11,98 +11,76 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var showHidden = false;
-
-        //Permission check
+        let show_hidden = false;
         if(command_data.args.includes("-h")) {
             if(command_data.global_context.bot_config.botOwners.includes(command_data.msg.author.id) === false) {
                 command_data.msg.reply("You aren't the bot owner-");
                 return;
             }
 
-            showHidden = true;
+            show_hidden = true;
             command_data.args.splice(command_data.args.indexOf("-h"), 1);
         }
 
-        //Get categories
         if(command_data.args.length > 0) {
-            var commandKeys = Array.from(data.bot.commands.keys());
-            var targetCommandName = command_data.args[0];
-
-            //Translate alias
-            if(data.bot.aliases.has(targetCommandName) === true) {
-                targetCommandName = data.bot.aliases.get(targetCommandName);
+            let command_keys = Array.from(command_data.global_context.commands.keys());
+            var target_command_name = command_data.args[0];
+            if(command_data.global_context.command_aliases.has(target_command_name) === true) {
+                target_command_name = command_data.global_context.command_aliases.get(target_command_name);
             }
 
-            //Check if command exists
-            if(commandKeys.includes(targetCommandName) === false || (data.bot.commands.get(targetCommandName).hidden === true && showHidden === false)) {
-                command_data.msg.channel.send("Command `" + targetCommandName + "` not found - see `" + command_data.server_config.prefix + "help` for help").catch(e => { console.log(e); });
+            if(command_keys.includes(target_command_name) === false || (command_data.global_context.commands.get(target_command_name).hidden === true && show_hidden === false)) {
+                command_data.msg.channel.send(`Command \`${target_command_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch(e => { console.log(e); });
                 return;
             }
 
-            //Get command
-            var command = data.bot.commands.get(targetCommandName);
-
-            //Check for subcommand
+            var command = command_data.global_context.commands.get(target_command_name);
             if(command_data.args.length > 1) {
-                var targetSubcommandName = command_data.args[1];
-
-                //Check if subcommand exists
-                if(command.subcommandHelp.has(targetSubcommandName) === false) {
-                    command_data.msg.channel.send("Subcommand `" + targetSubcommandName + "` not found - see `" + command_data.server_config.prefix + "help` for help").catch(e => { console.log(e); });
+                var target_subcommand_name = command_data.args[1];
+                if(command.subcommandHelp.has(target_subcommand_name) === false) {
+                    command_data.msg.channel.send(`Subcommand \`${target_subcommand_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch(e => { console.log(e); });
                     return;
                 }
 
-                //Construct text
-                var unhiddenText = showHidden === true && command.hidden === true ? "❓" : "";
-                var commandsText = command.name + " " + targetSubcommandName;
-                var usage = command.subcommandHelp.get(targetSubcommandName);
-                usage = usage.split("<subcommand_prefix>").join(command_data.server_config.prefix + commandsText);
+                var unhidden_text = show_hidden === true && command.hidden === true ? "❓" : "";
+                var commands_text = command.name + " " + target_subcommand_name;
+                var usage = command.subcommandHelp.get(target_subcommand_name);
+                usage = usage.split("<subcommand_prefix>").join(command_data.server_config.prefix + commands_text);
 
-                //Construct embed
-                const embedHelp = new data.bot.Discord.MessageEmbed()
+                let embedHelp = new command_data.global_context.modules.Discord.MessageEmbed()
                 .setColor(8388736)
-                .setTitle('Help for - `' + unhiddenText + commandsText + '`');
-
+                .setTitle(`Help for - \`${unhidden_text + commands_text}\``);
                 embedHelp.addField("Usage:", usage);
 
-                //Send message
                 command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { console.log(e); });
             } else {
-                //Construct text
-                var unhiddenText2 = showHidden === true && command.hidden === true ? "❓" : "";
-                var commandsText2 = command.name;
-                var usage2 = command.helpUsage;
-                command.aliases.forEach(function(alias) {
-                    commandsText2 += "/" + alias;
-                })
+                let unhidden_text = show_hidden === true && command.hidden === true ? "❓" : "";
+                let commands_text = command.name;
+                let usage = command.helpUsage;
+                command.aliases.forEach((alias) => {
+                    commands_text += "/" + alias;
+                });
 
-                //Construct embed
-                const embedHelp = new data.bot.Discord.MessageEmbed()
+                let embedHelp = new command_data.global_context.modules.Discord.MessageEmbed()
                 .setColor(8388736)
-                .setTitle('Help for - `' + unhiddenText2 + commandsText2 + '`')
+                .setTitle(`Help for - \`${unhidden_text + commands_text}\``)
                 .setDescription(command.description);
-
                 embedHelp.addField("Usage:", "`" + command_data.server_config.prefix + commandsText2 + " " + usage2);
 
                 if(command.subcommandHelp.size > 0) {
-                    var commandsString2b = "";
-
-                    command.subcommandHelp.forEach(function(usage, subcommand) {
-                        commandsString2b += 'Check `' + command_data.server_config.prefix + "help " + command.name + " " + subcommand + '` for help\n';
+                    let commands_text_2 = "";
+                    command.subcommandHelp.forEach((usage, subcommand) => {
+                        commands_text_2 += `Check \`${command_data.server_config.prefix}help ${command.name} ${subcommand}\` for help\n`;
                     });
 
-                    embedHelp.addField("Subcommands:", commandsString2b);
+                    embedHelp.addField("Subcommands:", commands_text_2);
                 }
 
-                //Send message
                 command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { console.log(e); });
             }
         } else {
-            var commands = data.bot.commands.array();
-
-            var categories = new Map([
+            let commands = Array.from(command_data.global_context.commands.values());
+            let categories = new Map([
                 ['Help & Information', { prefix: "<:n_help:771821666895527986> ", items: [], nsfw: false }],
                 ['Actions', { prefix: "<:n_actions:771821287105363969> ", items: [], nsfw: false }],
                 ['Emotes', { prefix: "<:n_emotes:771822090395189258> ", items: [], nsfw: false }],
@@ -116,52 +94,44 @@ module.exports = {
                 ['Leveling', { prefix: "<:n_leveling:771822966181724170> ", items: [], nsfw: false }],
                 ['Testing', { prefix: "", items: [], nsfw: false }]
             ]);
-    
-            //Collect commands into categories
             commands.forEach(command => {
-                if((showHidden === true || command.hidden === false) && categories.has(command.category)) {
+                if((show_hidden === true || command.hidden === false) && categories.has(command.category)) {
                     categories.get(command.category).items.push(command);
                 }
             });
 
-            //Construct unhidden text
-            var unhiddenText3 = showHidden === true ? " (Unhidden)" : "";
-    
-            //Construst embed
-            const embedHelp = new data.bot.Discord.MessageEmbed()
+            let url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
+            let unhidden_text = show_hidden === true ? " (Unhidden)" : "";
+            let embedHelp = new command_data.global_context.modules.Discord.MessageEmbed()
             .setColor(8388736)
-            .setTitle('❯     Prefix: `' + `${command_data.server_config.prefix}` + '` - Help' + unhiddenText3)
-            .setDescription("For help with a command, use `" + command_data.server_config.prefix + "help [command] [subcommand?]`.\nMake sure to join the server as there'll be cool stuff in the future!~ Have fun!~ \nAvailable commands, by category:")
-            .setFooter(`NekoMaid ${command_data.global_context.config.version}`, `${command_data.global_context.bot_config.avatarUrl}`);
+            .setTitle(`❯     Prefix: \`${command_data.server_config.prefix}\` - Help ${unhidden_text}`)
+            .setDescription(`For help with a command, use \`${command_data.server_config.prefix}help [command] [subcommand?]\`.\nMake sure to join the server as there'll be cool stuff in the future!~ Have fun!~ \nAvailable commands, by category:`)
+            .setFooter(`NekoMaid ${command_data.global_context.config.version}`, `${url}`);
             
-            //Collect commands from categories
-            var categoriesKeys = Array.from(categories.keys());
+            let categories_keys = Array.from(categories.keys());
+            categories_keys.forEach(category_key => {
+                let category = categories.get(category_key);
+                let commands_string = "";
+                let commands_keys = category.items;
     
-            categoriesKeys.forEach(categoryKey => {
-                var category = categories.get(categoryKey);
-                var commandsString = "";
-                var commandsKeys = category.items;
-    
-                commandsKeys.sort((a,b) => { return a.name.localeCompare(b.name); });
-                commandsKeys.forEach(function(command, index) {
-                    var commandsText = showHidden === true && command.hidden === true ? "❓" + command.name : command.name;
-                    command.aliases.forEach(function(alias) {
-                        commandsText += "/" + alias;
-                    })
+                commands_keys.sort((a,b) => { return a.name.localeCompare(b.name); });
+                commands_keys.forEach(function(command, index) {
+                    let command_text = show_hidden === true && command.hidden === true ? "❓" + command.name : command.name;
+                    command.aliases.forEach((alias) => {
+                        command_text += "/" + alias;
+                    });
 
-                    commandsString += '`' + commandsText + '`';
-    
-                    if(commandsKeys.length - 1 > index) {
-                        commandsString += ", ";
+                    commands_string += `\`${command_text}\``;
+                    if(commands_keys.length - 1 > index) {
+                        commands_string += ", ";
                     }
                 });
 
-                if(commandsString != "") {
-                    embedHelp.addField(category.prefix + categoryKey, category.nsfw && command_data.msg.channel.nsfw === false ? "Hidden in SFW channel, try changing this channel to NSFW" : commandsString);
+                if(commands_string != "") {
+                    embedHelp.addField(category.prefix + category_key, category.nsfw && command_data.msg.channel.nsfw === false ? "Hidden in SFW channel, try changing this channel to NSFW" : commands_string);
                 }
             });
-        
-            //Send message
+
             command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { console.log(e); });
         }
     },
