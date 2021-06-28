@@ -24,9 +24,21 @@ module.exports = {
         //Import API modules
         global_context.modules.NekoClient = require("nekos.life");
         global_context.modules.akaneko = require("akaneko");
+
+        //Import Sentry modules
+        global_context.modules.Sentry = require("@sentry/node");
+        global_context.modules.Tracing = require("@sentry/tracing");
         
         //Setup modules
         global_context.modules_clients.neko = new global_context.modules.NekoClient();
+        global_context.modules.Sentry.init({
+            dsn: "https://9b31012ff51345d3ab56088f4262d788@sentry.lamkas.dev/1",
+            integrations: [
+                new global_context.modules.Sentry.Integrations.Http({ tracing: true }),
+            ],
+
+            tracesSampleRate: 1.0,
+        });
 
         //Setup extra utils
         global_context.utils.pick_random = (array) => {
