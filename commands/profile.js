@@ -11,40 +11,25 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
-        var marriedText = command_data.tagged_user_config.marriedID;
-
-        if(marriedText === "-1") {
-            marriedText = "Nobody";
+        let married_text = command_data.tagged_user_config.marriedID;
+        if(married_text === "-1") {
+            married_text = "Nobody";
         } else {
-            var marriedUser = await data.bot.users.fetch(marriedText).catch(e => { console.log(e); });
-
-            if(marriedUser !== undefined && marriedUser !== null) {
-                marriedText = marriedUser.username + "#" + marriedUser.discriminator;
-
+            let married_user = await data.bot.users.fetch(married_text).catch(e => { console.log(e); });
+            if(married_user !== undefined && married_user !== null) {
+                married_text = married_user.username + "#" + married_user.discriminator;
                 if(command_data.tagged_user_config.canDivorce == false) {
-                    marriedText += " (🔒)"
+                    married_text += " (🔒)";
                 }
             }
         }
 
-        //Construct embed
-        var avatarUrl = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-
-        var credits = command_data.tagged_user_config.credits;
-        var bank = command_data.tagged_user_config.bank;
-        var level = command_data.tagged_user_config.level;
-        var xp = command_data.tagged_user_config.xp;
-        var neededXP = command_data.global_context.bot_config.levelXP;
-        var rep = command_data.tagged_user_config.rep;
-
-        var inventory = command_data.tagged_user_config.inventory;
-        var inventoryText = ""
-
+        let inventory = command_data.tagged_user_config.inventory;
+        let inventory_text = "";
         if(inventory.length < 1) {
-            inventoryText = "Empty";
+            inventory_text = "Empty";
         } else {
-            var inventoryMap = new Map();
+            let inventoryMap = new Map();
             inventory.forEach(id => {
                 inventoryMap.set(id, inventoryMap.has(id) === true ? inventoryMap.get(id) + 1 : 1);
             });
@@ -52,76 +37,72 @@ module.exports = {
             Array.from(inventoryMap.keys()).forEach(id => {
                 let count = inventoryMap.get(id);
 
-                if(inventoryText != "") { inventoryText += ", " }
+                if(inventory_text != "") { inventory_text += ", " }
                 if(command_data.global_context.bot_config.items.has(id) === true) {
-                    var item2 = command_data.global_context.bot_config.items.get(id);
-                    inventoryText += "`" + count + "x " + item2.displayName + "`";
+                    let item = command_data.global_context.bot_config.items.get(id);
+                    inventory_text += "`" + count + "x " + item.displayName + "`";
                 }
             });
         }
 
-        //Get premium state
-        var end = new Date();
-        var start = new Date(command_data.author_config.lastUpvotedTime);
-
-        var diff = (end.getTime() - start.getTime()) / 1000;
+        let end = new Date();
+        let start = new Date(command_data.author_config.lastUpvotedTime);
+        let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
         diff = Math.abs(Math.round(diff));
+        let premium_text = diff < 1440 ? " (Premium ⭐)" : "";
 
-        var premiumText = diff < 3600 ? " (Premium ⭐)" : "";
-
-        var bankUpgrade = 0;
+        let bank_upgrade = 0;
         command_data.tagged_user_config.inventory.forEach(item => {
             command_data.global_context.bot_config.items.forEach(item2 => {
                 if(item2.id === item && item2.type === "bankLimit") {
-                    bankUpgrade += item2.limit;
+                    bank_upgrade += item2.limit;
                 }
             });
         });
 
+        let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedProfile = {
             color: 8388736,
             author: {
-                name: `${command_data.tagged_user.tag}'s Profile` + premiumText,
-                icon_url: avatarUrl
+                name: `${command_data.tagged_user.tag}'s Profile ${premium_text}`,
+                icon_url: url
             },
             fields: [ 
                     {
                         name: '💵    Credits:',
-                        value: `$ ${credits}`,
+                        value: `$ ${command_data.tagged_user_config.credits}`,
                         inline: true
                     },
                     {
                         name: '🏦    Bank:',
-                        value: `$ ${bank}/${command_data.global_context.bot_config.bankLimit + bankUpgrade}`,
+                        value: `$ ${command_data.tagged_user_config.bank}/${(command_data.global_context.bot_config.bankLimit + bank_upgrade)}`,
                         inline: true
                     },
                     {
                         name: '⚡    Level:',
-                        value: `${level} (XP: ${xp}/${neededXP})`
+                        value: `${command_data.tagged_user_config.level} (XP: ${command_data.tagged_user_config.xp}/${command_data.global_context.bot_config.levelXP})`
                     },
                     {
                         name: '🎖️    Reputation:',
-                        value: `${rep}`
+                        value: `${command_data.tagged_user_config.rep}`
                     },
                     {
                         name: '❤️    Married with:',
-                        value: `${marriedText}`
+                        value: `${married_text}`
                     },
                     {
                         name: '📁    Inventory:',
-                        value: `${inventoryText.length < 1024 ? inventoryText : inventoryText.substring(0, 1021) + "..."}`
+                        value: `${inventory_text.length < 1024 ? inventory_text : inventory_text.substring(0, 1021) + "..."}`
                     }
             ],
             thumbnail: {
-                url: avatarUrl
+                url: url
             },
             footer: {
                 text: `Requested by ${command_data.msg.author.tag} | Cool stuff on the support server releasing soon!`
             },
         }
-
-        //Send message
         command_data.msg.channel.send("", { embed: embedProfile }).catch(e => { console.log(e); });
     },
 };

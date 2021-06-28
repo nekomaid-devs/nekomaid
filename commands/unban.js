@@ -19,43 +19,41 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        //Get server config
-        var usernames = []
-        var banInfo = -1
+        let usernames = [];
+        let ban_info = -1;
 
-        var taggedUserDisplayName = command_data.total_argument;
+        let tagged_user_display_name = command_data.total_argument;
         command_data.msg.guild.fetchBans().then(serverBansResult => {
             serverBansResult.forEach(ban => {
-                var taggedUserDisplayNameModded = taggedUserDisplayName.endsWith("#" + ban.user.discriminator) ? taggedUserDisplayName : taggedUserDisplayName + "#" + ban.user.discriminator
-                if(ban.user.username + "#" + ban.user.discriminator === taggedUserDisplayNameModded) {
-                    usernames.push(ban.user.username + "#" + ban.user.discriminator)
-                    banInfo = ban
+                let tagged_user_display_name_modded = tagged_user_display_name.endsWith("#" + ban.user.discriminator) ? tagged_user_display_name : tagged_user_display_name + "#" + ban.user.discriminator;
+                if(ban.user.username + "#" + ban.user.discriminator === tagged_user_display_name_modded) {
+                    usernames.push(ban.user.username + "#" + ban.user.discriminator);
+                    ban_info = ban;
                 }
             });
 
             if(usernames.length > 1) {
-                command_data.msg.reply("There are more than 1 user with this discriminator, so you need to specify which one (" + usernames + ")-");
+                command_data.msg.reply(`There are more than 1 user with this discriminator, so you need to specify which one (${usernames})-`);
             } else if(usernames.length < 1) {
-                command_data.msg.reply("`" + taggedUserDisplayName + "` isn't banned-");
+                command_data.msg.reply(`\`${tagged_user_display_name}\` isn't banned-`);
             } else {
-                command_data.msg.guild.members.unban(banInfo.user, "None").catch(err => {
+                command_data.msg.guild.members.unban(ban_info.user, "None").catch(err => {
                     console.error(err);
-                    command_data.msg.reply("Couldn't unban `" + banInfo.user.username + "#" + banInfo.user.discriminator + "` (Try moving Nekomaid's permissions above the user you want to unban-")
+                    command_data.msg.reply(`Couldn't unban \`${banInfo.user.tag}\` (Try moving Nekomaid's permissions above the user you want to unban-`)
                 })
 
-                var previousBan = -1;
-                data.serverBans.forEach(function(ban) {
+                let previous_ban = -1;
+                data.serverBans.forEach((ban) => {
                     if(ban.userID === banInfo.user.id) {
-                        previousBan = ban;
+                        previous_ban = ban;
                     }
                 });
 
-                command_data.msg.channel.send("Unbanned `" + banInfo.user.username + "#" + banInfo.user.discriminator + "`-").catch(e => { console.log(e); });
+                command_data.msg.channel.send(`Unbanned \`${banInfo.user.tag}\`-`).catch(e => { console.log(e); });
                 
-                if(previousBan != -1) {
+                if(previous_ban != -1) {
                     data.bot.lastModeratorIDs.set(command_data.msg.guild.id, command_data.msg.author.id);
-                    command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerBan(command_data.global_context.neko_modules_clients.ssm, previousBan.id);
+                    command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerBan(command_data.global_context.neko_modules_clients.ssm, previous_ban.id);
                 }
             }
         })

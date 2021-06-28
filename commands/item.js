@@ -15,28 +15,25 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var itemName = command_data.total_argument;
-        var targetItem = -1;
-
+        let item_name = command_data.item_name;
+        let target_item = -1;
         command_data.global_context.bot_config.items.forEach(item => {
             if(item.displayName.toLowerCase() === itemName.toLowerCase()) {
-                targetItem = item;
+                target_item = item;
             }
         });
 
-        if(targetItem === -1) {
-            command_data.msg.reply("Haven't found any item with name `" + itemName + "`-");
+        if(target_item === -1) {
+            command_data.msg.reply(`Haven't found any item with name \`${item_name}\`-`);
             return;
         }
 
         let embedItem = {
             color: 8388736,
-            title: "Info about `" + targetItem.displayName + "`",
-            description: targetItem.description,
-            footer: "Requested by " + command_data.msg.author.tag
+            title: `Info about \`${target_item.displayName}\``,
+            description: target_item.description,
+            footer: `Requested by ${command_data.msg.author.tag}`
         }
-
         command_data.msg.channel.send("", { embed: embedItem }).catch(e => { console.log(e); });
     },
 };

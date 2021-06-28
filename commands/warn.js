@@ -18,26 +18,22 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
-        var warnReason = "None";
+        let warn_reason = "None";
         if(command_data.args.length > 1) {
-            warnReason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[0]) + command_data.args[0].length + 1)
+            warn_reason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[0]) + command_data.args[0].length + 1);
         }
 
-        //Get server config
-        var numOfWarns = data.serverWarns.filter(warn =>
+        let num_of_warnings = data.serverWarns.filter(warn =>
             warn.userID === command_data.tagged_user.id
-        ).length
-        
-        command_data.msg.channel.send("Warned `" + command_data.tagged_user.tag + "` (Reason: `" + warnReason + "`, Strikes: `" + numOfWarns + "` => `" + (numOfWarns + 1) + "`)-").catch(e => { console.log(e); });
+        ).length;
+        command_data.msg.channel.send(`Warned \`${command_data.tagged_user.tag}\` (Reason: \`${warn_reason}\`, Strikes: \`${num_of_warnings}\` => \`${(numOfWarns + 1)}\`)-`).catch(e => { console.log(e); });
 
         if(command_data.server_config.audit_warns == true && command_data.server_config.audit_channel != "-1") {
-            const channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
-
+            let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {
-                const embedWarn = {
+                let embedWarn = {
                     author: {
-                        name: "Case " + command_data.server_config.caseID + "# | Warn | " + command_data.tagged_user.tag,
+                        name: `Case ${command_data.server_config.caseID}# | Warn | ${command_data.tagged_user.tag}`,
                         icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                     },
                     fields: [
@@ -57,12 +53,11 @@ module.exports = {
                         },
                         {
                             name: "Strikes:",
-                            value: numOfWarns + " => " + (numOfWarns + 1)
+                            value: `${num_of_warnings} => ${(num_of_warnings + 1)}`
                         }
                     ]
                 }
 
-                //Save edited config
                 command_data.server_config.caseID += 1;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
@@ -70,8 +65,7 @@ module.exports = {
             }
         }
 
-        //Construct serverBan
-        var serverWarn = {
+        let serverWarn = {
             id: data.bot.crypto.randomBytes(16).toString("hex"),
             serverID: command_data.msg.guild.id,
             userID: command_data.tagged_user.id,

@@ -18,34 +18,20 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
         if(command_data.server_config.sayCommand == false) {
             return;
         }
-
-        if(data.msg.mentions.members.size > 0 || data.msg.mentions.roles.size > 0 || data.msg.mentions.everyone === true) {
+        if(command_data.msg.mentions.members.size > 0 || command_data.msg.mentions.roles.size > 0 || command_data.msg.mentions.everyone === true) {
             command_data.msg.reply("Please remove all mentions before trying again-");
             return;
         }
-
-        var text = data.msg.content;
-        if(text.includes("@everyone") || text.includes("@here")) {
+        if(command_data.msg.content.includes("@everyone") || command_data.msg.content.includes("@here")) {
             command_data.msg.reply("Please remove all mentions before trying again-");
             return;
         }
-
-        var badWords = ["nigga", "nigger"]
-        var passed = true;
-        badWords.forEach(badWord => {
-            if(passed === true && text.includes(badWord) === true) {
-                command_data.msg.reply("I'm not saying that, sorry-");
-                passed = false;
-            }
-        })
 
         if(passed === true) {
-            //Send message
-            command_data.msg.channel.send(data.msg.content.substring(data.msg.content.indexOf(" ") + 1)).catch(e => { console.log(e); });
+            command_data.msg.channel.send(command_data.total_argument).catch(e => { console.log(e); });
             data.msg.delete().catch(e => { console.log(e); });
         }
     },

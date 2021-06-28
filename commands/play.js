@@ -24,21 +24,20 @@ module.exports = {
             command_data.msg.reply("You need to join a voice channel-");
             return;
         }
-
         if(command_data.msg.member.voice.channel.joinable === false || command_data.msg.member.voice.channel.speakable === false) {
             command_data.msg.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again-");
             return;
         }
 
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false) {
-            var connection = await command_data.msg.member.voice.channel.join();
-            var voiceData0 = new data.bot.VoiceData();
+            let connection = await command_data.msg.member.voice.channel.join();
+            let voiceData = new command_data.global_context.modules.VoiceData();
             voiceData0.id = command_data.msg.guild.id;
             voiceData0.connection = connection;
             voiceData0.joinedMessageChannelID = command_data.msg.channel.id;
 
             command_data.global_context.neko_modules_clients.vm.addConnection(data.bot, command_data.msg.guild.id, voiceData0);
-            command_data.msg.channel.send("Joined channel `" + command_data.msg.member.voice.channel.name + "`-").catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Joined channel \`${command_data.msg.member.voice.channel.name}\`-`).catch(e => { console.log(e); });
         }
 
         if(command_data.args.length > 0) {

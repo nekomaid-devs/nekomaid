@@ -15,42 +15,26 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
         if(command_data.server_config.sayCommand == false) {
             return;
         }
-
-        //Argument check
         if(command_data.args.length < 1) {
             command_data.msg.reply("You need to type in what do you me to owoify-");
             return;
         }
-
-        if(data.msg.mentions.members.size > 0 || data.msg.mentions.roles.size > 0 || data.msg.mentions.everyone === true) {
+        if(command_data.msg.mentions.members.size > 0 || command_data.msg.mentions.roles.size > 0 || command_data.msg.mentions.everyone === true) {
             command_data.msg.reply("Please remove all mentions before trying again-");
             return;
         }
-
-        var text = data.msg.content;
-        if(text.includes("@everyone") || text.includes("@here")) {
+        if(command_data.msg.content.includes("@everyone") || command_data.msg.content.includes("@here")) {
             command_data.msg.reply("Please remove all mentions before trying again-");
             return;
         }
-
-        var badWords = ["nigga", "nigger"]
-        var passed = true;
-        badWords.forEach(badWord => {
-            if(passed === true && text.includes(badWord) === true) {
-                command_data.msg.reply("I'm not saying that, sorry-");
-                passed = false;
-            }
-        })
 
         if(passed === true) {
-            //Send message
-            var owoifiedText = await data.bot.neko.sfw.OwOify({ text: data.msg.content.substring(data.msg.content.indexOf(" ") + 1) });
-            command_data.msg.channel.send(owoifiedText.owo).catch(e => { console.log(e); });
-            data.msg.delete().catch(e => { console.log(e); });
+            let owoified_text = await command_data.global_context.modules_clients.neko.sfw.OwOify({ text: command_data.total_argument });
+            command_data.msg.channel.send(owoified_text.owo).catch(e => { console.log(e); });
+            command_data.msg.delete().catch(e => { console.log(e); });
         }
     },
 };

@@ -10,24 +10,20 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        //Construst embed
-        const embedShop = new command_data.global_context.modules.Discord.MessageEmbed()
+        let embedShop = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
-        .setTitle('NekoMaid - Shop')
+        .setTitle("NekoMaid - Shop")
         .setFooter(`Requested by ${command_data.msg.author.tag}`);
 
-        var items = command_data.global_context.bot_config.shopItems;
-
+        let items = command_data.global_context.bot_config.shopItems;
         items.forEach(function (item) {
             command_data.global_context.bot_config.items.forEach(item2 => {
                 if(item.id === item2.id) {
-                    embedShop.addField("#" + item.id + " - " + item2.displayName, item.price + " credits");
+                    embedShop.addField(`#${item.id} - ${item2.displayName}`, `${item.price} credits`);
                 }
             })
-        })
+        });
 
-        //Send message
         command_data.msg.channel.send("", { embed: embedShop }).catch(e => { console.log(e); });
     },
 };
