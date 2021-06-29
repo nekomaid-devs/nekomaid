@@ -19,6 +19,7 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
+        // TODO: add an option for "off"
         let time = parseInt(command_data.args[0]);
         command_data.msg.channel.setRateLimitPerUser(time);
         command_data.msg.channel.send(`Set current channel's slowmode to \`${time}\` s.`).catch(e => { console.log(e); });

@@ -14,8 +14,9 @@ module.exports = {
     },
 
     async process(global_context, oldMember, newMember) {
-        if(oldMember.nickname != newMember.nickname) {
-            bot.emit("guildMemberNicknameChange", oldMember, newMember);
+        if(oldMember == null) { return; }
+        if(oldMember.nickname !== newMember.nickname) {
+            global_context.bot.emit("guildMemberNicknameChange", oldMember, newMember);
         }
     }
 }

@@ -16,7 +16,7 @@ module.exports = {
         }
 
         let top_text = "⚡ Server Level"
-        let top = await command_data.bot.sb.updateTopServerLevel(command_data.bot, command_data.server_config, command_data.msg.guild);
+        let top = await command_data.global_context.neko_modules_clients.sb.updateTopServerLevel(command_data.global_context, command_data.server_config, command_data.msg.guild);
         let embedTop = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
         .setTitle(`❯    Top - \`${top_text}\``)
@@ -46,12 +46,12 @@ module.exports = {
             }
 
             let level_XP = command_data.server_config.module_level_level_exp;
-            for(let i_2 = 1; i_2 < userConfig.level; i_2 += 1) {
+            for(let i_2 = 1; i_2 < user_config.level; i_2 += 1) {
                 level_XP *= command_data.server_config.module_level_level_multiplier;
             }
             let net_2 = (user_config.xp / level_XP) * 100;
 
-            let target_user = await command_data.bot.users.fetch(user_config.userID).catch(e => { console.log(e); });
+            let target_user = await command_data.global_context.bot.users.fetch(user_config.userID).catch(e => { console.log(e); });
             embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `Level ${net} (${Math.round(net_2)} %)`);
         }
         

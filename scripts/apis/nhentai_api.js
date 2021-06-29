@@ -1,15 +1,10 @@
 class NHentaiAPI {
-    constructor(_cheerio, _axios) {
-        this.cheerio = _cheerio;
-        this.axios = _axios;
-    }
-    
     async nhentai_result(ws, input) {
         //Get front page for tag
         var siteUrl0 = "https://nhentai.net/g/" + input;
 
         //Get starting and last page for this tag
-        var result0 = await ws.axios.get(siteUrl0).catch(function() {
+        var result0 = await global_context.modules.axios.get(siteUrl0).catch(function() {
             var failed = {
                 status: 0
             }
@@ -17,7 +12,7 @@ class NHentaiAPI {
             return failed;
         })
 
-        var $0 = await ws.cheerio.load(result0.data);
+        var $0 = await global_context.modules.cheerio.load(result0.data);
 
         //Construct object
         var infoHtml = $0("#info").html();

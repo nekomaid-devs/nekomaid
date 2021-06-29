@@ -20,38 +20,38 @@ module.exports = {
         var sauce = command_data.args[0];
 
         try {
-            var postInfo = await command_data.bot.nhentai.nhentai_result(command_data.bot.nhentai, sauce);
+            var post_info = await command_data.global_context.neko_modules_clients.nhentai.nhentai_result(command_data.global_context, sauce);
         } catch(err) {
             console.error(err);
             command_data.msg.reply("There was an error in processing this request-");
             return;
         }
 
-        switch(postInfo.status) {
+        switch(post_info.status) {
             case 0:
                 command_data.msg.reply("No results found-");
                 return;
         }
 
-        if(postInfo.tags.includes("lolicon") === true || postInfo.tags.includes("shotacon") === true) {
+        if(post_info.tags.includes("lolicon") === true || post_info.tags.includes("shotacon") === true) {
             command_data.msg.reply("Sorry, I cannot show this due to chance of violating the Discord TOS- (`loli`/`shota` content)");
             return;
         }
 
         var tagsText = "";
-        postInfo.tags.forEach(function(tag, index) {
+        post_info.tags.forEach(function(tag, index) {
             tagsText += "`" + tag.split("-").join(" ") + "`"
 
-            if(postInfo.tags.length - 1 > index) {
+            if(post_info.tags.length - 1 > index) {
                 tagsText += ", ";
             }
         })
 
         var languagesText = "";
-        postInfo.languages.forEach(function(language, index) {
+        post_info.languages.forEach(function(language, index) {
             languagesText += "`" + language + "`"
 
-            if(postInfo.languages.length - 1 > index) {
+            if(post_info.languages.length - 1 > index) {
                 languagesText += ", ";
             }
         })
@@ -62,16 +62,16 @@ module.exports = {
             color: 8388736,
             url: "https://nhentai.net/g/" + sauce,
             thumbnail: {
-                url: postInfo.thumbnailURL,
+                url: post_info.thumbnailURL,
             },
             fields: [
                 {
                     name: 'Title:',
-                    value: "`" + postInfo.title + "`"
+                    value: "`" + post_info.title + "`"
                 },
                 {
                     name: 'Pages:',
-                    value: "`" + postInfo.numOfPages + "`"
+                    value: "`" + post_info.numOfPages + "`"
                 },
                 {
                     name: 'Tags:',
@@ -83,7 +83,7 @@ module.exports = {
                 },
                 {
                     name: 'Favourites:',
-                    value: "`" + postInfo.favourites + "`"
+                    value: "`" + post_info.favourites + "`"
                 }
             ],
             footer: {

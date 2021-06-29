@@ -31,11 +31,10 @@ module.exports = {
         let elapsed = new Date() - new Date(role.createdAt.toUTCString());
         let createdAgo = command_data.global_context.neko_modules_clients.tc.convertTime(elapsed);
 
-        let permissions = ""
+        let permissions = "";
         let permissionsArray = role.permissions.toArray();
         permissionsArray.forEach((permission, index) => {
             permissions += "`" + permission + "`"
-
             if(permissionsArray.length - 1 > index) {
                 permissions += ", ";
             }
@@ -47,44 +46,44 @@ module.exports = {
                 name: "Information about role " + role.name
             },
             fields: [ 
-                    {
-                        name: '❯ Role ID',
-                        value: `${role.id}`,
-                        inline: true
-                    },
-                    {
-                        name: '❯ Position',
-                        value: `${role.position}`,
-                        inline: true
-                    },
-                    {
-                        name: '❯ Members',
-                        value: `${role.members.size}`,
-                        inline: true
-                    },
-                    {
-                        name: '❯ Permissions',
-                        value: `${permissions}`
-                    },
-                    {
-                        name: '❯ Mentionable',
-                        value: `${role.mentionable}`,
-                        inline: true
-                    },
-                    {
-                        name: '❯ Showing in tab',
-                        value: `${role.hoist}`,
-                        inline: true
-                    },
-                    {
-                        name: '❯ Color',
-                        value: `${role.hexColor} (` + role + `)`,
-                        inline: true
-                    },
-                    {
-                        name: '❯ Created',
-                        value: `${createdAgo} (${role.createdAt.toUTCString()})`
-                    }
+                {
+                    name: '❯ Role ID',
+                    value: `${role.id}`,
+                    inline: true
+                },
+                {
+                    name: '❯ Position',
+                    value: `${role.position}`,
+                    inline: true
+                },
+                {
+                    name: '❯ Members',
+                    value: `${role.members.size}`,
+                    inline: true
+                },
+                {
+                    name: '❯ Permissions',
+                    value: `${permissions}`
+                },
+                {
+                    name: '❯ Mentionable',
+                    value: `${role.mentionable}`,
+                    inline: true
+                },
+                {
+                    name: '❯ Showing in tab',
+                    value: `${role.hoist}`,
+                    inline: true
+                },
+                {
+                    name: '❯ Color',
+                    value: `${role.hexColor} (` + role + `)`,
+                    inline: true
+                },
+                {
+                    name: '❯ Created',
+                    value: `${createdAgo} (${role.createdAt.toUTCString()})`
+                }
             ],
             footer: {
                     text: `Requested by ${command_data.msg.author.tag}`

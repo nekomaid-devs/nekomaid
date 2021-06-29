@@ -18,36 +18,36 @@ module.exports = {
             return;
         }
         
-        /*var serverConfig = await bot.ssm.server_fetch.fetch(bot, { type: "server_message_delete", id: message.guild.id });
+        let serverConfig = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_message_delete", id: message.guild.id });
         if(serverConfig.audit_deletedMessages == true && serverConfig.audit_channel != "-1") {
-            var channel = await message.guild.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
-    
+            let channel = await global_context.bot.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {
-                const embedDeletedMessage = {
+                let url = message.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
+                let embedDeletedMessage = {
                     author: {
-                        name: "Message Deleted | " + message.member.user.tag,
-                        icon_url: message.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
+                        name: `Message Deleted | ${message.member.user.tag}`,
+                        icon_url: url,
                     },
                     fields: [
-                    {
-                        name: "User:",
-                        value: message.member.user,
-                        inline: true
-                    },
-                    {
-                        name: "Channel:",
-                        value: message.channel,
-                        inline: true
-                    },
-                    {
-                        name: "Message:",
-                        value: "~~" + message.content + "~~"
-                    }
+                        {
+                            name: "User:",
+                            value: message.member.user,
+                            inline: true
+                        },
+                        {
+                            name: "Channel:",
+                            value: message.channel,
+                            inline: true
+                        },
+                        {
+                            name: "Message:",
+                            value: "~~" + message.content + "~~"
+                        }
                     ]
                 }
         
                 channel.send("", { embed: embedDeletedMessage }).catch(e => { console.log(e); });
             }
-        }*/
+        }
     }
 }

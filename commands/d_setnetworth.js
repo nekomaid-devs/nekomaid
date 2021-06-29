@@ -2,9 +2,9 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
-    name: "d_setbank",
+    name: "d_setnetworth",
     category: "Testing",
-    description: "Sets bank to tagged user-",
+    description: "Sets net worth to tagged user-",
     helpUsage: "[mention] [ammount]`",
     hidden: true,
     aliases: [],
@@ -24,9 +24,9 @@ module.exports = {
         }
 
         let credits_ammount = parseInt(command_data.args[1]);
-        command_data.tagged_user_config.bank = credits_ammount;
+        command_data.tagged_user_config.netWorth = credits_ammount;
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
     
-        command_data.msg.channel.send(`Set bank to \`${credits_ammount}\` for \`${command_data.tagged_user.tag}\`!`).catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Set net worth to \`${credits_ammount}\` for \`${command_data.tagged_user.tag}\`!`).catch(e => { console.log(e); });
     },
 };

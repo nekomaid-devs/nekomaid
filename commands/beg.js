@@ -37,7 +37,7 @@ module.exports = {
         } else {
             answers = command_data.global_context.bot_config.begFailedAnswers;
             answer_color = 15483730;
-            creditsAmmount = -creditsAmmount;
+            creditsAmmount = -credits_ammount;
         }
         
         let answer = command_data.global_context.utils.pick_random(answers);
@@ -48,7 +48,7 @@ module.exports = {
 
         command_data.author_config.credits += credits_ammount;
         command_data.author_config.netWorth += credits_ammount;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedBeg = {
             color: answer_color,

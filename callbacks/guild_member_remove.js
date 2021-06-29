@@ -14,57 +14,50 @@ module.exports = {
     },
 
     async process(global_context, member) {
-        /*
-        //Get server's config
-        var serverConfig = await bot.ssm.server_fetch.fetch(bot, { type: "server_guildmember_remove", id: member.guild.id });
-    
-        //Send a leaveMessage if leaveMessages are on
-        if(serverConfig.leaveMessages == true) {
-            if(member.guild.channels.cache.has(serverConfig.leaveMessages_channel) == false) {
-                //console.log("[leaveMessages] Invalid channel(id:" + serverConfig.leaveMessages_channel + ", serverID:" + member.guild.id + ")-");
-                return;
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guildmember_remove", id: member.guild.id });
+
+        if(server_config.leaveMessages == true) {
+            let format = server_config.leaveMessages_format;
+            let member_display_name = "**" + member.user.tag + "**";
+            format = format.replace("<user>", member_display_name);
+
+            let channel = await global_context.bot.channels.fetch(server_config.leaveMessages_channel).catch(e => { console.log(e); });
+            if(channel !== undefined) {
+                channel.send(format).catch(e => { console.log(e); });
             }
-    
-            var format = serverConfig.leaveMessages_format;
-            var memberDisplayNameText = "**" + memberDisplayName + "**";
-            format = format.replace("%user%", memberDisplayNameText);
-            var channel = await member.guild.channels.fetch(serverConfig.leaveMessages_channel).catch(e => { console.log(e); });
-            channel.send(format).catch(e => { console.log(e); });
         }
 
-        var logMembers = true;
-        if(logMembers) {
+        let log_members = true;
+        if(log_members) {
             //var serverLogs = await bot.ssm.server_fetch.fetchServerLogs(bot, member.guild.id);
             
             //var log = { guildID: member.guild.id, type: "guildMemberRemove", userID: member.id, tag: member.user.tag, time: Date.now() }
             //serverLogs.logs.push(log);
             //bot.ssm.server_edit.editServerLogsInStructure(bot.ssm, member.guild, serverLogs);
         }
-
-        if(serverConfig.audit_kicks == true && serverConfig.audit_channel != "-1") {
-            var channel = await member.guild.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
-
+        
+        if(server_config.audit_kicks == true && server_config.audit_channel != "-1") {
+            let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {
-                var audit = await member.guild.fetchAuditLogs()
-                var lastAudit = audit.entries.first()
-
-                if(lastAudit.action === "MEMBER_KICK" && lastAudit.target.id === member.user.id) {
+                let audit = await member.guild.fetchAuditLogs();
+                let last_audit = audit.entries.first();
+                if(last_audit.action === "MEMBER_KICK" && last_audit.target.id === member.user.id) {
                     let executor = -1;
-                    if(lastAudit.executor.id === "691398095841263678") {
-                        executor = await member.guild.members.fetch(member.guild.client.lastModeratorIDs.get(member.guild.id)).catch(e => { console.log(e); });
+                    if(last_audit.executor.id === "691398095841263678") {
+                        executor = await member.guild.members.fetch(global_context.data.lastModeratorIDs.get(member.guild.id)).catch(e => { console.log(e); });
                     } else {
-                        executor = await member.guild.members.fetch(lastAudit.executor.id).catch(e => { console.log(e); });
+                        executor = await member.guild.members.fetch(last_audit.executor.id).catch(e => { console.log(e); });
                     }
 
-                    const embedKick = {
+                    let embedKick = {
                         author: {
-                            name: "Kick | " + lastAudit.target.tag,
-                            icon_url: lastAudit.target.avatarURL({ format: "png", dynamic: true, size: 1024 }),
+                            name: `Kick | ${last_audit.target.tag}`,
+                            icon_url: last_audit.target.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                         },
                         fields: [
                             {
                                 name: "User:",
-                                value: lastAudit.target.tag,
+                                value: last_audit.target.tag,
                                 inline: true
                             },
                             {
@@ -74,7 +67,7 @@ module.exports = {
                             },
                             {
                                 name: "Reason:",
-                                value: lastAudit.reason === null ? "None" : lastAudit.reason
+                                value: last_audit.reason === null ? "None" : last_audit.reason
                             }
                         ]
                     }
@@ -82,6 +75,6 @@ module.exports = {
                     channel.send("", { embed: embedKick }).catch(e => { console.log(e); });
                 }
             }
-        }*/
+        }
     }
 }

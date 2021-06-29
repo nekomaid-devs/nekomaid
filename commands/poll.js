@@ -39,7 +39,7 @@ module.exports = {
         }
         
         let question = parts.shift();
-        let description = parts.reduce((acc, curr) => {
+        let description = parts.reduce((acc, curr, i) => {
             acc += "**" + (i + 1) + ")** " + curr + "\n"; return acc;
         }, "");
 

@@ -30,9 +30,7 @@ module.exports = {
             return;
         }
 
-        if(passed === true) {
-            command_data.msg.channel.send(command_data.total_argument).catch(e => { console.log(e); });
-            command_data.msg.delete().catch(e => { console.log(e); });
-        }
+        command_data.msg.channel.send(command_data.total_argument).catch(e => { console.log(e); });
+        command_data.msg.delete().catch(e => { console.log(e); });
     },
 };

@@ -31,10 +31,8 @@ module.exports = {
             return;
         }
 
-        if(passed === true) {
-            let owoified_text = await command_data.global_context.modules_clients.neko.sfw.OwOify({ text: command_data.total_argument });
-            command_data.msg.channel.send(owoified_text.owo).catch(e => { console.log(e); });
-            command_data.msg.delete().catch(e => { console.log(e); });
-        }
+        let owoified_text = await command_data.global_context.modules_clients.neko.sfw.OwOify({ text: command_data.total_argument });
+        command_data.msg.channel.send(owoified_text.owo).catch(e => { console.log(e); });
+        command_data.msg.delete().catch(e => { console.log(e); });
     },
 };

@@ -20,7 +20,7 @@ module.exports = {
     .set("set",
     "`<subcommand_prefix> enabled [true/false]` - Enables/Disables the leveling module\n" +
     "`<subcommand_prefix> levelupMessages [true/false]` - Enables/Disables levelup messages\n" +
-    "`<subcommand_prefix> levelupMessages_format [true/false]` - Changes the levelup message (include <user> and <level> in your message to show username and level)\n" +
+    "`<subcommand_prefix> levelupMessages_format [text]` - Changes the levelup message (include <user> and <level> in your message to show username and level)\n" +
     "`<subcommand_prefix> levelupMessages_channel [channelMention]` - Changes the channel for levelup messages\n" +
     "`<subcommand_prefix> levelupMessages_ping [true/false]` - Enables/Disables mentions in levelup messages\n\n" +
     "`<subcommand_prefix> message_exp [number]` - Changes the XP gotten from each message\n" +
@@ -32,6 +32,9 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
+        // TODO: normalize names of settings
+        // TODO: make normal reply messages
+        // TODO: check for wrong error embeds
         command_data.server_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         if(command_data.args.length < 1) {
             let channel = `<#${command_data.server_config.module_level_levelupMessages_channel}>`;
@@ -172,17 +175,17 @@ module.exports = {
                             command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`", "add rank Trusted 5 TrustedRole") }).catch(e => { console.log(e); });
                             return;
                         }
-                        let roleName = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[4], command_data.msg.content.indexOf(command_data.args[3]) + command_data.args[3].length));
+                        let role_name = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[4], command_data.msg.content.indexOf(command_data.args[3]) + command_data.args[3].length));
                         let role = command_data.msg.guild.roles.cache.find(roleTemp =>
-                            roleTemp.name === roleName
+                            roleTemp.name === role_name
                         );
                         if(role === undefined) {
                             command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(command_data.msg, command_data.server_config.prefix, this, `No role with name \`${role_name}\` found`, "add rank Trusted 5 TrustedRole") }).catch(e => { console.log(e); });
                             return;
                         }
 
-                        command_data.server_config.module_level_ranks.push({ id: command_data.bot.crypto.randomBytes(16).toString("hex"), serverID: command_data.msg.guild.id, name: rankName, level: levelRequirement, roleID: role.id });
-                        command_data.msg.channel.send("Added rank `" + rankName + "` for level `" + levelRequirement + "` with role `" + roleName + "`-").catch(e => { console.log(e); });
+                        command_data.server_config.module_level_ranks.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), serverID: command_data.msg.guild.id, name: rank_name, level: level_requirement, roleID: role.id });
+                        command_data.msg.channel.send("Added rank `" + rank_name + "` for level `" + level_requirement + "` with role `" + role_name + "`-").catch(e => { console.log(e); });
                         break;
                     }
 
@@ -199,6 +202,7 @@ module.exports = {
                             return;
                         }
 
+                        // TODO: this won't work (checks wrongly or maybe parses the list wrongly idk)
                         let i = 0;
                         let channel_index = -1;
                         command_data.server_config.module_level_ignoredChannels.forEach((channel) => {
@@ -223,7 +227,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 break;
             }
 
@@ -252,7 +256,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.global_context.neko_modules_clients.ssm.server_remove.removeRank(command_data.global_context.neko_modules_clients.ssm, rankID);
+                        command_data.global_context.neko_modules_clients.ssm.server_remove.removeRank(command_data.global_context, rankID);
                         command_data.msg.channel.send(`Removed rank \`${rank_name}\`-`);
                         break;
                     }
@@ -278,12 +282,12 @@ module.exports = {
                             }
                             i += 1;
                         });
-                        if(channelIndex < 0) {
+                        if(channel_index < 0) {
                             command_data.msg.channel.send(`Channel ${command_data.args[2]} is not ignored-`).catch(e => { console.log(e); });
                             return;
                         }
 
-                        command_data.server_config.module_level_ignoredChannels.splice(channelIndex, 1);
+                        command_data.server_config.module_level_ignoredChannels.splice(channel_index, 1);
                         command_data.msg.channel.send(`Removed ${channel} from ignored channels-`).catch(e => { console.log(e); });
                         break;
                     }
@@ -294,7 +298,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 break;
             }
 
@@ -341,8 +345,8 @@ module.exports = {
                             return;
                         }
 
-                        value = valueText;
-                        command_data.server_config.module_level_levelupMessages_format = valueText;
+                        value = value_text;
+                        command_data.server_config.module_level_levelupMessages_format = value;
                         break;
                     }
 
@@ -354,12 +358,12 @@ module.exports = {
                         }
 
                         let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { console.log(e); });
-                        if(channel.permissionsFor(command_data.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.bot.user).has("SEND_MESSAGES") === false) {
+                        if(channel.permissionsFor(command_data.global_context.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.global_context.bot.user).has("SEND_MESSAGES") === false) {
                             command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again-");
                             return;
                         }
 
-                        command_data.server_config.module_level_levelupMessages_channel = value2;
+                        command_data.server_config.module_level_levelupMessages_channel = value;
                         break;
                     }
 
@@ -413,7 +417,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { console.log(e); });
                 break;
             }

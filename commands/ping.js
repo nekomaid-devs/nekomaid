@@ -20,7 +20,7 @@ module.exports = {
                 },
                 {
                     name: "🏠 API",
-                    value: `${Math.round(command_data.bot.ws.ping)}ms`
+                    value: `${Math.round(command_data.global_context.bot.ws.ping)}ms`
                 }
             ]
         }

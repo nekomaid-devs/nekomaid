@@ -23,6 +23,9 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
+        // TODO: normalize names of settings
+        // TODO: make normal reply messages
+        // TODO: check for wrong error embeds
         if(command_data.args.length < 1) {
             let channel = `<#${command_data.server_config.audit_channel}>`;
             if(command_data.server_config.audit_channel === "-1") {
@@ -177,7 +180,7 @@ module.exports = {
                         }
 
                         let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { console.log(e); });
-                        if(channel.permissionsFor(command_data.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.bot.user).has("SEND_MESSAGES") === false) {
+                        if(channel.permissionsFor(command_data.global_context.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.global_context.bot.user).has("SEND_MESSAGES") === false) {
                             command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again-");
                             return;
                         }
@@ -192,7 +195,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { console.log(e); });
                 break;
             }

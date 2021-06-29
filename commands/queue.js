@@ -31,7 +31,7 @@ module.exports = {
                 for(var i = 1; i <= 5; i += 1) {
                     if(voice_data.queue.length >= i) {
                         var voice_request = voice_data.queue[i - 1];
-                        var user = await command_data.bot.users.fetch(voice_request.requestUserID).catch(e => { console.log(e); });
+                        var user = await command_data.global_context.bot.users.fetch(voice_request.requestUserID).catch(e => { console.log(e); });
 
                         if(user !== undefined) {
                             var currentLength0 = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceRequest.info.duration));
@@ -94,7 +94,7 @@ module.exports = {
                     if(voice_data.persistentQueue.length > i2) {
                         var i3 = i2 + 1;
                         var voice_request_2 = voice_data.persistentQueue[i2];
-                        var user2 = await command_data.bot.users.fetch(voice_request_2.requestUserID).catch(e => { console.log(e); });
+                        var user2 = await command_data.global_context.bot.users.fetch(voice_request_2.requestUserID).catch(e => { console.log(e); });
 
                         if(user2 !== undefined) {
                             var currentLength0b = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voiceRequest2.info.duration));

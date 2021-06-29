@@ -14,9 +14,10 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: true,
     async execute(command_data) {
+        // TODO: API doesn't work anymore
         let post_info = -1;
         try {
-            post_info = await command_data.bot.xbooru.gelbooru_result(command_data.bot.xbooru, command_data.args);
+            post_info = await command_data.global_context.neko_modules_clients.xbooru.xbooru_result(command_data.global_context, command_data.args);
         } catch(err) {
             console.log(err);
             command_data.msg.reply("There was an error in processing this request-");
@@ -33,9 +34,9 @@ module.exports = {
                 return;
         }
 
-        let posts_number_0 = (postInfo.pageNumber - 1) * 42;
-        let post_number = posts_number_0 + postInfo.postNumber;
-        let num_of_posts = postInfo.numOfPosts * 42;
+        let posts_number_0 = (post_info.pageNumber - 1) * 42;
+        let post_number = posts_number_0 + post_info.postNumber;
+        let num_of_posts = post_info.numOfPosts * 42;
         let embedXbooru = {
             title: `Here is result for ${command_data.args[0]}`,
             color: 8388736,
@@ -46,10 +47,10 @@ module.exports = {
                 }
             ],
             image: {
-                url: postInfo.link
+                url: post_info.link
             },
             footer: {
-                text: `Page: ${postInfo.pageNumber}/${postInfo.numOfPages} Post: ${post_number}/${num_of_posts}`
+                text: `Page: ${post_info.pageNumber}/${post_info.numOfPages} Post: ${post_number}/${num_of_posts}`
             }
         }
         command_data.msg.channel.send("", { embed: embedXbooru }).catch(e => { console.log(e); });

@@ -40,12 +40,11 @@ module.exports = {
 
         try {
             var emote = await command_data.msg.guild.emojis.create(link.includes("https://") === true ? link : "https://cdn.discordapp.com/emojis/" + emoteID, emoteName)
-
-            //Construct message and send it
             let embedEmote = {
                 color: 6732650,
                 description: "Created new emote `" + emoteName + "` - " + emote.toString()
             }
+            command_data.msg.channel.send("", { embed: embedEmote }).catch(e => { console.log(e); });
         } catch(e) {
             const embedError = {
                 title: "<:n_error:771852301413384192> No image found at specified location!",
@@ -54,7 +53,5 @@ module.exports = {
 
             command_data.msg.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
         }
-
-        command_data.msg.channel.send("", { embed: embedEmote }).catch(e => { console.log(e); });
     },
 };

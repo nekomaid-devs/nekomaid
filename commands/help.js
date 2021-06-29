@@ -65,7 +65,7 @@ module.exports = {
                 .setColor(8388736)
                 .setTitle(`Help for - \`${unhidden_text + commands_text}\``)
                 .setDescription(command.description);
-                embedHelp.addField("Usage:", "`" + command_data.server_config.prefix + commandsText2 + " " + usage2);
+                embedHelp.addField("Usage:", "`" + command_data.server_config.prefix + commands_text + " " + usage);
 
                 if(command.subcommandHelp.size > 0) {
                     let commands_text_2 = "";

@@ -36,7 +36,7 @@ module.exports = {
             }
 
             //Edits and broadcasts the change
-            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: member.id, user: globalUserConfig });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: member.id, user: globalUserConfig });
         });
 
         //Construct message and send it

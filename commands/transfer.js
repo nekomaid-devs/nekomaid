@@ -41,20 +41,20 @@ module.exports = {
             return;
         }
 
-        if(command_data.author_config.credits - creditsAmmount < 0) {
+        if(command_data.author_config.credits - credits_ammount < 0) {
             command_data.msg.reply("You don't have enough credits to do this-");
             return;
         }
 
         command_data.author_config.credits -= credits_ammount;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         command_data.tagged_user_config.credits += credits_ammount;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         let embedTransfer = {
             color: 8388736,
-            description: `Transfered \`${creditsAmmount} 💵\` from \`${command_data.msg.author.tag}\` to \`${command_data.tagged_user.tag}\` (Current Credits: \`${command_data.author_config.credits}$\`)`
+            description: `Transfered \`${credits_ammount} 💵\` from \`${command_data.msg.author.tag}\` to \`${command_data.tagged_user.tag}\` (Current Credits: \`${command_data.author_config.credits}$\`)`
         }
         command_data.msg.channel.send("", { embed: embedTransfer }).catch(e => { console.log(e); });
     },

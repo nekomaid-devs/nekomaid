@@ -32,7 +32,7 @@ module.exports = {
 
         //Get server config
         var previousMuteID = -1;
-        command_data.serverMutes.forEach(function(mute) {
+        command_data.server_mutes.forEach(function(mute) {
             if(mute.userID === command_data.tagged_user.id) {
                 previousMuteID = mute.id;
             }
@@ -50,7 +50,7 @@ module.exports = {
             command_data.tagged_member.roles.remove(muteRole);
 
             command_data.msg.channel.send("Unmuted `" + command_data.tagged_user.tag + "` (Reason: `" + unmuteReason + "`)").catch(e => { console.log(e); });
-            command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerMute(command_data.global_context.neko_modules_clients.ssm, previousMuteID);
+            command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerMute(command_data.global_context, previousMuteID);
 
             if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
                 var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
@@ -81,7 +81,7 @@ module.exports = {
 
                     //Save edited config
                     command_data.server_config.caseID += 1;
-                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
                 }

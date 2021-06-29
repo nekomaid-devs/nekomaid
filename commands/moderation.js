@@ -21,6 +21,9 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
+        // TODO: normalize names of settings
+        // TODO: make normal reply messages
+        // TODO: check for wrong error embeds
         if(command_data.args.length < 1) {
             let banned_words = "";
             command_data.server_config.bannedWords.forEach((userID, index) => {
@@ -83,7 +86,7 @@ module.exports = {
                     }
                 }
     
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 break;
             }
     
@@ -121,7 +124,7 @@ module.exports = {
                     }
                 }
     
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 break;
             }
 
@@ -157,7 +160,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { console.log(e); });
                 break;
             }

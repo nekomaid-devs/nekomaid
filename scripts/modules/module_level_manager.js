@@ -129,7 +129,7 @@ class LevelingManager {
         data.taggedServerUserConfig.xp = Number(data.taggedServerUserConfig.xp.toFixed(2))
 
         //Saves user's config
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "serverUser", serverID: command_data.msg.guild.id, userID: command_data.tagged_member.user.id, user: data.taggedServerUserConfig });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "serverUser", serverID: command_data.msg.guild.id, userID: command_data.tagged_member.user.id, user: data.taggedServerUserConfig });
         //console.log("[server_leveling] Added " + messageXP + "xp to " + authorDisplayName + " on Server(id: " + msg.guild.id + ") (xp: " + authorConfig.xp + ")");
     }
 
@@ -151,7 +151,7 @@ class LevelingManager {
         }
 
         //Edits and broadcasts the change
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
         //console.log("[global_leveling] Added " + messageXP + "xp to " + authorDisplayName + " (xp: " + authorConfig.xp + ")");
     }*/
 }

@@ -11,14 +11,11 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        if(command_data.msg.guild.me.hasPermission("MANAGE_MESSAGES") === true) {
-            command_data.msg.suppressEmbeds(true);
-        }
-
+        // TODO: make impostors change colors
         let impostor = command_data.global_context.utils.pick_random([true, false]);
-        command_data.bot.jimp.read((impostor ? './data/wasImpostor.png' : './data/wasntImpostor.png')).then(image => {
-            command_data.bot.jimp.loadFont('./data/font.fnt').then(async(font) => {
-                image.print(font, 325 - command_data.bot.jimp.measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
+        command_data.global_context.modules.jimp.read((impostor ? './data/wasImpostor.png' : './data/wasntImpostor.png')).then(image => {
+            command_data.global_context.modules.jimp.loadFont('./data/font.fnt').then(async(font) => {
+                image.print(font, 325 - command_data.global_context.modules.jimp.measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
 
                 let embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
                 .setTitle(command_data.tagged_user.tag + " was " + (impostor ? "" : "not ") + "the impostor-")

@@ -29,6 +29,9 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
+        // TODO: normalize names of settings
+        // TODO: make normal reply messages
+        // TODO: check for wrong error embeds
         command_data.server_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         if(command_data.args.length < 1) {
             let channel_1 = `<#${command_data.server_config.welcomeMessages_channel}>`;
@@ -70,7 +73,7 @@ module.exports = {
                     },
                     {
                         name: "Welcome Format:",
-                        value: `${command_data.server_config.welcomeMessages_format}\` (Mention: \`${command_data.server_config.welcomeMessages_ping}\`)`
+                        value: `\`${command_data.server_config.welcomeMessages_format}\` (Mention: \`${command_data.server_config.welcomeMessages_ping}\`)`
                     },
                     {
                         name: "Leave Messages:",
@@ -350,7 +353,7 @@ module.exports = {
                                         return;
                             }
 
-                            command_data.server_config.counters.push({ id: command_data.bot.crypto.randomBytes(16).toString("hex"), type: counterType, serverID: command_data.msg.guild.id, channelID: channel.id, lastUpdate: new Date().toUTCString() });
+                            command_data.server_config.counters.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), type: counterType, serverID: command_data.msg.guild.id, channelID: channel.id, lastUpdate: new Date().toUTCString() });
                             command_data.msg.channel.send("Added new counter for `" + counterType + "`-").catch(e => { console.log(e); });
                             break;
                     }
@@ -361,7 +364,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 break;
             }
 
@@ -416,7 +419,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 break;
             }
 
@@ -463,8 +466,8 @@ module.exports = {
                             return;
                         }
 
-                        value = valueText;
-                        command_data.server_config.welcomeMessages_format = valueText;
+                        value = value_text;
+                        command_data.server_config.welcomeMessages_format = value;
                         break;
                     }
 
@@ -485,7 +488,7 @@ module.exports = {
                             return;
                         }
 
-                        value = valueText;
+                        value = value_text;
                         command_data.server_config.leaveMessages_format = value;
                         break;
                     }
@@ -498,7 +501,7 @@ module.exports = {
                         }
 
                         let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { console.log(e); });
-                        if(channel.permissionsFor(command_data.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.bot.user).has("SEND_MESSAGES") === false) {
+                        if(channel.permissionsFor(command_data.global_context.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.global_context.bot.user).has("SEND_MESSAGES") === false) {
                             command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again-");
                             return;
                         }
@@ -515,12 +518,12 @@ module.exports = {
                         }
 
                         let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { console.log(e); });
-                        if(channel.permissionsFor(command_data.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.bot.user).has("SEND_MESSAGES") === false) {
+                        if(channel.permissionsFor(command_data.global_context.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.global_context.bot.user).has("SEND_MESSAGES") === false) {
                             command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again-");
                             return;
                         }
 
-                        command_data.server_config.leaveMessages_channel = value2;
+                        command_data.server_config.leaveMessages_channel = value;
                         break;
                     }
 
@@ -541,7 +544,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
                 command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { console.log(e); });
                 break;
             }

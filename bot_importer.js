@@ -74,28 +74,28 @@ module.exports = {
         global_context.neko_modules_clients.ssm = new global_context.neko_modules.ServerStructureManager(global_context, sql_connection);
 
         global_context.neko_modules.Rule34API = require('./scripts/apis/rule34_api');
-        global_context.neko_modules_clients.r34 = new global_context.neko_modules.Rule34API(global_context);
+        global_context.neko_modules_clients.r34 = new global_context.neko_modules.Rule34API();
 
         global_context.neko_modules.GelbooruAPI = require('./scripts/apis/gelbooru_api');
-        global_context.neko_modules_clients.gelbooru = new global_context.neko_modules.GelbooruAPI(global_context);
+        global_context.neko_modules_clients.gelbooru = new global_context.neko_modules.GelbooruAPI();
 
         global_context.neko_modules.XBooruAPI = require('./scripts/apis/xbooru_api');
-        global_context.neko_modules_clients.xbooru = new global_context.neko_modules.XBooruAPI(global_context);
+        global_context.neko_modules_clients.xbooru = new global_context.neko_modules.XBooruAPI();
 
         global_context.neko_modules.RealbooruAPI = require('./scripts/apis/realbooru_api');
-        global_context.neko_modules_clients.realbooru = new global_context.neko_modules.RealbooruAPI(global_context);
+        global_context.neko_modules_clients.realbooru = new global_context.neko_modules.RealbooruAPI();
 
         global_context.neko_modules.NHentaiAPI = require('./scripts/apis/nhentai_api');
-        global_context.neko_modules_clients.nhentai = new global_context.neko_modules.NHentaiAPI(global_context);
+        global_context.neko_modules_clients.nhentai = new global_context.neko_modules.NHentaiAPI();
 
         global_context.neko_modules.SafebooruAPI = require('./scripts/apis/safebooru_api');
-        global_context.neko_modules_clients.safebooru = new global_context.neko_modules.SafebooruAPI(global_context);
+        global_context.neko_modules_clients.safebooru = new global_context.neko_modules.SafebooruAPI();
 
         global_context.neko_modules.DanbooruAPI = require('./scripts/apis/danbooru_api');
-        global_context.neko_modules_clients.danbooru = new global_context.neko_modules.DanbooruAPI(global_context);
+        global_context.neko_modules_clients.danbooru = new global_context.neko_modules.DanbooruAPI();
 
         global_context.neko_modules.E621API = require('./scripts/apis/e621_api');
-        global_context.neko_modules_clients.e621 = new global_context.neko_modules.E621API(global_context);
+        global_context.neko_modules_clients.e621 = new global_context.neko_modules.E621API();
 
         global_context.neko_modules.TimeConvert = require('./scripts/utils/util_timeconvert');
         global_context.neko_modules_clients.tc = new global_context.neko_modules.TimeConvert();

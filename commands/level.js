@@ -16,7 +16,7 @@ module.exports = {
             return;
         }
 
-        let top = await command_data.bot.sb.updateTopServerLevel(command_data.bot, command_data.server_config, command_data.msg.guild);
+        let top = await command_data.global_context.neko_modules_clients.sb.updateTopServerLevel(command_data.global_context, command_data.server_config, command_data.msg.guild);
         let author_pos = -1;
         let author_config = -1;
         for(let i = 0; i < top.items.length; i += 1) {
@@ -29,10 +29,10 @@ module.exports = {
         }
 
         author_pos += 1;
-        let xp = authorConfig.xp;
-        let level = authorConfig.level;
+        let xp = author_config.xp;
+        let level = author_config.level;
         let level_XP = command_data.server_config.module_level_level_exp;
-        for(let i = 1; i < authorConfig.level; i += 1) {
+        for(let i = 1; i < author_config.level; i += 1) {
             level_XP *= command_data.server_config.module_level_level_multiplier;
         }
 

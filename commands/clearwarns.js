@@ -23,7 +23,7 @@ module.exports = {
             warnReason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[0]) + command_data.args[0].length + 1)
         }
 
-        let warns = command_data.serverWarns.filter(warn =>
+        let warns = command_data.server_warns.filter(warn =>
             warn.userID === command_data.tagged_user.id
         )
         command_data.msg.channel.send(`Cleared warnings of \`${command_data.tagged_user.tag}\` (Reason: \`${warn_reason}\`, Strikes: \`${warns.length}\` => \`0\`)-`).catch(e => { console.log(e); });
@@ -59,12 +59,12 @@ module.exports = {
                 }
 
                 command_data.server_config.caseID += 1;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                 channel.send("", { embed: embedClearWarns }).catch(e => { console.log(e); });
             }
         }
 
-        command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerWarningsFromUser(command_data.global_context.neko_modules_clients.ssm, command_data.msg.guild, command_data.msg.author);
+        command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerWarningsFromUser(command_data.global_context, command_data.msg.guild, command_data.msg.author);
     }
 };

@@ -43,7 +43,7 @@ module.exports = {
                 })
 
                 let previous_ban = -1;
-                command_data.serverBans.forEach((ban) => {
+                command_data.server_bans.forEach((ban) => {
                     if(ban.userID === banInfo.user.id) {
                         previous_ban = ban;
                     }
@@ -53,7 +53,7 @@ module.exports = {
                 
                 if(previous_ban != -1) {
                     command_data.global_context.data.lastModeratorIDs.set(command_data.msg.guild.id, command_data.msg.author.id);
-                    command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerBan(command_data.global_context.neko_modules_clients.ssm, previous_ban.id);
+                    command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerBan(command_data.global_context, previous_ban.id);
                 }
             }
         })

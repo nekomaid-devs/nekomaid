@@ -20,7 +20,7 @@ module.exports = {
             question += "?";
         }
 
-        let answer = command_data.global_context.bot.pickRandom(command_data.global_context.bot.vars.get8BallAnswers());
+        let answer = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get8BallAnswers());
         let embed8Ball = {
             title: "🎱 | 8Ball",
             color: 8388736,

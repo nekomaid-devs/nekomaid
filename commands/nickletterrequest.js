@@ -29,11 +29,11 @@ module.exports = {
             let author_index = Math.floor(Math.random() * ((author_nickname.length - 1) - 0 + 1) + 0);
             let reacted_index = Math.floor(Math.random() * ((reacted_nickname.length - 1) - 0 + 1) + 0);
 
-            let letter = reactedNickname.charAt(author_index);
+            let letter = reacted_nickname.charAt(author_index);
             let new_author_username = author_nickname.slice(0, author_index) + letter + author_nickname.slice(author_index);
             let new_reacted_username = reacted_nickname.slice(0, reacted_index) + reacted_nickname.slice(reacted_index + 1);
 
-            await author.setNickname(new_author_username).catch(e => { console.log(e); });
+            await command_data.msg.member.setNickname(new_author_username).catch(e => { console.log(e); });
             await reacted.setNickname(new_reacted_username).catch(e => { console.log(e); });
         });
     }

@@ -21,7 +21,7 @@ module.exports = {
         }
 
         let end = new Date();
-        let start = new Date(command_data.author_config.lastStealTime);
+        let start = new Date(command_data.author_config.lastRepTime);
         let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
         diff = Math.abs(Math.round(diff));
@@ -34,10 +34,10 @@ module.exports = {
         }
 
         command_data.author_config.lastRepTime = end.toUTCString();
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         command_data.tagged_user_config.rep += 1;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
         
         command_data.msg.channel.send(`Added \`1\` reputation to \`${command_data.tagged_user.tag}\`! (Current reputation: \`${command_data.tagged_user_config.rep}\`)`).catch(e => { console.log(e); });
     },

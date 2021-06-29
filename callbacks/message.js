@@ -70,7 +70,7 @@ module.exports = {
         }
 
         let is_invite = false;
-        if(command_data.server_config.invites === false) {
+        if(command_data.server_config.invites == false) {
             if((message.content.toLowerCase().includes("discord.gg") === true || message.content.toLowerCase().includes("discordapp.com/invite") === true || message.content.toLowerCase().includes("discord.com/invite") === true) && manages_guild === false) {
                 message.reply("Sending invites isn't allowed on here-");
                 message.delete().catch(e => { global_context.logger.error(e); });
@@ -131,7 +131,7 @@ module.exports = {
         command_data.server_warns = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverWarnings", id: message.guild.id });
         command_data.author_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUser", id: message.author.id });
         command_data.tagged_server_user_config = message.mentions.users.array().length < 1 ? command_data.author_server_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", serverID: message.guild.id, userID: message.mentions.users.array()[0].id });
-        command_data.tagged_user_config = message.mentions.users.array().length < 1 ? command_data.msg.author_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUser", id: message.mentions.users.array()[0].id });    
+        command_data.tagged_user_config = message.mentions.users.array().length < 1 ? command_data.author_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUser", id: message.mentions.users.array()[0].id });    
         
         let command_name = command_data.args.shift().toLowerCase();
         command_data.total_argument = command_data.args.join(" ");

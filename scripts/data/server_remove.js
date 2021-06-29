@@ -1,31 +1,31 @@
 module.exports = {
-    async removeServerWarningsFromUser(ssm, server, user) {
+    async removeServerWarningsFromUser(global_context, server, user) {
         var query = "DELETE FROM serverwarnings WHERE serverID='" + server.id + "' AND userID='" + user.id + "'";
-        return await ssm.sqlConn.promise().query(query);
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeServerMute(ssm, id) {
+    async removeServerMute(global_context, id) {
         var query = "DELETE FROM servermutes WHERE id='" + id + "'";
-        return await ssm.sqlConn.promise().query(query);
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeServerBan(ssm, id) {
+    async removeServerBan(global_context, id) {
         var query = "DELETE FROM serverbans WHERE id='" + id + "'";
-        return await ssm.sqlConn.promise().query(query);
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeRank(ssm, id) {
+    async removeRank(global_context, id) {
         var query = "DELETE FROM ranks WHERE id='" + id + "'";
-        return await ssm.sqlConn.promise().query(query);
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeRanksFromServer(ssm, id) {
+    async removeRanksFromServer(global_context, id) {
         var query = "DELETE FROM ranks WHERE serverID='" + id + "'";
-        return await ssm.sqlConn.promise().query(query);
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeReactionRolesFromServer(ssm, id) {
+    async removeReactionRolesFromServer(global_context, id) {
         var query = "DELETE FROM reactionroles WHERE serverID='" + id + "'";
-        return await ssm.sqlConn.promise().query(query);
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     }
 }

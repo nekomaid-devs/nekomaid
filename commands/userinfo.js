@@ -48,6 +48,7 @@ module.exports = {
             }
         }
 
+        // TODO: this won't work
         let join_score_array = Array.from(command_data.msg.guild.members.cache.values()).sort(function(a, b) { return a.joinedTimestamp - b.joinedTimestamp });
         let join_score = -1;
         let join_score_suffix = "th";
@@ -76,7 +77,7 @@ module.exports = {
             color: 8388736,
             author: {
                 name: "Information about user " + command_data.tagged_user.tag,
-                icon_url: avatarUrl
+                icon_url: url
             },
             fields: [ 
                     {

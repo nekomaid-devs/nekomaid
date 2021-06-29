@@ -51,7 +51,7 @@ module.exports = {
         command_data.author_config.inventory.push(targetItem2.id)
 
         //Edits and broadcasts the change
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedBuy = {
             color: 8388736,

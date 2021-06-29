@@ -10,6 +10,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
+        // TODO: replace link
         let link = "https://discord.com/oauth2/authorize?client_id=691398095841263678&permissions=268822608&scope=bot";
         let embedInvite = {
             title: "",

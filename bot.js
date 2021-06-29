@@ -13,7 +13,7 @@ let global_context = {
 
     utils: {},
     logger: {},
-    bot_config: { botOwners: [] }
+    bot_config: {}
 }
 
 //Import modules
@@ -144,6 +144,7 @@ bot.on('ready', async() => {
     /*bot.webupdates.refreshStatus(bot);
     console.log("Preparing the database...");
     setTimeout(postLoad, 1000);*/
+    global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "defaultConfig" });
 });
 bot.on('ratelimit', (ratelimit) => {
     global_context.logger.log("Ratelimit: " + ratelimit.timeout + " (" + ratelimit.path + " - " + ratelimit.route + ")");

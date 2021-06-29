@@ -14,36 +14,36 @@ module.exports = {
     },
 
     async process(global_context, oldMessage, newMessage) {
-        global_context.data.total_events += 1;
-        global_context.data.processed_events += 1;
+        if(newMessage.channel.type === "dm") {
+            return;
+        }
         
-        /*var serverConfig = await bot.ssm.server_fetch.fetch(bot, { type: "server_message_update", id: newMessage.guild.id });
+        let serverConfig = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_message_update", id: newMessage.guild.id });
         if(serverConfig.audit_editedMessages == true && serverConfig.audit_channel != "-1") {
-            var channel = await newMessage.guild.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
-    
+            let channel = await global_context.bot.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {
-                const embedMessageEdit = {
+                let embedMessageEdit = {
                     author: {
-                        name: "Message edited | " + newMessage.member.user.tag,
+                        name: `Message edited | ${newMessage.member.user.tag}`,
                         icon_url: newMessage.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                     },
                     fields: [
-                    {
-                        name: "User:",
-                        value: newMessage.member.user,
-                        inline: false
-                    },
-                    {
-                        name: "Change:",
-                        value:
-                        oldMessage.content + " -> " +
-                        newMessage.content
-                    }
+                        {
+                            name: "User:",
+                            value: newMessage.member.user,
+                            inline: false
+                        },
+                        {
+                            name: "Change:",
+                            value:
+                            oldMessage.content + " -> " +
+                            newMessage.content
+                        }
                     ]
                 }
         
                 channel.send("", { embed: embedMessageEdit }).catch(e => { console.log(e); });
             }
-        }*/
+        }
     }
 }

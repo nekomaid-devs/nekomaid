@@ -19,18 +19,21 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
+        // TODO: normalize names of settings
+        // TODO: make normal reply messages
+        // TODO: check for wrong error embeds
         if(command_data.args.length < 1) {
             let bot_owners_text = "";
-            for(let i = 0; i < command_data.bot_config.botOwners.length; i++) {
-                let owner_ID = command_data.bot_config.botOwners[i];
-                let owner = await command_data.bot.users.fetch(owner_ID).catch(e => { console.log(e); });
+            for(let i = 0; i < command_data.global_context.bot_config.botOwners.length; i++) {
+                let owner_ID = command_data.global_context.bot_config.botOwners[i];
+                let owner = await command_data.global_context.bot.users.fetch(owner_ID).catch(e => { console.log(e); });
                 if(owner === undefined) {
                     bot_owners_text += "`" + owner_ID + "`";
                 } else {
                     bot_owners_text += "`" + owner.tag + "`";
                 }
 
-                if(command_data.global_context.bot_config.botOwners.length - 1 > index) {
+                if(command_data.global_context.bot_config.botOwners.length - 1 > i) {
                     bot_owners_text += ", ";
                 }
             }
@@ -82,7 +85,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.bot, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
                 break;
             }
 
@@ -115,7 +118,7 @@ module.exports = {
                         }
 
                         command_data.global_context.bot_config.botOwners.splice(command_data.global_context.bot_config.botOwners.indexOf(tagged_user.id), 1);
-                        command_data.msg.channel.send("Removed `" + taggedUserDisplayName + "` from bot's property `" + property + "`").catch(e => { console.log(e); });
+                        command_data.msg.channel.send("Removed `" + tagged_user.tag + "` from bot's property `" + property + "`").catch(e => { console.log(e); });
                         break;
                     }
 
@@ -125,7 +128,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.bot, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
                 break;
             }
 

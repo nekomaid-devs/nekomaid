@@ -1,10 +1,5 @@
 class GelbooruAPI {
-    constructor(_cheerio, _axios) {
-        this.cheerio = _cheerio;
-        this.axios = _axios;
-    }
-
-    async gelbooru_result(ws, args) {
+    async gelbooru_result(global_context, args) {
         //Get front page for tag
         var siteUrl0 = "https://gelbooru.com/index.php?page=post&s=list" + (args.length > 0 ? "&tags=" + args.join("+") : "");
 
@@ -17,8 +12,8 @@ class GelbooruAPI {
         });
 
         //Get starting and last page for this tag
-        var result0 = await ws.axios.get(siteUrl0);
-        var $0 = await ws.cheerio.load(result0.data);
+        var result0 = await global_context.modules.axios.get(siteUrl0);
+        var $0 = await global_context.modules.cheerio.load(result0.data);
 
         var pages = [];
         var nextPage = null;
@@ -78,8 +73,8 @@ class GelbooruAPI {
 
             //Get results from target page of tag
             var siteUrl1 = "https://gelbooru.com/index.php" + page;
-            var result1 = await ws.axios.get(siteUrl1);
-            var $1 = await ws.cheerio.load(result1.data);
+            var result1 = await global_context.modules.axios.get(siteUrl1);
+            var $1 = await global_context.modules.cheerio.load(result1.data);
 
             var postLinks = [];
 
@@ -120,8 +115,8 @@ class GelbooruAPI {
                 var postlink = postLinks[postLinkNumber - 1];
 
                 //Get postInfo from the post
-                const result2 = await ws.axios.get(postlink);
-                var $2 = await ws.cheerio.load(result2.data);
+                const result2 = await global_context.modules.axios.get(postlink);
+                var $2 = await global_context.modules.cheerio.load(result2.data);
 
                 var image = $2("#image");
                 var imageLink = image.attr("src");

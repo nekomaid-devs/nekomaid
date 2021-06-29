@@ -1,5 +1,5 @@
 module.exports = {
-    async edit(ssm, data) {
+    async edit(global_context, data) {
         console.log("SQL - Editing data of type " + data.type + "..."); 
 
         switch(data.type) {
@@ -10,7 +10,7 @@ module.exports = {
                 const query0 = "botOwners=?, suggestionID=?"
                 const queryData = [ config.botOwners.join(","), config.suggestionID ]
                 const query = "UPDATE configs SET " + query0 + " WHERE id='" + data.id + "'";
-                return await this.editData(ssm, query, queryData);
+                return await this.editData(global_context, query, queryData);
             }
 
             case "server": {
@@ -28,23 +28,23 @@ module.exports = {
                 const query = "UPDATE servers SET " + query0 + " WHERE serverID='" + server.serverID + "'";
                 if(server.counters !== undefined) {
                     server.counters.forEach(c => {
-                        ssm.server_add.addCounter(ssm, c);
+                        global_context.neko_modules_clients.ssm.server_add.addCounter(global_context, c);
                     })
                 }
                 if(server.reactionRoles !== undefined) {
-                    ssm.server_remove.removeReactionRolesFromServer(ssm, server.serverID);
+                    global_context.neko_modules_clients.ssm.server_remove.removeReactionRolesFromServer(global_context, server.serverID);
                     server.reactionRoles.forEach(rr => {
-                        ssm.server_add.addReactionRole(ssm, rr);
+                        global_context.neko_modules_clients.ssm.server_add.addReactionRole(global_context, rr);
                     })
                 }
                 if(server.module_level_ranks !== undefined) {
-                    ssm.server_remove.removeRanksFromServer(ssm, server.serverID);
+                    global_context.neko_modules_clients.ssm.server_remove.removeRanksFromServer(global_context, server.serverID);
                     server.module_level_ranks.forEach(rank => {
-                        ssm.server_add.addRank(ssm, rank);
+                        global_context.neko_modules_clients.ssm.server_add.addRank(global_context, rank);
                     })
                 }
 
-                return await this.editData(ssm, query, queryData);
+                return await this.editData(global_context, query, queryData);
             }
 
             case "server_cb": {
@@ -55,7 +55,7 @@ module.exports = {
                 const queryData = [ server.caseID ]
 
                 const query = "UPDATE servers SET " + query0 + " WHERE serverID='" + server.serverID + "'";
-                return await this.editData(ssm, query, queryData);
+                return await this.editData(global_context, query, queryData);
             }
 
             case "globalUser": {
@@ -65,7 +65,7 @@ module.exports = {
                 const query0 = "credits=?, bank=?, level=?, xp=?, rep=?, netWorth=?, votes=?, lastDailyTime=?, lastUpvotedTime=?, lastBegTime=?, lastRepTime=?, marriedID=?, osuUsername=?, canDivorce=?, lastWorkTime=?, lastStealTime=?, lastCrimeTime=?, inventory=?"
                 const queryData = [ user.credits, user.bank, user.level, user.xp, user.rep, user.netWorth, user.votes, user.lastDailyTime, user.lastUpvotedTime, user.lastBegTime, user.lastRepTime, user.marriedID, user.osuUsername, user.canDivorce, user.lastWorkTime, user.lastStealTime, user.lastCrimeTime, user.inventory.join(",") ]
                 const query = "UPDATE globalusers SET " + query0 + " WHERE userID='" + user.userID + "'";
-                return await this.editData(ssm, query, queryData);
+                return await this.editData(global_context, query, queryData);
             }
 
             case "serverUser": {
@@ -76,21 +76,21 @@ module.exports = {
                 const query0 = "level=?, xp=?"
                 const queryData = [ user.level, user.xp ]
                 const query = "UPDATE serverusers SET " + query0 + " WHERE fastFindID='" + fastFindID + "'";
-                return await this.editData(ssm, query, queryData);
+                return await this.editData(global_context, query, queryData);
             }
         }
     },
 
-    async editData(db, query, queryData) {
-        let res = await db.sqlConn.promise().execute(query, queryData);
+    async editData(global_context, query, queryData) {
+        let res = await global_context.neko_modules_clients.ssm.sql_connection.promise().execute(query, queryData);
         return res;
     },
 
-    editServerLogsInStructure(ssm, server, newData) {
+    editServerLogsInStructure(global_context, server, newData) {
         var serverLogsPrefabData = JSON.stringify(newData);
         var query = "UPDATE serverlogs SET data='" + serverLogsPrefabData.split("'").join("''") + "' WHERE serverID='" + server.id + "'";
 
-        ssm.sqlConn.promise().query(query)
+        global_context.neko_modules_clients.ssm.sql_connection.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }
         });

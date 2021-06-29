@@ -3,7 +3,7 @@ class SortBy {
         this.global_context = global_context;
     }
 
-    /*createComparator(props) {
+    createComparator(props) {
         return function(a, b) {
             var aNet = 0;
             var bNet = 0;
@@ -40,10 +40,10 @@ class SortBy {
         }
     }
 
-    async updateTop(bot, props) {
+    async updateTop(global_context, props) {
         var t0 = Date.now();
 
-        var globalUserTop = await bot.ssm.server_fetch.fetch(bot, { type: "globalUsers" });
+        var globalUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUsers" });
         var comparator = this.createComparator(props);
         globalUserTop.sort(comparator);
     
@@ -53,10 +53,11 @@ class SortBy {
         return { elapsed: secTaken, items: globalUserTop };
     }
 
-    async updateTopServer(bot, server, props) {
+    async updateTopServer(global_context, server, props) {
         var t0 = Date.now();
 
-        var serverUserTop = await bot.ssm.server_fetch.fetch(bot, { type: "globalUsers" });
+        // TODO: this won't work
+        var serverUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUsers" });
         var serverUserTop2 = serverUserTop.filter(val =>
             server.members.cache.has(val.userID)
         );
@@ -70,10 +71,10 @@ class SortBy {
         return { elapsed: secTaken, items: serverUserTop2 };
     }
 
-    async updateTopServerLevel(bot, serverConfig, server) {
+    async updateTopServerLevel(global_context, serverConfig, server) {
         var t0 = Date.now();
 
-        var serverUserTop = await bot.ssm.server_fetch.fetch(bot, { type: "serverUsers", id: server.id });
+        var serverUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUsers", id: server.id });
         var comparator = this.createComparatorServerLevel(serverConfig);
         serverUserTop.sort(comparator);
     
@@ -81,7 +82,7 @@ class SortBy {
         var secTaken = ((t1 - t0) / 1000).toFixed(3);
 
         return { elapsed: secTaken, items: serverUserTop };
-    }*/
+    }
 }
 
 module.exports = SortBy;

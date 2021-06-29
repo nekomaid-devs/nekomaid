@@ -4,9 +4,12 @@ module.exports = {
     shop: require('./shop'),
     d_addnetworth: require('./d_addnetworth'),
     d_addcredits: require('./d_addcredits'),
+    d_addbank: require('./d_addbank'),
+
+    d_setnetworth: require('./d_setnetworth'),
     d_setcredits: require('./d_setcredits'),
     d_setbank: require('./d_setbank'),
-    d_tagged: require('./d_tagged'),
+
     update: require('./update'),
     botconfig: require('./botconfig'),
     customembed: require('./customembed'),
@@ -49,6 +52,7 @@ module.exports = {
     think: require('./think'),
     lewd: require('./lewd'),
     pout: require('./pout'),
+    shrug: require('./shrug'),
 
     coinflip: require('./coinflip'),
     roll: require('./roll'),

@@ -3,7 +3,7 @@ class TimeConvert {
         this.global_context = global_context;
     }
 
-    /*convertTime_inconsistent(time) {
+    convertTime_inconsistent(time) {
         return this.convertString(this.convertTime((time.days * 86400000 ) + (time.hrs * 3600000) + (time.mins * 60000) + (time.secs * 1000)));
     }
 
@@ -219,7 +219,7 @@ class TimeConvert {
 
         timeString = timeString.endsWith(":") ? timeString.slice(0, timeString.length - 1) : timeString;
         return timeString;
-    }*/
+    }
 }
 
 module.exports = TimeConvert;

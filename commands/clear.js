@@ -19,6 +19,7 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
+        //TODO: support swapping arguments
         let num_messages = parseInt(command_data.args[0]);
         if(isNaN(num_messages) || num_messages > 99) {
             command_data.msg.reply(`Cannot delete more than 99 messages~`);
@@ -30,7 +31,7 @@ module.exports = {
             let messages = Array.from(command_data.msg.channel.messages.cache.values());
             messages.pop();
             let target_messages = messages.filter(m =>
-                m.author.id === targetUser.id
+                m.author.id === target_user.id
             );
             target_messages = target_messages.slice(target_messages.length - num_messages, target_messages.length + 1);
 

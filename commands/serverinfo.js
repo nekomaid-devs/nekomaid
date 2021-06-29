@@ -13,6 +13,7 @@ module.exports = {
         let elapsed = new Date() - new Date(command_data.msg.guild.createdAt.toUTCString());
         let createdAgo = command_data.global_context.neko_modules_clients.tc.convertTime(elapsed);
 
+        // TODO: fix owner tag
         let url = command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
         let embedServer = {
             color: 8388736,
@@ -33,7 +34,7 @@ module.exports = {
                     },
                     {
                         name: '❯ Owner',
-                        value: `${command_data.msg.guild.owner.user.username}#${command_data.msg.guild.owner.user.discriminator}`,
+                        value: `${command_data.msg.guild.owner.user.tag}`,
                         inline: true
                     },
                     {
@@ -58,7 +59,7 @@ module.exports = {
                     }
             ],
             thumbnail: {
-                url: avatarUrl
+                url: url
             },
             footer: {
                 text: `Requested by ${command_data.msg.author.tag}`

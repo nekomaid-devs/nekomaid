@@ -39,7 +39,7 @@ module.exports = {
 
         //Get server config
         var previousMute = -1;
-        command_data.serverMutes.forEach(function(mute) {
+        command_data.server_mutes.forEach(function(mute) {
             if(mute.userID === command_data.tagged_user.id) {
                 previousMute = mute;
             }
@@ -89,7 +89,7 @@ module.exports = {
 
                     //Save edited config
                     command_data.server_config.caseID += 1;
-                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
                 }
@@ -134,7 +134,7 @@ module.exports = {
 
                     //Save edited config
                     command_data.server_config.caseID += 1;
-                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
                 }
@@ -143,7 +143,7 @@ module.exports = {
 
         //Construct serverMute
         var serverMute = {
-            id: command_data.bot.crypto.randomBytes(16).toString("hex"),
+            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
             serverID: command_data.msg.guild.id,
             userID: command_data.tagged_user.id,
             start: muteStart,
@@ -163,7 +163,7 @@ module.exports = {
             }
         }
 
-        command_data.global_context.neko_modules_clients.ssm.server_add.addServerMute(command_data.global_context.neko_modules_clients.ssm, serverMute);
+        command_data.global_context.neko_modules_clients.ssm.server_add.addServerMute(command_data.global_context, serverMute);
     },
 
     createMuteRoleAndMute(data, msg, taggedUser) {
@@ -197,7 +197,7 @@ module.exports = {
             taggedUser.roles.add(muteRole)
             .then(function() {
                 command_data.server_config.muteRoleID = muteRole.id;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: msg.guild.id, server: command_data.server_config });
             })
             .catch(err => {
                 console.error(err);

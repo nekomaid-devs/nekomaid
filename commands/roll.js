@@ -53,6 +53,7 @@ module.exports = {
             //Check author's config
             var authorCredits = command_data.author_config.credits;
 
+            // TODO: add support for %
             if(command_data.args[2] === "all") {
                 if(authorCredits <= 0) {
                     command_data.msg.reply(`You don't have enough credits to do this-`);
@@ -86,7 +87,7 @@ module.exports = {
                 command_data.author_config.netWorth += wonAmmount;
 
                 //Edits and broadcasts the change
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
                 //Construct message and send it
                 embedRoll.description = "You won `" + wonAmmountText + "` credits-";
@@ -98,7 +99,7 @@ module.exports = {
                 command_data.author_config.credits -= betAmmount;
 
                 //Edits and broadcasts the change
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
                 //Construct message and send it
                 embedRoll.description = "You lost `" + betAmmount + "` credits-";

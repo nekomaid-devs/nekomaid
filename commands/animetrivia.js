@@ -16,6 +16,9 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
+        // TODO: add stats at end of game
+        // TODO: make skipping vote based
+        // TODO: fix double end message
         if(command_data.msg.member.voice.channel == null) {
             command_data.msg.reply("You need to join a voice channel-");
             return;
@@ -26,7 +29,7 @@ module.exports = {
         }
         if(command_data.args.length > 0) { return; }
         if(command_data.msg.guild.voice !== undefined) {
-            command_data.msg.channel.send("Please make sure there are no other running games or music playing and try again~").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Please make sure there are no other running games or music playing and try again~ (or make Nekomaid leave voice)").catch(e => { console.log(e); });
             return;
         }
 

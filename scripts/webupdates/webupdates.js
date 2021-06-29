@@ -16,6 +16,7 @@ module.exports = {
                     "pain peko",
                     "on 6 consoles"
                 ]
+                // TODO: don't forget
                 var text = bot.pickRandom(statuses) + ' | ' + guildCountPOST + ' servers';
             
                 bot.user.setStatus('available');

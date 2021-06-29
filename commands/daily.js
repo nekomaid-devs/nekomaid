@@ -27,11 +27,11 @@ module.exports = {
 
         command_data.author_config.credits += command_data.global_context.bot_config.dailyCredits;
         command_data.author_config.netWorth += command_data.global_context.bot_config.dailyCredits;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedDaily = {
             color: 6732650,
-            description: `Picked up daily reward of \`${command_data.global_context.bot_config.dailyCredits} 💵\`! (Current Credits: \`${credits}$\`)`,
+            description: `Picked up daily reward of \`${command_data.global_context.bot_config.dailyCredits} 💵\`! (Current Credits: \`${command_data.author_config.credits}$\`)`,
             footer: {
                 text: "Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
             }

@@ -2,8 +2,8 @@ class VoiceManager {
     constructor(global_context) {
         this.global_context = global_context;
 
-        /*this.connections = new Map();
-        setInterval(this.checkForTimeouts, 1000, bot);*/
+        this.connections = new Map();
+        setInterval(this.checkForTimeouts, 1000, bot);
     }
 
     /*addConnection(bot, id, voiceData) {
@@ -142,7 +142,7 @@ class VoiceManager {
                     voiceRequest.url = url;
                     voiceRequest.info = info;
                     voiceRequest.requestMessageID = msg.id;
-                    voiceRequest.uuid = bot.crypto.randomBytes(16).toString("hex");
+                    voiceRequest.uuid = command_data.global_context.modules.crypto.randomBytes(16).toString("hex");
                     voiceRequest.requestChannelID = msg.channel.id;
                     voiceRequest.requestUserID = msg.member.id;
                     voiceRequest.stream = stream;
@@ -180,7 +180,7 @@ class VoiceManager {
                     voiceRequest.url = url;
                     voiceRequest.info = info;
                     voiceRequest.requestMessageID = msg.id;
-                    voiceRequest.uuid = bot.crypto.randomBytes(16).toString("hex");
+                    voiceRequest.uuid = command_data.global_context.modules.crypto.randomBytes(16).toString("hex");
                     voiceRequest.requestChannelID = msg.channel.id;
                     voiceRequest.requestUserID = msg.member.id;
                     voiceData.queue.push(voiceRequest);

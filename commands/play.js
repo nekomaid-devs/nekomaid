@@ -30,7 +30,7 @@ module.exports = {
 
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false) {
             let connection = await command_data.msg.member.voice.channel.join();
-            let voice_data = new command_data.global_context.modules.VoiceData();
+            let voice_data = new command_data.global_context.neko_modules.VoiceData();
             voice_data.id = command_data.msg.guild.id;
             voice_data.connection = connection;
             voice_data.joinedMessageChannelID = command_data.msg.channel.id;

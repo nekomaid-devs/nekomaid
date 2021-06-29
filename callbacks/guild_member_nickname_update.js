@@ -14,33 +14,33 @@ module.exports = {
     },
 
     async process(global_context, oldMember, newMember) {
-        /*var serverConfig = await bot.ssm.server_fetch.fetch(bot, { type: "server_guildmember_nicknamechange", id: newMember.guild.id });
+        // TODO: this doesn't work
+        let serverConfig = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guildmember_nicknamechange", id: newMember.guild.id });
         if(serverConfig.audit_nicknames == true && serverConfig.audit_channel != "-1") {
-            var channel = await newMember.guild.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
-    
+            let channel = await global_context.bot.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {
-                const embedNicknameChange = {
+                let embedNicknameChange = {
                     author: {
-                        name: "Nickname changed | " + newMember.user.tag,
+                        name: `Nickname changed | ${newMember.user.tag}`,
                         icon_url: newMember.user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                     },
                     fields: [
-                    {
-                        name: "User:",
-                        value: newMember.user,
-                        inline: false
-                    },
-                    {
-                        name: "Change:",
-                        value:
-                        (oldMember.nickname === null ? oldMember.user.username : oldMember.nickname) + " -> " +
-                        (newMember.nickname === null ? newMember.user.username : newMember.nickname)
-                    }
+                        {
+                            name: "User:",
+                            value: newMember.user,
+                            inline: false
+                        },
+                        {
+                            name: "Change:",
+                            value:
+                            (oldMember.nickname === null ? oldMember.user.username : oldMember.nickname) + " -> " +
+                            (newMember.nickname === null ? newMember.user.username : newMember.nickname)
+                        }
                     ]
                 }
         
                 channel.send("", { embed: embedNicknameChange }).catch(e => { console.log(e); });
             }
-        }*/
+        }
     }
 }

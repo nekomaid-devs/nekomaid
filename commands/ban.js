@@ -39,7 +39,7 @@ module.exports = {
 
         //Get server config
         var previousBan = -1;
-        command_data.serverBans.forEach(function(ban) {
+        command_data.server_bans.forEach(function(ban) {
             if(ban.userID === command_data.tagged_user.id) {
                 previousBan = ban;
             }
@@ -61,7 +61,7 @@ module.exports = {
 
         //Construct serverBan
         var serverBan = {
-            id: command_data.bot.crypto.randomBytes(16).toString("hex"),
+            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
             serverID: command_data.msg.guild.id,
             userID: command_data.tagged_user.id,
             start: banStart,
@@ -71,6 +71,6 @@ module.exports = {
 
         command_data.tagged_member.ban({ reason: banReason });
         command_data.global_contexdt.data.lastModeratorIDs.set(command_data.msg.guild.id, command_data.msg.author.id);
-        command_data.global_context.neko_modules_clients.ssm.server_add.addServerBan(command_data.global_context.neko_modules_clients.ssm, serverBan);
+        command_data.global_context.neko_modules_clients.ssm.server_add.addServerBan(command_data.global_context, serverBan);
     }
 };

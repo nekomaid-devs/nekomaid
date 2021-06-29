@@ -35,10 +35,10 @@ module.exports = {
 
         command_data.author_config.credits += credits_ammount;
         command_data.author_config.netWorth += credits_ammount;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedWork = {
-            color: answer_color,
+            color: 6732650,
             description: `${answer} (Current Credits: \`${command_data.author_config.credits}$\`)`,
             footer: {
                 text: `Make sure to vote with ${command_data.server_config.prefix}vote for free credits`

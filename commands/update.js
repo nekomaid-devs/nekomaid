@@ -22,7 +22,7 @@ module.exports = {
 
         command_data.msg.channel.send("", { embed: embedUpdate }).catch(e => { console.log(e); });
 
-        command_data.bot.webupdates.refreshStatus(command_data.bot);
-        command_data.bot.webupdates.refreshBotList(command_data.bot);
+        command_data.global_context.neko_modules_clients.webupdates.refreshStatus(command_data.global_context);
+        command_data.global_context.neko_modules_clients.webupdates.refreshBotList(command_data.global_context);
     },
 };

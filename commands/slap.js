@@ -17,7 +17,7 @@ module.exports = {
     execute(command_data) {
         let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getSlapGifs())
         let embedSlap = {
-            title: `${command_data.msg.author.tag} slaps ${command_data.bot.taggedUserTags}!`,
+            title: `${command_data.msg.author.tag} slaps ${command_data.tagged_user_tags}!`,
             color: 8388736,
             image: {
                 url: url

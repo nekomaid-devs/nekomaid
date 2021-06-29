@@ -54,7 +54,7 @@ module.exports = {
         }
 
         //Get extra command_data.args
-        command_data.bot.jimp.read({
+        command_data.global_context.modules.jimp.read({
                 url: imageURL,
                 headers: {}
         }).then(image => {

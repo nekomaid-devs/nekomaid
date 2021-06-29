@@ -35,7 +35,7 @@ module.exports = {
         }
 
         //Edits and broadcasts the change
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         //Construct message and send it
         console.log("[d_give] Added " + targetItem.displayName + " to " + command_data.tagged_user.tag + " on Server(id: " + command_data.msg.guild.id + ")");

@@ -62,9 +62,9 @@ module.exports = {
         var top_text_2 = ""
         if(command_data.args.includes("-server") === true) {
             top_text_2 = `in \`${command_data.msg.guild.name}\``
-            top = await command_data.bot.sb.updateTopServer(command_data.bot, command_data.msg.guild, props, command_data.global_context.bot_config);
+            top = await command_data.global_context.neko_modules_clients.sb.updateTopServer(command_data.global_context, command_data.msg.guild, props, command_data.global_context.bot_config);
         } else {
-            top = await command_data.bot.sb.updateTop(command_data.bot, props);
+            top = await command_data.global_context.neko_modules_clients.sb.updateTop(command_data.global_context, props);
         }
 
         let embedTop = new command_data.global_context.modules.Discord.MessageEmbed()
@@ -99,7 +99,7 @@ module.exports = {
                 net += user_config[prop];
             });
 
-            let target_user = await command_data.bot.users.fetch(user_config.userID).catch(e => { console.log(e); });
+            let target_user = await command_data.global_context.bot.users.fetch(user_config.userID).catch(e => { console.log(e); });
             embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `${net} ${top_user_text}`);
         }
         

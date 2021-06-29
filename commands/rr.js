@@ -26,7 +26,7 @@ module.exports = {
         this.continueCollecting(command_data.bot, command_data.server_config, command_data.msg, msg1, roleMessages, roles, command_data.global_context.modules.Discord);
     },
 
-    continueCollecting(bot, serverConfig, sourceMessage, msg, roleMessages, roles, Discord) {
+    continueCollecting(global_context, serverConfig, sourceMessage, msg, roleMessages, roles, Discord) {
         var filter = message =>
         message.author.id === sourceMessage.author.id
 
@@ -51,7 +51,7 @@ module.exports = {
                     }
 
                     var reactionRoleMenuInfo = {
-                        id: bot.crypto.randomBytes(16).toString("hex"),
+                        id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
                         serverID: msg.guild.id,
                         channelID: msg.channel.id,
                         messageID: msg.id,

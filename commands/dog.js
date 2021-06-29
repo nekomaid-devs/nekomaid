@@ -10,7 +10,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        var obj = await command_data.bot.neko.sfw.woof();
+        var obj = await command_data.global_context.modules_clients.neko.sfw.woof();
         let embedDog = {
             title: "Here's a dog, just for you-",
             color: 8388736,

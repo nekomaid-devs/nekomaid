@@ -27,6 +27,7 @@ module.exports = {
                 return;
             }
 
+            // TODO: add support for %
             let author_credits = command_data.author_config.credits;
             if(command_data.args[0] === "all") {
                 if(author_credits <= 0) {
@@ -53,23 +54,23 @@ module.exports = {
             }
 
             if(result === bet_result) {
-                let won_ammount = Math.floor(betAmmount * 0.75);
-                let won_ammount_text = betAmmount + won_ammount;
+                let won_ammount = Math.floor(bet_ammount * 0.75);
+                let won_ammount_text = bet_ammount + won_ammount;
 
                 command_data.author_config.credits += won_ammount;
                 command_data.author_config.netWorth += won_ammount;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
                 embedCoinflip.description = `You won \`${won_ammount_text}\` credits-`;
                 embedCoinflip.footer = {
                     text: "Win multiplier: 1.75x"
                 }
             } else {
-                command_data.author_config.credits -= betAmmount;
-                command_data.author_config.netWorth -= betAmmount;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+                command_data.author_config.credits -= bet_ammount;
+                command_data.author_config.netWorth -= bet_ammount;
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
-                embedCoinflip.description = `You lost \`${betAmmount}\` credits-`;
+                embedCoinflip.description = `You lost \`${bet_ammount}\` credits-`;
             }
 
             command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { console.log(e); });
