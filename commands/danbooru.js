@@ -16,7 +16,7 @@ module.exports = {
     async execute(command_data) {
         let post_info = -1;
         try {
-            post_info = await data.bot.danbooru.danbooru_result(data.bot.danbooru, command_data.args);
+            post_info = await command_data.bot.danbooru.danbooru_result(command_data.bot.danbooru, command_data.args);
         } catch(err) {
             console.error(err);
             command_data.msg.reply("There was an error in processing this request-");

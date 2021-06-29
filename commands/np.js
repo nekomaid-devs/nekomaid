@@ -23,7 +23,7 @@ module.exports = {
         .setFooter("Nekomaid");
 
         let currentLength0b = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_data.current.info.duration));
-        let user = await data.bot.users.fetch(voice_data.current.requestUserID).catch(e => { console.log(e); });
+        let user = await command_data.bot.users.fetch(voice_data.current.requestUserID).catch(e => { console.log(e); });
         if(user !== undefined) {
             let descriptionText = `[${voice_data.current.info.title}](${voice_data.current.info.link}) *(${currentLength0b})*\n`;
 

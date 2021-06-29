@@ -16,7 +16,7 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        let warns = data.serverWarns.filter(warn => { return warn.userID === command_data.tagged_user.id });
+        let warns = command_data.serverWarns.filter(warn => { return warn.userID === command_data.tagged_user.id });
         let embedWarns = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
         .setAuthor(`❯ Warnings for ${command_data.tagged_user.tag} (${warns.length})`, command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }));

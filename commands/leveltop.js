@@ -10,70 +10,51 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
-        //Argument check
         if(command_data.server_config.module_level_enabled == false) {
             command_data.msg.reply("Leveling isn't enabled on this server- (see `" + command_data.server_config.prefix + "leveling` for help)");
             return;
         }
- 
-        //Get compared property and it's custom texts
-        var topText = "⚡ Server Level"
 
-        //Update top users
-        var top = await data.bot.sb.updateTopServerLevel(data.bot, command_data.server_config, command_data.msg.guild);
-
-        //Construst embed
-        const embedTop = new command_data.global_context.modules.Discord.MessageEmbed()
+        let top_text = "⚡ Server Level"
+        let top = await command_data.bot.sb.updateTopServerLevel(command_data.bot, command_data.server_config, command_data.msg.guild);
+        let embedTop = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
-        .setTitle('❯    Top - `' + topText + '`')
+        .setTitle(`❯    Top - \`${top_text}\``)
         .setFooter(`Update took ${top.elapsed}s...`);
 
-        //Get what position target user is
-        var authorPos = -1;
-        var authorConfig = -1;
-        for(var i = 0; i < top.items.length; i += 1) {
-            var user = top.items[i];
-            
+        let author_pos = -1;
+        let author_config = -1;
+        for(let i = 0; i < top.items.length; i += 1) {
+            let user = top.items[i];
             if(user.userID === command_data.msg.author.id) {
-                authorPos = i;
-                authorConfig = user;
+                author_pos = i;
+                author_config = user;
                 break;
             }
         }
-        
-        //Collect top users from globalUserTop
-        var limit = top.items.length < 10 ? top.items.length : 10;
-        for(let i = 0; i < limit; i += 1) {
-            let userConfig = top.items[i];
 
+        let limit = top.items.length < 10 ? top.items.length : 10;
+        for(let i = 0; i < limit; i += 1) {
+            let user_config = top.items[i];
+            let net = user_config.level;
             if(i === 8 && authorPos > 10) {
                 embedTop.addField("...", "...");
                 continue;
-            } else if(i === 9 && authorPos > 10) {
-                userConfig = authorConfig;
-                i = authorPos;
+            } else if(i === 9 && author_pos > 10) {
+                user_config = author_config;
+                i = author_pos;
             }
 
-            const net = userConfig.level;
-
-            var levelXP = command_data.server_config.module_level_level_exp;
-            for(var i2 = 1; i2 < userConfig.level; i2 += 1) {
-                levelXP *= command_data.server_config.module_level_level_multiplier;
+            let level_XP = command_data.server_config.module_level_level_exp;
+            for(let i_2 = 1; i_2 < userConfig.level; i_2 += 1) {
+                level_XP *= command_data.server_config.module_level_level_multiplier;
             }
+            let net_2 = (user_config.xp / level_XP) * 100;
 
-            const net2 = (userConfig.xp / levelXP) * 100;
-
-            //Get targetUser
-            var targetUser = await data.bot.users.fetch(userConfig.userID).catch(e => { console.log(e); });
-            var targetUserDisplayName = targetUser !== undefined ? targetUser.username + "#" + targetUser.discriminator : "<unknown>";
-
-            //Add user into ranking
-            var pos = i + 1;
-            embedTop.addField(pos + ") " + targetUserDisplayName, "Level " + net + " (" + Math.round(net2) + " %)");
+            let target_user = await command_data.bot.users.fetch(user_config.userID).catch(e => { console.log(e); });
+            embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `Level ${net} (${Math.round(net_2)} %)`);
         }
         
-        //Send message
         command_data.msg.channel.send("", { embed: embedTop }).catch(e => { console.log(e); });
     }
 };

@@ -20,7 +20,7 @@ module.exports = {
         var sauce = command_data.args[0];
 
         try {
-            var postInfo = await data.bot.nhentai.nhentai_result(data.bot.nhentai, sauce);
+            var postInfo = await command_data.bot.nhentai.nhentai_result(command_data.bot.nhentai, sauce);
         } catch(err) {
             console.error(err);
             command_data.msg.reply("There was an error in processing this request-");

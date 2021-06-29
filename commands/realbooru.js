@@ -16,7 +16,7 @@ module.exports = {
     async execute(command_data) {
         let post_info = -1;
         try {
-            post_info = await data.bot.realbooru.realbooru_result(data.bot.r34, command_data.args);
+            post_info = await command_data.bot.realbooru.realbooru_result(command_data.bot.r34, command_data.args);
         } catch(err) {
             console.log(err);
             command_data.msg.reply("There was an error in processing this request-");

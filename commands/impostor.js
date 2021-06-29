@@ -11,14 +11,14 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        if(data.msg.guild.me.hasPermission("MANAGE_MESSAGES") === true) {
-            data.msg.suppressEmbeds(true);
+        if(command_data.msg.guild.me.hasPermission("MANAGE_MESSAGES") === true) {
+            command_data.msg.suppressEmbeds(true);
         }
 
         let impostor = command_data.global_context.utils.pick_random([true, false]);
-        data.bot.jimp.read((impostor ? './data/wasImpostor.png' : './data/wasntImpostor.png')).then(image => {
-            data.bot.jimp.loadFont('./data/font.fnt').then(async(font) => {
-                image.print(font, 325 - data.bot.jimp.measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
+        command_data.bot.jimp.read((impostor ? './data/wasImpostor.png' : './data/wasntImpostor.png')).then(image => {
+            command_data.bot.jimp.loadFont('./data/font.fnt').then(async(font) => {
+                image.print(font, 325 - command_data.bot.jimp.measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
 
                 let embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
                 .setTitle(command_data.tagged_user.tag + " was " + (impostor ? "" : "not ") + "the impostor-")

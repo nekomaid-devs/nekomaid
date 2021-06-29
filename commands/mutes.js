@@ -17,17 +17,17 @@ module.exports = {
         let now = Date.now();
         let embedMutes = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
-        .setAuthor(`❯ Mutes (${data.serverMutes.length})`, command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
+        .setAuthor(`❯ Mutes (${command_data.serverMutes.length})`, command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
 
-        if(data.serverMutes.length < 1) {
+        if(command_data.serverMutes.length < 1) {
             command_data.msg.channel.send("", { embed: embedMutes }).catch(e => { console.log(e); });
             return;
         }
 
         let loadedMutes = 0;
-        let expectedMutes = data.serverMutes.length < 25 ? data.serverMutes.length : 25;
-        data.serverMutes.slice(data.serverMutes.length - 25).forEach(async(mute) => {
-            let mutedUser = await data.bot.users.fetch(mute.userID).catch(e => { console.log(e); });
+        let expectedMutes = command_data.serverMutes.length < 25 ? command_data.serverMutes.length : 25;
+        command_data.serverMutes.slice(command_data.serverMutes.length - 25).forEach(async(mute) => {
+            let mutedUser = await command_data.bot.users.fetch(mute.userID).catch(e => { console.log(e); });
             if(mutedUser !== undefined) {
                 let remainingText = mute.end === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(mute.end - now);
                 embedMutes.addField(`Mute - ${mutedUser.tag}`, `Remaining: \`${remainingText}\``);

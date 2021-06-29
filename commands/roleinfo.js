@@ -16,8 +16,8 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         let role = -1;
-        if(data.msg.mentions.roles.size > 0) {
-            role = Array.from(data.msg.mentions.roles.values())[0];
+        if(command_data.msg.mentions.roles.size > 0) {
+            role = Array.from(command_data.msg.mentions.roles.values())[0];
         } else {
             role = command_data.msg.guild.roles.cache.find(roleTemp =>
                 roleTemp.name === command_data.total_argument || roleTemp.id === command_data.total_argument

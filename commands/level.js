@@ -16,7 +16,7 @@ module.exports = {
             return;
         }
 
-        let top = await data.bot.sb.updateTopServerLevel(command_data.bot, command_data.server_config, command_data.msg.guild);
+        let top = await command_data.bot.sb.updateTopServerLevel(command_data.bot, command_data.server_config, command_data.msg.guild);
         let author_pos = -1;
         let author_config = -1;
         for(let i = 0; i < top.items.length; i += 1) {

@@ -11,13 +11,13 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false) {
-            data.msg.reply("I'm not in a voice channel-");
+            command_data.msg.reply("I'm not in a voice channel-");
             return;
         }
 
-        let voiceData = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
-        voiceData.queue = [];
-        voiceData.persistentQueue = [];
+        let voice_data = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
+        voice_data.queue = [];
+        voice_data.persistentQueue = [];
 
         command_data.msg.channel.send("Cleared the current queue-").catch(e => { console.log(e); });
     },

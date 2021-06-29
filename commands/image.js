@@ -20,13 +20,13 @@ module.exports = {
         // TODO: re-factor command
         return;
         if(command_data.msg.guild.me.hasPermission("MANAGE_MESSAGES") === true) {
-            data.msg.suppressEmbeds(true);
+            command_data.msg.suppressEmbeds(true);
         }
 
         var imageURL = "";
         var action = "";
 
-        if(data.msg.mentions.users.array().length < 1) {
+        if(command_data.msg.mentions.users.array().length < 1) {
             if(command_data.args.length < 1) {
                 command_data.msg.reply("You need to mention somebody/type an url-")
                 return;
@@ -49,12 +49,12 @@ module.exports = {
                 return;
             }
 
-            imageURL = data.msg.mentions.users.array()[0].avatarURL({ format: "png", dynamic: true, size: 1024 });
+            imageURL = command_data.msg.mentions.users.array()[0].avatarURL({ format: "png", dynamic: true, size: 1024 });
             action = command_data.args[1];
         }
 
         //Get extra command_data.args
-        data.bot.jimp.read({
+        command_data.bot.jimp.read({
                 url: imageURL,
                 headers: {}
         }).then(image => {
@@ -257,7 +257,7 @@ module.exports = {
             image.writeAsync("image.jpg").then(function() {
                 switch(action) {
                     case "bonk":
-                        data.bot.gm()
+                        command_data.bot.gm()
                         .in('-geometry', '+0+0')
                         .in('./image.jpg')
                         .implode(-0.4)
@@ -282,7 +282,7 @@ module.exports = {
                         break;
 
                         case "loli-license":
-                            data.bot.gm()
+                            command_data.bot.gm()
                             .in('-geometry', '+0+0')
                             .in('./loli-license.png')
                             .in('-geometry', '368x368')

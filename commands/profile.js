@@ -15,7 +15,7 @@ module.exports = {
         if(married_text === "-1") {
             married_text = "Nobody";
         } else {
-            let married_user = await data.bot.users.fetch(married_text).catch(e => { console.log(e); });
+            let married_user = await command_data.bot.users.fetch(married_text).catch(e => { console.log(e); });
             if(married_user !== undefined && married_user !== null) {
                 married_text = married_user.username + "#" + married_user.discriminator;
                 if(command_data.tagged_user_config.canDivorce == false) {

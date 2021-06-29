@@ -17,30 +17,30 @@ module.exports = {
     execute(command_data) {
         // TODO: re-factor command
         return;
-        if(data.msg.guild.me.hasPermission("MANAGE_MESSAGES") === true) {
-            data.msg.suppressEmbeds(true);
+        if(command_data.msg.guild.me.hasPermission("MANAGE_MESSAGES") === true) {
+            command_data.msg.suppressEmbeds(true);
         }
 
         var imageURL = "";
 
-        if(data.msg.mentions.users.array().length < 1) {
+        if(command_data.msg.mentions.users.array().length < 1) {
             imageURL = command_data.args[0];
 
             if(imageURL.startsWith("<")) {
                 imageURL = imageURL.replace("<", "").replace(">", "")
             }
         } else {
-            imageURL = data.msg.mentions.users.array()[0].avatarURL({ format: "png", dynamic: true, size: 1024 });
+            imageURL = command_data.msg.mentions.users.array()[0].avatarURL({ format: "png", dynamic: true, size: 1024 });
         }
 
-        data.bot.jimp.read({
+        command_data.bot.jimp.read({
             url: imageURL,
             headers: {}
         }).then(image => {
             var t0 = Date.now();
 
             image.writeAsync("image.jpg").then(function() {
-                    data.bot.gm()
+                command_data.bot.gm()
                             .in('-geometry', '+0+0')
                             .in('./image.jpg')
                             .implode(-0.4)
@@ -66,7 +66,7 @@ module.exports = {
         })
         .catch(err => {
             console.error(err);
-            data.msg.reply("Sorry, couldn't process that image-");
+            command_data.msg.reply("Sorry, couldn't process that image-");
         })
     },
 };

@@ -32,7 +32,7 @@ module.exports = {
 
         if(passed === true) {
             command_data.msg.channel.send(command_data.total_argument).catch(e => { console.log(e); });
-            data.msg.delete().catch(e => { console.log(e); });
+            command_data.msg.delete().catch(e => { console.log(e); });
         }
     },
 };

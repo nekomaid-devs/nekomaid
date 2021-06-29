@@ -27,12 +27,12 @@ module.exports = {
 
         var unmuteReason = "None";
         if(command_data.args.length > 1) {
-            unmuteReason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[1]))
+            unmuteReason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[1]))
         }
 
         //Get server config
         var previousMuteID = -1;
-        data.serverMutes.forEach(function(mute) {
+        command_data.serverMutes.forEach(function(mute) {
             if(mute.userID === command_data.tagged_user.id) {
                 previousMuteID = mute.id;
             }

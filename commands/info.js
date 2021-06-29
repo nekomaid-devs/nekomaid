@@ -20,10 +20,10 @@ module.exports = {
         var commit_elapsedTime = command_data.global_context.neko_modules_clients.tc.convertTime(elapsed);
 
         //Get memory usage
-        var managerProcess = await data.bot.processUsage(process.ppid);
-        var shardProcess = await data.bot.processUsage(process.pid);
-        var allShards_pid = await data.bot.shard.broadcastEval('process.pid');
-        var allShards_memoryUsage = await data.bot.shard.broadcastEval('process.memoryUsage()');
+        var managerProcess = await command_data.bot.processUsage(process.ppid);
+        var shardProcess = await command_data.bot.processUsage(process.pid);
+        var allShards_pid = await command_data.bot.shard.broadcastEval('process.pid');
+        var allShards_memoryUsage = await command_data.bot.shard.broadcastEval('process.memoryUsage()');
 
         var k = 1024;
         var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
@@ -60,7 +60,7 @@ module.exports = {
         var manager_cpu = managerProcess.cpu;
         for (var index2 = 0; index2 < allShards_pid.length; index2 += 1) {
             var pid = allShards_pid[index2];
-            var shardProcess2 = await data.bot.processUsage(pid);
+            var shardProcess2 = await command_data.bot.processUsage(pid);
             manager_cpu += shardProcess2.cpu;
 
             if(process.pid === pid) {
@@ -75,8 +75,8 @@ module.exports = {
         var manager_elapsedTime = command_data.global_context.neko_modules_clients.tc.convertTime(managerProcess.elapsed);
 
         //Get number of servers
-        var shard_guilds = data.bot.guilds.cache.size;
-        var manager_guilds = await data.bot.shard.fetchClientValues('guilds.cache.size').then(results =>
+        var shard_guilds = command_data.bot.guilds.cache.size;
+        var manager_guilds = await command_data.bot.shard.fetchClientValues('guilds.cache.size').then(results =>
             results.reduce((prev, guildCount) =>
                 prev + guildCount, 0
             )
@@ -84,20 +84,20 @@ module.exports = {
 
         //Get number of users
         var shard_members = 0;
-        data.bot.guilds.cache.forEach(guild => {
+        command_data.bot.guilds.cache.forEach(guild => {
             shard_members += guild.memberCount;
         });
 
-        var manager_members = await data.bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)').then(results =>
+        var manager_members = await command_data.bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)').then(results =>
             results.reduce((prev, memberCount) =>
                 prev + memberCount, 0
             )
         );
 
         //Get command performance
-        var shard_commands = data.bot.totalCommands;
+        var shard_commands = command_data.bot.totalCommands;
         var manager_commands = 0;
-        await data.bot.shard.broadcastEval('this.totalCommands').then(results => {
+        await command_data.bot.shard.broadcastEval('this.totalCommands').then(results => {
             results.forEach(result => {
                 manager_commands += result;
             })
@@ -106,7 +106,7 @@ module.exports = {
         //Get voice connections
         var shard_vc = command_data.global_context.neko_modules_clients.vm.connections.size;
         var manager_vc = 0;
-        await data.bot.shard.broadcastEval('this.vm.connections.size').then(results => {
+        await command_data.bot.shard.broadcastEval('this.vm.connections.size').then(results => {
             results.forEach(result => {
                 manager_vc += result;
             })
@@ -123,7 +123,7 @@ module.exports = {
             },
             fields: [
                 {
-                    name: 'Current Shard (shard#' + data.bot.shard.ids[0] + ")",
+                    name: 'Current Shard (shard#' + command_data.bot.shard.ids[0] + ")",
                     value: `
                     **Uptime:**\n${shard_elapsedTime}\n
                     **Caching:**\n${shard_guilds} servers, ${shard_members} users\n
@@ -134,7 +134,7 @@ module.exports = {
                     inline: true
                 },
                 {
-                    name: 'All Shards (' + data.bot.shard.count + ')',
+                    name: 'All Shards (' + command_data.bot.shard.count + ')',
                     value: `
                     **Uptime:**\n${manager_elapsedTime}\n
                     **Caching:**\n${manager_guilds} servers, ${manager_members} users\n

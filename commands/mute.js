@@ -39,7 +39,7 @@ module.exports = {
 
         //Get server config
         var previousMute = -1;
-        data.serverMutes.forEach(function(mute) {
+        command_data.serverMutes.forEach(function(mute) {
             if(mute.userID === command_data.tagged_user.id) {
                 previousMute = mute;
             }
@@ -143,7 +143,7 @@ module.exports = {
 
         //Construct serverMute
         var serverMute = {
-            id: data.bot.crypto.randomBytes(16).toString("hex"),
+            id: command_data.bot.crypto.randomBytes(16).toString("hex"),
             serverID: command_data.msg.guild.id,
             userID: command_data.tagged_user.id,
             start: muteStart,
@@ -152,12 +152,12 @@ module.exports = {
         }
 
         if(command_data.server_config.muteRoleID === "-1") {
-            this.createMuteRoleAndMute(data, data.msg, command_data.tagged_member);
+            this.createMuteRoleAndMute(command_data, command_data.msg, command_data.tagged_member);
         } else {
             var muteRole = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { console.log(e); });
 
             if(muteRole === undefined) {
-                this.createMuteRoleAndMute(data, data.msg, command_data.tagged_member);
+                this.createMuteRoleAndMute(command_data, command_data.msg, command_data.tagged_member);
             } else {
                 command_data.tagged_member.roles.add(muteRole);
             }

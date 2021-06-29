@@ -19,7 +19,6 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
         if(command_data.msg.member.voice.channel == null) {
             command_data.msg.reply("You need to join a voice channel-");
             return;
@@ -31,12 +30,12 @@ module.exports = {
 
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false) {
             let connection = await command_data.msg.member.voice.channel.join();
-            let voiceData = new command_data.global_context.modules.VoiceData();
-            voiceData0.id = command_data.msg.guild.id;
-            voiceData0.connection = connection;
-            voiceData0.joinedMessageChannelID = command_data.msg.channel.id;
+            let voice_data = new command_data.global_context.modules.VoiceData();
+            voice_data.id = command_data.msg.guild.id;
+            voice_data.connection = connection;
+            voice_data.joinedMessageChannelID = command_data.msg.channel.id;
 
-            command_data.global_context.neko_modules_clients.vm.addConnection(data.bot, command_data.msg.guild.id, voiceData0);
+            command_data.global_context.neko_modules_clients.vm.addConnection(command_data.bot, command_data.msg.guild.id, voice_data);
             command_data.msg.channel.send(`Joined channel \`${command_data.msg.member.voice.channel.name}\`-`).catch(e => { console.log(e); });
         }
 
@@ -44,8 +43,8 @@ module.exports = {
             let url = command_data.args[0];
             url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
 
-            if(data.bot.ytlist.validateID(url) === true) {
-                const result = await data.bot.ytlist(url)
+            if(command_data.bot.ytlist.validateID(url) === true) {
+                let result = await command_data.bot.ytlist(url)
                 .catch(e => {
                     console.error(e);
                     command_data.msg.channel.send("Failed to get video results-").catch(e => { console.log(e); });
@@ -54,57 +53,57 @@ module.exports = {
 
                 for(let i = 0; i < result.items.length; i++) {
                     let item = result.items[i];
-                    await command_data.global_context.neko_modules_clients.vm.playOnConnection(data.bot, data.msg, item.url, item, false);
+                    await command_data.global_context.neko_modules_clients.vm.playOnConnection(command_data.bot, command_data.msg, item.url, item, false);
                 }
 
-                command_data.msg.channel.send("Added `" + result.items.length + "` songs to the queue-").catch(e => { console.log(e); });
-            } else if(data.bot.ytdl.validateURL(url) === true) {
+                command_data.msg.channel.send(`Added \`${result.items.length}\` songs to the queue-`).catch(e => { console.log(e); });
+            } else if(command_data.bot.ytdl.validateURL(url) === true) {
                 url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
-                command_data.global_context.neko_modules_clients.vm.playOnConnection(data.bot, data.msg, url);
+                command_data.global_context.neko_modules_clients.vm.playOnConnection(command_data.bot, command_data.msg, url);
             } else {
-                var max = 5;
-                const embedPlay = new command_data.global_context.modules.Discord.MessageEmbed()
+                let max = 5;
+                let embedPlay = new command_data.global_context.modules.Discord.MessageEmbed()
                 .setColor(8388736)
-                .setTitle("Select a song to play (type 1-" + max + ")-")
+                .setTitle(`Select a song to play (type 1-${max})-`)
 
-                var infosByID = new Map();
-                const result = await data.bot.ytsr(command_data.total_argument, { limit: 5 })
+                let infosByID = new Map();
+                let result = await command_data.bot.ytsr(command_data.total_argument, { limit: 5 })
                 .catch(e => {
                     command_data.msg.channel.send("Failed to get video results-").catch(e => { console.log(e); });
                     console.error(e);
                 });
                 if(result === undefined || result.items === undefined) { return; }
                 result.items = result.items.filter(l => { return l.type === "video"; })
-                result.items.sort(data.bot.sb.createComparatorViews());
+                result.items.sort(command_data.bot.sb.createComparatorViews());
 
-                var descriptionText = "";
+                let description_text = "";
                 for(let i = 1; i <= result.items.length; i++) {
                     let item = result.items[i];
                     if(item === undefined) {
-                        descriptionText += "**" + i + ")** Private video?\n";
+                        description_text += `**${i})** Private video?\n`;
                     } else {
                         infosByID.set(i, item);
 
-                        var currentLength1 = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(item.duration);
-                        var currentLength2 = command_data.global_context.neko_modules_clients.tc.convertString_yt2(currentLength1);
-                        descriptionText += "**" + i + ")** " + item.title + " *(" + currentLength2 + ")*\n";
+                        let current_length = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(item.duration);
+                        let current_length_1 = command_data.global_context.neko_modules_clients.tc.convertString_yt2(current_length);
+                        description_text += `**${i})** ${item.title} *(${current_length_1})*\n`;
                     }
                 }
 
-                var filter = m =>
+                let filter = m =>
                     (parseInt(m.content) <= 5 && parseInt(m.content) >= 1 && infosByID.has(parseInt(m.content))) || m.content.startsWith(command_data.server_config.prefix + "play");
-                const collector = data.msg.channel.createMessageCollector(filter, { time: 15000, max: 1 });
+                    let collector = command_data.msg.channel.createMessageCollector(filter, { time: 15000, max: 1 });
                 collector.on('collect', m => {
-                    if(m.content.startsWith(command_data.server_config.prefix + "play") === true) {
+                    if(m.content.startsWith(`${command_data.server_config.prefix}play`) === true) {
                         collector.stop();
                         return;
                     }
 
-                    const pos = parseInt(m.content);
-                    command_data.global_context.neko_modules_clients.vm.playOnConnection(data.bot, m, infosByID.get(pos).url, infosByID.get(pos));
+                    let pos = parseInt(m.content);
+                    command_data.global_context.neko_modules_clients.vm.playOnConnection(command_data.bot, m, infosByID.get(pos).url, infosByID.get(pos));
                 });
 
-                embedPlay.setDescription(descriptionText);
+                embedPlay.setDescription(description_text);
                 command_data.msg.channel.send("", { embed: embedPlay }).catch(e => { console.log(e); });
             }
         }

@@ -107,7 +107,7 @@ module.exports = {
                         value: `${join_score} (${join_score}${join_score_suffix} out of ${join_score_max})`
                     },
                     {
-                        name: '❯ Roles [' + data.tagged_member.roles.cache.size + ']',
+                        name: '❯ Roles [' + command_data.tagged_member.roles.cache.size + ']',
                         value: `${roles}`
                     }
             ],

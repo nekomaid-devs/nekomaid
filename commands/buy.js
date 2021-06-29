@@ -26,7 +26,7 @@ module.exports = {
         });
 
         if(targetItem === -1) {
-            data.msg.reply("Haven't found any item with name `" + itemName + "`-");
+            command_data.msg.reply("Haven't found any item with name `" + itemName + "`-");
             return;
         }
 
@@ -38,12 +38,12 @@ module.exports = {
         })
 
         if(targetItem2 === -1) {
-            data.msg.reply("Item `" + targetItem.displayName + "` isn't for sale-");
+            command_data.msg.reply("Item `" + targetItem.displayName + "` isn't for sale-");
             return;
         }
 
         if(command_data.author_config.credits < targetItem2.price) {
-            data.msg.reply(`You don't have enough credits to do this-`);
+            command_data.msg.reply(`You don't have enough credits to do this-`);
             return;
         }
 

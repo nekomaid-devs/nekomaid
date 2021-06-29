@@ -27,6 +27,6 @@ module.exports = {
             ]
         }
 
-        data.msg.channel.send("", { embed: embedSite }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedSite }).catch(e => { console.log(e); });
     },
 };

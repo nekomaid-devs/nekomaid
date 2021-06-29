@@ -25,7 +25,7 @@ module.exports = {
 
         let kick_reason = "None";
         if(command_data.args.length > 1) {
-            kick_reason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1);
+            kick_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1);
         }
 
         command_data.msg.channel.send(`Kicked \`${command_data.tagged_user.tag}\` (Reason: \`${kick_reason}\`)-`).catch(e => { console.log(e); });

@@ -18,24 +18,20 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
-        var warnReason = "None";
+        let warn_reason = "None";
         if(command_data.args.length > 1) {
-            warnReason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[0]) + command_data.args[0].length + 1)
+            warnReason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[0]) + command_data.args[0].length + 1)
         }
 
-        //Get server config
-        var warns = data.serverWarns.filter(warn =>
+        let warns = command_data.serverWarns.filter(warn =>
             warn.userID === command_data.tagged_user.id
         )
-
-        command_data.msg.channel.send("Cleared warnings of `" + command_data.tagged_user.tag + "` (Reason: `" + warnReason + "`, Strikes: `" + warns.length + "` => `0`)-").catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Cleared warnings of \`${command_data.tagged_user.tag}\` (Reason: \`${warn_reason}\`, Strikes: \`${warns.length}\` => \`0\`)-`).catch(e => { console.log(e); });
 
         if(command_data.server_config.audit_warns == true && command_data.server_config.audit_channel != "-1") {
-            const channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
-
+            let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {
-                const embedClearWarns = {
+                let embedClearWarns = {
                     author: {
                         name: "Case " + command_data.server_config.caseID + "# | Cleared warnings | " + command_data.tagged_user.tag,
                         icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
@@ -53,16 +49,15 @@ module.exports = {
                         },
                         {
                             name: "Reason:",
-                            value: warnReason
+                            value: warn_reason
                         },
                         {
                             name: "Strikes:",
-                            value: warns.length + " => 0"
+                            value: `${warns.length} => 0`
                         }
                     ]
                 }
 
-                //Save edited config
                 command_data.server_config.caseID += 1;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context.neko_modules_clients.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
@@ -70,7 +65,6 @@ module.exports = {
             }
         }
 
-        //Clear warnings
         command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerWarningsFromUser(command_data.global_context.neko_modules_clients.ssm, command_data.msg.guild, command_data.msg.author);
     }
 };

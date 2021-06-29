@@ -20,10 +20,10 @@ module.exports = {
     async execute(command_data) {
         let warn_reason = "None";
         if(command_data.args.length > 1) {
-            warn_reason = data.msg.content.substring(data.msg.content.indexOf(command_data.args[0]) + command_data.args[0].length + 1);
+            warn_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[0]) + command_data.args[0].length + 1);
         }
 
-        let num_of_warnings = data.serverWarns.filter(warn =>
+        let num_of_warnings = command_data.serverWarns.filter(warn =>
             warn.userID === command_data.tagged_user.id
         ).length;
         command_data.msg.channel.send(`Warned \`${command_data.tagged_user.tag}\` (Reason: \`${warn_reason}\`, Strikes: \`${num_of_warnings}\` => \`${(numOfWarns + 1)}\`)-`).catch(e => { console.log(e); });
@@ -66,7 +66,7 @@ module.exports = {
         }
 
         let serverWarn = {
-            id: data.bot.crypto.randomBytes(16).toString("hex"),
+            id: command_data.bot.crypto.randomBytes(16).toString("hex"),
             serverID: command_data.msg.guild.id,
             userID: command_data.tagged_user.id,
             start: Date.now(),

@@ -23,7 +23,7 @@ module.exports = {
                 voice_data.persistentQueue.push(voiceRequest);
             })
 
-            command_data.msg.channel.send(`Shuffled \`${voiceData.queue.length}\` songs-`).catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Shuffled \`${voice_data.queue.length}\` songs-`).catch(e => { console.log(e); });
         } else {
             voice_data.persistentQueue = command_data.global_context.utils.shuffle_playlist(voice_data.persistentQueue);
 
@@ -41,7 +41,7 @@ module.exports = {
                 i += 1;
             });
 
-            command_data.msg.channel.send(`Shuffled \`${voiceData.persistentQueue.length}\` songs-`).catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Shuffled \`${voice_data.persistentQueue.length}\` songs-`).catch(e => { console.log(e); });
         }
     },
 };

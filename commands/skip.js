@@ -15,16 +15,16 @@ module.exports = {
             return;
         }
 
-        let voiceData = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
-        let voiceRequest = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).current;
-        voiceData.current.stream.destroy();
-        voiceData.current = -1;
+        let voice_data = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
+        let voice_request = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).current;
+        voice_data.current.stream.destroy();
+        voice_data.current = -1;
 
-        command_data.msg.channel.send(`Skipped \`${voiceRequest.info.title}\`- (\`${command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).queue.length}\` remaining)-`).catch(e => { console.log(e); });
-        if(voiceData.mode === 0) {
-            voiceData.persistentQueue.shift();
+        command_data.msg.channel.send(`Skipped \`${voice_request.info.title}\`- (\`${command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).queue.length}\` remaining)-`).catch(e => { console.log(e); });
+        if(voice_data.mode === 0) {
+            voice_data.persistentQueue.shift();
         }
 
-        command_data.global_context.neko_modules_clients.vm.tryPlayingNext(data.bot, command_data.msg.guild.id);
+        command_data.global_context.neko_modules_clients.vm.tryPlayingNext(command_data.bot, command_data.msg.guild.id);
     },
 };

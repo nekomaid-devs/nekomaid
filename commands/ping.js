@@ -16,11 +16,11 @@ module.exports = {
             fields: [
                 {
                     name: "🏓 Ping",
-                    value: `${(m.createdTimestamp - data.msg.createdTimestamp)}ms`
+                    value: `${(m.createdTimestamp - command_data.msg.createdTimestamp)}ms`
                 },
                 {
                     name: "🏠 API",
-                    value: `${Math.round(data.bot.ws.ping)}ms`
+                    value: `${Math.round(command_data.bot.ws.ping)}ms`
                 }
             ]
         }

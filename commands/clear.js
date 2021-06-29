@@ -25,9 +25,9 @@ module.exports = {
             return;
         }
 
-        if(data.msg.mentions.users.array().length > 0) {
-            let target_user = data.msg.mentions.users.array()[0];
-            let messages = Array.from(data.msg.channel.messages.cache.values());
+        if(command_data.msg.mentions.users.array().length > 0) {
+            let target_user = command_data.msg.mentions.users.array()[0];
+            let messages = Array.from(command_data.msg.channel.messages.cache.values());
             messages.pop();
             let target_messages = messages.filter(m =>
                 m.author.id === targetUser.id

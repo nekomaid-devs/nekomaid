@@ -34,7 +34,7 @@ module.exports = {
         var emoteID = text.substring(a, text.indexOf(">", a))
 
         if(text.includes("https://") === false && emoteID.length != 18) {
-            data.msg.reply("Invalid emoteID length - (" + emoteID + ", " + emoteID.length + "/18)");
+            command_data.msg.reply("Invalid emoteID length - (" + emoteID + ", " + emoteID.length + "/18)");
             return;
         }
 

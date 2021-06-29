@@ -22,7 +22,7 @@ module.exports = {
 
         command_data.msg.channel.send("", { embed: embedUpdate }).catch(e => { console.log(e); });
 
-        data.bot.webupdates.refreshStatus(data.bot);
-        data.bot.webupdates.refreshBotList(data.bot);
+        command_data.bot.webupdates.refreshStatus(command_data.bot);
+        command_data.bot.webupdates.refreshBotList(command_data.bot);
     },
 };

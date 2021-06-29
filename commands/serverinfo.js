@@ -10,7 +10,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let elapsed = new Date() - new Date(data.msg.guild.createdAt.toUTCString());
+        let elapsed = new Date() - new Date(command_data.msg.guild.createdAt.toUTCString());
         let createdAgo = command_data.global_context.neko_modules_clients.tc.convertTime(elapsed);
 
         let url = command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
