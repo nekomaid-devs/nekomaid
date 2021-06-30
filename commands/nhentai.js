@@ -15,12 +15,9 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: true,
     async execute(command_data) {
-        // TODO: re-factor command
-        //Get random image from rule34
-        var sauce = command_data.args[0];
-
+        let post_info = -1;
         try {
-            var post_info = await command_data.global_context.neko_modules_clients.nhentai.nhentai_result(command_data.global_context, sauce);
+            post_info = await command_data.global_context.neko_modules_clients.nhentai.nhentai_result(command_data.global_context, command_data.args[0]);
         } catch(err) {
             console.error(err);
             command_data.msg.reply("There was an error in processing this request-");
@@ -38,60 +35,55 @@ module.exports = {
             return;
         }
 
-        var tagsText = "";
-        post_info.tags.forEach(function(tag, index) {
-            tagsText += "`" + tag.split("-").join(" ") + "`"
-
+        let tags_text = "";
+        post_info.tags.forEach((tag, index) => {
+            tags_text += "`" + tag.split("-").join(" ") + "`";
             if(post_info.tags.length - 1 > index) {
-                tagsText += ", ";
+                tags_text += ", ";
             }
         })
 
-        var languagesText = "";
-        post_info.languages.forEach(function(language, index) {
-            languagesText += "`" + language + "`"
-
+        let languages_text = "";
+        post_info.languages.forEach((language, index) => {
+            languages_text += "`" + language + "`"
             if(post_info.languages.length - 1 > index) {
-                languagesText += ", ";
+                languages_text += ", ";
             }
         })
 
-        //Construct embed
         let embedNHentai = {
-            title: "Sauce for - " + sauce,
+            title: `Sauce for - ${command_data.args[0]}`,
             color: 8388736,
-            url: "https://nhentai.net/g/" + sauce,
+            url: `https://nhentai.net/g/${command_data.args[0]}`,
             thumbnail: {
                 url: post_info.thumbnailURL,
             },
             fields: [
                 {
                     name: 'Title:',
-                    value: "`" + post_info.title + "`"
+                    value: `\`${post_info.title}\``
                 },
                 {
                     name: 'Pages:',
-                    value: "`" + post_info.numOfPages + "`"
+                    value: `\`${post_info.numOfPages}\``
                 },
                 {
                     name: 'Tags:',
-                    value: `${tagsText}`
+                    value: tags_text
                 },
                 {
                     name: 'Languages:',
-                    value: `${languagesText}`
+                    value: languages_text
                 },
                 {
                     name: 'Favourites:',
-                    value: "`" + post_info.favourites + "`"
+                    value: `\`${post_info.favourites}\``
                 }
             ],
             footer: {
                 text: `Requested by ${command_data.msg.author.tag}...`
             }
         }
-
-        //Send message
         command_data.msg.channel.send("", { embed: embedNHentai }).catch(e => { console.log(e); });
     },
 };

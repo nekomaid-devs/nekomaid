@@ -16,25 +16,22 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
-        //Process message
-        var msg1 = await command_data.msg.channel.send("Type in a role name or `stop` to finish the menu-").catch(e => { console.log(e); });
-        var roles = new Map();
-        var roleMessages = [];
+        let msg = await command_data.msg.channel.send("Type in a role name or `stop` to finish the menu-").catch(e => { console.log(e); });
+        let roles = new Map();
+        let role_messages = [];
         
         command_data.server_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
-        this.continueCollecting(command_data.bot, command_data.server_config, command_data.msg, msg1, roleMessages, roles, command_data.global_context.modules.Discord);
+        this.continue_collecting(command_data.global_context, command_data.server_config, command_data.msg, msg, role_messages, roles);
     },
 
-    continueCollecting(global_context, serverConfig, sourceMessage, msg, roleMessages, roles, Discord) {
-        var filter = message =>
-        message.author.id === sourceMessage.author.id
+    continue_collecting(global_context, server_config, source_message, msg, role_messages, roles) {
+        let filter = message =>
+            message.author.id === source_message.author.id
 
-        let roleName = -1;
+        let role_name = -1;
         let role = -1;
-
-        var collector0 = msg.channel.createMessageCollector(filter, { max: 1 })
-        collector0.on('collect', message => {
+        let collector = msg.channel.createMessageCollector(filter, { max: 1 })
+        collector.on('collect', message => {
             switch(message.content) {
                 case "stop":
                     if(roles.size < 1) {
@@ -43,78 +40,71 @@ module.exports = {
                         return;
                     }
 
-                    var rolesArray = [];
-                    var rolesEmojisArray = [];
-                    for(const [key, value] of roles.entries()) {
-                        rolesArray.push(key);
-                        rolesEmojisArray.push(value);
+                    let roles_array = [];
+                    let roles_emojis_array = [];
+                    for(let [key, value] of roles.entries()) {
+                        roles_array.push(key);
+                        roles_emojis_array.push(value);
                     }
 
-                    var reactionRoleMenuInfo = {
-                        id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+                    let reactionRoleMenuInfo = {
+                        id: global_context.modules.crypto.randomBytes(16).toString("hex"),
                         serverID: msg.guild.id,
                         channelID: msg.channel.id,
                         messageID: msg.id,
-                        reactionRoles: rolesArray,
-                        reactionRoleEmojis: rolesEmojisArray
+                        reactionRoles: roles_array,
+                        reactionRoleEmojis: roles_emojis_array
                     }
+                    server_config.reactionRoles.push(reactionRoleMenuInfo);
 
-                    serverConfig.reactionRoles.push(reactionRoleMenuInfo);
-
-                    roleMessages.forEach(rmsg => {
+                    role_messages.forEach(rmsg => {
                         rmsg.delete().catch(e => { console.log(e); });
                     });
-
                     message.delete().catch(e => { console.log(e); });
 
-                    var reactionRoleEmbed = new bot.Discord.MessageEmbed()
+                    let reactionRoleEmbed = new global_context.modules.Discord.MessageEmbed()
                     .setColor(8388736)
-                    .setTitle("Roles (" + roles.size + ")")
+                    .setTitle(`Roles (${roles.size})`)
 
-                    var menuDescription = "";
-                    Array.from(roles.keys()).forEach(roleID => {
-                        var emoji = roles.get(roleID);
-                        var emoji2 = emoji.includes(":") ? emoji.substring(emoji.lastIndexOf(":") + 1, emoji.length - 1) : emoji
+                    let menu_description = "";
+                    Array.from(roles.keys()).forEach(role_ID => {
+                        let emoji = roles.get(role_ID);
+                        let emoji_2 = emoji.includes(":") ? emoji.substring(emoji.lastIndexOf(":") + 1, emoji.length - 1) : emoji
 
-                        msg.react(emoji2);
-                        menuDescription += emoji + " - <@&" + roleID + ">\n"
+                        msg.react(emoji_2);
+                        menu_description += `${emoji} - <@&${role_ID}>\n`
                     });
 
-                    reactionRoleEmbed.setDescription(menuDescription);
+                    reactionRoleEmbed.setDescription(menu_description);
                     msg.edit("", reactionRoleEmbed);
 
-                    //Save edited config
-                    bot.ssm.server_edit.edit(bot.ssm, { type: "server", id: msg.guild.id, server: serverConfig });
-
-                    //Create collector
-                    bot.rrm.createCollector(bot.rrm, msg.guild, reactionRoleMenuInfo);
+                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", id: msg.guild.id, server: server_config });
+                    global_context.neko_modules_clients.rrm.createCollector(global_context, msg.guild, reactionRoleMenuInfo);
                     break;
                 
                 default:
-                    roleName = message.content;
+                    role_name = message.content;
                     role = msg.guild.roles.cache.find(roleTemp =>
-                        roleTemp.name === roleName || roleTemp.id === roleName
+                        roleTemp.name === role_name || roleTemp.id === role_name
                     );
                     if(role === undefined) {
-                        msg.edit("You typed invalid role name- Type in existing role name or `stop` to finish the menu- (" + roles.size + " roles so far)")
-                        this.continueCollecting(bot, serverConfig, sourceMessage, msg, roleMessages, roles, Discord);
+                        msg.edit(`You typed invalid role name- Type in existing role name or \`stop\` to finish the menu- (${roles.size} roles so far)`)
+                        this.continue_collecting(global_context, server_config, source_message, msg, role_messages, roles);
                         return;
                     }
 
-                    roleMessages.push(message);
+                    role_messages.push(message);
                     roles.set(role.id, "");
-                    msg.edit("React on your message with an emote you want the menu to have (" + roles.size + "/" + roles.size + ")-");
+                    msg.edit(`React on your message with an emote you want the menu to have (${roles.size}/${roles.size})-`);
 
-                    var filter2 = (reaction, user) =>
-                    user.id === sourceMessage.author.id
-                    
-                    var collector = message.createReactionCollector(filter2, { max: 1 })
-                    collector.on('collect', r => {
-                        console.log(JSON.stringify(r.emoji))
-                        roles.set(role.id, r.emoji.id === null ? r.emoji.name : "<:" + r.emoji.name + ":" + r.emoji.id + ">")
-                        msg.edit("Type in a role name or `stop` to finish the menu- (" + roles.size + " roles so far)")
+                    let filter_2 = (reaction, user) =>
+                        user.id === source_message.author.id
+                    let collector_2 = message.createReactionCollector(filter_2, { max: 1 })
+                    collector_2.on('collect', r => {
+                        roles.set(role.id, r.emoji.id === null ? r.emoji.name : `<:${r.emoji.name}:${r.emoji.id}>`)
+                        msg.edit(`Type in a role name or \`stop\` to finish the menu- (${roles.size} roles so far)`)
 
-                        this.continueCollecting(bot, serverConfig, sourceMessage, msg, roleMessages, roles, Discord);
+                        this.continue_collecting(global_context, server_config, source_message, msg, role_messages, roles);
                     });
                     break;
             }

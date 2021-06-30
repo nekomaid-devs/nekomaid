@@ -19,47 +19,45 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: re-factor command
         if(command_data.tagged_user.bannable === false) {
-            command_data.msg.reply("Couldn't unmute `" + command_data.tagged_user.tag + "` (Try moving Nekomaid's permissions above the user you want to unmute)-");
+            command_data.msg.reply(`Couldn't unmute \`${command_data.tagged_user.tag}\` (Try moving Nekomaid's permissions above the user you want to unmute)-`);
             return;
         }
 
-        var unmuteReason = "None";
+        let unmute_reason = "None";
         if(command_data.args.length > 1) {
-            unmuteReason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[1]))
+            unmute_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[1]))
         }
 
-        //Get server config
-        var previousMuteID = -1;
-        command_data.server_mutes.forEach(function(mute) {
+        let previous_mute_ID = -1;
+        command_data.server_mutes.forEach((mute) => {
             if(mute.userID === command_data.tagged_user.id) {
-                previousMuteID = mute.id;
+                previous_mute_ID = mute.id;
             }
         });
 
-        if(previousMuteID === -1) {
-            command_data.msg.reply("`" + command_data.tagged_user.tag + "` isn't muted-");
+        if(previous_mute_ID === -1) {
+            command_data.msg.reply(`\`${command_data.tagged_user.tag}\` isn't muted-`);
         } else {
             if(command_data.msg.guild.roles.cache.has(command_data.server_config.muteRoleID) === false) {
                 command_data.msg.reply("Couldn't find the Muted role- (Did somebody delete it?)-");
                 return;
             }
             
-            var muteRole = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { console.log(e); });
-            command_data.tagged_member.roles.remove(muteRole);
+            let mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { console.log(e); });
+            command_data.tagged_member.roles.remove(mute_role);
 
-            command_data.msg.channel.send("Unmuted `" + command_data.tagged_user.tag + "` (Reason: `" + unmuteReason + "`)").catch(e => { console.log(e); });
-            command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerMute(command_data.global_context, previousMuteID);
+            command_data.msg.channel.send(`Unmuted \`${command_data.tagged_user.tag}\` (Reason: \`${unmute_reason}\`)`).catch(e => { console.log(e); });
+            command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerMute(command_data.global_context, previous_mute_ID);
 
             if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
-                var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
-
+                let channel = await command_data.global_context.bot.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
                 if(channel !== undefined) {
+                    let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                     let embedMute = {
                         author: {
-                            name: "Case " + command_data.server_config.caseID + "# | Unmute | " + command_data.tagged_user.tag,
-                            icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
+                            name: `Case ${command_data.server_config.caseID}# | Unmute | ${command_data.tagged_user.tag}`,
+                            icon_url: url,
                         },
                         fields: [
                             {
@@ -74,12 +72,11 @@ module.exports = {
                             },
                             {
                                 name: "Reason:",
-                                value: unmuteReason
+                                value: unmute_reason
                             }
                         ]
                     }
 
-                    //Save edited config
                     command_data.server_config.caseID += 1;
                     command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 

@@ -19,26 +19,20 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var ammount = parseInt(command_data.args[1]);
-        var itemID = parseInt(command_data.args[2]);
+        let ammount = parseInt(command_data.args[1]);
+        let item_ID = command_data.args[2];
 
-        var targetItem = command_data.global_context.bot_config.items.has(itemID) === true ? command_data.global_context.bot_config.items.get(itemID) : -1;
-        if(targetItem === -1) {
-            command_data.msg.reply("There isn't any item with id `" + itemID + "`-");
+        let target_item = command_data.global_context.bot_config.items.has(item_ID) === true ? command_data.global_context.bot_config.items.get(item_ID) : -1;
+        if(target_item === -1) {
+            command_data.msg.reply(`There isn't any item with id \`${item_ID}\`-`);
             return;
         }
 
-        //Add an item to a database
         for(var i = 0; i < ammount; i += 1) {
-            command_data.tagged_user_config.inventory.push({ id: itemID });
+            command_data.tagged_user_config.inventory.push(item_ID);
         }
-
-        //Edits and broadcasts the change
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
-        //Construct message and send it
-        console.log("[d_give] Added " + targetItem.displayName + " to " + command_data.tagged_user.tag + " on Server(id: " + command_data.msg.guild.id + ")");
-        command_data.msg.channel.send("Added `" + ammount + "x " + targetItem.displayName + "` to `" + command_data.tagged_user.tag + "`-").catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Added \`${ammount}x ${target_item.displayName}\` to \`${command_data.tagged_user.tag}\`-`).catch(e => { console.log(e); });
     },
 };

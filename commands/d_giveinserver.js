@@ -18,29 +18,24 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        var ammount = parseInt(command_data.args[0]);
-        var itemID = parseInt(command_data.args[1]);
+        let ammount = parseInt(command_data.args[0]);
+        let item_ID = command_data.args[1];
 
-        var targetItem = command_data.global_context.bot_config.items.has(itemID) === true ? command_data.global_context.bot_config.items.get(itemID) : -1;
-        if(targetItem === -1) {
-            command_data.msg.reply("There isn't any item with id `" + itemID + "`-");
+        let target_item = command_data.global_context.bot_config.items.has(item_ID) === true ? command_data.global_context.bot_config.items.get(item_ID) : -1;
+        if(target_item === -1) {
+            command_data.msg.reply(`There isn't any item with id \`${item_ID}\`-`);
             return;
         }
 
-        command_data.msg.guild.members.cache.forEach(member => {
-            //Add an item to a database
-            var globalUserConfig = command_data.global_context.neko_modules_clients.ssm.globalUserConfigCache.get(member.id);
+        // TODO: this won't work
+        command_data.msg.guild.members.cache.forEach(async(member) => {
+            let config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "globalUser", id: member.user.id });
             for(var i = 0; i < ammount; i += 1) {
-                globalUserConfig.inventory.push({ id: itemID });
+                config.inventory.push(item_ID);
             }
-
-            //Edits and broadcasts the change
-            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: member.id, user: globalUserConfig });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: member.user.id, user: config });
         });
 
-        //Construct message and send it
-        console.log("[d_giveinserver] Added " + targetItem.displayName + " to " + command_data.msg.guild.members.cache.size + " members on Server(id: " + command_data.msg.guild.id + ")");
-        command_data.msg.channel.send("Added `" + ammount + "x " + targetItem.displayName + "` to `" + command_data.msg.guild.members.cache.size + "` members-").catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Added \`${ammount}x ${target_item.displayName}\` to \`${command_data.msg.guild.members.cache.size}\` members-`).catch(e => { console.log(e); });
     },
 };

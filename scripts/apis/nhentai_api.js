@@ -1,5 +1,5 @@
 class NHentaiAPI {
-    async nhentai_result(ws, input) {
+    async nhentai_result(global_context, input) {
         //Get front page for tag
         var siteUrl0 = "https://nhentai.net/g/" + input;
 

@@ -105,10 +105,8 @@ module.exports = {
     xbooru: require('./xbooru'),
 
     ava: require('./ava'),
-    bonk: require('./bonk'),
     say: require('./say'),
     owoify: require('./owoify'),
-    image: require('./image'),
     getemote: require('./getemote'),
     serverinfo: require('./serverinfo'),
     roleinfo: require('./roleinfo'),
