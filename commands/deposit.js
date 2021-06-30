@@ -15,6 +15,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
+        // TODO: update helpUsage
         // TODO: add support for %
         let credits_ammount = parseInt(command_data.args[0]);
         if(command_data.args[0] === "all") {

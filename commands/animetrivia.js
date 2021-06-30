@@ -16,6 +16,7 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
+        // TODO: make people join by reacting on the message
         // TODO: add stats at end of game
         // TODO: make skipping vote based
         // TODO: fix double end message

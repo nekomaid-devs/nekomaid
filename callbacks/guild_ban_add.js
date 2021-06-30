@@ -14,52 +14,54 @@ module.exports = {
     },
 
     async process(global_context, guild, user) {
-        /*var serverConfig = await bot.ssm.server_fetch.fetch(bot, { type: "server_guild_banadd", id: guild.id });
-        if(serverConfig.audit_bans == true && serverConfig.audit_channel != "-1") {
-            var channel = await guild.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
-    
+        // TODO: this should add Nekomaid's bans aswell
+        // TODO: also we should check for uncaught bans somewhere else
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_banadd", id: guild.id });
+        if(server_config.audit_bans == true && server_config.audit_channel != "-1") {
+            let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {
-                var audit = await guild.fetchAuditLogs()
-                var lastAudit = audit.entries.first()
+                let audit = await guild.fetchAuditLogs();
+                let last_audit = audit.entries.first();
 
-                if(lastAudit.action === "MEMBER_BAN_ADD" && lastAudit.target.id === user.id) {
+                if(last_audit.action === "MEMBER_BAN_ADD" && last_audit.target.id === user.id) {
                     let executor = -1;
-                    if(lastAudit.executor.id === "691398095841263678") {
-                        executor = await guild.members.fetch(guild.client.lastModeratorIDs.get(guild.id)).catch(e => { console.log(e); });
+                    if(last_audit.executor.id === global_context.bot.user.id) {
+                        executor = await global_context.bot.users.fetch(global_context.data.last_moderator_IDs.get(guild.id)).catch(e => { console.log(e); });
                     } else {
-                        executor = await guild.members.fetch(lastAudit.executor.id).catch(e => { console.log(e); });
+                        executor = await global_context.bot.users.fetch(last_audit.executor.id).catch(e => { console.log(e); });
                     }
 
-                    const embedBan = {
+                    // TODO: add duration of ban (if available)
+                    let url = user.avatarURL({ format: "png", dynamic: true, size: 1024 });
+                    let embedBan = {
                         author: {
-                            name: "Case " + serverConfig.caseID + "# | Ban | " + user.tag,
-                            icon_url: user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
+                            name: `Case ${server_config.caseID}# | Ban | ${user.tag}`,
+                            icon_url: url,
                         },
                         fields: [
-                        {
-                            name: "User:",
-                            value: user.tag,
-                            inline: true
-                        },
-                        {
-                            name: "Moderator:",
-                            value: executor,
-                            inline: true
-                        },
-                        {
-                            name: "Reason:",
-                            value: lastAudit.reason === null ? "None" : lastAudit.reason
-                        }
+                            {
+                                name: "User:",
+                                value: user.tag,
+                                inline: true
+                            },
+                            {
+                                name: "Moderator:",
+                                value: executor,
+                                inline: true
+                            },
+                            {
+                                name: "Reason:",
+                                value: last_audit.reason === null ? "None" : last_audit.reason
+                            }
                         ]
                     }
 
-                    //Save edited config
-                    serverConfig.caseID += 1;
-                    bot.ssm.server_edit.edit(bot.ssm, { type: "server_cb", id: guild.id, server: serverConfig });
+                    server_config.caseID += 1;
+                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server_cb", id: guild.id, server: server_config });
             
                     channel.send("", { embed: embedBan }).catch(e => { console.log(e); });
                 }
             }
-        }*/
+        }
     }
 }

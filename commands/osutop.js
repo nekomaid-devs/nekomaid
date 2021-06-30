@@ -11,6 +11,7 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         // TODO: make tagged user instead of author
+        // TODO: pp always shows ??
         if(command_data.author_config.osuUsername === "-1") {
             command_data.msg.channel.send(`You haven't set an osu! profile yet~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)`)
             return;

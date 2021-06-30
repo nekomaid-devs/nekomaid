@@ -11,6 +11,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
+        // TODO: add position in top
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let credits = command_data.tagged_user_config.credits;
         let bank = command_data.tagged_user_config.bank;

@@ -11,6 +11,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
+        // TODO: add inventory command and remove inventory from here
         let married_text = command_data.tagged_user_config.marriedID;
         if(married_text === "-1") {
             married_text = "Nobody";

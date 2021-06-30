@@ -15,6 +15,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
+        // TODO: maybe add some more cool information
         let item_name = command_data.item_name;
         let target_item = -1;
         command_data.global_context.bot_config.items.forEach(item => {

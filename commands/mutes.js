@@ -14,6 +14,8 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
+        // TODO: support piping into file
+        // TODO: add pagination
         let now = Date.now();
         let embedMutes = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)

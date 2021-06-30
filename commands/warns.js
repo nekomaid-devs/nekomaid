@@ -16,6 +16,7 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
+        // TODO: add pagination
         let warns = command_data.server_warns.filter(warn => { return warn.userID === command_data.tagged_user.id });
         let embedWarns = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)

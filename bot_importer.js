@@ -13,10 +13,16 @@ module.exports = {
         global_context.modules.sql = require("mysql2");
         
         //Import Youtube modules
-        global_context.modules.ytdl = require("ytdl-core-discord");
         global_context.modules.ytlist = require("ytpl");
         global_context.modules.ytsr = require("ytsr");
+
         global_context.modules.ytinfo = require("youtube.get-video-info");
+        // ^^ THIS ONE HAS ADDED FOLLOWING CODE (otherwise doesn't work)
+        // '&eurl=https%3A%2F%2Fyoutube.googleapis.com%2Fv%2Fonz2k4zoLjQ&html5=1&c=TVHTML5&cver=7.20190319' on line 17
+
+        global_context.modules.ytdl = require("ytdl-core-discord");
+        // ^^ THIS ONE NEEDS TO HAVE 'node-ytdl-core' UPDATED TO 4.8.3 MANUALLY
+        // INSTALL 'node-ytdl-core@latest', UPDATE 'package.json' FOR 'ytdl-core-discord' AND DROP 'node-ytdl-core' INTO 'node_modules' IN 'ytdl-core-discord'
 
         //Import image modules
         global_context.modules.jimp = require("jimp");
@@ -53,7 +59,7 @@ module.exports = {
             }
         }
         global_context.utils.shuffle_playlist = (playlist) => {
-            playlist = playlist.map(a => { return { sort: Math.random(), value: a }; }).sort((a, b) => { return a.sort - b.sort; }).map(a => { a.value });
+            playlist = playlist.map(a => { return { sort: Math.random(), value: a }; }).sort((a, b) => { return a.sort - b.sort; }).map(a => { return a.value; });
             return playlist;
         }
 

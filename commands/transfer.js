@@ -21,6 +21,8 @@ module.exports = {
             return;
         }
 
+        // TODO: add support for %
+        // TODO: update helpUsage
         let credits_ammount = parseInt(command_data.args[0]);
         if(command_data.args[0] === "all") {
             if(command_data.author_config.credits <= 0) {

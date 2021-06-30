@@ -17,6 +17,7 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
+        // TODO: make this on current shard only
         let eval_query = command_data.total_argument;
         command_data.bot.shard.broadcastEval(eval_query)
         .then(result =>

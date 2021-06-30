@@ -39,20 +39,20 @@ module.exports = {
             } else {
                 command_data.msg.guild.members.unban(ban_info.user, "None").catch(err => {
                     console.error(err);
-                    command_data.msg.reply(`Couldn't unban \`${banInfo.user.tag}\` (Try moving Nekomaid's permissions above the user you want to unban-`)
+                    command_data.msg.reply(`Couldn't unban \`${ban_info.user.tag}\` (Try moving Nekomaid's permissions above the user you want to unban-`)
                 })
 
                 let previous_ban = -1;
                 command_data.server_bans.forEach((ban) => {
-                    if(ban.userID === banInfo.user.id) {
+                    if(ban.userID === ban_info.user.id) {
                         previous_ban = ban;
                     }
                 });
 
-                command_data.msg.channel.send(`Unbanned \`${banInfo.user.tag}\`-`).catch(e => { console.log(e); });
+                command_data.msg.channel.send(`Unbanned \`${ban_info.user.tag}\`-`).catch(e => { console.log(e); });
                 
                 if(previous_ban != -1) {
-                    command_data.global_context.data.lastModeratorIDs.set(command_data.msg.guild.id, command_data.msg.author.id);
+                    command_data.global_context.data.last_moderator_IDs.set(command_data.msg.guild.id, command_data.msg.author.id);
                     command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerBan(command_data.global_context, previous_ban.id);
                 }
             }

@@ -19,7 +19,7 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        //TODO: support swapping arguments
+        // TODO: support swapping arguments (or improve the format)
         let num_messages = parseInt(command_data.args[0]);
         if(isNaN(num_messages) || num_messages > 99) {
             command_data.msg.reply(`Cannot delete more than 99 messages~`);

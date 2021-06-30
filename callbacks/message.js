@@ -26,6 +26,7 @@ module.exports = {
 
         let manages_guild = message.member.permissionsIn(message.channel).has("MANAGE_GUILD");
         let tagged = message.mentions.members.array().length > 0;
+        // TODO: add support for tagging users with IDs
         let command_data = {
             global_context: global_context,
             msg: message,

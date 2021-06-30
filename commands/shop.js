@@ -10,6 +10,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
+        // TODO: add pagination
         let embedShop = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
         .setTitle("NekoMaid - Shop")

@@ -18,6 +18,7 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
+        // TODO: disable this shit by default lmao
         if(command_data.server_config.sayCommand == false) {
             return;
         }

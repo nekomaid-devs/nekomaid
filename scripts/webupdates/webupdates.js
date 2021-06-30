@@ -151,7 +151,7 @@ module.exports = {
             var headersPOST2 = {
                 "Content-Type": 'application/json',
                 "Authorization": bot.globalPersistentConfig.discordBotsAPI_key,
-                "User-Agent": "NekoMaid-4177/1.0 (discord.js; +nekomaid.xyz) DBots/691398095841263678"
+                "User-Agent": `NekoMaid-4177/1.0 (discord.js; +nekomaid.xyz) DBots/${command_data.global_context.bot.user.id}`
             }
 
             var headersPOST4 = {
@@ -169,35 +169,35 @@ module.exports = {
                 "Authorization": bot.globalPersistentConfig.topggAPI_key
             }
         
-            bot.axios.post("https://discordbotlist.com/api/v1/bots/691398095841263678/stats", data, {
+            bot.axios.post(`https://discordbotlist.com/api/v1/bots/${command_data.global_context.bot.user.id}/stats`, data, {
                 headers: headersPOST
             })
             .catch(error => {
                 console.log("[POST1] " + error)
             })
         
-            bot.axios.post("https://discord.bots.gg/api/v1/bots/691398095841263678/stats", data2, {
+            bot.axios.post(`https://discord.bots.gg/api/v1/bots/${command_data.global_context.bot.user.id}/stats`, data2, {
                 headers: headersPOST2
             })
             .catch(error => {
                 console.log("[POST2] " + error)
             })
 
-            bot.axios.post("https://discord.boats/api/bot/691398095841263678", data5, {
+            bot.axios.post(`https://discord.boats/api/bot/${command_data.global_context.bot.user.id}`, data5, {
                 headers: headersPOST4
             })
             .catch(error => {
                 console.log("[POST4] " + error)
             })
 
-            bot.axios.post("https://botsfordiscord.com/api/bot/691398095841263678", data5, {
+            bot.axios.post(`https://botsfordiscord.com/api/bot/${command_data.global_context.bot.user.id}`, data5, {
                 headers: headersPOST5
             })
             .catch(error => {
                 console.log("[POST5] " + error)
             })
 
-            bot.axios.post("https://top.gg/api/bots/691398095841263678/stats", data5, {
+            bot.axios.post(`https://top.gg/api/bots/${command_data.global_context.bot.user.id}/stats`, data5, {
                 headers: headersPOST6
             })
             .catch(error => {

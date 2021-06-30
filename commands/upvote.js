@@ -10,9 +10,9 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let link = "https://top.gg/bot/691398095841263678/vote";
+        let link = `https://top.gg/bot/${command_data.global_context.bot.user.id}/vote`;
         let link_2 = "https://discordbotlist.com/bots/nekomaid/upvote";
-        let url = "https://cdn.discordapp.com/app-icons/691398095841263678/cd4710d92ec10005b17d942c51c722d2.png";
+        let url = `https://cdn.discordapp.com/app-icons/${command_data.global_context.bot.user.id}/cd4710d92ec10005b17d942c51c722d2.png`;
 
         let embedUpvote = {
             title: "",

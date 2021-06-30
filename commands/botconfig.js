@@ -112,7 +112,7 @@ module.exports = {
                             command_data.msg.reply(`\`${tagged_user.tag}\` isn't a bot owner-`);
                             return;
                         }
-                        if(tagged_user.id === "566751683963650048") {
+                        if(tagged_user.id === command_data.global_context.owner_id) {
                             command_data.msg.reply("no");
                             return;
                         }

@@ -10,7 +10,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let link = "https://discord.com/invite/j5VkavYv7d";
+        let link = `https://discord.com/invite/${command_data.global_context.config.invite_code}`;
         let embedSupport = {
             title: "",
             color: 8388736,

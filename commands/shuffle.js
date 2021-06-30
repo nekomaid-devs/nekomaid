@@ -30,12 +30,12 @@ module.exports = {
             let currentPersistentIndex = voice_data.persistentQueue.length;
             let i = 0;
             voice_data.queue = []
-            voice_data.persistentQueue.forEach(voiceRequest => {
-                if(voiceRequest.uuid === voice_data.current.uuid) {
+            voice_data.persistentQueue.forEach(voice_request => {
+                if(voice_request.uuid === voice_data.current.uuid) {
                     currentPersistentIndex = i;
                 }
                 if(currentPersistentIndex < i) {
-                    voice_data.queue.push(voiceRequest);
+                    voice_data.queue.push(voice_request);
                 }
 
                 i += 1;

@@ -15,10 +15,9 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        // TODO: stop hard-coding channel names baka
         command_data.msg.channel.send("Suggestion sent! Thanks for the feedback ❤️!").catch(e => { console.log(e); });
 
-        let channel = await command_data.global_context.bot.channels.fetch('719915544257626143').catch(e => { console.log(e); });
+        let channel = await command_data.global_context.bot.channels.fetch(command_data.global_context.config.suggestion_channel).catch(e => { console.log(e); });
         let embedSuggestion = {
             title: `Suggestion from \`${command_data.msg.author.tag}\``,
             description: command_data.total_argument

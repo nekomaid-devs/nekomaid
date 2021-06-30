@@ -82,6 +82,7 @@ global_context.commands.forEach(command => {
 });
 
 //Setup callbacks
+// TODO: make sure none of them are called, before the bot is ready
 let bot_callbacks = require('./callbacks');
 Object.keys(bot_callbacks).forEach(key => {
     bot_callbacks[key].hook(global_context);

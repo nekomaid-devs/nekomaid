@@ -15,6 +15,8 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
+        // TODO: support piping into file
+        // TODO: add pagination
         let now = Date.now();
         let embedBans = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
@@ -34,7 +36,7 @@ module.exports = {
             command_data.server_bans.slice(-25).forEach(ban => {
                 let bannedMember = serverBansByID.get(ban.userID);
                 if(bannedMember !== undefined) {
-                    let remainingText = ban.end === -1 ? "Forever" : command_data.tc.convertTime(ban.end - now);
+                    let remainingText = ban.end === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(ban.end - now);
                     embedBans.addField(`Ban - ${bannedMember.user.tag}`, `Remaining: \`${remainingText}\``);
                 }
             });

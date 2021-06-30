@@ -43,8 +43,8 @@ module.exports = {
                 let last_audit = audit.entries.first();
                 if(last_audit.action === "MEMBER_KICK" && last_audit.target.id === member.user.id) {
                     let executor = -1;
-                    if(last_audit.executor.id === "691398095841263678") {
-                        executor = await member.guild.members.fetch(global_context.data.lastModeratorIDs.get(member.guild.id)).catch(e => { console.log(e); });
+                    if(last_audit.executor.id === global_context.bot.user.id) {
+                        executor = await member.guild.members.fetch(global_context.data.last_moderator_IDs.get(member.guild.id)).catch(e => { console.log(e); });
                     } else {
                         executor = await member.guild.members.fetch(last_audit.executor.id).catch(e => { console.log(e); });
                     }

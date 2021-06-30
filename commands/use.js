@@ -15,6 +15,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
+        // TODO: add support for number of items
         if(command_data.args.length < 1) {
             command_data.msg.reply(`You need to type in an item name-`);
             return;
