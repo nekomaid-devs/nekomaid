@@ -11,10 +11,10 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         let elapsedCreated = new Date() - new Date(command_data.tagged_user.createdAt.toUTCString());
-        let createdAgo = command_data.global_context.neko_modules_clients.tc.convertTime(elapsedCreated);
+        let createdAgo = command_data.global_context.neko_modules_clients.tc.convert_time(elapsedCreated);
 
         let elapsedJoined = new Date() - new Date(command_data.tagged_member.joinedAt.toUTCString());
-        let joinedAgo = command_data.global_context.neko_modules_clients.tc.convertTime(elapsedJoined);
+        let joinedAgo = command_data.global_context.neko_modules_clients.tc.convert_time(elapsedJoined);
 
         let roles = "";
         let rolesArray = Array.from(command_data.tagged_member.roles.cache.values());

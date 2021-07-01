@@ -3,222 +3,188 @@ class TimeConvert {
         this.global_context = global_context;
     }
 
-    convertTime_inconsistent(time) {
-        return this.convertString(this.convertTime((time.days * 86400000 ) + (time.hrs * 3600000) + (time.mins * 60000) + (time.secs * 1000)));
+    convert_time_inconsistent(time) {
+        return this.convert_string_to_time_data(this.convert_time((time.days * 86400000 ) + (time.hrs * 3600000) + (time.mins * 60000) + (time.secs * 1000)));
     }
 
-    sumTimes(time1, time2) {
-        if(time2.status === -1) {
-            return time1;
+    sum_times(time_1, time_2) {
+        if(time_2.status === -1) {
+            return time_1;
         }
 
-        time1.days += time2.days;
-        time1.hrs += time2.hrs;
-        time1.mins += time2.mins;
-        time1.secs += time2.secs;
+        time_1.days += time_2.days;
+        time_1.hrs += time_2.hrs;
+        time_1.mins += time_2.mins;
+        time_1.secs += time_2.secs;
 
-        return time1;
+        return time_1;
     }
 
-    substractTimes(time1, time2) {
-        if(time2.status === -1) {
-            return time1;
+    sub_times(time_1, time_2) {
+        if(time_2.status === -1) {
+            return time_1;
         }
 
-        time1.days -= time2.days;
-        time1.hrs -= time2.hrs;
-        time1.mins -= time2.mins;
-        time1.secs -= time2.secs;
+        time_1.days -= time_2.days;
+        time_1.hrs -= time_2.hrs;
+        time_1.mins -= time_2.mins;
+        time_1.secs -= time_2.secs;
 
-        return time1;
+        return time_1;
     }
 
-    convertTime(time) {
-        var timeString = "";
-        var timeLeft = time;
+    convert_time(time) {
+        let time_string = "";
+        let time_left = time;
     
-        var ms = timeLeft % 1000;
-        timeLeft = (timeLeft - ms) / 1000;
-        var secs = timeLeft % 60;
-        timeLeft = (timeLeft - secs) / 60;
-        var mins = timeLeft % 60;
-        timeLeft = (timeLeft - mins) / 60;
-        var hrs = timeLeft % 24;
-        timeLeft = (timeLeft - hrs) / 24;
-        var days = timeLeft % 30;
-        timeLeft = (timeLeft - days) / 30;
-        var months = timeLeft % 12;
-        timeLeft = (timeLeft - months) / 12;
-        var years = timeLeft;
+        let ms = time_left % 1000;
+        time_left = (time_left - ms) / 1000;
+        let secs = time_left % 60;
+        time_left = (time_left - secs) / 60;
+        let mins = time_left % 60;
+        time_left = (time_left - mins) / 60;
+        let hrs = time_left % 24;
+        time_left = (time_left - hrs) / 24;
+        let days = time_left % 30;
+        time_left = (time_left - days) / 30;
+        let months = time_left % 12;
+        time_left = (time_left - months) / 12;
+        let years = time_left;
 
-        if(years > 0) {
-            timeString += years + "y ";
-        }
+        time_string += years > 0 ? `${years}y ` : "";
+        time_string += months > 0 ? `${months}mon  ` : "";
+        time_string += hrs > 0 ? `${hrs}h ` : "";
+        time_string += mins > 0 ? `${mins}m ` : "";
+        time_string += secs > 0 ? `${secs}s ` : "";
+        time_string = time_string.substring(0, time_string.length - 1);
 
-        if(months > 0) {
-            timeString += months + "mon ";
-        }
-
-        if(days > 0) {
-            timeString += days + "d ";
-        }
-    
-        if(hrs > 0) {
-            timeString += hrs + "h ";
-        }
-    
-        if(mins > 0) {
-            timeString += mins + "m ";
-        }
-    
-        if(secs > 0) {
-            timeString += secs + "s ";
-        }
-    
-        timeString = timeString.substring(0, timeString.length - 1);
-        
-        return timeString;
+        return time_string;
     }
 
-    convertString(timeString) {
-        var prev = 0;
-        var timeStringMod = timeString.replace(" ", "");
+    convert_string_to_time_data(time_string) {
+        let prev = 0;
+        let time_string_mod = time_string.replace(" ", "");
 
-        var timeDays = timeStringMod.indexOf("d", prev) === -1 ? 0 : timeStringMod.substring(prev, timeStringMod.indexOf("d", prev));
-        prev = timeStringMod.indexOf("d", prev) === -1 ? prev : timeStringMod.indexOf("d", prev) + 1;
+        let days = time_string_mod.indexOf("d", prev) === -1 ? 0 : time_string_mod.substring(prev, time_string_mod.indexOf("d", prev));
+        prev = time_string_mod.indexOf("d", prev) === -1 ? prev : time_string_mod.indexOf("d", prev) + 1;
+        let hrs = time_string_mod.indexOf("h", prev) === -1 ? 0 : time_string_mod.substring(prev, time_string_mod.indexOf("h", prev));
+        prev = time_string_mod.indexOf("h", prev) === -1 ? prev : time_string_mod.indexOf("h", prev) + 1;
+        let mins = time_string_mod.indexOf("m", prev) === -1 ? 0 : time_string_mod.substring(prev, time_string_mod.indexOf("m", prev));
+        prev = time_string_mod.indexOf("m", prev) === -1 ? prev : time_string_mod.indexOf("m", prev) + 1;
+        let secs = time_string_mod.indexOf("s", prev) === -1 ? 0 : time_string_mod.substring(prev, time_string_mod.indexOf("s", prev));
+        prev = time_string_mod.indexOf("s", prev) === -1 ? prev : time_string_mod.indexOf("s", prev) + 1;
 
-        var timeHrs = timeStringMod.indexOf("h", prev) === -1 ? 0 : timeStringMod.substring(prev, timeStringMod.indexOf("h", prev));
-        prev = timeStringMod.indexOf("h", prev) === -1 ? prev : timeStringMod.indexOf("h", prev) + 1;
-
-        var timeMins = timeStringMod.indexOf("m", prev) === -1 ? 0 : timeStringMod.substring(prev, timeStringMod.indexOf("m", prev));
-        prev = timeStringMod.indexOf("m", prev) === -1 ? prev : timeStringMod.indexOf("m", prev) + 1;
-
-        var timeSecs = timeStringMod.indexOf("s", prev) === -1 ? 0 : timeStringMod.substring(prev, timeStringMod.indexOf("s", prev));
-        prev = timeStringMod.indexOf("s", prev) === -1 ? prev : timeStringMod.indexOf("s", prev) + 1;
-
-        var timeData = {
+        let time_data = {
             status: 1,
-            days: parseInt(timeDays),
-            hrs: parseInt(timeHrs),
-            mins: parseInt(timeMins),
-            secs: parseInt(timeSecs)
+            days: parseInt(days),
+            hrs: parseInt(hrs),
+            mins: parseInt(mins),
+            secs: parseInt(secs)
         }
-        timeData.status = (timeData.days > 0 || timeData.hrs > 0 || timeData.mins > 0 || timeData.secs > 0) &&
-                        (isNaN(timeData.days) === false && isNaN(timeData.hrs) === false && isNaN(timeData.mins) === false && isNaN(timeData.secs) === false) ? 1 : -1;
+        time_data.status = (time_data.days > 0 || time_data.hrs > 0 || time_data.mins > 0 || time_data.secs > 0) &&
+            (isNaN(time_data.days) === false && isNaN(time_data.hrs) === false && isNaN(time_data.mins) === false && isNaN(time_data.secs) === false) ? 1 : -1;
         
-        return timeData;
+        return time_data;
     }
 
-    decideConvertString_yt(timeString) {
-        if(timeString === null) {
+    convert_youtube_string_to_time_data(time_string) {
+        if(time_string === null) {
             return { status: -1 }
-        } else if(timeString.includes("PT") === true) {
-            return this.convertString_yt(timeString)
+        } else if(time_string.includes("PT") === true) {
+            return this.convert_youtube_string_to_time_data_0(time_string)
         }
 
-        return this.convertString_ytb(timeString);
+        return this.convert_youtube_string_to_time_data_1(time_string);
     }
 
-    convertString_yt(timeString) {
-        var prev = 0;
-        var timeStringMod = timeString.replace("PT", "");
+    convert_youtube_string_to_time_data_0(time_string) {
+        let prev = 0;
+        let time_string_mod = time_string.replace("PT", "");
 
-        var timeDays = timeStringMod.indexOf("D", prev) === -1 ? 0 : timeStringMod.substring(prev, timeStringMod.indexOf("D", prev));
-        prev = timeStringMod.indexOf("D", prev) === -1 ? prev : timeStringMod.indexOf("D", prev) + 1;
+        let days = time_string_mod.indexOf("D", prev) === -1 ? 0 : time_string_mod.substring(prev, time_string_mod.indexOf("D", prev));
+        prev = time_string_mod.indexOf("D", prev) === -1 ? prev : time_string_mod.indexOf("D", prev) + 1;
+        let hrs = time_string_mod.indexOf("H", prev) === -1 ? 0 : time_string_mod.substring(prev, time_string_mod.indexOf("H", prev));
+        prev = time_string_mod.indexOf("H", prev) === -1 ? prev : time_string_mod.indexOf("H", prev) + 1;
+        let mins = time_string_mod.indexOf("M", prev) === -1 ? 0 : time_string_mod.substring(prev, time_string_mod.indexOf("M", prev));
+        prev = time_string_mod.indexOf("M", prev) === -1 ? prev : time_string_mod.indexOf("M", prev) + 1;
+        let secs = time_string_mod.indexOf("S", prev) === -1 ? 0 : time_string_mod.substring(prev, time_string_mod.indexOf("S", prev));
+        prev = time_string_mod.indexOf("S", prev) === -1 ? prev : time_string_mod.indexOf("S", prev) + 1;
 
-        var timeHrs = timeStringMod.indexOf("H", prev) === -1 ? 0 : timeStringMod.substring(prev, timeStringMod.indexOf("H", prev));
-        prev = timeStringMod.indexOf("H", prev) === -1 ? prev : timeStringMod.indexOf("H", prev) + 1;
-
-        var timeMins = timeStringMod.indexOf("M", prev) === -1 ? 0 : timeStringMod.substring(prev, timeStringMod.indexOf("M", prev));
-        prev = timeStringMod.indexOf("M", prev) === -1 ? prev : timeStringMod.indexOf("M", prev) + 1;
-
-        var timeSecs = timeStringMod.indexOf("S", prev) === -1 ? 0 : timeStringMod.substring(prev, timeStringMod.indexOf("S", prev));
-        prev = timeStringMod.indexOf("S", prev) === -1 ? prev : timeStringMod.indexOf("S", prev) + 1;
-
-        var timeData = {
+        let time_data = {
             status: 1,
-            days: parseInt(timeDays),
-            hrs: parseInt(timeHrs),
-            mins: parseInt(timeMins),
-            secs: parseInt(timeSecs)
+            days: parseInt(days),
+            hrs: parseInt(hrs),
+            mins: parseInt(mins),
+            secs: parseInt(secs)
         }
-        timeData.status = (timeData.days > 0 || timeData.hrs > 0 || timeData.mins > 0 || timeData.secs > 0) &&
-                        (isNaN(timeData.days) === false && isNaN(timeData.hrs) === false && isNaN(timeData.mins) === false && isNaN(timeData.secs) === false) ? 1 : -1;
+        time_data.status = (time_data.days > 0 || time_data.hrs > 0 || time_data.mins > 0 || time_data.secs > 0) &&
+            (isNaN(time_data.days) === false && isNaN(time_data.hrs) === false && isNaN(time_data.mins) === false && isNaN(time_data.secs) === false) ? 1 : -1;
         
-        return timeData;
+        return time_data;
     }
 
-    convertString_ytb(timeString) {
-        var timeStringMod = ":" + timeString;
-        var count = (timeStringMod.match(/:/g) || []).length;
+    convert_youtube_string_to_time_data_1(time_string) {
+        let time_string_mod = `:${time_string}`;
+        let count = (time_string_mod.match(/:/g) || []).length;
 
-        var timeSecs = 0;
-        var timeMins = 0;
-        var timeHrs = 0;
-        var timeDays = 0;
-
+        let secs = 0;
+        let mins = 0;
+        let hrs = 0;
+        let days = 0;
         if(count > 1) {
-            timeSecs = timeStringMod.substring(timeStringMod.lastIndexOf(":") + 1);
-            timeStringMod = timeStringMod.substring(0, timeStringMod.lastIndexOf(":"));
+            secs = time_string_mod.substring(time_string_mod.lastIndexOf(":") + 1);
+            time_string_mod = time_string_mod.substring(0, time_string_mod.lastIndexOf(":"));
         }
-
         if(count > 1) {
-            timeMins = timeStringMod.substring(timeStringMod.lastIndexOf(":") + 1);
-            timeStringMod = timeStringMod.substring(0, timeStringMod.lastIndexOf(":"));
+            mins = time_string_mod.substring(time_string_mod.lastIndexOf(":") + 1);
+            time_string_mod = time_string_mod.substring(0, time_string_mod.lastIndexOf(":"));
         }
-
         if(count > 2) {
-            timeHrs = timeStringMod.substring(timeStringMod.lastIndexOf(":") + 1);
-            timeStringMod = timeStringMod.substring(0, timeStringMod.lastIndexOf(":"));
+            hrs = time_string_mod.substring(time_string_mod.lastIndexOf(":") + 1);
+            time_string_mod = time_string_mod.substring(0, time_string_mod.lastIndexOf(":"));
         }
-
         if(count > 3) {
-            timeDays = timeStringMod.substring(timeStringMod.lastIndexOf(":") + 1);
-            timeStringMod = timeStringMod.substring(0, timeStringMod.lastIndexOf(":"));
+            days = time_string_mod.substring(time_string_mod.lastIndexOf(":") + 1);
+            time_string_mod = time_string_mod.substring(0, time_string_mod.lastIndexOf(":"));
         }
 
-        var timeData = {
+        let time_data = {
             status: 1,
-            days: parseInt(timeDays),
-            hrs: parseInt(timeHrs),
-            mins: parseInt(timeMins),
-            secs: parseInt(timeSecs)
+            days: parseInt(days),
+            hrs: parseInt(hrs),
+            mins: parseInt(mins),
+            secs: parseInt(secs)
         }
-        timeData.status = (timeData.days > 0 || timeData.hrs > 0 || timeData.mins > 0 || timeData.secs > 0) &&
-                        (isNaN(timeData.days) === false && isNaN(timeData.hrs) === false && isNaN(timeData.mins) === false && isNaN(timeData.secs) === false) ? 1 : -1;
+        time_data.status = (time_data.days > 0 || time_data.hrs > 0 || time_data.mins > 0 || time_data.secs > 0) &&
+            (isNaN(time_data.days) === false && isNaN(time_data.hrs) === false && isNaN(time_data.mins) === false && isNaN(time_data.secs) === false) ? 1 : -1;
         
-        return timeData;
+        return time_data;
     }
 
-    convertString_yt2(timeData) {
-        if(timeData.status === -1) {
+    convert_time_data_to_string(time_data) {
+        if(time_data.status === -1) {
             return "Unknown";
         }
 
-        var timeString = "";
-
-        if(timeData.days != 0) {
-            timeString += timeData.days + ":";
+        let time_string = "";
+        if(time_data.days != 0) {
+            time_string += time_data.days + ":";
+        }
+        if(time_data.hrs != 0 || (time_data.days > 0)) {
+            time_string += time_data.hrs.toString().length < 2 ? `0${time_data.hrs}:` : `${time_data.hrs}:`;
+        }
+        if(time_data.mins != 0 || (time_data.hrs > 0 || time_data.days > 0)) {
+            time_string += time_data.mins.toString().length < 2 ? `0${time_data.mins}:` : `${time_data.mins}:`;
+        }
+        if(time_data.secs != 0 || (time_data.mins > 0 || time_data.hrs > 0 || time_data.days > 0)) {
+            time_string += time_data.secs.toString().length < 2 ? `0${time_data.secs}:` : `${time_data.secs}:`;
+        }
+        if(time_data.days === 0 && time_data.hrs === 0 && time_data.mins === 0) {
+            time_string = `00:${time_string}`;
         }
 
-        if(timeData.hrs != 0 || (timeData.days > 0)) {
-            timeString += timeData.hrs.toString().length < 2 ? "0" + timeData.hrs + ":" : timeData.hrs + ":";
-        }
-
-        if(timeData.mins != 0 || (timeData.hrs > 0 || timeData.days > 0)) {
-            timeString += timeData.mins.toString().length < 2 ? "0" + timeData.mins + ":" : timeData.mins + ":";
-        }
-
-        if(timeData.secs != 0 || (timeData.mins > 0 || timeData.hrs > 0 || timeData.days > 0)) {
-            timeString += timeData.secs.toString().length < 2 ? "0" + timeData.secs + ":" : timeData.secs + ":";
-        }
-
-        if(timeData.days === 0 && timeData.hrs === 0 && timeData.mins === 0) {
-            timeString = "00:" + timeString
-        }
-
-        timeString = timeString.endsWith(":") ? timeString.slice(0, timeString.length - 1) : timeString;
-        return timeString;
+        time_string = time_string.endsWith(":") ? time_string.slice(0, time_string.length - 1) : time_string;
+        return time_string;
     }
 }
 

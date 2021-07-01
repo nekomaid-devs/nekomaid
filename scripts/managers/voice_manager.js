@@ -103,12 +103,12 @@ class VoiceManager {
                     break;
 
                 default: {
-                    let current_length = global_context.neko_modules_clients.tc.decideConvertString_yt(info.duration);
+                    let current_length = global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(info.duration);
                     if(current_length.status != -1 && (current_length.hrs >= 3 || info.duration === "P0D") && diff > 3600) {
                         msg.channel.send(`To play videos longer than \`3h\` please upvote the bot on here ˇˇ\nhttps://top.gg/bot/${global_context.bot.user.id}/vote`).catch(e => { console.log(e); });
                         return;
                     }
-                    let current_length_2 = global_context.neko_modules_clients.tc.convertString_yt2(current_length);
+                    let current_length_2 = global_context.neko_modules_clients.tc.convert_time_data_to_string(current_length);
                     if(info.duration === "P0D") {
                         current_length_2 = "Livestream";
                     }
@@ -162,12 +162,12 @@ class VoiceManager {
                     break;
 
                 default: {
-                    let current_length = global_context.neko_modules_clients.tc.decideConvertString_yt(info.duration);
+                    let current_length = global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(info.duration);
                     if(current_length.status != -1 && (current_length.hrs >= 3 || info.duration === "P0D") && diff > 3600) {
                         msg.channel.send(`To play videos longer than \`3h\` please upvote the bot on here ˇˇ\nhttps://top.gg/bot/${global_context.bot.user.id}/vote`).catch(e => { console.log(e); });
                         return;
                     }
-                    let current_length_2 = global_context.neko_modules_clients.tc.convertString_yt2(current_length);
+                    let current_length_2 = global_context.neko_modules_clients.tc.convert_time_data_to_string(current_length);
                     if(info.duration === "P0D") {
                         current_length_2 = "Livestream";
                     }
@@ -204,8 +204,8 @@ class VoiceManager {
 
             if(voice_data.queue.length > 0) {
                 let voice_request = voice_data.queue[0];
-                let current_length = global_context.neko_modules_clients.tc.decideConvertString_yt(voice_request.info.duration);
-                let current_length_2 = global_context.neko_modules_clients.tc.convertString_yt2(current_length);
+                let current_length = global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_request.info.duration);
+                let current_length_2 = global_context.neko_modules_clients.tc.convert_time_data_to_string(current_length);
                 if(voice_request.info.duration === "P0D") {
                     current_length_2 = "Livestream";
                 }
@@ -273,7 +273,7 @@ class VoiceManager {
             var result_m = {
                 title: title.split("+").join(" "),
                 url: url,
-                duration: global_context.neko_modules_clients.tc.convertString_yt2(global_context.neko_modules_clients.tc.convertString(global_context.neko_modules_clients.tc.convertTime(duration * 1000)))
+                duration: global_context.neko_modules_clients.tc.convert_time_data_to_string(global_context.neko_modules_clients.tc.convert_string_to_time_data(global_context.neko_modules_clients.tc.convert_time(duration * 1000)))
             }
 
             if (error || result_m === undefined) {

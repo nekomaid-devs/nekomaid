@@ -93,8 +93,8 @@ module.exports = {
                         }
                         infosByID.set(i, item);
 
-                        let current_length = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(item.duration);
-                        let current_length_1 = command_data.global_context.neko_modules_clients.tc.convertString_yt2(current_length);
+                        let current_length = command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(item.duration);
+                        let current_length_1 = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(current_length);
                         description_text += `**${i})** ${item.title} *(${current_length_1})*\n`;
                     }
                 }

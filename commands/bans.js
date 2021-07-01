@@ -36,7 +36,7 @@ module.exports = {
             command_data.server_bans.slice(-25).forEach(ban => {
                 let bannedMember = serverBansByID.get(ban.userID);
                 if(bannedMember !== undefined) {
-                    let remainingText = ban.end === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(ban.end - now);
+                    let remainingText = ban.end === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(ban.end - now);
                     embedBans.addField(`Ban - ${bannedMember.user.tag}`, `Remaining: \`${remainingText}\``);
                 }
             });

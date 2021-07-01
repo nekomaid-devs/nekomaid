@@ -32,7 +32,7 @@ module.exports = {
                         let user = await command_data.global_context.bot.users.fetch(voice_request.requestUserID).catch(e => { console.log(e); });
 
                         if(user !== undefined) {
-                            let current_length = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_request.info.duration));
+                            let current_length = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_request.info.duration));
                             description_text += `${i}) [${voice_request.info.title}](${voice_request.info.url}) *(${current_length})* by *[${user.username}]*\n`;
                         }
                     }
@@ -45,18 +45,18 @@ module.exports = {
 
                 embedQueue.setDescription(description_text);
 
-                let total_length = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_data.current.info.duration);
-                let elapsedLength = command_data.global_context.neko_modules_clients.tc.convertString(command_data.global_context.neko_modules_clients.tc.convertTime(voice_data.elapsedMilis));
-                total_length = command_data.global_context.neko_modules_clients.tc.substractTimes(total_length, elapsedLength);
+                let total_length = command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_data.current.info.duration);
+                let elapsedLength = command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.global_context.neko_modules_clients.tc.convert_time(voice_data.elapsedMilis));
+                total_length = command_data.global_context.neko_modules_clients.tc.sub_times(total_length, elapsedLength);
 
                 voice_data.queue.forEach(voice_request => {
-                    let current_length = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_request.info.duration);
-                    total_length = command_data.global_context.neko_modules_clients.tc.sumTimes(total_length, current_length);
+                    let current_length = command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_request.info.duration);
+                    total_length = command_data.global_context.neko_modules_clients.tc.sum_times(total_length, current_length);
                 });
-                total_length = command_data.global_context.neko_modules_clients.tc.convertTime_inconsistent(total_length);
-                let total_length_2 = command_data.global_context.neko_modules_clients.tc.convertString_yt2(total_length);
+                total_length = command_data.global_context.neko_modules_clients.tc.convert_time_inconsistent(total_length);
+                let total_length_2 = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(total_length);
 
-                let current_length = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_data.current.info.duration));
+                let current_length = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_data.current.info.duration));
                 embedQueue.addField("Currenly playing", `[${voice_data.current.info.title}](${voice_data.current.info.url}) *(${current_length})*`, false);
                 embedQueue.addField("Total queue time", `\`${total_length_2}\``, true);
                 break;
@@ -94,7 +94,7 @@ module.exports = {
 
                         if(user2 !== undefined) {
                             // TODO: the position i3 is wrong (if i'm not dumb)
-                            let current_length = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_request_2.info.duration));
+                            let current_length = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_request_2.info.duration));
                             description_text += (i2 === current_persistent_index ? `**${i3})** ` : `${i3}) `);
                             description_text += `[${voice_request_2.info.title}](${voice_request_2.info.url}) *(${current_length})* - by [${user2.username}]\n`
                         }
@@ -108,19 +108,19 @@ module.exports = {
 
                 embedQueue.setDescription(description_text);
 
-                let total_length_2_b = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_data.current.info.duration);
+                let total_length_2_b = command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_data.current.info.duration);
 
-                let elapsedLength2b = command_data.global_context.neko_modules_clients.tc.convertString(command_data.global_context.neko_modules_clients.tc.convertTime(voice_data.elapsedMilis));
-                total_length_2_b = command_data.global_context.neko_modules_clients.tc.substractTimes(total_length_2_b, elapsedLength2b);
+                let elapsedLength2b = command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.global_context.neko_modules_clients.tc.convert_time(voice_data.elapsedMilis));
+                total_length_2_b = command_data.global_context.neko_modules_clients.tc.sub_times(total_length_2_b, elapsedLength2b);
 
                 voice_data.persistentQueue.forEach(voice_request => {
-                    let current_length = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_request.info.duration);
-                    total_length_2_b = command_data.global_context.neko_modules_clients.tc.sumTimes(total_length_2_b, current_length);
+                    let current_length = command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_request.info.duration);
+                    total_length_2_b = command_data.global_context.neko_modules_clients.tc.sum_times(total_length_2_b, current_length);
                 });
-                total_length_2_b = command_data.global_context.neko_modules_clients.tc.convertTime_inconsistent(total_length_2_b);
-                let total_length_2_c = command_data.global_context.neko_modules_clients.tc.convertString_yt2(total_length_2_b);
+                total_length_2_b = command_data.global_context.neko_modules_clients.tc.convert_time_inconsistent(total_length_2_b);
+                let total_length_2_c = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(total_length_2_b);
 
-                let current_length_b = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_data.persistentQueue[current_persistent_index].info.duration));
+                let current_length_b = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_data.persistentQueue[current_persistent_index].info.duration));
                 embedQueue.addField("Currenly playing", `[${voice_data.persistentQueue[current_persistent_index].info.title}](${voice_data.persistentQueue[current_persistent_index].info.url}) *(${current_length_b})*`, false);
                 embedQueue.addField("Total queue time", `\`${total_length_2_c}\``, true);
                 break;

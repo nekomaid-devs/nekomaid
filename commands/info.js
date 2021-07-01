@@ -43,7 +43,7 @@ module.exports = {
         let m_i_2 = Math.floor(Math.log(manager_bytes2) / Math.log(k));
         let manager_memory_string_2 = parseFloat((manager_bytes2 / (k ** m_i_2)).toFixed(2)) + ' ' + sizes[m_i_2];
 
-        let shard_elapsed_time = command_data.global_context.neko_modules_clients.tc.convertTime((Date.now() - command_data.global_context.data.uptime_start));
+        let shard_elapsed_time = command_data.global_context.neko_modules_clients.tc.convert_time((Date.now() - command_data.global_context.data.uptime_start));
 
         let shard_guilds = command_data.global_context.bot.guilds.cache.size;
         let manager_guilds = await command_data.global_context.bot.shard.fetchClientValues('guilds.cache.size').then(results =>

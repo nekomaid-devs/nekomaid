@@ -23,16 +23,16 @@ module.exports = {
         .setTitle(`Current playing for \`${command_data.msg.guild.name}\``)
         .setFooter("Nekomaid");
 
-        let currentLength0b = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_data.current.info.duration));
+        let currentLength0b = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_data.current.info.duration));
         let user = await command_data.global_context.bot.users.fetch(voice_data.current.requestUserID).catch(e => { console.log(e); });
         if(user !== undefined) {
             let descriptionText = `[${voice_data.current.info.title}](${voice_data.current.info.url}) *(${currentLength0b})*\n`;
 
-            let totalLength = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_data.current.info.duration);
-            let elapsedLength = command_data.global_context.neko_modules_clients.tc.convertString(command_data.global_context.neko_modules_clients.tc.convertTime(voice_data.elapsedMilis));
-            totalLength = command_data.global_context.neko_modules_clients.tc.substractTimes(totalLength, elapsedLength);
-            totalLength = command_data.global_context.neko_modules_clients.tc.convertTime_inconsistent(totalLength);
-            totalLength = command_data.global_context.neko_modules_clients.tc.convertString_yt2(totalLength);
+            let totalLength = command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_data.current.info.duration);
+            let elapsedLength = command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.global_context.neko_modules_clients.tc.convert_time(voice_data.elapsedMilis));
+            totalLength = command_data.global_context.neko_modules_clients.tc.sub_times(totalLength, elapsedLength);
+            totalLength = command_data.global_context.neko_modules_clients.tc.convert_time_inconsistent(totalLength);
+            totalLength = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(totalLength);
 
             embedNP.addField("Title", descriptionText);
             embedNP.addField("Requested by", `\`${user.tag}\``);

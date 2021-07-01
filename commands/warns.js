@@ -29,7 +29,7 @@ module.exports = {
 
         warns.slice(-3).forEach((warn, index) => {
             let end = Date.now()
-            let elapsedTime = command_data.global_context.neko_modules_clients.tc.convertTime(end - warn.start)
+            let elapsedTime = command_data.global_context.neko_modules_clients.tc.convert_time(end - warn.start)
             embedWarns.addField(`Warn #${(warns.length - index)}`, `Warned for - ${warn.reason} (${elapsedTime} ago)`);
         });
 

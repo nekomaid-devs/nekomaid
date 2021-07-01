@@ -34,7 +34,7 @@ module.exports = {
         for(var i = 0; i < 5; i += 1) {
             let play = top[i];
             let elapsed = start - play.date;
-            let ago = command_data.global_context.neko_modules_clients.tc.convertTime(elapsed);
+            let ago = command_data.global_context.neko_modules_clients.tc.convert_time(elapsed);
             
             let mods = "";
             /*eslint no-bitwise: 0*/

@@ -17,7 +17,7 @@ class EventManager {
         let files = [];
         let embed = {
             color: 0x0011ff,
-            footer: { text: "Remaining: " + em.bot.tc.convertTime(remaining) },
+            footer: { text: "Remaining: " + em.bot.tc.convert_time(remaining) },
             author: { name: "New event occured - #" + type, icon_url: "https://femboylamkas.please-fuck.me/uaMz9w.jpeg", url: "https://nekomaid.xyz" }
         };
         switch(type) {
@@ -353,7 +353,7 @@ class EventManager {
         });
         let timer = setInterval(() => {
             remaining -= 30 * 1000;
-            embed.footer = { text: "Remaining: " + em.bot.tc.convertTime(remaining) }
+            embed.footer = { text: "Remaining: " + em.bot.tc.convert_time(remaining) }
             if(remaining < 0) {
                 clearInterval(timer);
                 embed.footer = { text: "Remaining: Expired" }

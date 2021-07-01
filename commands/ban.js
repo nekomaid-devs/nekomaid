@@ -21,7 +21,7 @@ module.exports = {
     execute(command_data) {
         // TODO: support swapping arguments (or improve the format)
         // TODO: this should clear all messages from them aswell
-        let time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : command_data.global_context.neko_modules_clients.tc.convertString(command_data.args[1]));
+        let time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.args[1]));
         if(time != -1 && time.status != 1) {
             command_data.msg.reply("You entered invalid time format (ex. `1d2h3m4s` or `-1`)-");
             return;
@@ -45,11 +45,11 @@ module.exports = {
         let ban_start = Date.now();
         let ban_end = -1;
         let extended_time = (time.days * 86400000) + (time.hrs * 3600000) + (time.mins * 60000) + (time.secs * 1000);
-        let extended_time_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(extended_time);
+        let extended_time_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(extended_time);
 
         if(previous_ban === -1) {
             ban_end = ban_start + extended_time;
-            let ban_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(ban_end - ban_start);
+            let ban_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(ban_end - ban_start);
             command_data.msg.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${ban_reason}\`, Time: \`${ban_end_text}\`)-`).catch(e => { console.log(e); });
         } else {
             command_data.msg.reply(`\`${command_data.tagged_user.tag}\` is already banned-`);

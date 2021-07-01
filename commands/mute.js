@@ -21,7 +21,7 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         // TODO: previous mutes don't get removed btw
-        let time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : command_data.global_context.neko_modules_clients.tc.convertString(command_data.args[1]));
+        let time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.args[1]));
         if(time != -1 && time.status != 1) {
             command_data.msg.reply("You entered invalid time format (ex. `1d2h3m4s` or `-1`)-");
             return;
@@ -45,11 +45,11 @@ module.exports = {
         let mute_start = Date.now();
         let mute_end = -1;
         let extended_time = (time.days * 86400000) + (time.hrs * 3600000) + (time.mins * 60000) + (time.secs * 1000);
-        let extended_time_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(extended_time);
+        let extended_time_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(extended_time);
 
         if(previous_mute === -1) {
             mute_end = mute_start + extended_time;
-            let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(mute_end - mute_start);
+            let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(mute_end - mute_start);
             command_data.msg.channel.send(`Muted \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { console.log(e); });
 
             // TODO: drop this once a separate callback
@@ -91,8 +91,8 @@ module.exports = {
             }
         } else {
             mute_end = previous_mute.end + extended_time;
-            let prev_mute_end_text = previous_mute.end === 1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(previous_mute.end - mute_start);
-            let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(mute_end - mute_start);
+            let prev_mute_end_text = previous_mute.end === 1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(previous_mute.end - mute_start);
+            let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(mute_end - mute_start);
             command_data.msg.channel.send(`Extended mute of \`${command_data.tagged_user.tag}\` by \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { console.log(e); });
 
             // TODO: drop this once a separate callback
