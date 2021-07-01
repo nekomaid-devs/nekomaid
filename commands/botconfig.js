@@ -5,7 +5,7 @@ module.exports = {
     category: "Help & Information",
     description: "Changes settings of the bot-",
     helpUsage: "[action?] [property?] [value?]` *(arguments depend on action)*",
-    exampleUsage: "add BotOwner /userTag/",
+    exampleUsage: "add BotOwner /user_tag/",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map()

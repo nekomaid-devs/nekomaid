@@ -6,6 +6,7 @@ module.exports = {
     category: "Utility",
     description: "Returns result of eval-",
     helpUsage: "[script]`",
+    exampleUsage: "this.token",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),

@@ -6,7 +6,7 @@ module.exports = {
     category: "Moderation",
     description: "Displays warnings of tagged user-",
     helpUsage: "[?mention]` *(optional argument)*",
-    exampleUsage: "/userTag/",
+    exampleUsage: "/user_tag/",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),

@@ -430,7 +430,7 @@ module.exports = {
 
     get_error_embed(msg, prefix, command, problem, usage_detailed) {
         let usage = `\`${prefix}${command.name} ${command.helpUsage}\n\`${prefix}${command.name} ${usage_detailed}\``;
-        usage = usage.split("/userTag/").join(`@${msg.author.tag}`);
+        usage = usage.split("/user_tag/").join(`@${msg.author.tag}`);
         usage = usage.split("/username/").join(msg.author.username);
         let embedError = {
             title: "❌ Wrong arguments",

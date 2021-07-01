@@ -6,12 +6,12 @@ module.exports = {
     category: "Moderation",
     description: "Deletes messages in current channel-",
     helpUsage: "[numberOfMessages] [mention?]` *(1 optional argument)*",
-    exampleUsage: "99 /userTag/",
+    exampleUsage: "99 /user_tag/",
     hidden: false,
     aliases: ["purge"],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in number of messages-")
+        new NeededArgument(1, "You need to type in number of messages-", "int>0")
     ],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_MESSAGES"),
@@ -21,7 +21,7 @@ module.exports = {
     execute(command_data) {
         // TODO: support swapping arguments (or improve the format)
         let num_messages = parseInt(command_data.args[0]);
-        if(isNaN(num_messages) || num_messages > 99) {
+        if(num_messages > 99) {
             command_data.msg.reply(`Cannot delete more than 99 messages~`);
             return;
         }

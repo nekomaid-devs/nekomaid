@@ -3,7 +3,7 @@ module.exports = {
     category: "Utility",
     description: "Displays avatar of the tagged person-",
     helpUsage: "[mention?]` *(optional argument)*",
-    exampleUsage: "/userTag/",
+    exampleUsage: "/user_tag/",
     hidden: false,
     aliases: ["avatar"],
     subcommandHelp: new Map(),

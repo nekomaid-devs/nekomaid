@@ -3,7 +3,7 @@ module.exports = {
     category: "Profile",
     description: "Displays the tagged user's balance-",
     helpUsage: "[mention?]` *(optional argument)*",
-    exampleUsage: "/userTag/",
+    exampleUsage: "/user_tag/",
     hidden: false,
     aliases: ["balance", "bank"],
     subcommandHelp: new Map(),

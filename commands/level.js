@@ -3,7 +3,7 @@ module.exports = {
     category: "Leveling",
     description: "Displays the tagged user's server profile-",
     helpUsage: "[mention?]` *(optional argument)*",
-    exampleUsage: "/userTag/",
+    exampleUsage: "/user_tag/",
     hidden: false,
     aliases: ["lvl"],
     subcommandHelp: new Map(),

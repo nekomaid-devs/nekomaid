@@ -5,12 +5,12 @@ module.exports = {
     category: "Actions",
     description: "Pokes the tagged person-",
     helpUsage: "[mention]`",
-    exampleUsage: "/userTag/",
+    exampleUsage: "/user_tag/",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention somebody-", "mention1")
+        new NeededArgument(1, "You need to mention somebody-", "mention")
     ],
     permissionsNeeded: [],
     nsfw: false,

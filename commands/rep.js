@@ -5,12 +5,12 @@ module.exports = {
     category: "Profile",
     description: "Adds a reputation point to the tagged user-",
     helpUsage: "[mention]`",
-    exampleUsage: "/userTag/",
+    exampleUsage: "/user_tag/",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention an user-", "mention1")
+        new NeededArgument(1, "You need to mention an user-", "mention")
     ],
     permissionsNeeded: [],
     nsfw: false,

@@ -11,7 +11,7 @@ module.exports = {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in number of seconds-", "int")
+        new NeededArgument(1, "You need to type in number of seconds-", "int>0")
     ],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_CHANNELS"),

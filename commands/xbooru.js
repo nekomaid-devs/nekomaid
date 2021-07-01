@@ -5,6 +5,7 @@ module.exports = {
     category: "NSFW",
     description: "Posts an image from xbooru with specified tag (or filters out tag with !)",
     helpUsage: "[tag/!tag]`",
+    exampleUsage: "ass",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),

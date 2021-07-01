@@ -6,12 +6,12 @@ module.exports = {
     category: "Moderation",
     description: "Mutes the tagged user-",
     helpUsage: "[mention] [?time] [?reason]` *(2 optional arguments)*",
-    exampleUsage: "/userTag/ 6h Posting invites",
+    exampleUsage: "/user_tag/ 6h Posting invites",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention an user-", "mention1")
+        new NeededArgument(1, "You need to mention an user-", "mention")
     ],
     permissionsNeeded: [
         new NeededPermission("author", "BAN_MEMBERS"),

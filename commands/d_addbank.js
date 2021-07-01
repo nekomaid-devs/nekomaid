@@ -6,11 +6,13 @@ module.exports = {
     category: "Testing",
     description: "Adds bank to tagged user-",
     helpUsage: "[mention] [ammount]`",
+    exampleUsage: "/user_tag/ 100",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an ammount-", "int>0")
+        new NeededArgument(1, "You need to mention somebody-", "mention"),
+        new NeededArgument(2, "You need to type in an ammount-", "int>0")
     ],
     permissionsNeeded: [
         new NeededPermission("author", "BOT_OWNER")

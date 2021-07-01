@@ -6,11 +6,12 @@ module.exports = {
     category: "Leveling",
     description: "Adds XP to the tagged user-",
     helpUsage: "[mention] [ammount]`",
-    exampleUsage: "/userTag/ 100",
+    exampleUsage: "/user_tag/ 100",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
+        new NeededArgument(1, "You need to mention somebody-", "mention"),
         new NeededArgument(2, "You need to type in an ammount-", "float>0", "Invalid XP ammount-")
     ],
     permissionsNeeded: [

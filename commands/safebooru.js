@@ -5,6 +5,7 @@ module.exports = {
     category: "Utility",
     description: "Posts an image from safebooru with specified tag (or filters out tag with at beginning of the tag !)",
     helpUsage: "[?tag/!tag]`",
+    exampleUsage: "catgirl",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),

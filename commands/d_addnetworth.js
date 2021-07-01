@@ -6,11 +6,12 @@ module.exports = {
     category: "Testing",
     description: "Adds net worth to tagged user-",
     helpUsage: "[mention] [ammount]`",
+    exampleUsage: "/user_tag/ 100",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention somebody-", "mention1"),
+        new NeededArgument(1, "You need to mention somebody-", "mention"),
         new NeededArgument(2, "You need to type in an ammount-", "int>0")
     ],
     permissionsNeeded: [

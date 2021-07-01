@@ -3,7 +3,7 @@ module.exports = {
     category: "Fun",
     description: "I wasn't the impostor...",
     helpUsage: "[mention?]`",
-    exampleUsage: "/userTag/",
+    exampleUsage: "/user_tag/",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),

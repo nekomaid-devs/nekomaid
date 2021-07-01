@@ -10,7 +10,7 @@ module.exports = {
     aliases: ["dep"],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an ammount-", "none")
+        new NeededArgument(1, "You need to type in an ammount-", "int>0")
     ],
     permissionsNeeded: [],
     nsfw: false,
@@ -32,9 +32,6 @@ module.exports = {
             } else {
                 credits_ammount = Math.round(command_data.author_config.credits / 2);
             }
-        } else if(isNaN(credits_ammount) || credits_ammount <= 0) {
-            command_data.msg.reply(`Invalid credits ammount-`);
-            return;
         }
 
         if(command_data.author_config.credits - credits_ammount < 0) {

@@ -5,6 +5,7 @@ module.exports = {
     category: "Utility",
     description: "Sets user's osu! acount-",
     helpUsage: "[osuUsername]`",
+    exampleUsage: "chocomint",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),

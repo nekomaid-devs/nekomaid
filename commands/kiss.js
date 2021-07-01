@@ -3,7 +3,7 @@ module.exports = {
     category: "Actions",
     description: "Kisses the tagged person-",
     helpUsage: "[mention]`",
-    exampleUsage: "/userTag/",
+    exampleUsage: "/user_tag/",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),

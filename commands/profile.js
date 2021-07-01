@@ -3,7 +3,7 @@ module.exports = {
     category: "Profile",
     description: "Displays the tagged user's profile-",
     helpUsage: "[mention?]` *(optional argument)*",
-    exampleUsage: "/userTag/",
+    exampleUsage: "/user_tag/",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
