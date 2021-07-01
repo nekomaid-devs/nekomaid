@@ -19,6 +19,7 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
+        // TODO: add a loading embed
         if(command_data.msg.member.voice.channel == null) {
             command_data.msg.reply("You need to join a voice channel-");
             return;

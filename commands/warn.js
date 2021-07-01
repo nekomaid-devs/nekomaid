@@ -28,6 +28,7 @@ module.exports = {
         ).length;
         command_data.msg.channel.send(`Warned \`${command_data.tagged_user.tag}\` (Reason: \`${warn_reason}\`, Strikes: \`${num_of_warnings}\` => \`${(num_of_warnings + 1)}\`)-`).catch(e => { console.log(e); });
 
+        // TODO: drop this once a separate callback
         if(command_data.server_config.audit_warns == true && command_data.server_config.audit_channel != "-1") {
             let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {

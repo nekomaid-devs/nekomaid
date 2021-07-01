@@ -52,6 +52,7 @@ module.exports = {
             let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(mute_end - mute_start);
             command_data.msg.channel.send(`Muted \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { console.log(e); });
 
+            // TODO: drop this once a separate callback
             if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
                 let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
                 if(channel !== undefined) {
@@ -94,6 +95,7 @@ module.exports = {
             let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convertTime(mute_end - mute_start);
             command_data.msg.channel.send(`Extended mute of \`${command_data.tagged_user.tag}\` by \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { console.log(e); });
 
+            // TODO: drop this once a separate callback
             if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
                 let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
                 if(channel !== undefined) {
