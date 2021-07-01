@@ -29,7 +29,7 @@ module.exports = {
             let descriptionText = `[${voice_data.current.info.title}](${voice_data.current.info.url}) *(${currentLength0b})*\n`;
 
             let totalLength = command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_data.current.info.duration);
-            let elapsedLength = command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.global_context.neko_modules_clients.tc.convert_time(voice_data.elapsedMilis));
+            let elapsedLength = command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.global_context.neko_modules_clients.tc.convert_time(voice_data.elapsed_ms));
             totalLength = command_data.global_context.neko_modules_clients.tc.sub_times(totalLength, elapsedLength);
             totalLength = command_data.global_context.neko_modules_clients.tc.convert_time_inconsistent(totalLength);
             totalLength = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(totalLength);

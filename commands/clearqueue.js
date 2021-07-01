@@ -18,7 +18,7 @@ module.exports = {
 
         let voice_data = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
         voice_data.queue = [];
-        voice_data.persistentQueue = [];
+        voice_data.persistent_queue = [];
 
         command_data.msg.channel.send("Cleared the current queue-").catch(e => { console.log(e); });
     },

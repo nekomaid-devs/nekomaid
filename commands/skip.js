@@ -22,7 +22,7 @@ module.exports = {
 
         command_data.msg.channel.send(`Skipped \`${voice_request.info.title}\`- (\`${command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).queue.length}\` remaining)-`).catch(e => { console.log(e); });
         if(voice_data.mode === 0) {
-            voice_data.persistentQueue.shift();
+            voice_data.persistent_queue.shift();
         }
 
         command_data.global_context.neko_modules_clients.vm.try_playing_next(command_data.global_context, command_data.msg.guild.id);

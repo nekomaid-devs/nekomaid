@@ -34,7 +34,7 @@ module.exports = {
             let voice_data = new command_data.global_context.neko_modules.VoiceData();
             voice_data.id = command_data.msg.guild.id;
             voice_data.connection = connection;
-            voice_data.joinedMessageChannelID = command_data.msg.channel.id;
+            voice_data.init_message_channel_ID = command_data.msg.channel.id;
 
             command_data.global_context.neko_modules_clients.vm.add_connection(command_data.global_context, command_data.msg.guild.id, voice_data);
             command_data.msg.channel.send(`Joined channel \`${command_data.msg.member.voice.channel.name}\`-`).catch(e => { console.log(e); });

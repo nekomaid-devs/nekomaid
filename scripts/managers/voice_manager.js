@@ -50,13 +50,13 @@ class VoiceManager {
             if(voice_data.connection.dispatcher == null) {
                 global_context.neko_modules_clients.vm.timeout_connection(global_context, voice_data.id);
             } else {
-                if(voice_data.timeouting === false && voice_data.connection.channel.members.size < 2) {
-                    global_context.neko_modules_clients.vm.connections.get(voice_data.id).timeouting = true;
-                    setTimeout(global_context.neko_modules_clients.vm.timeout_connection, voice_data.timeoutDelay, global_context, voice_data.id);
+                if(voice_data.should_timeout === false && voice_data.connection.channel.members.size < 2) {
+                    global_context.neko_modules_clients.vm.connections.get(voice_data.id).should_timeout = true;
+                    setTimeout(global_context.neko_modules_clients.vm.timeout_connection, voice_data.timeout_delay, global_context, voice_data.id);
                 }
     
                 if(voice_data.current != -1 && voice_data.connection.dispatcher.paused === false) {
-                    voice_data.elapsedMilis += 1000;
+                    voice_data.elapsed_ms += 1000;
                 }
             }
         });
@@ -70,14 +70,14 @@ class VoiceManager {
         let voice_data = global_context.neko_modules_clients.vm.connections.get(id);
         if(voice_data.connection.channel.members.size < 2) {
             let guild = await global_context.bot.guilds.fetch(id).catch(e => { console.log(e); });
-            let channel = await guild.channels.fetch(voice_data.joinedMessageChannelID).catch(e => { console.log(e); });
+            let channel = await guild.channels.fetch(voice_data.init_message_channel_ID).catch(e => { console.log(e); });
             if(channel !== undefined) {
                 channel.send(`I left \`${voice_data.connection.channel.name}\`, because I was left alone-`).catch(e => { console.log(e); });
             }
 
             global_context.neko_modules_clients.vm.remove_connection(global_context, id);
         } else {
-            global_context.neko_modules_clients.vm.connections.get(id).timeouting = false;
+            global_context.neko_modules_clients.vm.connections.get(id).should_timeout = false;
         }
     }
 
@@ -114,11 +114,11 @@ class VoiceManager {
                     }
                     
                     let stream = voice_data.connection.play(await global_context.modules.ytdl(url, { quality: 'highestaudio', highWaterMark: 1 << 25 }), { type: 'opus' });
-                    voice_data.elapsedMilis = 0;
+                    voice_data.elapsed_ms = 0;
                     stream.on("finish", () => {
                         voice_data.current = -1;
                         if(voice_data.mode === 0) {
-                            voice_data.persistentQueue.shift();
+                            voice_data.persistent_queue.shift();
                         }
 
                         try {
@@ -144,7 +144,7 @@ class VoiceManager {
 
                     voice_data = global_context.neko_modules_clients.vm.connections.get(id);
                     voice_data.current = voice_request;
-                    voice_data.persistentQueue = [ voice_request ]
+                    voice_data.persistent_queue = [ voice_request ]
                     global_context.neko_modules_clients.vm.connections.set(id, voice_data);
 
                     msg.channel.send(`Playing \`${info.title}\` *(${current_length_2})*-`).catch(e => { console.log(e); });
@@ -180,7 +180,7 @@ class VoiceManager {
                     voice_request.requestChannelID = msg.channel.id;
                     voice_request.requestUserID = msg.member.id;
                     voice_data.queue.push(voice_request);
-                    voice_data.persistentQueue.push(voice_request);
+                    voice_data.persistent_queue.push(voice_request);
                     global_context.neko_modules_clients.vm.connections.set(id, voice_data);
 
                     let length = voice_data.queue.length;
@@ -197,7 +197,7 @@ class VoiceManager {
         if(global_context.neko_modules_clients.vm.connections.has(id) === true) {
             let voice_data = global_context.neko_modules_clients.vm.connections.get(id);
             if(voice_data.mode === 1 && voice_data.queue.length < 1) {
-                voice_data.persistentQueue.forEach(voice_request => {
+                voice_data.persistent_queue.forEach(voice_request => {
                     voice_data.queue.push(voice_request)
                 });
             }
@@ -211,11 +211,11 @@ class VoiceManager {
                 }
 
                 let stream = voice_data.connection.play(await global_context.modules.ytdl(voice_request.url, { quality: 'highestaudio', highWaterMark: 1 << 25 }), { type: 'opus' });
-                voice_data.elapsedMilis = 0;
+                voice_data.elapsed_ms = 0;
                 stream.on("finish", () => {
                     voice_data.current = -1;
                     if(voice_data.mode === 0) {
-                        voice_data.persistentQueue.shift();
+                        voice_data.persistent_queue.shift();
                     }
 
                     try {
