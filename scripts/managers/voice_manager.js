@@ -36,7 +36,7 @@ class VoiceManager {
 
             if(message !== -1) {
                 let guild = await global_context.bot.guilds.fetch(id).catch(e => { console.log(e); });
-                let channel = await guild.channels.fetch(global_context.neko_modules_clients.vm.connections.get(id).current.requestChannelID).catch(e => { console.log(e); });
+                let channel = await guild.channels.fetch(global_context.neko_modules_clients.vm.connections.get(id).current.request_channel_ID).catch(e => { console.log(e); });
                 channel.send(message).catch(e => { console.log(e) }).catch(e => { console.log(e); });
             }
         }
@@ -136,10 +136,10 @@ class VoiceManager {
                     let voice_request = new global_context.neko_modules.VoiceRequest();
                     voice_request.url = url;
                     voice_request.info = info;
-                    voice_request.requestMessageID = msg.id;
+                    voice_request.request_message_ID = msg.id;
                     voice_request.uuid = global_context.modules.crypto.randomBytes(16).toString("hex");
-                    voice_request.requestChannelID = msg.channel.id;
-                    voice_request.requestUserID = msg.member.id;
+                    voice_request.request_channel_ID = msg.channel.id;
+                    voice_request.request_user_ID = msg.member.id;
                     voice_request.stream = stream;
 
                     voice_data = global_context.neko_modules_clients.vm.connections.get(id);
@@ -175,10 +175,10 @@ class VoiceManager {
                     let voice_request = new global_context.neko_modules.VoiceRequest();
                     voice_request.url = url;
                     voice_request.info = info;
-                    voice_request.requestMessageID = msg.id;
+                    voice_request.request_message_ID = msg.id;
                     voice_request.uuid = global_context.modules.crypto.randomBytes(16).toString("hex");
-                    voice_request.requestChannelID = msg.channel.id;
-                    voice_request.requestUserID = msg.member.id;
+                    voice_request.request_channel_ID = msg.channel.id;
+                    voice_request.request_user_ID = msg.member.id;
                     voice_data.queue.push(voice_request);
                     voice_data.persistent_queue.push(voice_request);
                     global_context.neko_modules_clients.vm.connections.set(id, voice_data);
@@ -226,7 +226,7 @@ class VoiceManager {
                 });
         
                 stream.on("error", async(error) => {
-                    let channel = await global_context.bot.channels.fetch(voice_request.requestChannelID).catch(e => { console.log(e); });
+                    let channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch(e => { console.log(e); });
                     channel.send("There was an error while playing the video-").catch(e => { console.log(e); });
                     console.error(error);
                     global_context.neko_modules_clients.vm.remove_connection(global_context, id, error);
@@ -235,7 +235,7 @@ class VoiceManager {
                 voice_request.stream = stream;
                 voice_data.current = voice_request;
 
-                let channel = await global_context.bot.channels.fetch(voice_request.requestChannelID).catch(e => { console.log(e); });
+                let channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch(e => { console.log(e); });
                 let length = voice_data.queue.length - 1;
                 if(channel !== undefined) {
                     channel.send(`Playing \`${voice_request.info.title}\` *(${current_length_2})* (\`${length}\` in the queue)-`).catch(e => { console.log(e); });

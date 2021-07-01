@@ -24,7 +24,7 @@ module.exports = {
         .setFooter("Nekomaid");
 
         let currentLength0b = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_data.current.info.duration));
-        let user = await command_data.global_context.bot.users.fetch(voice_data.current.requestUserID).catch(e => { console.log(e); });
+        let user = await command_data.global_context.bot.users.fetch(voice_data.current.request_user_ID).catch(e => { console.log(e); });
         if(user !== undefined) {
             let descriptionText = `[${voice_data.current.info.title}](${voice_data.current.info.url}) *(${currentLength0b})*\n`;
 

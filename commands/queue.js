@@ -29,7 +29,7 @@ module.exports = {
                 for(let i = 1; i <= 5; i += 1) {
                     if(voice_data.queue.length >= i) {
                         let voice_request = voice_data.queue[i - 1];
-                        let user = await command_data.global_context.bot.users.fetch(voice_request.requestUserID).catch(e => { console.log(e); });
+                        let user = await command_data.global_context.bot.users.fetch(voice_request.request_user_ID).catch(e => { console.log(e); });
 
                         if(user !== undefined) {
                             let current_length = command_data.global_context.neko_modules_clients.tc.convert_time_data_to_string(command_data.global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(voice_request.info.duration));
@@ -90,7 +90,7 @@ module.exports = {
                     if(voice_data.persistent_queue.length > i2) {
                         let i3 = i2 + 1;
                         let voice_request_2 = voice_data.persistent_queue[i2];
-                        let user2 = await command_data.global_context.bot.users.fetch(voice_request_2.requestUserID).catch(e => { console.log(e); });
+                        let user2 = await command_data.global_context.bot.users.fetch(voice_request_2.request_user_ID).catch(e => { console.log(e); });
 
                         if(user2 !== undefined) {
                             // TODO: the position i3 is wrong (if i'm not dumb)
