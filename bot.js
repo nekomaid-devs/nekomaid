@@ -82,13 +82,6 @@ global_context.commands.forEach(command => {
     });
 });
 
-//Setup callbacks
-// TODO: make sure none of them are called, before the bot is ready
-let bot_callbacks = require('./callbacks');
-Object.keys(bot_callbacks).forEach(key => {
-    bot_callbacks[key].hook(global_context);
-});
-
 //Log into Discord
 bot.login(global_context.config.token);
 
@@ -149,10 +142,12 @@ bot.on('ready', async() => {
     bot.user.setStatus('available');
     bot.user.setActivity("getting bullied by lamkas", { type: 'PLAYING' });
 
-    /*bot.webupdates.refreshStatus(bot);
-    console.log("Preparing the database...");
-    setTimeout(postLoad, 1000);*/
     global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "defaultConfig" });
+    
+    let bot_callbacks = require('./callbacks');
+    Object.keys(bot_callbacks).forEach(key => {
+        bot_callbacks[key].hook(global_context);
+    });
 });
 bot.on('ratelimit', (ratelimit) => {
     global_context.logger.log("Ratelimit: " + ratelimit.timeout + " (" + ratelimit.path + " - " + ratelimit.route + ")");
