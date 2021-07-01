@@ -49,6 +49,7 @@ const bot = new Discord.Client({
     cachePresences: false
 });
 global_context.bot = bot;
+bot.neko_data = {};
 
 //Create log colors
 let log_colors = ["\x1b[32m", "\x1b[33m", "\x1b[34m", "\x1b[35m", "\x1b[36m",
@@ -126,6 +127,12 @@ async function postLoad() {
 
     bot.botConfig = await bot.ssm.server_fetch.fetch(bot, { type: "config", id: "defaultConfig" });
 }*/
+setInterval(() => {
+    bot.neko_data.total_commands = global_context.data.total_commands;
+    if(global_context.neko_modules_clients.vm !== undefined) {
+        bot.neko_data.vm_connections = global_context.neko_modules_clients.vm.connections.size;
+    }
+}, 1000);
 
 let bot_importer = require('./bot_importer');
 bot.on('ready', async() => {

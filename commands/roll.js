@@ -11,98 +11,85 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: re-factor command
-        //Get roll type
-        var rollType = 6;
+        let roll_type = 6;
         if(command_data.args.length > 0) {
-            rollType = parseInt(command_data.args[0]);
+            roll_type = parseInt(command_data.args[0]);
         }
 
-        //Get options set
-        var options = [];
-        switch(rollType) {
+        let options = [];
+        switch(roll_type) {
             default:
-                if(isNaN(rollType) || rollType <= 1) {
+                if(isNaN(roll_type) || roll_type <= 1) {
                     command_data.msg.reply("Invalid `numberOfSides` for `roll`- (number more than 1)");
                     return;
                 } else {
-                    for(var i = 1; i <= rollType; i += 1) {
+                    for(let i = 1; i <= roll_type; i++) {
                         options.push(i);
                     }
                 }
         }
 
-        //Get random result and image if exists
-        var result = command_data.global_context.utils.pick_random(options);
-
-        //Construct embed
+        let result = command_data.global_context.utils.pick_random(options);
         let embedRoll = {
             title: `${command_data.msg.author.tag} rolled ${result}!`,
             color: 8388736
         }
 
         if(command_data.args.length > 2) {
-            var betResult = parseInt(command_data.args[1]);
-            var betAmmount = parseInt(command_data.args[2]);
+            let bet_result = parseInt(command_data.args[1]);
+            let bet_ammount = parseInt(command_data.args[2]);
 
-            if(isNaN(betResult) || options.includes(betResult) === false) {
-                command_data.msg.reply("Invalid `betResult` for `roll`- (" + options[0] + "-" + options[options.length - 1] + ")");
+            if(isNaN(bet_result) || options.includes(bet_result) === false) {
+                command_data.msg.reply(`Invalid \`bet_result\` for \`roll\`- (${options[0]}-${options[options.length - 1]})`);
                 return;
             }
 
-            //Check author's config
-            var authorCredits = command_data.author_config.credits;
-
+            let author_credits = command_data.author_config.credits;
             // TODO: add support for %
             if(command_data.args[2] === "all") {
-                if(authorCredits <= 0) {
-                    command_data.msg.reply(`You don't have enough credits to do this-`);
+                if(author_credits <= 0) {
+                    command_data.msg.reply("You don't have enough credits to do this-");
                     return;
                 } else {
-                    betAmmount = authorCredits;
+                    bet_ammount = author_credits;
                 }
             } else if(command_data.args[2] === "half") {
-                if(authorCredits <= 1) {
-                    command_data.msg.reply(`You don't have enough credits to do this-`);
+                if(author_credits <= 1) {
+                    command_data.msg.reply("You don't have enough credits to do this-");
                     return;
                 } else {
-                    betAmmount = Math.round(authorCredits / 2);
+                    bet_ammount = Math.round(author_credits / 2);
                 }
-            } else if(isNaN(betAmmount) || betAmmount <= 0) {
+            } else if(isNaN(bet_ammount) || bet_ammount <= 0) {
                 command_data.msg.reply("Invalid `betAmmount` for `roll`- (number)");
                 return;
             }
 
-            if(command_data.author_config.credits < betAmmount) {
-                command_data.msg.reply(`You don't have enough credits to do this-`);
+            if(command_data.author_config.credits < bet_ammount) {
+                command_data.msg.reply("You don't have enough credits to do this-");
                 return;
             }
 
-            if(result === betResult) {
-                var multiplier = 0.55 + ((numOfOptions - 1) / 5);
-                var multiplierText = (1 + multiplier).toFixed(2);
-                var wonAmmount = Math.floor(betAmmount * multiplier);
-                var wonAmmountText = betAmmount + wonAmmount;
-                command_data.author_config.credits += wonAmmount;
-                command_data.author_config.netWorth += wonAmmount;
-
-                //Edits and broadcasts the change
+            if(result === bet_result) {
+                let multiplier = 0.55 + ((options.length - 1) / 5);
+                let multiplier_text = (1 + multiplier).toFixed(2);
+                let won_ammount = Math.floor(bet_ammount * multiplier);
+                let won_ammount_text = bet_ammount + won_ammount;
+                
+                command_data.author_config.credits += won_ammount;
+                command_data.author_config.netWorth += won_ammount;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
-                //Construct message and send it
-                embedRoll.description = "You won `" + wonAmmountText + "` credits-";
+                embedRoll.description = `You won \`${won_ammount_text}\` credits-`;
                 embedRoll.footer = {
-                    text: "Win multiplier: " + multiplierText + "x"
+                    text: `Win multiplier: ${multiplier_text}x`
                 }
             } else {
-                command_data.author_config.credits -= betAmmount;
-                command_data.author_config.credits -= betAmmount;
-
-                //Edits and broadcasts the change
+                command_data.author_config.credits -= bet_ammount;
+                command_data.author_config.credits -= bet_ammount;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
 
-                //Construct message and send it
-                embedRoll.description = "You lost `" + betAmmount + "` credits-";
+                embedRoll.description = `You lost \`${bet_ammount}\` credits-`;
             }
 
             command_data.msg.channel.send("", { embed: embedRoll }).catch(e => { console.log(e); });
