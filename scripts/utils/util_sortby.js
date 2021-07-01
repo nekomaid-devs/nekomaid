@@ -3,85 +3,54 @@ class SortBy {
         this.global_context = global_context;
     }
 
-    createComparator(props) {
-        return function(a, b) {
-            var aNet = 0;
-            var bNet = 0;
-
+    create_comparator(props) {
+        return (a, b) => {
+            let a_net = 0;
+            let b_net = 0;
             props.forEach(prop => {
-                aNet += isNaN(parseFloat(a[prop])) ? 0 : parseFloat(a[prop]);
-                bNet += isNaN(parseFloat(b[prop])) ? 0 : parseFloat(b[prop]);
+                a_net += isNaN(parseFloat(a[prop])) ? 0 : parseFloat(a[prop]);
+                b_net += isNaN(parseFloat(b[prop])) ? 0 : parseFloat(b[prop]);
             })
             
-            return bNet - aNet;
+            return b_net - a_net;
         }
     }
 
-    createComparatorServerLevel(serverConfig) {
-        return function(a, b) {
-            var levelXP = serverConfig.module_level_level_exp;
-            for(var i2 = 1; i2 < a.level; i2 += 1) {
-                levelXP *= serverConfig.module_level_level_multiplier;
+    create_comparator_server_level(server_config) {
+        return (a, b) => {
+            let levelXP = server_config.module_level_level_exp;
+            for(let i = 1; i < a.level; i++) {
+                levelXP *= server_config.module_level_level_multiplier;
             }
 
-            var aNet = a.level + (a.xp / levelXP);
-            var bNet = b.level + (b.xp / levelXP);
+            let a_net = a.level + (a.xp / levelXP);
+            let b_net = b.level + (b.xp / levelXP);
             
-            return bNet - aNet;
+            return b_net - a_net;
         }
     }
 
-    createComparatorViews() {
-        return function(a, b) {
-            var aNet = a.views;
-            var bNet = b.views;
-            
-            return bNet - aNet;
-        }
+    async get_top(global_context, props) {
+        let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
+        items.sort(this.create_comparator(props));
+
+        return items;
     }
 
-    async updateTop(global_context, props) {
-        var t0 = Date.now();
-
-        var globalUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
-        var comparator = this.createComparator(props);
-        globalUserTop.sort(comparator);
-    
-        var t1 = Date.now();
-        var secTaken = ((t1 - t0) / 1000).toFixed(3);
-
-        return { elapsed: secTaken, items: globalUserTop };
-    }
-
-    async updateTopServer(global_context, server, props) {
-        var t0 = Date.now();
-
+    async get_top_server(global_context, server, props) {
         // TODO: this won't work
-        var serverUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
-        var serverUserTop2 = serverUserTop.filter(val =>
-            server.members.cache.has(val.userID)
-        );
+        let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
+        items = items.filter(val => { return server.members.cache.has(val.userID); });
+        items.sort(this.create_comparator(props));
 
-        var comparator = this.createComparator(props);
-        serverUserTop2.sort(comparator);
-    
-        var t1 = Date.now();
-        var secTaken = ((t1 - t0) / 1000).toFixed(3);
-
-        return { elapsed: secTaken, items: serverUserTop2 };
+        return items;
     }
 
-    async updateTopServerLevel(global_context, serverConfig, server) {
-        var t0 = Date.now();
+    async get_top_server_level(global_context, server_config, server) {
+        let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_users", id: server.id });
+        items.sort(this.create_comparator_server_level(server_config));
 
-        var serverUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUsers", id: server.id });
-        var comparator = this.createComparatorServerLevel(serverConfig);
-        serverUserTop.sort(comparator);
-    
-        var t1 = Date.now();
-        var secTaken = ((t1 - t0) / 1000).toFixed(3);
-
-        return { elapsed: secTaken, items: serverUserTop };
+        return items;
     }
 }
 

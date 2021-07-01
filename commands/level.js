@@ -16,11 +16,11 @@ module.exports = {
             return;
         }
 
-        let top = await command_data.global_context.neko_modules_clients.sb.updateTopServerLevel(command_data.global_context, command_data.server_config, command_data.msg.guild);
+        let items = await command_data.global_context.neko_modules_clients.sb.get_top_server_level(command_data.global_context, command_data.server_config, command_data.msg.guild);
         let author_pos = -1;
         let author_config = -1;
-        for(let i = 0; i < top.items.length; i += 1) {
-            let user = top.items[i];
+        for(let i = 0; i < items.length; i += 1) {
+            let user = items[i];
             if(user.userID === command_data.tagged_user.id) {
                 author_config = user;
                 author_pos = i;

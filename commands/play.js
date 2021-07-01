@@ -79,7 +79,7 @@ module.exports = {
                 });
                 if(result === undefined || result.items === undefined) { return; }
                 result.items = result.items.filter(l => { return l.type === "video"; })
-                result.items.sort(command_data.global_context.neko_modules_clients.sb.createComparatorViews());
+                result.items.sort(command_data.global_context.neko_modules_clients.sb.create_comparator(["views"]));
 
                 let description_text = "";
                 for(let i = 1; i <= result.items.length; i++) {

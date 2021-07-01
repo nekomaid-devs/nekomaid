@@ -96,7 +96,7 @@ setInterval(function() {
 }, 1000)
 setInterval(async function() {
     if(bot.shard.ids[0] !== bot.Discord.ShardClientUtil.shardIDForGuildID("713467608363696128", bot.shard.count)) { return; }
-    let topList = await bot.sb.updateTop(bot, ["credits", "bank"]);
+    let topList = await bot.sb.get_top(bot, ["credits", "bank"]);
     bot.top = [];
 
     for(let i = 0; i < (topList.items.length < 15 ? topList.items.length : 15); i++) {

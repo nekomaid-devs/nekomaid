@@ -58,24 +58,23 @@ module.exports = {
                 return;
         }
 
-        let top = {}
+        let items = []
         var top_text_2 = ""
         if(command_data.args.includes("-server") === true) {
             top_text_2 = `in \`${command_data.msg.guild.name}\``
-            top = await command_data.global_context.neko_modules_clients.sb.updateTopServer(command_data.global_context, command_data.msg.guild, props, command_data.global_context.bot_config);
+            items = await command_data.global_context.neko_modules_clients.sb.get_top_server(command_data.global_context, command_data.msg.guild, props, command_data.global_context.bot_config);
         } else {
-            top = await command_data.global_context.neko_modules_clients.sb.updateTop(command_data.global_context, props);
+            items = await command_data.global_context.neko_modules_clients.sb.get_top(command_data.global_context, props);
         }
 
         let embedTop = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)
-        .setTitle(`❯    Top - \`${top_text}\` ${top_text_2}`)
-        .setFooter(`Update took ${top.elapsed}s...`);
+        .setTitle(`❯    Top - \`${top_text}\` ${top_text_2}`);
         
         let author_pos = -1;
         let author_config = -1;
-        for(let i = 0; i < top.items.length; i += 1) {
-            let user = top.items[i];
+        for(let i = 0; i < items.length; i += 1) {
+            let user = items[i];
             if(user.userID === command_data.msg.author.id) {
                 author_pos = i;
                 author_config = user;
@@ -83,9 +82,9 @@ module.exports = {
             }
         }
 
-        let limit = top.items.length < 10 ? top.items.length : 10;
+        let limit = items.length < 10 ? items.length : 10;
         for(let i = 0; i < limit; i += 1) {
-            let user_config = top.items[i];
+            let user_config = items[i];
             let net = 0;
             if(i === 8 && authorPos > 10) {
                 embedTop.addField("...", "...");
