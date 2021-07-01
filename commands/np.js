@@ -26,7 +26,7 @@ module.exports = {
         let currentLength0b = command_data.global_context.neko_modules_clients.tc.convertString_yt2(command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_data.current.info.duration));
         let user = await command_data.global_context.bot.users.fetch(voice_data.current.requestUserID).catch(e => { console.log(e); });
         if(user !== undefined) {
-            let descriptionText = `[${voice_data.current.info.title}](${voice_data.current.info.link}) *(${currentLength0b})*\n`;
+            let descriptionText = `[${voice_data.current.info.title}](${voice_data.current.info.url}) *(${currentLength0b})*\n`;
 
             let totalLength = command_data.global_context.neko_modules_clients.tc.decideConvertString_yt(voice_data.current.info.duration);
             let elapsedLength = command_data.global_context.neko_modules_clients.tc.convertString(command_data.global_context.neko_modules_clients.tc.convertTime(voice_data.elapsedMilis));
