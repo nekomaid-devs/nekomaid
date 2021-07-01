@@ -14,7 +14,7 @@ module.exports = {
     },
 
     async process(global_context, member) {
-        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guildmember_remove", id: member.guild.id });
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_remove", id: member.guild.id });
 
         if(server_config.leaveMessages == true) {
             let format = server_config.leaveMessages_format;
@@ -33,7 +33,7 @@ module.exports = {
             
             //var log = { guildID: member.guild.id, type: "guildMemberRemove", userID: member.id, tag: member.user.tag, time: Date.now() }
             //serverLogs.logs.push(log);
-            //bot.ssm.server_edit.editServerLogsInStructure(bot.ssm, member.guild, serverLogs);
+            //bot.ssm.server_edit.edit_server_logs_in_structure(bot.ssm, member.guild, serverLogs);
         }
         
         if(server_config.audit_kicks == true && server_config.audit_channel != "-1") {

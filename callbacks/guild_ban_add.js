@@ -16,7 +16,7 @@ module.exports = {
     async process(global_context, guild, user) {
         // TODO: this should add Nekomaid's bans aswell
         // TODO: also we should check for uncaught bans somewhere else
-        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_banadd", id: guild.id });
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_ban_add", id: guild.id });
         if(server_config.audit_bans == true && server_config.audit_channel != "-1") {
             let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {

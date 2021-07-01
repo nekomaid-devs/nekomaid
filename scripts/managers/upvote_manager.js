@@ -42,7 +42,7 @@ class UpvoteManager {
 
     async updateUpvotedStatus(um, id, siteID, isDouble = false) {
         var user = await um.bot.users.fetch(id).catch(e => { console.log(e); });
-        var userConfig = await um.bot.ssm.server_fetch.fetch(um.bot, { type: "globalUser", id });  
+        var userConfig = await um.bot.ssm.server_fetch.fetch(um.bot, { type: "global_user", id });  
         var botConfig = await um.bot.ssm.server_fetch.fetch(um.bot, { type: "config", id: "defaultConfig" });
         var date = new Date();
 
@@ -95,7 +95,7 @@ class UpvoteManager {
                 break;
         }
 
-        um.bot.ssm.server_edit.edit(um.bot.ssm, { type: "globalUser", id: user.id, user: userConfig });
+        um.bot.ssm.server_edit.edit(um.bot.ssm, { type: "global_user", id: user.id, user: userConfig });
     }*/
 }
 

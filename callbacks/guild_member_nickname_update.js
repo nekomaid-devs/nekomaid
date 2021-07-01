@@ -15,7 +15,7 @@ module.exports = {
 
     async process(global_context, oldMember, newMember) {
         // TODO: this doesn't work
-        let serverConfig = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guildmember_nicknamechange", id: newMember.guild.id });
+        let serverConfig = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_nickname_change", id: newMember.guild.id });
         if(serverConfig.audit_nicknames == true && serverConfig.audit_channel != "-1") {
             let channel = await global_context.bot.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {

@@ -29,11 +29,11 @@ module.exports = {
 
         // TODO: this won't work
         command_data.msg.guild.members.cache.forEach(async(member) => {
-            let config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "globalUser", id: member.user.id });
+            let config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: member.user.id });
             for(var i = 0; i < ammount; i += 1) {
                 config.inventory.push(item_ID);
             }
-            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: member.user.id, user: config });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: member.user.id, user: config });
         });
 
         command_data.msg.channel.send(`Added \`${ammount}x ${target_item.displayName}\` to \`${command_data.msg.guild.members.cache.size}\` members-`).catch(e => { console.log(e); });

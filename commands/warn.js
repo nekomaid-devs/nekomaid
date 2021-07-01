@@ -75,6 +75,6 @@ module.exports = {
             reason: warn_reason
         }
 
-        command_data.global_context.neko_modules_clients.ssm.server_add.addServerWarning(command_data.global_context, serverWarn, command_data.msg.guild);
+        command_data.global_context.neko_modules_clients.ssm.server_add.add_server_warning(command_data.global_context, serverWarn, command_data.msg.guild);
     }
 };

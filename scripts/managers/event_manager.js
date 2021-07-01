@@ -103,19 +103,19 @@ class EventManager {
                     let ammount = data.joinedUsers.length * 100;
                     if(c > 40) {
                         data.joinedUsers.forEach(async(id) => {
-                            let reactedConfig = await em.bot.ssm.server_fetch.fetch(em.bot, { type: "globalUser", id: id });   
+                            let reactedConfig = await em.bot.ssm.server_fetch.fetch(em.bot, { type: "global_user", id: id });   
 
                             reactedConfig.credits += ammount;
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: id, user: reactedConfig });
                         })
 
                         channel.send("The robbery was a success and everyone took away " + ammount + "$~").catch(e => { console.log(e); });
                     } else {
                         data.joinedUsers.forEach(async(id) => {
-                            let reactedConfig = await em.bot.ssm.server_fetch.fetch(em.bot, { type: "globalUser", id: id });   
+                            let reactedConfig = await em.bot.ssm.server_fetch.fetch(em.bot, { type: "global_user", id: id });   
 
                             reactedConfig.rep -= 5;
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: id, user: reactedConfig });
                         })
 
                         channel.send("The robbery was a failure and everyone except the neko was caught~ Everyone's reputation lowered~").catch(e => { console.log(e); });
@@ -152,10 +152,10 @@ class EventManager {
                 setTimeout(async() => {
                     if(data.tickets.length > 0) {
                         let winnerID = em.bot.pickRandom(data.tickets);
-                        let winnerConfig = await em.bot.ssm.server_fetch.fetch(em.bot, { type: "globalUser", id: winnerID });  
+                        let winnerConfig = await em.bot.ssm.server_fetch.fetch(em.bot, { type: "global_user", id: winnerID });  
 
                         winnerConfig.credits += 2000;
-                        em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: winnerID, user: winnerConfig }).catch(e => { console.log(e); });
+                        em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: winnerID, user: winnerConfig }).catch(e => { console.log(e); });
 
                         channel.send("<@" + winnerID + "> won the prize of 2000$ from total of " + data.tickets.length + " tickets!~");
                     } else {
@@ -172,7 +172,7 @@ class EventManager {
         var collector = message.createReactionCollector(filter, { time: remaining })
         collector.on('collect', async(r, u) => {
             let emoji = r.emoji.name;
-            let reactedConfig = await em.bot.ssm.server_fetch.fetch(em.bot, { type: "globalUser", id: u.id });   
+            let reactedConfig = await em.bot.ssm.server_fetch.fetch(em.bot, { type: "global_user", id: u.id });   
 
             switch(type) {
                 case 0:
@@ -180,7 +180,7 @@ class EventManager {
                         data.claimedUsers.push(u.id);
 
                         reactedConfig.inventory.push("0")
-                        em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                        em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
 
                         channel.send("<@" + u.id + "> claimed the gift~ (Gifted so far: " + data.claimedUsers.length + ")").catch(e => { console.log(e); });
                     }
@@ -191,7 +191,7 @@ class EventManager {
                         data.claimedUsers.push(u.id);
 
                         reactedConfig.credits += 300;
-                        em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                        em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
 
                         channel.send("<@" + u.id + "> claimed the gift~ (Gifted so far: " + data.claimedUsers.length + ")").catch(e => { console.log(e); });
                     }
@@ -204,7 +204,7 @@ class EventManager {
                         let won = data.winnings.has(u.id) === false ? 0 : data.winnings.get(u.id);
                         if(c > 50) {
                             reactedConfig.credits += ammount;
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
 
                             data.bets.set(u.id, ammount*1.5);
                             data.winnings.set(u.id, won+ammount);
@@ -222,7 +222,7 @@ class EventManager {
                     if(emoji === "💸") {
                         if(reactedConfig.credits >= 50) {
                             reactedConfig.credits -= 50;
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
 
                             data.donated += 50;
 
@@ -250,7 +250,7 @@ class EventManager {
 
                             reactedConfig.rep -= 10;
                             reactedConfig.credits += 1000;
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
 
                             channel.send("<@" + u.id + "> passed the interview~ (Passed so far: " + data.claimedUsers.length + ")").catch(e => { console.log(e); });
                         }
@@ -262,7 +262,7 @@ class EventManager {
                         let c = Math.floor(Math.random() * (100 - 0 + 1) + 0);
                         if(c > 80) {
                             reactedConfig.rep += 10;
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
 
                             remaining = 0;
 
@@ -286,7 +286,7 @@ class EventManager {
                         let c = Math.floor(Math.random() * (100 - 0 + 1) + 0);
                         if(c > 70) {
                             reactedConfig.credits += 700;
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
 
                             data.joinedUsers.push(u.id);
                             channel.send("The neko scientist was satisfied with the results and rewarded <@" + u.id + ">~").catch(e => { console.log(e); });
@@ -305,7 +305,7 @@ class EventManager {
 
                             reactedConfig.credits -= 200;
                             reactedConfig.inventory.push(itemID);
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
 
                             channel.send("<@" + u.id + "> bought " + item.displayName + "!~").catch(e => { console.log(e); });
                         }
@@ -329,7 +329,7 @@ class EventManager {
 
                             reactedConfig.credits += 75;
                             reactedConfig.inventory.splice(targetIndex, 1);
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
                             
                             channel.send("<@" + u.id + "> sold " + item.displayName + " for 75$!~").catch(e => { console.log(e); });
                         }
@@ -341,7 +341,7 @@ class EventManager {
                         let ammount = data.userTickets.has(u.id) === false ? 0 : data.userTickets.get(u.id);
                         if(reactedConfig.credits >= 100) {
                             reactedConfig.credits -= 100;
-                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "globalUser", id: u.id, user: reactedConfig });
+                            em.bot.ssm.server_edit.edit(em.bot.ssm, { type: "global_user", id: u.id, user: reactedConfig });
 
                             data.userTickets.set(u.id, ammount+1)
                             data.tickets.push(u.id);

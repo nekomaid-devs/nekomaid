@@ -42,11 +42,11 @@ module.exports = {
 
         command_data.author_config.credits += credits_ammount;
         command_data.author_config.netWorth += credits_ammount;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
         command_data.tagged_user_config.credits -= credits_ammount;
         command_data.tagged_user_config.netWorth -= credits_ammount;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         let embedSteal = {
             color: 8388736,

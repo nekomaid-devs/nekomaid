@@ -256,7 +256,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.global_context.neko_modules_clients.ssm.server_remove.removeRank(command_data.global_context, rankID);
+                        command_data.global_context.neko_modules_clients.ssm.server_remove.remove_rank(command_data.global_context, rankID);
                         command_data.msg.channel.send(`Removed rank \`${rank_name}\`-`);
                         break;
                     }

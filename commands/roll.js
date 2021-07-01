@@ -78,7 +78,7 @@ module.exports = {
                 
                 command_data.author_config.credits += won_ammount;
                 command_data.author_config.netWorth += won_ammount;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
                 embedRoll.description = `You won \`${won_ammount_text}\` credits-`;
                 embedRoll.footer = {
@@ -87,7 +87,7 @@ module.exports = {
             } else {
                 command_data.author_config.credits -= bet_ammount;
                 command_data.author_config.credits -= bet_ammount;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.msg.author.id, user: command_data.author_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
                 embedRoll.description = `You lost \`${bet_ammount}\` credits-`;
             }

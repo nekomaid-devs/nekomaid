@@ -154,7 +154,7 @@ module.exports = {
             }
         }
 
-        command_data.global_context.neko_modules_clients.ssm.server_add.addServerMute(command_data.global_context, server_mute);
+        command_data.global_context.neko_modules_clients.ssm.server_add.add_server_mute(command_data.global_context, server_mute);
     },
 
     create_mute_role_and_mute(command_data) {

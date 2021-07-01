@@ -20,12 +20,12 @@ module.exports = {
     async execute(command_data) {
         if(command_data.msg.mentions.users.size < 1) {
             command_data.tagged_user = await command_data.global_context.bot.users.fetch(command_data.args[0]).catch(e => { console.log(e); });
-            command_data.tagged_user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "globalUser", id: command_data.args[0] });    
+            command_data.tagged_user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: command_data.args[0] });    
         }
 
         let credits_ammount = parseInt(command_data.args[1]);
         command_data.tagged_user_config.netWorth = credits_ammount;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "globalUser", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
     
         command_data.msg.channel.send(`Set net worth to \`${credits_ammount}\` for \`${command_data.tagged_user.tag}\`!`).catch(e => { console.log(e); });
     },

@@ -1,30 +1,30 @@
 module.exports = {
-    async removeServerWarningsFromUser(global_context, server, user) {
+    async remove_server_warnings_from_user(global_context, server, user) {
         var query = "DELETE FROM serverwarnings WHERE serverID='" + server.id + "' AND userID='" + user.id + "'";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeServerMute(global_context, id) {
+    async remove_server_mute(global_context, id) {
         var query = "DELETE FROM servermutes WHERE id='" + id + "'";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeServerBan(global_context, id) {
+    async remove_server_ban(global_context, id) {
         var query = "DELETE FROM serverbans WHERE id='" + id + "'";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeRank(global_context, id) {
+    async remove_rank(global_context, id) {
         var query = "DELETE FROM ranks WHERE id='" + id + "'";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeRanksFromServer(global_context, id) {
+    async remove_ranks_from_server(global_context, id) {
         var query = "DELETE FROM ranks WHERE serverID='" + id + "'";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
-    async removeReactionRolesFromServer(global_context, id) {
+    async remove_reaction_roles_from_server(global_context, id) {
         var query = "DELETE FROM reactionroles WHERE serverID='" + id + "'";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     }

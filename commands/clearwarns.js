@@ -65,6 +65,6 @@ module.exports = {
             }
         }
 
-        command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerWarningsFromUser(command_data.global_context, command_data.msg.guild, command_data.msg.author);
+        command_data.global_context.neko_modules_clients.ssm.server_remove.remove_server_warnings_from_user(command_data.global_context, command_data.msg.guild, command_data.msg.author);
     }
 };

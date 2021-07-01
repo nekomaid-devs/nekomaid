@@ -7,7 +7,7 @@ class ModerationManager {
     }
 
     /*async timeoutAllMutes(moderator) {
-        var allMutes = await moderator.bot.ssm.server_fetch.fetch(moderator.bot, { type: "allServerMutes" });
+        var allMutes = await moderator.bot.ssm.server_fetch.fetch(moderator.bot, { type: "all_server_mutes" });
         moderator.bot.guilds.cache.forEach(server => {
             let serverMutes = allMutes.filter(e => { return e.serverID === server.id; });
             if(moderator.bot.isDatabaseReady === true && server.me !== undefined && server.me !== null && server.me.hasPermission("MANAGE_ROLES") === true) {
@@ -32,7 +32,7 @@ class ModerationManager {
         if(serverMutes.length < 0 || serverConfig.muteRoleID === "-1") { return; }
         
         mutesToRemove.forEach(mute => {
-            moderator.bot.ssm.server_remove.removeServerMute(moderator.bot.ssm, mute.id);
+            moderator.bot.ssm.server_remove.remove_server_mute(moderator.bot.ssm, mute.id);
         })
         userIDsToUnmute.forEach(async(userID) => {
             var mutedUser = await server.members.fetch(userID).catch(e => { console.log(e); });
@@ -45,7 +45,7 @@ class ModerationManager {
     }
 
     async timeoutAllBans(moderator) {
-        let allBans = await moderator.bot.ssm.server_fetch.fetch(moderator.bot, { type: "allServerBans" });
+        let allBans = await moderator.bot.ssm.server_fetch.fetch(moderator.bot, { type: "all_server_bans" });
         moderator.bot.guilds.cache.forEach(server => {
             let serverBans = allBans.filter(e => { return e.serverID === server.id; });
             if(moderator.bot.isDatabaseReady === true && server.me !== undefined && server.me !== null && server.me.hasPermission("MANAGE_ROLES") === true) {
@@ -77,7 +77,7 @@ class ModerationManager {
                 });
             })
 
-            moderator.bot.ssm.server_remove.removeServerBan(moderator.bot.ssm, ban0.id);
+            moderator.bot.ssm.server_remove.remove_server_ban(moderator.bot.ssm, ban0.id);
         })
     }
 

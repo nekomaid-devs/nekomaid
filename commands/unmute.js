@@ -48,7 +48,7 @@ module.exports = {
             command_data.tagged_member.roles.remove(mute_role);
 
             command_data.msg.channel.send(`Unmuted \`${command_data.tagged_user.tag}\` (Reason: \`${unmute_reason}\`)`).catch(e => { console.log(e); });
-            command_data.global_context.neko_modules_clients.ssm.server_remove.removeServerMute(command_data.global_context, previous_mute_ID);
+            command_data.global_context.neko_modules_clients.ssm.server_remove.remove_server_mute(command_data.global_context, previous_mute_ID);
 
             // TODO: drop this once a separate callback
             if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {

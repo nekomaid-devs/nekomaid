@@ -14,8 +14,8 @@ module.exports = {
     },
 
     async process(global_context, member) {
-        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guildmember_add", id: member.guild.id });
-        let server_mutes = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverMutes", id: member.guild.id });
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_add", id: member.guild.id });
+        let server_mutes = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_mutes", id: member.guild.id });
 
         member.guild.roles.cache.forEach(role => {
             if(server_config.autoRoles.includes(role.id) === true) {
@@ -49,7 +49,7 @@ module.exports = {
             
             //var log = { guildID: member.guild.id, type: "guildMemberAdd", userID: member.id, tag: member.user.tag, time: Date.now() }
             //serverLogs.logs.push(log);
-            //bot.ssm.server_edit.editServerLogsInStructure(bot.ssm, member.guild, serverLogs);
+            //bot.ssm.server_edit.edit_server_logs_in_structure(bot.ssm, member.guild, serverLogs);
         }
     }
 }

@@ -46,20 +46,20 @@ class MarriageManager {
         var targetUserDisplayName = targetUser.username + "#" + targetUser.discriminator;
       
         //Changes the data in structure
-        var globalAuthorConfig = await bot.ssm.server_fetch.fetch(bot, { type: "globalUser", id: sourceUser.id });  
+        var globalAuthorConfig = await bot.ssm.server_fetch.fetch(bot, { type: "global_user", id: sourceUser.id });  
         globalAuthorConfig.marriedID = targetUser.id;
 
         //Edits and broadcasts the change
-        bot.ssm.server_edit.edit(bot.ssm, { type: "globalUser", id: sourceUser.id, user: globalAuthorConfig });
+        bot.ssm.server_edit.edit(bot.ssm, { type: "global_user", id: sourceUser.id, user: globalAuthorConfig });
       
-        var globalUserConfig = await bot.ssm.server_fetch.fetch(bot, { type: "globalUser", id: targetUser.id });  
+        var globalUserConfig = await bot.ssm.server_fetch.fetch(bot, { type: "global_user", id: targetUser.id });  
         if(log === 2) {
             globalUserConfig.canDivorce = false;
         }
         globalUserConfig.marriedID = sourceUser.id;
 
         //Edits and broadcasts the change
-        bot.ssm.server_edit.edit(bot.ssm, { type: "globalUser", id: targetUser.id, user: globalUserConfig });
+        bot.ssm.server_edit.edit(bot.ssm, { type: "global_user", id: targetUser.id, user: globalUserConfig });
       
         //Construct message and send it
         console.log(`[marry] ${authorDisplayName} married ${targetUserDisplayName}!`);

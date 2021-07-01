@@ -43,7 +43,7 @@ class SortBy {
     async updateTop(global_context, props) {
         var t0 = Date.now();
 
-        var globalUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUsers" });
+        var globalUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
         var comparator = this.createComparator(props);
         globalUserTop.sort(comparator);
     
@@ -57,7 +57,7 @@ class SortBy {
         var t0 = Date.now();
 
         // TODO: this won't work
-        var serverUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "globalUsers" });
+        var serverUserTop = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
         var serverUserTop2 = serverUserTop.filter(val =>
             server.members.cache.has(val.userID)
         );

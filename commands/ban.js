@@ -66,7 +66,7 @@ module.exports = {
         }
 
         command_data.global_context.data.last_moderator_IDs.set(command_data.msg.guild.id, command_data.msg.author.id);
-        command_data.global_context.neko_modules_clients.ssm.server_add.addServerBan(command_data.global_context, server_ban);
+        command_data.global_context.neko_modules_clients.ssm.server_add.add_server_ban(command_data.global_context, server_ban);
         command_data.tagged_member.ban({ reason: ban_reason });
     }
 };
