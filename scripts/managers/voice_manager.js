@@ -113,7 +113,7 @@ class VoiceManager {
                         current_length_2 = "Livestream";
                     }
                     
-                    let stream = voice_data.connection.play(await global_context.modules.ytdl(url, { quality: 'highestaudio' }), { type: 'opus', highWaterMark: 50 });
+                    let stream = voice_data.connection.play(await global_context.modules.ytdl(url, { quality: 'highestaudio', highWaterMark: 1 << 25 }), { type: 'opus' });
                     voice_data.elapsedMilis = 0;
                     stream.on("finish", () => {
                         voice_data.current = -1;
@@ -210,7 +210,7 @@ class VoiceManager {
                     current_length_2 = "Livestream";
                 }
 
-                let stream = voice_data.connection.play(await global_context.modules.ytdl(voice_request.url, { quality: 'highestaudio' }), { type: 'opus', highWaterMark: 50 });
+                let stream = voice_data.connection.play(await global_context.modules.ytdl(voice_request.url, { quality: 'highestaudio', highWaterMark: 1 << 25 }), { type: 'opus' });
                 voice_data.elapsedMilis = 0;
                 stream.on("finish", () => {
                     voice_data.current = -1;
