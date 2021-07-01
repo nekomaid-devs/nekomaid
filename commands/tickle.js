@@ -15,7 +15,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getTickleGifs());
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get_tickle_gifs());
         let embedTickle = {
             title: `${command_data.msg.author.tag} tickles ${command_data.tagged_user_tags}!`,
             color: 8388736,

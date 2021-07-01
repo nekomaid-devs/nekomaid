@@ -57,7 +57,7 @@ module.exports = {
         switch(action) {
             case "add": {
                 if(command_data.args.length < 2) {
-                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to add a \`value\` to- (Check \`${command_data.server_config.prefix}help botconfig add\` for help)`, "add botOwner @LamkasDev") }).catch(e => { console.log(e); });
+                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to add a \`value\` to- (Check \`${command_data.server_config.prefix}help botconfig add\` for help)`, "add botOwner @LamkasDev") }).catch(e => { console.log(e); });
                     return;
                 }
                 let property = command_data.args[1];
@@ -80,7 +80,7 @@ module.exports = {
                     }
 
                     default: {
-                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help botconfig add\` for help)`, "add botOwner @LamkasDev") }).catch(e => { console.log(e); });
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help botconfig add\` for help)`, "add botOwner @LamkasDev") }).catch(e => { console.log(e); });
                         return;
                     }
                 }
@@ -91,7 +91,7 @@ module.exports = {
 
             case "remove": {
                 if(command_data.args.length < 2) {
-                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help botconfig remove\` for help)`, "remove botOwner @LamkasDev") }).catch(e => { console.log(e); });
+                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help botconfig remove\` for help)`, "remove botOwner @LamkasDev") }).catch(e => { console.log(e); });
                     return;
                 }
                 let property = command_data.args[1];
@@ -123,7 +123,7 @@ module.exports = {
                     }
 
                     default: {
-                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help botconfig remove\` for help)`, "remove botOwner @LamkasDev") }).catch(e => { console.log(e); });
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help botconfig remove\` for help)`, "remove botOwner @LamkasDev") }).catch(e => { console.log(e); });
                         return;
                     }
                 }
@@ -133,7 +133,7 @@ module.exports = {
             }
 
             default: {
-                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.getErrorEmbed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `remove`)", "add botOwner @LamkasDev") }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `remove`)", "add botOwner @LamkasDev") }).catch(e => { console.log(e); });
                 break;
             }
         }

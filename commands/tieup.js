@@ -16,7 +16,7 @@ module.exports = {
     nsfw: true,
     nsfw: false,
     execute(command_data) {
-        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getTieupGifs());
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get_tieup_gifs());
         let embedTieUp = {
             title: `${command_data.msg.author.tag} ties up ${command_data.tagged_user_tags}!`,
             color: 8388736,

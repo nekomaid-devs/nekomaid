@@ -10,7 +10,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getLewdGifs())
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get_lewd_gifs())
         let embedLewd = {
             title: `${command_data.msg.author.tag} thinks thats lewd!`,
             color: 8388736,

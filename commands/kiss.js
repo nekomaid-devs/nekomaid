@@ -11,7 +11,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getKissGifs());
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get_kiss_gifs());
         let embedKiss = {
             title: `${command_data.msg.author.tag} kisses ${command_data.tagged_user_tags}!`,
             color: 8388736,

@@ -15,7 +15,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getLickGifs())
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get_lick_gifs())
         let embedLick = {
             title: `${command_data.msg.author.tag} licks ${command_data.tagged_user_tags}!`,
             color: 8388736,

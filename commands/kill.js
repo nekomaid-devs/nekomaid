@@ -27,7 +27,7 @@ module.exports = {
             return;
         }
 
-        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getKillGifs());
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get_kill_gifs());
         let embedKill = {
             title: `${command_data.msg.author.tag} kills ${command_data.tagged_user_tags}!`,
             color: 8388736,

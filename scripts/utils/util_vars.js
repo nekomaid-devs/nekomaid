@@ -1,5 +1,5 @@
 module.exports = {
-    get8BallAnswers() {
+    get_8ball_answers() {
         return [
             "Yes, 100%",
             "Signs point to yes",
@@ -27,13 +27,13 @@ module.exports = {
         ];
     },
 
-    getAngryGifs() {
+    get_angry_gifs() {
         return [
             "https://media.discordapp.net/attachments/670322638274560010/688170288143138826/ghz5ksh.gif" 
         ];
     },
 
-    getArrestGifs() {
+    get_arrest_gifs() {
         return [
             "https://i.imgur.com/bvTdOGI.gif",
             "https://i.imgur.com/QPi0AzY.gif",
@@ -42,7 +42,7 @@ module.exports = {
         ];
     },
 
-    getBiteGifs() {
+    get_bite_gifs() {
         return [
             "https://cdn.weeb.sh/images/H1hige7sZ.gif",
             "https://cdn.weeb.sh/images/ry3pQGraW.gif",
@@ -60,7 +60,7 @@ module.exports = {
         ];
     },
 
-    getBlushGifs() {
+    get_blush_gifs() {
         return [
             "https://cdn.weeb.sh/images/S1exMIQDb.gif",
             "https://cdn.weeb.sh/images/Hky7MImwW.gif",
@@ -79,7 +79,7 @@ module.exports = {
         ];
     },
 
-    getBorgarGifs() {
+    get_borgar_gifs() {
         return [
             "https://i.kym-cdn.com/photos/images/original/001/609/349/cea.gif",
             "https://i.pinimg.com/originals/31/1b/84/311b84141684c71bede893c0d92d7671.gif",
@@ -88,7 +88,7 @@ module.exports = {
         ];
     },
 
-    getCryGifs() {
+    get_cry_gifs() {
         return [
             "https://cdn.weeb.sh/images/ByPGQIQwb.gif",
             "https://cdn.weeb.sh/images/rJUbkgqyf.gif",
@@ -106,7 +106,7 @@ module.exports = {
         ];
     },
 
-    getCuddleGifs() {
+    get_cuddle_gifs() {
         return [
             "https://api.suya.moe/cdn.gif/cuddle/U0piR0xVUXdaMg.gif",
             "https://api.suya.moe/cdn.gif/cuddle/U3laazhVN3ZiYw.gif",
@@ -125,7 +125,7 @@ module.exports = {
         ];
     },
 
-    getDanceGifs() {
+    get_dance_gifs() {
         return [
             "https://cdn.weeb.sh/images/HJ12OUXwZ.gif",
             "https://cdn.weeb.sh/images/rkxOLd8Xv-.gif",
@@ -148,7 +148,7 @@ module.exports = {
         ];
     },
 
-    getHugGifs() {
+    get_hug_gifs() {
         return [
             "https://api.suya.moe/cdn.gif/hug/cmt4MWRKMjV6bQ.gif",
             "https://api.suya.moe/cdn.gif/hug/cms2UHN2T1VNdQ.gif",
@@ -168,7 +168,7 @@ module.exports = {
         ];
     },
 
-    getKillGifs() {
+    get_kill_gifs() {
         return [
             "https://cdn.weeb.sh/images/r11as1tvZ.gif",
             "https://cdn.weeb.sh/images/HyXTiyKw-.gif",
@@ -177,7 +177,7 @@ module.exports = {
         ];
     },
 
-    getKissGifs() {
+    get_kiss_gifs() {
         return [
             "https://api.suya.moe/cdn.gif/kiss/SEo1a2hUT1AtbQ.gif",
             "https://api.suya.moe/cdn.gif/kiss/UzEtS1hzaDBibQ.gif",
@@ -200,7 +200,7 @@ module.exports = {
         ];
     },
 
-    getLewdGifs() {
+    get_lewd_gifs() {
         return [
             "https://cdn.weeb.sh/images/ByDu6pOv-.gif",
             "https://cdn.weeb.sh/images/Sk7XL6ECb.gif",
@@ -219,7 +219,7 @@ module.exports = {
         ];
     },
 
-    getLickGifs() {
+    get_lick_gifs() {
         return [
             "https://api.suya.moe/cdn.gif/lick/UzFJbGwwX3ZXag.gif",
             "https://api.suya.moe/cdn.gif/lick/cko2aHJRcjYtbA.gif",
@@ -235,7 +235,7 @@ module.exports = {
         ];
     },
 
-    getNomGifs() {
+    get_nom_gifs() {
         return [
             "https://cdn.weeb.sh/images/H1hige7sZ.gif",
             "https://cdn.weeb.sh/images/rJAlbgXsb.gif",
@@ -246,7 +246,7 @@ module.exports = {
         ];
     },
 
-    getPatGifs() {
+    get_pat_gifs() {
         return [
             "https://api.suya.moe/cdn.gif/pat/cmtiYmxrWXZicg.gif",
             "https://api.suya.moe/cdn.gif/pat/QnlkM2trdHctdA.gif",
@@ -274,7 +274,7 @@ module.exports = {
         ];
     },
 
-    getPokeGifs() {
+    get_poke_gifs() {
         return [
             "https://api.suya.moe/cdn.gif/poke/ckowaGxzblItdA.gif",
             "https://api.suya.moe/cdn.gif/poke/U3lRelJhRkZibg.gif",
@@ -290,7 +290,7 @@ module.exports = {
           ];
     },
 
-    getPoutGifs() {
+    get_pout_gifs() {
         return [
             "https://cdn.weeb.sh/images/BJphgJYvW.gif",
             "https://cdn.weeb.sh/images/SJrolJYv-.gif",
@@ -307,7 +307,7 @@ module.exports = {
         ];
     },
 
-    getShrugGifs() {
+    get_shrug_gifs() {
         return [
             "https://cdn.weeb.sh/images/HkpQ7JYDW.gif",
             "https://cdn.weeb.sh/images/HyHk2WSrz.gif",
@@ -318,7 +318,7 @@ module.exports = {
         ];
     },
 
-    getSlapGifs() {
+    get_slap_gifs() {
         return [
             "https://api.suya.moe/cdn.gif/slap/cmtwQVhhNWJHZg.gif",
             "https://api.suya.moe/cdn.gif/slap/U0pMM1ExRnZidg.gif",
@@ -338,7 +338,7 @@ module.exports = {
         ];
     },
 
-    getSleepyGifs() {
+    get_sleepy_gifs() {
         return [
             "https://cdn.weeb.sh/images/rk3-NkKDb.gif",
             "https://cdn.weeb.sh/images/rJ7ZNyKDW.gif",
@@ -357,7 +357,7 @@ module.exports = {
         ];
     },
 
-    getSmileGifs() {
+    get_smile_gifs() {
         return [
             "https://cdn.weeb.sh/images/SkR3TJFNM.gif",
             "https://cdn.weeb.sh/images/rJZYEytPb.gif",
@@ -375,7 +375,7 @@ module.exports = {
         ];
     },
 
-    getSmugGifs() {
+    get_smug_gifs() {
         return [
             "https://cdn.weeb.sh/images/r1HveSEtz.gif",
             "https://cdn.weeb.sh/images/S1slUkFvZ.gif",
@@ -393,7 +393,7 @@ module.exports = {
         ];
     },
 
-    getThinkGifs() {
+    get_think_gifs() {
         return [
             "https://media.giphy.com/media/13Z5kstwARnPna/giphy.gif",
             "https://gifimage.net/wp-content/uploads/2017/09/anime-thinking-gif-8.gif",
@@ -405,7 +405,7 @@ module.exports = {
         ];
     },
 
-    getTickleGifs() {
+    get_tickle_gifs() {
         return [
             "https://cdn.weeb.sh/images/Byj7LJmiW.gif",
             "https://cdn.weeb.sh/images/HyjNLkXiZ.gif",
@@ -419,7 +419,7 @@ module.exports = {
         ];
     },
 
-    getTieupGifs() {
+    get_tieup_gifs() {
         return [
             "https://media.discordapp.net/attachments/670328197677711372/690709486641610752/tenor.gif",
             "https://media.discordapp.net/attachments/670322638274560010/690911266591735859/source.gif",
@@ -428,22 +428,22 @@ module.exports = {
         ];
     },
 
-    getErrorEmbed(msg, prefix, command, problem, _usage) {
-        let usage = "`" + prefix + command.name + " " + command.helpUsage + "\n`" + prefix + command.name + " " + _usage + "`"
-        usage = usage.split("/userTag/").join("@" + msg.author.username)
-        usage = usage.split("/username/").join(msg.author.username)
-        const embedError = {
+    get_error_embed(msg, prefix, command, problem, usage_detailed) {
+        let usage = `\`${prefix}${command.name} ${command.helpUsage}\n\`${prefix}${command.name} ${usage_detailed}\``;
+        usage = usage.split("/userTag/").join(`@${msg.author.tag}`);
+        usage = usage.split("/username/").join(msg.author.username);
+        let embedError = {
             title: "❌ Wrong arguments",
             color: 8388736,
             fields: [ 
-            {
-                name: 'Problem:',
-                value: problem
-            },
-            {
-                name: 'Usage:',
-                value: usage
-            }
+                {
+                    name: 'Problem:',
+                    value: problem
+                },
+                {
+                    name: 'Usage:',
+                    value: usage
+                }
             ]
         }
 

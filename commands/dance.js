@@ -10,7 +10,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.getDanceGifs())
+        let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get_dance_gifs())
         let embedDance = {
             title: `${command_data.msg.author.tag} is dancing!`,
             color: 8388736,
