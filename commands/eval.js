@@ -17,15 +17,15 @@ module.exports = {
         new NeededPermission("author", "BOT_OWNER")
     ],
     nsfw: false,
-    execute(command_data) {
-        // TODO: make this on current shard only
+    async execute(command_data) {
+        // TODO: make this a cool embed
         let eval_query = command_data.total_argument;
-        command_data.bot.shard.broadcastEval(eval_query)
-        .then(result =>
-            command_data.msg.channel.send(`Result for \`${eval_query}\`\n${result}`).catch(e => { console.log(e); })
-        )
-        .catch(err =>
+        
+        try {
+            let result = await eval(eval_query);
+            command_data.msg.channel.send(`Result for \`${eval_query}\`\n${result}`).catch(e => { console.log(e); });
+        } catch(err) {
             command_data.msg.channel.send(`Error for \`${eval_query}\`\n${err}`).catch(e => { console.log(e); })
-        )
+        }
     },
 };
