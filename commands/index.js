@@ -130,6 +130,7 @@ module.exports = {
     repeat: require('./repeat'),
     shuffle: require('./shuffle'),
     pause: require('./pause'),
+    resume: require('./resume'),
     clearqueue: require('./clearqueue'),
     np: require('./np'),
     

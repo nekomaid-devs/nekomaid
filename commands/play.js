@@ -19,7 +19,6 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: add a loading embed
         if(command_data.msg.member.voice.channel == null) {
             command_data.msg.reply("You need to join a voice channel-");
             return;
@@ -29,6 +28,7 @@ module.exports = {
             return;
         }
 
+        let avatar_url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false) {
             let connection = await command_data.msg.member.voice.channel.join();
             let voice_data = new command_data.global_context.neko_modules.VoiceData();
@@ -37,12 +37,31 @@ module.exports = {
             voice_data.init_message_channel_ID = command_data.msg.channel.id;
 
             command_data.global_context.neko_modules_clients.vm.add_connection(command_data.global_context, command_data.msg.guild.id, voice_data);
-            command_data.msg.channel.send(`Joined channel \`${command_data.msg.member.voice.channel.name}\`-`).catch(e => { console.log(e); });
+
+            let embedJoin = {
+                author: {
+                    name: `Joined channel - ${command_data.msg.member.voice.channel.name}`,
+                    icon_url: avatar_url,
+                },
+                description: `Joined \`${command_data.msg.member.voice.channel.name}\` in \`${command_data.msg.guild.name}\``
+            }
+
+            command_data.msg.channel.send("", { embed: embedJoin }).catch(e => { console.log(e); });
         }
 
         if(command_data.args.length > 0) {
             let url = command_data.args[0];
             url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
+
+            let embedPlay = {
+                author: {
+                    name: "Loading... <a:loading:393852367751086090>",
+                    icon_url: avatar_url,
+                },
+                color: 8388736,
+                description: `Fetching results for \`${url}\``
+            }
+            let message = await command_data.msg.channel.send("", { embed: embedPlay }).catch(e => { console.log(e); });
 
             if(command_data.global_context.modules.ytlist.validateID(url) === true) {
                 let result = await command_data.global_context.modules.ytlist(url)
@@ -61,16 +80,14 @@ module.exports = {
                     await command_data.global_context.neko_modules_clients.vm.play_on_connection(command_data.global_context, command_data.msg, item.url, item, false);
                 }
 
-                command_data.msg.channel.send(`Added \`${result.items.length}\` songs to the queue-`).catch(e => { console.log(e); });
+                embedPlay.author.name = `Added \`${result.items.length}\` songs to the queue-`;
+                embedPlay.description = "Done~ <:n_music:771823629570277396>";
+                message.edit("", { embed: embedPlay }).catch(e => { console.log(e); });
             } else if(command_data.global_context.modules.ytdl.validateURL(url) === true) {
                 url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
                 command_data.global_context.neko_modules_clients.vm.play_on_connection(command_data.global_context, command_data.msg, url);
             } else {
                 let max = 5;
-                let embedPlay = new command_data.global_context.modules.Discord.MessageEmbed()
-                .setColor(8388736)
-                .setTitle(`Select a song to play (type 1-${max})-`)
-
                 let infosByID = new Map();
                 let result = await command_data.global_context.modules.ytsr(command_data.total_argument, { limit: 5 })
                 .catch(e => {
@@ -112,8 +129,9 @@ module.exports = {
                     command_data.global_context.neko_modules_clients.vm.play_on_connection(command_data.global_context, m, infosByID.get(pos).url, infosByID.get(pos));
                 });
 
-                embedPlay.setDescription(description_text);
-                command_data.msg.channel.send("", { embed: embedPlay }).catch(e => { console.log(e); });
+                embedPlay.author.name = `Select a song to play (type 1-${max}) <:n_music:771823629570277396>`;
+                embedPlay.description = description_text;
+                message.edit("", { embed: embedPlay }).catch(e => { console.log(e); });
             }
         }
     },

@@ -73,10 +73,9 @@ module.exports = {
                 let value = args_temp.join(" ");
     
                 switch(property) {
-                    // TODO: re-do this
                     case "bannedWord": {
                         command_data.server_config.bannedWords.push(value);
-                        command_data.msg.channel.send("Added `" + value + "` to bot's property `" + property + "`").catch(e => { console.log(e); });
+                        command_data.msg.channel.send(`Added \`${value}\` to bot's property \`${property}\``).catch(e => { console.log(e); });
                         break;
                     }
     
@@ -105,7 +104,6 @@ module.exports = {
                 let value = args_temp.join(" ");
     
                 switch(property) {
-                    // TODO: re-do this
                     case "bannedWord": {
                         if(command_data.server_config.bannedWords.includes(value) === false) {
                             command_data.msg.reply(`Word \`${value}\` isn't a banned-`);
@@ -113,7 +111,7 @@ module.exports = {
                         }
 
                         command_data.server_config.bannedWords.splice(command_data.server_config.bannedWords.indexOf(command_data.args[2]), 1);
-                        command_data.msg.channel.send("Removed `" + value + "` from bot's property `" + property + "`").catch(e => { console.log(e); });
+                        command_data.msg.channel.send(`Removed \`${value}\` from bot's property \`${property}\``).catch(e => { console.log(e); });
                         break;
                     }
 

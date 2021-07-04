@@ -38,7 +38,7 @@ class SortBy {
     }
 
     async get_top_server(global_context, server, props) {
-        // TODO: this won't work
+        await global_context.utils.verify_guild_members(server);
         let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
         items = items.filter(val => { return server.members.cache.has(val.userID); });
         items.sort(this.create_comparator(props));

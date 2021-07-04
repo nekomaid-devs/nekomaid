@@ -14,9 +14,11 @@ module.exports = {
     },
 
     async process(global_context, guild, user) {
-        // TODO: this should add Nekomaid's bans aswell
+        // TODO: this should add Nekomaid's bans aswell 
         // TODO: also we should check for uncaught bans somewhere else
+        let moderation_action = global_context.data.last_moderation_actions.get(guild.id);
         let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_ban_add", id: guild.id });
+
         if(server_config.audit_bans == true && server_config.audit_channel != "-1") {
             let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { console.log(e); });
             if(channel !== undefined) {
@@ -26,12 +28,12 @@ module.exports = {
                 if(last_audit.action === "MEMBER_BAN_ADD" && last_audit.target.id === user.id) {
                     let executor = -1;
                     if(last_audit.executor.id === global_context.bot.user.id) {
-                        executor = await global_context.bot.users.fetch(global_context.data.last_moderator_IDs.get(guild.id)).catch(e => { console.log(e); });
+                        executor = await global_context.bot.users.fetch(moderation_action.moderator).catch(e => { console.log(e); });
+                        global_context.data.last_moderation_actions.delete(guild.id);
                     } else {
                         executor = await global_context.bot.users.fetch(last_audit.executor.id).catch(e => { console.log(e); });
                     }
 
-                    // TODO: add duration of ban (if available)
                     let url = user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                     let embedBan = {
                         author: {
@@ -52,6 +54,11 @@ module.exports = {
                             {
                                 name: "Reason:",
                                 value: last_audit.reason === null ? "None" : last_audit.reason
+                            },
+                            {
+                                name: "Duration:",
+                                value: moderation_action === undefined ? "Unknown" : moderation_action.duration,
+                                inline: true
                             }
                         ]
                     }

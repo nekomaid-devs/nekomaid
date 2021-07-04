@@ -16,6 +16,7 @@ let global_context = {
     bot_config: {},
     cached_all_channels: [],
     cached_all_roles: []
+    cached_all_members: []
 }
 
 //Import modules
@@ -100,13 +101,6 @@ setInterval(async function() {
     }
 }, 60000)
 
-setInterval(function() {
-    if(bot.shard.ids[0] !== bot.Discord.ShardClientUtil.shardIDForGuildID("713467608363696128", bot.shard.count)) { return; }
-    
-    bot.webupdates.refreshStatus(bot);
-    bot.webupdates.refreshBotList(bot);
-}, 60000)
-
 async function postLoad() {
     bot.isDatabaseReady = true;
 
@@ -115,12 +109,6 @@ async function postLoad() {
 
     bot.botConfig = await bot.ssm.server_fetch.fetch(bot, { type: "config", id: "defaultConfig" });
 }*/
-setInterval(() => {
-    if(bot.shard.ids[0] !== 0) { return; }
-    if(global_context.neko_modules.webupdates !== undefined) {
-        global_context.neko_modules.webupdates.refresh_website(global_context);
-    }
-}, 2000);
 setInterval(() => {
     bot.neko_data.processed_events = global_context.data.processed_events;
     bot.neko_data.total_events = global_context.data.total_events;
@@ -136,6 +124,18 @@ setInterval(() => {
     global_context.data.processed_messages = 0;
     global_context.data.processed_commands = 0;
 }, 1000);
+setInterval(() => {
+    if(bot.shard.ids[0] !== 0) { return; }
+    if(global_context.neko_modules.web_updates !== undefined) {
+        global_context.neko_modules.web_updates.refresh_website(global_context);
+    }
+}, 2000);
+setInterval(() => {
+    global_context.neko_modules.web_updates.refresh_bot_list(global_context);
+}, 60000);
+setInterval(() => {
+    global_context.neko_modules.web_updates.refresh_status(global_context);
+}, 60000 * 30);
 
 let bot_importer = require('./bot_importer');
 bot.on('ready', async() => {
@@ -151,7 +151,7 @@ bot.on('ready', async() => {
     global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Channels: ${bot.channels.cache.size}] - [Users: ${bot.users.cache.size}]`);
 
     global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "defaultConfig" });
-    global_context.neko_modules.webupdates.refresh_status(global_context);
+    global_context.neko_modules.web_updates.refresh_status(global_context);
     
     let bot_callbacks = require('./callbacks');
     Object.keys(bot_callbacks).forEach(key => {

@@ -30,7 +30,7 @@ module.exports = {
 
         command_data.msg.channel.send(`Kicked \`${command_data.tagged_user.tag}\` (Reason: \`${kick_reason}\`)-`).catch(e => { console.log(e); });
 
-        command_data.global_context.data.last_moderator_IDs.set(command_data.msg.guild.id, command_data.msg.author.id);
+        command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id });
         command_data.tagged_member.kick(kick_reason);
     }
 };

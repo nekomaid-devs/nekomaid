@@ -29,6 +29,9 @@ module.exports = {
             case "server_guild_member_nickname_update":
                 return await this.fetch_data(global_context, "SELECT serverID, audit_channel, audit_nicknames FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
+            case "server_guild_member_warn":
+                return await this.fetch_data(global_context, "SELECT serverID, audit_channel, audit_warns, caseID FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+
             case "server_message":
                 return await this.fetch_data(global_context, "SELECT serverID, prefix, bannedWords, invites, module_level_enabled, module_level_message_exp FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 

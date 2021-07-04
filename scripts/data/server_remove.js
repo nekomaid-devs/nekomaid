@@ -19,6 +19,11 @@ module.exports = {
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 
+    async remove_counters_from_server(global_context, id) {
+        var query = "DELETE FROM counters WHERE serverID='" + id + "'";
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
+    },
+
     async remove_ranks_from_server(global_context, id) {
         var query = "DELETE FROM ranks WHERE serverID='" + id + "'";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);

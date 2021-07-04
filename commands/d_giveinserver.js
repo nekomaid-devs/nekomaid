@@ -27,7 +27,7 @@ module.exports = {
             return;
         }
 
-        // TODO: this won't work
+        await command_data.global_context.utils.verify_guild_members(command_data.msg.guild);
         command_data.msg.guild.members.cache.forEach(async(member) => {
             let config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: member.user.id });
             for(var i = 0; i < ammount; i += 1) {

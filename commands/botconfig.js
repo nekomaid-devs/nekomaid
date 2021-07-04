@@ -72,10 +72,9 @@ module.exports = {
                 let tagged_user = tagged_users[0];
 
                 switch(property) {
-                    // TODO: re-do this
                     case "botOwner": {
                         command_data.global_context.bot_config.botOwners.push(tagged_user.id);
-                        command_data.msg.channel.send("Added `" + tagged_user.tag + "` to bot's property `" + property + "`").catch(e => { console.log(e); });
+                        command_data.msg.channel.send(`Added \`${tagged_user.tag}\` to bot's property \`${property}\``).catch(e => { console.log(e); });
                         break;
                     }
 

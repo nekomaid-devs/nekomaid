@@ -74,6 +74,12 @@ module.exports = {
                 global_context.cached_all_roles.push(guild.id);
             }
         }
+        global_context.utils.verify_guild_members = async(guild) => {
+            if(global_context.cached_all_members.includes(guild.id) === false) {
+                await guild.members.fetch();
+                global_context.cached_all_members.push(guild.id);
+            }
+        }
 
         //Setup SQL
         let sql_connection = global_context.modules.sql.createConnection({
@@ -178,7 +184,7 @@ module.exports = {
             cb(guildData);
         });*/
 
-        global_context.neko_modules.webupdates = require('./scripts/webupdates/webupdates');
+        global_context.neko_modules.web_updates = require('./scripts/web_updates/web_updates');
         global_context.neko_modules.vars = require('./scripts/utils/util_vars');
 
         //Setup other stupid stuff
@@ -189,8 +195,8 @@ module.exports = {
         global_context.data.processed_messages = 0;
         global_context.data.total_commands = 0;
         global_context.data.processed_commands = 0;
-
-        global_context.data.last_moderator_IDs = new Map();
+        
+        global_context.data.last_moderation_actions = new Map();
         global_context.data.openings = global_context.utils.read_JSON("/data/openings.json");
 
         global_context.data.default_headers = {

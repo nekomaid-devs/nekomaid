@@ -65,7 +65,7 @@ module.exports = {
             end: time === -1 ? -1 : ban_end
         }
 
-        command_data.global_context.data.last_moderator_IDs.set(command_data.msg.guild.id, command_data.msg.author.id);
+        command_data.global_context.data.last_moderation_actions.set(command_data.guild.id, { moderator: command_data.msg.author.id, duration: extended_time_text });
         command_data.global_context.neko_modules_clients.ssm.server_add.add_server_ban(command_data.global_context, server_ban);
         command_data.tagged_member.ban({ reason: ban_reason });
     }

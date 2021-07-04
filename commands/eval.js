@@ -18,14 +18,24 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: make this a cool embed
         let eval_query = command_data.total_argument;
+        
+        let url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
+        let embedEval = {
+            author: {
+                name: `Result for - \`${(eval_query.length < 32 ? eval_query : eval_query.slice(0, 32) + "...")}\``,
+                icon_url: url,
+            }
+        }
         
         try {
             let result = await eval(eval_query);
-            command_data.msg.channel.send(`Result for \`${eval_query}\`\n${result}`).catch(e => { console.log(e); });
+
+            embedEval.description = result;
+            command_data.msg.channel.send("", { embed: embedEval }).catch(e => { console.log(e); });
         } catch(err) {
-            command_data.msg.channel.send(`Error for \`${eval_query}\`\n${err}`).catch(e => { console.log(e); })
+            embedEval.description = err;
+            command_data.msg.channel.send("", { embed: embedEval }).catch(e => { console.log(e); });
         }
     },
 };

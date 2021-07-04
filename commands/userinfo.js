@@ -49,8 +49,8 @@ module.exports = {
             }
         }
 
-        // TODO: this won't work
-        let join_score_array = Array.from(command_data.msg.guild.members.cache.values()).sort(function(a, b) { return a.joinedTimestamp - b.joinedTimestamp });
+        await command_data.global_context.utils.verify_guild_members(command_data.msg.guild);
+        let join_score_array = Array.from(command_data.msg.guild.members.cache.values()).sort((a, b) => { return a.joinedTimestamp - b.joinedTimestamp });
         let join_score = -1;
         let join_score_suffix = "th";
         let join_score_max = command_data.msg.guild.members.cache.size;
