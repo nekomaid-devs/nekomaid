@@ -47,7 +47,7 @@ if(config.dev_mode === true) { return; }
 let server = http.createServer((req, res) => {
     let API_key_1 = req.headers["Authorization"].substring(0, req.headers["Authorization"].indexOf(" "))
     let API_key_2 = req.headers["Authorization"];
-    let authorized = config.nekomaid_API_keys.includes(API_key_1) || config.nekomaid_API_keys.includes(API_key_2);
+    let authorized = config.nekomaid_vote_keys.includes(API_key_1) || config.nekomaid_vote_keys.includes(API_key_2);
 
     if(req.method === 'GET') {
         if(authorized === true) {

@@ -1,105 +1,128 @@
 module.exports = {
-    refreshStatus(bot) {
-        try {
-            bot.shard.fetchClientValues('guilds.cache.size')
-            .then(results => {
-                var guildCountPOST = results.reduce((prev, guildCountPOST) =>
-                    prev + guildCountPOST, 0
-                );
+    async refresh_status(global_context) {
+        let guild_count = 0;
+        await global_context.bot.shard.fetchClientValues('guilds.cache.size').then(results => {
+            guild_count = results.reduce((prev, guild_count) =>
+                prev + guild_count, 0
+            );
+        }).catch(e => { /*console.log(e);*/ })
 
-                let statuses = [
-                    "Maid Battle Royale 2021",
-                    "Nekopara",
-                    "with cute people",
-                    "latest version",
-                    "peko peko",
-                    "pain peko",
-                    "on 6 consoles"
-                ]
-                // TODO: don't forget
-                var text = bot.pickRandom(statuses) + ' | ' + guildCountPOST + ' servers';
-            
-                bot.user.setStatus('available');
-                bot.user.setActivity(text, { type: 'PLAYING' });
-            }).catch(e => { console.log(e); })
-        } catch(e) {
-            console.log(e);
-        }
+        let statuses = [
+            "getting bullied by lamkas"
+        ]
+        global_context.bot.user.setStatus('available');
+        global_context.bot.user.setActivity(`${global_context.utils.pick_random(statuses)} | ${guild_count} servers`, { type: 'PLAYING' });
     },
 
-    async refreshWebsite(bot, top) {
-        try {
-            if(bot.socketClient === undefined || bot.socketClient.connected === false) { return; } 
-            if(bot.shard.ids[0] !== bot.Discord.ShardClientUtil.shardIDForGuildID("713467608363696128", bot.shard.count)) { return; }
+    async refresh_website(global_context) {
+        if(global_context.bot.shard.ids[0] !== 0) { return; }
 
-            var guildCount = 0;
-            var memberCount = 0;
-            var channelCount = 0;
-            var commandCount = 0;
-            var voiceConnections = 0;
-
-            await bot.shard.fetchClientValues('guilds.cache.size')
-            .then(results => {
-                guildCount = results.reduce((prev, guildCount) =>
-                    prev + guildCount, 0
-                );
-            }).catch(e => { /*console.log(e);*/ })
-
-            // TODO: maybe change this, since we don't cache channels?
-            await bot.shard.fetchClientValues('channels.cache.size')
-            .then(results => {
-                channelCount = results.reduce((prev, channelCount) =>
-                    prev + channelCount, 0
-                );
-            }).catch(e => { /*console.log(e);*/ })
-        
-            await bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)')
-            .then(results => {
-                memberCount = results.reduce((prev, memberCount) =>
-                    prev + memberCount, 0
-                );
-            }).catch(e => { /*console.log(e);*/ })
-        
-            await bot.shard.fetchClientValues('vm.connections.size')
-            .then(results => {
-                voiceConnections = results.reduce((prev, voiceConnections) =>
-                    prev + voiceConnections, 0
-                );
-            }).catch(e => { /*console.log(e);*/ })
-
-            await bot.shard.fetchClientValues('totalCommands')
-            .then(results => {
-                commandCount = results.reduce((prev, commandCount) =>
-                    prev + commandCount, 0
-                );
-            }).catch(e => { /*console.log(e);*/ })
-
-            let commandList = [];
-            bot.commands.forEach(command => {
-                if(command.hidden === false) {
-                    commandList.push({ name: command.name, description: command.description, category: command.category, aliases: command.aliases })
-                }
-            })
-
-            var data3 = {
-                guilds: guildCount,
-                channels: channelCount,
-                users: memberCount,
-                commands: commandCount,
-                voice_connections: voiceConnections,
-                shard_count: bot.shard.count,
-                start: bot.start,
-                commandList: commandList,
-                top: top
-            }
-
-            bot.socketClient.emit("postStats", data3);
-        } catch(e) {
-            console.log(e);
+        let shard_list = [];
+        for(let i = 0; i < global_context.bot.shard.count; i++) {
+            shard_list[i] = { online: true };
         }
+
+        await global_context.bot.shard.broadcastEval('this.neko_data.uptime_start')
+        .then(results => {
+            results.forEach((start, i) => {
+                shard_list[i].start = start;
+            });
+        });
+
+        await global_context.bot.shard.broadcastEval('this.guilds.cache.size')
+        .then(results => {
+            results.forEach((guilds, i) => {
+                shard_list[i].guilds = guilds;
+            });
+        });
+        await global_context.bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)')
+        .then(results => {
+            results.forEach((users, i) => {
+                shard_list[i].users = users;
+            });
+        });
+        // TODO: maybe change this, since we don't cache channels?
+        await global_context.bot.shard.broadcastEval('this.channels.cache.size')
+        .then(results => {
+            results.forEach((channels, i) => {
+                shard_list[i].channels = channels;
+            });
+        });
+
+        await global_context.bot.shard.broadcastEval('this.neko_data.processed_events')
+        .then(results => {
+            results.forEach((processed_events, i) => {
+                shard_list[i].processed_events = processed_events;
+            });
+        });
+        await global_context.bot.shard.broadcastEval('this.neko_data.total_events')
+        .then(results => {
+            results.forEach((total_events, i) => {
+                shard_list[i].total_events = total_events;
+            });
+        });
+        await global_context.bot.shard.broadcastEval('this.neko_data.processed_messages')
+        .then(results => {
+            results.forEach((processed_messages, i) => {
+                shard_list[i].processed_messages = processed_messages;
+            });
+        });
+        await global_context.bot.shard.broadcastEval('this.neko_data.total_messages')
+        .then(results => {
+            results.forEach((total_messages, i) => {
+                shard_list[i].total_messages = total_messages;
+            });
+        });
+        await global_context.bot.shard.broadcastEval('this.neko_data.processed_commands')
+        .then(results => {
+            results.forEach((processed_commands, i) => {
+                shard_list[i].processed_commands = processed_commands;
+            });
+        });
+        await global_context.bot.shard.broadcastEval('this.neko_data.total_commands')
+        .then(results => {
+            results.forEach((total_commands, i) => {
+                shard_list[i].total_commands = total_commands;
+            });
+        });
+        
+        await global_context.bot.shard.broadcastEval('this.neko_data.vm_connections')
+        .then(results => {
+            results.forEach((voice_connections, i) => {
+                shard_list[i].voice_connections = voice_connections;
+            });
+        });
+
+        let command_list = [];
+        global_context.commands.forEach(command => {
+            if(command.hidden === false) {
+                command_list.push({ name: command.name, description: command.description, category: command.category, aliases: command.aliases })
+            }
+        });
+
+        let stats = {
+            start: global_context.data.uptime_start,
+			hosts: 1,
+
+			sentry_online: true,
+			analytics_online: true,
+			akaneko_online: true,
+			uptime_pings: [Array(24).fill({ up: true })],
+
+			shard_list: shard_list,
+			command_list: command_list,
+			top_list: []
+        }
+
+        global_context.modules.axios.post(`https://api.nekomaid.xyz/postStats`, { stats: stats }, {
+            headers: global_context.data.default_headers
+        })
+        .catch(error => {
+            console.log("[Nekomaid API] " + error)
+        })
     },
   
-    async refreshBotList(bot) {
+    async refresh_bot_list(bot) {
         if(bot.isDeveloper === true) { return; }
 
         try {

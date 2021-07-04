@@ -159,6 +159,7 @@ module.exports = {
         let command = global_context.commands.get(command_name);
         let passed = true;
         await global_context.utils.verify_guild_roles(message.guild);
+        await global_context.utils.verify_guild_channels(message.guild);
         command.permissionsNeeded.forEach(perm => {
             if(passed === true && perm.passes(command_data, command) === false) {
                 passed = false;

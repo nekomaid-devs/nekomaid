@@ -178,7 +178,7 @@ module.exports = {
             cb(guildData);
         });*/
 
-        //global_context.neko_modules.webupdates = require('./scripts/webupdates/webupdates');
+        global_context.neko_modules.webupdates = require('./scripts/webupdates/webupdates');
         global_context.neko_modules.vars = require('./scripts/utils/util_vars');
 
         //Setup other stupid stuff
@@ -195,7 +195,8 @@ module.exports = {
 
         global_context.data.default_headers = {
             "Content-Type": 'application/json',
-            "Authorization": global_context.config.nekomaid_API_keys[0]
+            "Authorization": global_context.config.nekomaid_API_key,
+            "Origin": "https://api.nekomaid.xyz"
         }
 
         /*let lastTimestamp = Date.now();

@@ -27,6 +27,7 @@ module.exports = {
 
                 const query = "UPDATE servers SET " + query0 + " WHERE serverID='" + server.serverID + "'";
                 if(server.counters !== undefined) {
+                    // TODO: forgot to remove counters lol
                     server.counters.forEach(c => {
                         global_context.neko_modules_clients.ssm.server_add.add_counter(global_context, c);
                     })

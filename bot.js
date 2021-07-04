@@ -89,14 +89,6 @@ global_context.commands.forEach(command => {
 bot.login(global_context.config.token);
 
 /*bot.top = []
-setInterval(function() {
-    if(bot.shard.ids[0] !== bot.Discord.ShardClientUtil.shardIDForGuildID("713467608363696128", bot.shard.count)) { return; }
-    bot.webupdates.refreshWebsite(bot);
-
-    bot.processedEvents = 0;
-    bot.processedMessages = 0;
-    bot.processedCommands = 0;
-}, 1000)
 setInterval(async function() {
     if(bot.shard.ids[0] !== bot.Discord.ShardClientUtil.shardIDForGuildID("713467608363696128", bot.shard.count)) { return; }
     let topList = await bot.sb.get_top(bot, ["credits", "bank"]);
@@ -124,10 +116,25 @@ async function postLoad() {
     bot.botConfig = await bot.ssm.server_fetch.fetch(bot, { type: "config", id: "defaultConfig" });
 }*/
 setInterval(() => {
+    if(bot.shard.ids[0] !== 0) { return; }
+    if(global_context.neko_modules.webupdates !== undefined) {
+        global_context.neko_modules.webupdates.refresh_website(global_context);
+    }
+}, 2000);
+setInterval(() => {
+    bot.neko_data.processed_events = global_context.data.processed_events;
+    bot.neko_data.total_events = global_context.data.total_events;
+    bot.neko_data.processed_messages = global_context.data.processed_messages;
+    bot.neko_data.total_messages = global_context.data.total_messages;
+    bot.neko_data.processed_commands = global_context.data.processed_commands;
     bot.neko_data.total_commands = global_context.data.total_commands;
     if(global_context.neko_modules_clients.vm !== undefined) {
         bot.neko_data.vm_connections = global_context.neko_modules_clients.vm.connections.size;
     }
+
+    global_context.data.processed_events = 0;
+    global_context.data.processed_messages = 0;
+    global_context.data.processed_commands = 0;
 }, 1000);
 
 let bot_importer = require('./bot_importer');
@@ -137,15 +144,14 @@ bot.on('ready', async() => {
 
     //Stuff the bot with goods uwu :pleading_emoji:
     global_context = await bot_importer.import_into_context(global_context);
+    bot.neko_data.uptime_start = global_context.data.uptime_start;
 
     let t_loading_end = global_context.modules.performance.now();
     global_context.logger.log(`Finished loading shard (took ${(t_loading_end - t_logging_end).toFixed(1)}ms)...`);
     global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Channels: ${bot.channels.cache.size}] - [Users: ${bot.users.cache.size}]`);
 
-    bot.user.setStatus('available');
-    bot.user.setActivity("getting bullied by lamkas", { type: 'PLAYING' });
-
     global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "defaultConfig" });
+    global_context.neko_modules.webupdates.refresh_status(global_context);
     
     let bot_callbacks = require('./callbacks');
     Object.keys(bot_callbacks).forEach(key => {
