@@ -45,6 +45,7 @@ module.exports = {
                 );
             }).catch(e => { /*console.log(e);*/ })
 
+            // TODO: maybe change this, since we don't cache channels?
             await bot.shard.fetchClientValues('channels.cache.size')
             .then(results => {
                 channelCount = results.reduce((prev, channelCount) =>

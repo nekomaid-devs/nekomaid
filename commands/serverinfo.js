@@ -9,11 +9,12 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(command_data) {
+    async execute(command_data) {
         let elapsed = new Date() - new Date(command_data.msg.guild.createdAt.toUTCString());
         let createdAgo = command_data.global_context.neko_modules_clients.tc.convert_time(elapsed);
 
         // TODO: fix owner tag
+        let channels = await command_data.msg.guild.channels.fetch();
         let url = command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
         let embedServer = {
             color: 8388736,
@@ -44,7 +45,7 @@ module.exports = {
                     },
                     {
                         name: '❯ Channels',
-                        value: `${command_data.msg.guild.channels.cache.size}`,
+                        value: `${channels.size}`,
                         inline: true
                     },
                     {

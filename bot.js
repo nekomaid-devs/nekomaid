@@ -13,7 +13,9 @@ let global_context = {
 
     utils: {},
     logger: {},
-    bot_config: {}
+    bot_config: {},
+    cached_all_channels: [],
+    cached_all_roles: []
 }
 
 //Import modules
@@ -42,11 +44,12 @@ global_context.config = config;
 //Setup Discord client
 const bot = new Discord.Client({
     cacheGuilds: true,
-    cacheChannels: true,
-    cacheOverwrites: true,
-    cacheRoles: true,
-    cacheEmojis: true,
-    cachePresences: false
+    cacheChannels: false,
+    cacheOverwrites: false,
+    cacheRoles: false,
+    cacheEmojis: false,
+    cachePresences: false,
+    messageCacheMaxSize: 10
 });
 global_context.bot = bot;
 bot.neko_data = {};
@@ -137,7 +140,7 @@ bot.on('ready', async() => {
 
     let t_loading_end = global_context.modules.performance.now();
     global_context.logger.log(`Finished loading shard (took ${(t_loading_end - t_logging_end).toFixed(1)}ms)...`);
-    global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Users: ${bot.users.cache.size}] - [Channels: ${bot.channels.cache.size}]`);
+    global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Channels: ${bot.channels.cache.size}] - [Users: ${bot.users.cache.size}]`);
 
     bot.user.setStatus('available');
     bot.user.setActivity("getting bullied by lamkas", { type: 'PLAYING' });

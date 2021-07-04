@@ -18,7 +18,7 @@ module.exports = {
         new NeededPermission("me", "MANAGE_MESSAGES"),
     ],
     nsfw: false,
-    execute(command_data) {
+    async execute(command_data) {
         // TODO: support swapping arguments (or improve the format)
         let num_messages = parseInt(command_data.args[0]);
         if(num_messages > 99) {
@@ -28,7 +28,9 @@ module.exports = {
 
         if(command_data.msg.mentions.users.array().length > 0) {
             let target_user = command_data.msg.mentions.users.array()[0];
-            let messages = Array.from(command_data.msg.channel.messages.cache.values());
+            let messages = await command_data.msg.channel.messages.fetch({ limit: 99 });
+            messages = Array.from(messages.values());
+            
             messages.pop();
             let target_messages = messages.filter(m =>
                 m.author.id === target_user.id

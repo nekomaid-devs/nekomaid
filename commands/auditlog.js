@@ -174,12 +174,12 @@ module.exports = {
 
                     case "audit_channel": {
                         value = value.includes("<#") ? value.replace("<#", "").replace(">", "") : value;
-                        if(command_data.msg.guild.channels.cache.has(value) === false) {
+                        let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { console.log(e); });
+                        if(channel === undefined) {
                             command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) }).catch(e => { console.log(e); });
                             return;
                         }
 
-                        let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { console.log(e); });
                         if(channel.permissionsFor(command_data.global_context.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.global_context.bot.user).has("SEND_MESSAGES") === false) {
                             command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again-");
                             return;

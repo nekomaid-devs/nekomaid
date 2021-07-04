@@ -17,6 +17,7 @@ module.exports = {
         let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_add", id: member.guild.id });
         let server_mutes = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_mutes", id: member.guild.id });
 
+        await global_context.utils.verify_guild_roles(member.guild);
         member.guild.roles.cache.forEach(role => {
             if(server_config.autoRoles.includes(role.id) === true) {
                 member.roles.add(role).catch(e => { console.log(e) });

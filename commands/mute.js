@@ -166,8 +166,9 @@ module.exports = {
                 mentionable: false,
                 permissions: []
             }
-        }).then(mute_role => {
-            command_data.msg.guild.channels.cache.forEach(channel => {
+        }).then(async(mute_role) => {
+            let channels = await command_data.msg.guild.channels.fetch();
+            channels.forEach(channel => {
                 try {
                     if(channel.type === "text") {
                         channel.createOverwrite(mute_role, {

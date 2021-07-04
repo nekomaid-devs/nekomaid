@@ -19,12 +19,12 @@ module.exports = {
         if(message.channel.type === "dm" || message.author.bot === true) {
             return;
         }
-        let can_send_messages = message.guild.me.permissionsIn(message.channel).has("SEND_MESSAGES");
+        // TODO: deal with this in other way, because there's shouldn't be a cache for channel overwrites
+        /*let can_send_messages = message.guild.me.permissionsIn(message.channel).has("SEND_MESSAGES");
         if(can_send_messages === false) {
             return;
-        }
+        }*/
 
-        let manages_guild = message.member.permissionsIn(message.channel).has("MANAGE_GUILD");
         let tagged = message.mentions.members.array().length > 0;
         // TODO: add support for tagging users with IDs
         let command_data = {
@@ -55,6 +55,12 @@ module.exports = {
 
         global_context.data.total_events += 1;
         global_context.data.processed_events += 1;
+
+        let manages_guild = false;
+        if(command_data.server_config.bannedWords.length > 0 || command_data.server_config.invites == false) {
+            await global_context.utils.verify_guild_roles(message.guild);
+            manages_guild = message.member.hasPermission("MANAGE_GUILD");
+        }
 
         let is_banned = false;
         if(command_data.server_config.bannedWords.length > 0) {
@@ -152,6 +158,7 @@ module.exports = {
         global_context.logger.log(`[${message.guild.name}] Called command: ${command_name}`);
         let command = global_context.commands.get(command_name);
         let passed = true;
+        await global_context.utils.verify_guild_roles(message.guild);
         command.permissionsNeeded.forEach(perm => {
             if(passed === true && perm.passes(command_data, command) === false) {
                 passed = false;

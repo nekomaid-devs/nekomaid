@@ -62,6 +62,18 @@ module.exports = {
             playlist = playlist.map(a => { return { sort: Math.random(), value: a }; }).sort((a, b) => { return a.sort - b.sort; }).map(a => { return a.value; });
             return playlist;
         }
+        global_context.utils.verify_guild_channels = async(guild) => {
+            if(global_context.cached_all_channels.includes(guild.id) === false) {
+                await guild.channels.fetch();
+                global_context.cached_all_channels.push(guild.id);
+            }
+        }
+        global_context.utils.verify_guild_roles = async(guild) => {
+            if(global_context.cached_all_roles.includes(guild.id) === false) {
+                await guild.roles.fetch();
+                global_context.cached_all_roles.push(guild.id);
+            }
+        }
 
         //Setup SQL
         let sql_connection = global_context.modules.sql.createConnection({
