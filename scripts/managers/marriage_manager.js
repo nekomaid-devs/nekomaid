@@ -35,8 +35,6 @@ class MarriageManager {
         target_user_config.marriedID = marriage_proposal.source_ID;
         global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: marriage_proposal.target_ID, user: target_user_config });
 
-        console.log(`[marry] ${marriage_proposal.source_tag} married ${marriage_proposal.target_tag}!`);
-
         switch(log) {
             case 1:
                 channel.send(`\`${marriage_proposal.source_tag}\` married \`${marriage_proposal.target_tag}\`!`).catch(e => { console.log(e); });
@@ -82,11 +80,9 @@ class MarriageManager {
 
     timeout_marriage_proposal(global_context, channel, target_user) {
         if(global_context.neko_modules_clients.mm.timeout_proposals.has(target_user.id)) {
-            console.log("[mm] Cleared previous timeout of User(id: " + target_user.id + ")");
             clearTimeout(global_context.neko_modules_clients.mm.timeout_proposals.get(target_user.id));
         }
 
-        console.log("[mm] Added timeout to User(id: " + target_user.id + ")");
         let timeout_proposal = setTimeout(() => { 
             global_context.neko_modules_clients.mm.remove_marriage_proposal(global_context, channel, target_user, 1); 
         }, 120000);
@@ -95,8 +91,6 @@ class MarriageManager {
 
     remove_marriage_proposal(global_context, channel, marriage_proposal, log = -1) {
         if(global_context.neko_modules_clients.mm.marriage_proposals.has(marriage_proposal.target_ID)) {
-            console.log("[mm] Removed proposal to User(id: " + marriage_proposal.target_ID + ")");
-
             switch(log) {
                 case 1:
                     channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` expired.`).catch(e => { console.log(e); });

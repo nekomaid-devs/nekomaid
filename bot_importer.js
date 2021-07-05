@@ -1,5 +1,7 @@
 module.exports = {
     async import_into_context(global_context) {
+        let t_start = global_context.modules.performance.now();
+
         //Import modules
         global_context.modules.crypto = require("crypto");
 
@@ -36,6 +38,9 @@ module.exports = {
             global_context.modules.Sentry = require("@sentry/node");
             global_context.modules.Tracing = require("@sentry/tracing");
         }
+
+        let t_modules_end = global_context.modules.performance.now();
+        global_context.logger.log(`Finished loading modules (took ${(t_modules_end- t_start).toFixed(1)}ms)...`);
         
         //Setup modules
         global_context.modules_clients.neko = new global_context.modules.NekoClient();
@@ -85,6 +90,9 @@ module.exports = {
             }
         }
 
+        let t_utils_end = global_context.modules.performance.now();
+        global_context.logger.log(`Finished loading utils (took ${(t_utils_end - t_modules_end).toFixed(1)}ms)...`);
+
         //Setup SQL
         let sql_connection = global_context.modules.sql.createConnection({
             host: global_context.config.sql_host,
@@ -96,6 +104,9 @@ module.exports = {
         await sql_connection.promise().connect().catch(e => {
             global_context.logger.error(e);
         });
+
+        let t_sql_end = global_context.modules.performance.now();
+        global_context.logger.log(`Finished establishing SQL connection (took ${(t_sql_end - t_utils_end).toFixed(1)}ms)...`);
 
         //Setup Nekomaid's modules
         global_context.neko_modules.ServerStructureManager = require('./scripts/data/server_structure_manager');
@@ -220,6 +231,9 @@ module.exports = {
             },
         5000);
         console.log("Finished importing...");*/
+
+        let t_modules_2_end = global_context.modules.performance.now();
+        global_context.logger.log(`Finished setting up the modules (took ${(t_modules_2_end - t_sql_end).toFixed(1)}ms)...`);
 
         return global_context;
     }

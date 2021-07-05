@@ -71,7 +71,7 @@ global_context.logger.error = (error) => {
     var log_message = error.stack === undefined ? error : error.stack;
     process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] " + log_color_shard + "[shard_" + bot.shard.ids[0] + "] " + log_color_message + log_message + "\x1b[0m\n");
 };
-global_context.logger.log(`Started loading shard...`);
+global_context.logger.log("Started logging into the shard...");
 let t_loading_start = global_context.modules.performance.now();
 
 //Setup commands
@@ -141,14 +141,17 @@ setInterval(() => {
 let bot_importer = require('./bot_importer');
 bot.on('ready', async() => {
     let t_logging_end = global_context.modules.performance.now();
-    global_context.logger.log(`Finished logging into shard (took ${(t_logging_end - t_loading_start).toFixed(1)}ms)...`);
+    global_context.logger.log(`Finished logging into the shard (took ${(t_logging_end - t_loading_start).toFixed(1)}ms)...`);
+    global_context.logger.log("-".repeat(30));
 
     //Stuff the bot with goods uwu :pleading_emoji:
+    global_context.logger.log(`Started loading the shard...`);
     global_context = await bot_importer.import_into_context(global_context);
     bot.neko_data.uptime_start = global_context.data.uptime_start;
 
     let t_loading_end = global_context.modules.performance.now();
     global_context.logger.log(`Finished loading shard (took ${(t_loading_end - t_logging_end).toFixed(1)}ms)...`);
+    global_context.logger.log("-".repeat(30));
     global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Channels: ${bot.channels.cache.size}] - [Users: ${bot.users.cache.size}]`);
 
     global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "defaultConfig" });

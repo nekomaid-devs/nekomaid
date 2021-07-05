@@ -40,7 +40,7 @@ manager.on('shardCreate', shard => {
     console.log(`Creating new shard (shard_${shard.id})...`);
     console.log("-".repeat(30));
 });
-manager.spawn(config.shard_count, 5500, 900000);
+manager.spawn(config.shard_count, 20000, 900000);
 
 //Launch server for processing upvotes (only if non-developer version)
 if(config.dev_mode === true) { return; }
