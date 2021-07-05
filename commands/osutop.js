@@ -11,6 +11,8 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
+        if(command_data.global_context.config.osu_enabled === false) { command_data.msg.channel.send("The osu! module is disabled for this bot.").catch(e => { console.log(e); }); return; }
+
         // TODO: make tagged user instead of author
         // TODO: pp always shows ??
         if(command_data.author_config.osuUsername === "-1") {

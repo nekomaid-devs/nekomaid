@@ -176,8 +176,10 @@ module.exports = {
         global_context.neko_modules.EventManager = require('./scripts/managers/event_manager');
         global_context.neko_modules_clients.em = new global_context.neko_modules.EventManager(global_context);
 
-        global_context.modules.OsuAPI = require('node-osu');
-        global_context.modules_clients.osu = new global_context.modules.OsuAPI.Api(global_context.config.osu_API_key, { notFoundAsError: false, completeScores: true });
+        if(global_context.config.osu_enabled === true) {
+            global_context.modules.OsuAPI = require('node-osu');
+            global_context.modules_clients.osu = new global_context.modules.OsuAPI.Api(global_context.config.osu_API_key, { notFoundAsError: false, completeScores: true });
+        }
 
         /*global_context.modules.io = require('socket.io-client');
         bot.socketClient = bot.io("https://nekomaid.xyz");

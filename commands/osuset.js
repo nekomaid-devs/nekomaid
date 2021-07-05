@@ -16,6 +16,8 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
+        if(command_data.global_context.config.osu_enabled === false) { command_data.msg.channel.send("The osu! module is disabled for this bot.").catch(e => { console.log(e); }); return; }
+
         let user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.total_argument }).catch(e => { console.log(e); });
         if(user.id === undefined) {
             command_data.msg.reply(`Haven't found any osu! account with username \`${command_data.total_argument}\`-`);
