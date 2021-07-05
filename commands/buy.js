@@ -52,6 +52,6 @@ module.exports = {
             color: 8388736,
             description: `Bought \`1x ${target_item.displayName}\` for \`${target_shop_item.price} 💵\`-`
         }
-        command_data.msg.channel.send("", { embed: embedBuy }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedBuy }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

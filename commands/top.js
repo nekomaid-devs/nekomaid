@@ -103,10 +103,10 @@ module.exports = {
                 net += user_config[prop];
             });
 
-            let target_user = await command_data.global_context.bot.users.fetch(user_config.userID).catch(e => { console.log(e); });
+            let target_user = await command_data.global_context.bot.users.fetch(user_config.userID).catch(e => { command_data.global_context.logger.api_error(e); });
             embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `${net} ${top_user_text}`);
         }
         
-        command_data.msg.channel.send("", { embed: embedTop }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedTop }).catch(e => { command_data.global_context.logger.api_error(e); });
     }
 };

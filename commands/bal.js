@@ -56,6 +56,6 @@ module.exports = {
             },
         }
 
-        command_data.msg.channel.send("", { embed: embedBalance }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedBalance }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

@@ -11,7 +11,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        if(command_data.global_context.config.osu_enabled === false) { command_data.msg.channel.send("The osu! module is disabled for this bot.").catch(e => { console.log(e); }); return; }
+        if(command_data.global_context.config.osu_enabled === false) { command_data.msg.channel.send("The osu! module is disabled for this bot.").catch(e => { command_data.global_context.logger.api_error(e); }); return; }
 
         // TODO: make tagged user instead of author
         if(command_data.author_config.osuUsername === "-1") {
@@ -19,13 +19,13 @@ module.exports = {
             return;
         }
 
-        let user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.author_config.osuUsername }).catch(e => { console.log(e); });
+        let user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.author_config.osuUsername }).catch(e => { command_data.global_context.logger.api_error(e); });
         if(user.id === undefined) {
             command_data.msg.channel.send(`No osu! profile found~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)-`);
             return;
         }
 
-        let top = await command_data.global_context.modules_clients.osu.getUserRecent({ u: command_data.author_config.osuUsername }).catch(e => { console.log(e); });
+        let top = await command_data.global_context.modules_clients.osu.getUserRecent({ u: command_data.author_config.osuUsername }).catch(e => { command_data.global_context.logger.api_error(e); });
         if(top.length === undefined || top.length < 1) {
             command_data.msg.reply("There was an error in processing this request-");
             return;
@@ -83,6 +83,6 @@ module.exports = {
                 text: `Requested by ${command_data.msg.author.tag}`
             }
         }
-        command_data.msg.channel.send("", { embed: embedOsu }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedOsu }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

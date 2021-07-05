@@ -37,6 +37,6 @@ module.exports = {
             command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: member.user.id, user: config });
         });
 
-        command_data.msg.channel.send(`Added \`${ammount}x ${target_item.displayName}\` to \`${command_data.msg.guild.members.cache.size}\` members-`).catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Added \`${ammount}x ${target_item.displayName}\` to \`${command_data.msg.guild.members.cache.size}\` members-`).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

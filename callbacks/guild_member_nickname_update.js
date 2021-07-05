@@ -19,7 +19,7 @@ module.exports = {
         // TODO: this doesn't work
         let serverConfig = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_nickname_update", id: newMember.guild.id });
         if(serverConfig.audit_nicknames == true && serverConfig.audit_channel != "-1") {
-            let channel = await global_context.bot.channels.fetch(serverConfig.audit_channel).catch(e => { console.log(e); });
+            let channel = await global_context.bot.channels.fetch(serverConfig.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let embedNicknameChange = {
                     author: {
@@ -41,7 +41,7 @@ module.exports = {
                     ]
                 }
         
-                channel.send("", { embed: embedNicknameChange }).catch(e => { console.log(e); });
+                channel.send("", { embed: embedNicknameChange }).catch(e => { global_context.logger.api_error(e); });
             }
         }
     }

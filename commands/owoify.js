@@ -36,7 +36,7 @@ module.exports = {
         }
 
         let owoified_text = await command_data.global_context.modules_clients.neko.sfw.OwOify({ text: command_data.total_argument });
-        command_data.msg.channel.send(owoified_text.owo).catch(e => { console.log(e); });
-        command_data.msg.delete().catch(e => { console.log(e); });
+        command_data.msg.channel.send(owoified_text.owo).catch(e => { command_data.global_context.logger.api_error(e); });
+        command_data.msg.delete().catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

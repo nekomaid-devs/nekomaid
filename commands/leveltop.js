@@ -51,10 +51,10 @@ module.exports = {
             }
             let net_2 = (user_config.xp / level_XP) * 100;
 
-            let target_user = await command_data.global_context.bot.users.fetch(user_config.userID).catch(e => { console.log(e); });
+            let target_user = await command_data.global_context.bot.users.fetch(user_config.userID).catch(e => { command_data.global_context.logger.api_error(e); });
             embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `Level ${net} (${Math.round(net_2)} %)`);
         }
         
-        command_data.msg.channel.send("", { embed: embedTop }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedTop }).catch(e => { command_data.global_context.logger.api_error(e); });
     }
 };

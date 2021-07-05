@@ -26,7 +26,7 @@ module.exports = {
         .setAuthor(`❯ Warnings for ${command_data.tagged_user.tag} (${warns.length})`, command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }));
 
         if(warns.length < 1) {
-            command_data.msg.channel.send("", { embed: embedWarns }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedWarns }).catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
@@ -36,6 +36,6 @@ module.exports = {
             embedWarns.addField(`Warn #${(warns.length - index)}`, `Warned for - ${warn.reason} (${elapsedTime} ago)`);
         });
 
-        command_data.msg.channel.send("", { embed: embedWarns }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedWarns }).catch(e => { command_data.global_context.logger.api_error(e); });
     }
 }

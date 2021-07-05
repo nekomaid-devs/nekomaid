@@ -36,7 +36,7 @@ module.exports = {
             }
 
             if(command_keys.includes(target_command_name) === false || (command_data.global_context.commands.get(target_command_name).hidden === true && show_hidden === false)) {
-                command_data.msg.channel.send(`Command \`${target_command_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch(e => { console.log(e); });
+                command_data.msg.channel.send(`Command \`${target_command_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch(e => { command_data.global_context.logger.api_error(e); });
                 return;
             }
 
@@ -44,7 +44,7 @@ module.exports = {
             if(command_data.args.length > 1) {
                 var target_subcommand_name = command_data.args[1];
                 if(command.subcommandHelp.has(target_subcommand_name) === false) {
-                    command_data.msg.channel.send(`Subcommand \`${target_subcommand_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch(e => { console.log(e); });
+                    command_data.msg.channel.send(`Subcommand \`${target_subcommand_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch(e => { command_data.global_context.logger.api_error(e); });
                     return;
                 }
 
@@ -58,7 +58,7 @@ module.exports = {
                 .setTitle(`Help for - \`${unhidden_text + commands_text}\``);
                 embedHelp.addField("Usage:", usage);
 
-                command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { command_data.global_context.logger.api_error(e); });
             } else {
                 let unhidden_text = show_hidden === true && command.hidden === true ? "❓" : "";
                 let commands_text = command.name;
@@ -82,7 +82,7 @@ module.exports = {
                     embedHelp.addField("Subcommands:", commands_text_2);
                 }
 
-                command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { command_data.global_context.logger.api_error(e); });
             }
         } else {
             let commands = Array.from(command_data.global_context.commands.values());
@@ -138,7 +138,7 @@ module.exports = {
                 }
             });
 
-            command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { command_data.global_context.logger.api_error(e); });
         }
     },
 };

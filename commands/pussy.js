@@ -11,7 +11,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: true,
     async execute(command_data) {
-        let url = await command_data.global_context.modules.akaneko.nsfw.pussy().catch(e => { console.log(e); });
+        let url = await command_data.global_context.modules.akaneko.nsfw.pussy().catch(e => { command_data.global_context.logger.api_error(e); });
         let embedPussy = {
             title: "Here are your lewds-",
             color: 8388736,
@@ -23,6 +23,6 @@ module.exports = {
             }
         }
         
-        command_data.msg.channel.send("", { embed: embedPussy }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedPussy }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

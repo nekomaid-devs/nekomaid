@@ -57,19 +57,25 @@ global_context.bot = bot;
 bot.neko_data = {};
 
 //Create log colors
-let log_colors = ["\x1b[32m", "\x1b[33m", "\x1b[34m", "\x1b[35m", "\x1b[36m",
-                            "\x1b[90m", "\x1b[92m", "\x1b[93m", "\x1b[95m", "\x1b[96m"]
+let log_colors = ["\x1b[32m", "\x1b[33m", "\x1b[34m", "\x1b[35m", "\x1b[36m", "\x1b[37m",
+                    "\x1b[90m", "\x1b[93m", "\x1b[95m", "\x1b[96m", "\x1b[97m"]
 var log_color_shard = log_colors[Math.floor(Math.random() * log_colors.length)];
 var log_color_message = "\x1b[92m";
+var log_color_api_error = "\x1b[94m";
+var log_color_error = "\x1b[31m";
 var log_color_time = "\x1b[91m";
 
 //Console setup
 global_context.logger.log = (log_message) => {
     process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] " + log_color_shard + "[shard_" + bot.shard.ids[0] + "] " + log_color_message + log_message + "\x1b[0m\n");
 };
+global_context.logger.api_error = (error) => {
+    var log_message = error.stack === undefined ? error : error.stack;
+    process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] [API Error] " + log_color_shard + "[shard_" + bot.shard.ids[0] + "] " + log_color_api_error + log_message + "\x1b[0m\n");
+};
 global_context.logger.error = (error) => {
     var log_message = error.stack === undefined ? error : error.stack;
-    process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] " + log_color_shard + "[shard_" + bot.shard.ids[0] + "] " + log_color_message + log_message + "\x1b[0m\n");
+    process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] [Error] " + log_color_shard + "[shard_" + bot.shard.ids[0] + "] " + log_color_error + log_message + "\x1b[0m\n");
 };
 global_context.logger.log("Started logging into the shard...");
 let t_loading_start = global_context.modules.performance.now();

@@ -22,19 +22,19 @@ module.exports = {
 
         let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_channel_create", id: channel.guild.id });
         if(server_config.muteRoleID !== "-1") {
-            let mute_role = await channel.guild.roles.fetch(server_config.muteRoleID).catch(e => { console.log(e); });
+            let mute_role = await channel.guild.roles.fetch(server_config.muteRoleID).catch(e => { global_context.logger.api_error(e); });
             if(mute_role !== undefined) {
                 try {
                     if(channel.type === "text") {
                         channel.createOverwrite(mute_role, {
                             SEND_MESSAGES: false,
                             ADD_REACTIONS: false
-                        }).catch(e => { console.log(e); });
+                        }).catch(e => { global_context.logger.api_error(e); });
                     } else if(channel.type === "voice") {
                         channel.createOverwrite(mute_role, {
                             CONNECT: false,
                             SPEAK: false
-                        }).catch(e => { console.log(e); });
+                        }).catch(e => { global_context.logger.api_error(e); });
                     }
                 } catch(err) {
                     console.log("[mod] Skipped a permission overwrite because I didn't have permission-")

@@ -29,6 +29,6 @@ module.exports = {
         let add_XP = parseFloat(command_data.args[1]);
         command_data.global_context.neko_modules_clients.lvl.updateServerLevel(command_data, add_XP);
 
-        command_data.msg.channel.send(`Added \`${add_XP}\` XP to \`${command_data.tagged_user.tag}\`! (Current XP: \`${Math.round(command_data.taggedServerUserConfig.xp)}\`)`).catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Added \`${add_XP}\` XP to \`${command_data.tagged_user.tag}\`! (Current XP: \`${Math.round(command_data.taggedServerUserConfig.xp)}\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

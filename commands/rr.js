@@ -17,7 +17,7 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        let msg = await command_data.msg.channel.send("Type in a role name or `stop` to finish the menu-").catch(e => { console.log(e); });
+        let msg = await command_data.msg.channel.send("Type in a role name or `stop` to finish the menu-").catch(e => { command_data.global_context.logger.api_error(e); });
         let roles = new Map();
         let role_messages = [];
         
@@ -36,7 +36,7 @@ module.exports = {
             switch(message.content) {
                 case "stop":
                     if(roles.size < 1) {
-                        message.delete().catch(e => { console.log(e); });
+                        message.delete().catch(e => { command_data.global_context.logger.api_error(e); });
                         msg.edit("Cancelled the reaction menu-");
                         return;
                     }
@@ -59,9 +59,9 @@ module.exports = {
                     server_config.reactionRoles.push(reactionRoleMenuInfo);
 
                     role_messages.forEach(rmsg => {
-                        rmsg.delete().catch(e => { console.log(e); });
+                        rmsg.delete().catch(e => { command_data.global_context.logger.api_error(e); });
                     });
-                    message.delete().catch(e => { console.log(e); });
+                    message.delete().catch(e => { command_data.global_context.logger.api_error(e); });
 
                     let reactionRoleEmbed = new global_context.modules.Discord.MessageEmbed()
                     .setColor(8388736)

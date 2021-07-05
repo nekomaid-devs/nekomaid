@@ -31,7 +31,7 @@ module.exports = {
         }
         if(command_data.args.length > 0) { return; }
         if(command_data.msg.guild.voice !== undefined) {
-            command_data.msg.channel.send("Please make sure there are no other running games or music playing and try again~ (or make Nekomaid leave voice)").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Please make sure there are no other running games or music playing and try again~ (or make Nekomaid leave voice)").catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
@@ -48,7 +48,7 @@ module.exports = {
                 text: `Start the game by typing ${command_data.server_config.prefix}animetrivia start`
             }
         }
-        command_data.msg.channel.send({ embed: embedSong }).catch(e => { console.log(e); });
+        command_data.msg.channel.send({ embed: embedSong }).catch(e => { command_data.global_context.logger.api_error(e); });
 
         let collector = command_data.msg.channel.createMessageCollector(m => m.author.bot === false);
         collector.on('collect', async(m) => {
@@ -57,7 +57,7 @@ module.exports = {
                 this.play_next(command_data, connection);
                 collector.stop();
             } else {
-                command_data.msg.channel.send("Cancelled the game~ Try again once you change your mind~").catch(e => { console.log(e); });
+                command_data.msg.channel.send("Cancelled the game~ Try again once you change your mind~").catch(e => { command_data.global_context.logger.api_error(e); });
                 collector.stop();
             }
         });
@@ -111,7 +111,7 @@ module.exports = {
                 text: `You have 45 seconds to answer~ | or end the game with ${command_data.server_config.prefix}animetrivia end`
             }
         }
-        command_data.msg.channel.send({ embed: embedSong }).catch(e => { console.log(e); });
+        command_data.msg.channel.send({ embed: embedSong }).catch(e => { command_data.global_context.logger.api_error(e); });
 
         let timeout = -1;
         let answered = false;
@@ -121,26 +121,26 @@ module.exports = {
                 if(m.content.startsWith(command_data.server_config.prefix + "animetrivia skip")) {
                     answered = true;
                     dispatcher.end();
-                    command_data.msg.channel.send(`Skipped this opening~ The anime was: \`${opening.source}\``).catch(e => { console.log(e); });
+                    command_data.msg.channel.send(`Skipped this opening~ The anime was: \`${opening.source}\``).catch(e => { command_data.global_context.logger.api_error(e); });
 
                     this.play_next(command_data, connection);
                 } else if(m.content.startsWith(command_data.server_config.prefix + "animetrivia end")) {
                     answered = true;
                     connection.disconnect();
-                    command_data.msg.channel.send(`<@${m.author.id}> ended the trivia~`).catch(e => { console.log(e); });
+                    command_data.msg.channel.send(`<@${m.author.id}> ended the trivia~`).catch(e => { command_data.global_context.logger.api_error(e); });
                 } else {
                     let guess = parseInt(m.content);
                     if(isNaN(guess) === false && answered_IDs.includes(m.author.id) === false) {
                         if(guess === correct_option) {
                             answered = true;
                             dispatcher.end();
-                            command_data.msg.channel.send(`<@${m.author.id}> got it correct! The anime was: \`${opening.source}\`~`).catch(e => { console.log(e); });
+                            command_data.msg.channel.send(`<@${m.author.id}> got it correct! The anime was: \`${opening.source}\`~`).catch(e => { command_data.global_context.logger.api_error(e); });
 
                             this.play_next(command_data, connection);
                             clearTimeout(timeout);
                         } else {
                             answered_IDs.push(m.author.id);
-                            command_data.msg.channel.send(`<@${m.author.id}> was wrong! The answer isn't \`${guess}\`~`).catch(e => { console.log(e); });
+                            command_data.msg.channel.send(`<@${m.author.id}> was wrong! The answer isn't \`${guess}\`~`).catch(e => { command_data.global_context.logger.api_error(e); });
                         }
                     }
                 }
@@ -165,7 +165,7 @@ module.exports = {
             answered = true;
             dispatcher.end();
 
-            command_data.msg.channel.send(`Nobody got it correct~ The anime was: \`${opening.source}\`~`).catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Nobody got it correct~ The anime was: \`${opening.source}\`~`).catch(e => { command_data.global_context.logger.api_error(e); });
             this.play_next(command_data, connection);
         }, 45 * 1000);
     }

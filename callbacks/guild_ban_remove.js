@@ -22,7 +22,7 @@ module.exports = {
         let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_ban_remove", id: guild.id });
 
         if(server_config.audit_bans == true && server_config.audit_channel != "-1") {
-            let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { console.log(e); });
+            let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let audit = await guild.fetchAuditLogs();
                 let last_audit = audit.entries.first();
@@ -30,10 +30,10 @@ module.exports = {
                 if(last_audit.action === "MEMBER_BAN_REMOVE" && last_audit.target.id === user.id) {
                     let executor = -1;
                     if(last_audit.executor.id === global_context.bot.user.id) {
-                        executor = await global_context.bot.users.fetch(moderation_action.moderator).catch(e => { console.log(e); });
+                        executor = await global_context.bot.users.fetch(moderation_action.moderator).catch(e => { global_context.logger.api_error(e); });
                         global_context.data.last_moderation_actions.delete(guild.id);
                     } else {
-                        executor = await global_context.bot.users.fetch(last_audit.executor.id).catch(e => { console.log(e); });
+                        executor = await global_context.bot.users.fetch(last_audit.executor.id).catch(e => { global_context.logger.api_error(e); });
                     }
 
                     let url = user.avatarURL({ format: "png", dynamic: true, size: 1024 });
@@ -63,7 +63,7 @@ module.exports = {
                     server_config.caseID += 1;
                     global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server_cb", id: guild.id, server: server_config });
             
-                    channel.send("", { embed: embedBan }).catch(e => { console.log(e); });
+                    channel.send("", { embed: embedBan }).catch(e => { global_context.logger.api_error(e); });
                 }
             }
         }

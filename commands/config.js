@@ -48,7 +48,7 @@ module.exports = {
             let auto_roles_text = "";
             for(let i = 0; i < command_data.server_config.autoRoles.length; i++) {
                 let role_ID = command_data.server_config.autoRoles[i];
-                let role = await command_data.msg.guild.roles.fetch(role_ID).catch(e => { console.log(e); });
+                let role = await command_data.msg.guild.roles.fetch(role_ID).catch(e => { command_data.global_context.logger.api_error(e); });
                 if(role === undefined) {
                     auto_roles_text += "`" + role_ID + "`";
                 } else {
@@ -95,7 +95,7 @@ module.exports = {
                 ]
             }
 
-            command_data.msg.channel.send("", { embed: embedConfig }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedConfig }).catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
@@ -111,12 +111,12 @@ module.exports = {
                 switch(property) {
                     case "autoRole": {
                         if(command_data.msg.guild.me.hasPermission("MANAGE_ROLES") === false) {
-                            command_data.msg.channel.send("The bot doesn't have required permissions to do this - `Manage Roles`\nPlease add required permissions and try again-").catch(e => { console.log(e); });
+                            command_data.msg.channel.send("The bot doesn't have required permissions to do this - `Manage Roles`\nPlease add required permissions and try again-").catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         if(command_data.args.length < 3) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`.", "add autoRole Newbie") }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`.", "add autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
                         let role_name = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[2], command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length));
@@ -124,23 +124,23 @@ module.exports = {
                             role_temp.name === role_name
                         );
                         if(role === undefined) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name .\`${role_name}\` found-`, "add autoRole Newbie") }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name .\`${role_name}\` found-`, "add autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         command_data.server_config.autoRoles.push(role.id);
-                        command_data.msg.channel.send(`Added auto role \`${role_name}\`-`).catch(e => { console.log(e); });
+                        command_data.msg.channel.send(`Added auto role \`${role_name}\`-`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     case "counter": {
                         if(command_data.msg.guild.me.hasPermission("MANAGE_CHANNELS") === false) {
-                            command_data.msg.channel.send("The bot doesn't have required permissions to do this - `Manage Channels`\nPlease add required permissions and try again-").catch(e => { console.log(e); });
+                            command_data.msg.channel.send("The bot doesn't have required permissions to do this - `Manage Channels`\nPlease add required permissions and try again-").catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         if(command_data.args.length < 3) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `type`- (Types: `allMembers`, `members`, `roles`, `channels`, `bots`)", "add counter allMembers") }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `type`- (Types: `allMembers`, `members`, `roles`, `channels`, `bots`)", "add counter allMembers") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -179,19 +179,19 @@ module.exports = {
                             }
 
                             default: {
-                                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid counter `type`- (Types: `allMembers`,`members`,`roles`,`channels`,`bots`)", "add counter allMembers") }).catch(e => { console.log(e); });
+                                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid counter `type`- (Types: `allMembers`,`members`,`roles`,`channels`,`bots`)", "add counter allMembers") }).catch(e => { command_data.global_context.logger.api_error(e); });
                                 return;
                             }
                         }
 
                         setTimeout(() => { command_data.global_context.neko_modules_clients.cm.update_counters(command_data.global_context, command_data.msg.guild, true); }, 5000);
                         command_data.server_config.counters.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), type: counter_type, serverID: command_data.msg.guild.id, channelID: channel.id, lastUpdate: new Date().toUTCString() });
-                        command_data.msg.channel.send(`Added new counter for \`${counter_type}\`.`).catch(e => { console.log(e); });
+                        command_data.msg.channel.send(`Added new counter for \`${counter_type}\`.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     default: {
-                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help config add\` for help)`, "add autoRole Newbie") }).catch(e => { console.log(e); });
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help config add\` for help)`, "add autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                         return;
                     }
                 }
@@ -202,7 +202,7 @@ module.exports = {
 
             case "remove": {
                 if(command_data.args.length < 2) {
-                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, `remove ${property} <value>`) }).catch(e => { console.log(e); });
+                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, `remove ${property} <value>`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                     return;
                 }
                 let property = command_data.args[1];
@@ -210,12 +210,12 @@ module.exports = {
                 switch(property) {
                     case "autoRole": {
                         if(command_data.msg.guild.me.hasPermission("MANAGE_ROLES") === false) {
-                            command_data.msg.channel.send("The bot doesn't have required permissions to do this - `Manage Roles`\nPlease add required permissions and try again-").catch(e => { console.log(e); });
+                            command_data.msg.channel.send("The bot doesn't have required permissions to do this - `Manage Roles`\nPlease add required permissions and try again-").catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         if(command_data.args.length < 3) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, `remove ${property} <value>`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, `remove ${property} <value>`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
                         let role_name = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[2], command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length));
@@ -223,7 +223,7 @@ module.exports = {
                             role_temp.name === role_name
                         );
                         if(role === undefined) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name \`${roleName}\` found-`, "remove autoRole Newbie") }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name \`${roleName}\` found-`, "remove autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -236,17 +236,17 @@ module.exports = {
                             i += 1;
                         });
                         if(role_index < 0) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No \`autoRole\` with name \`${role_name}\` found-`, "remove autoRole Newbie") }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No \`autoRole\` with name \`${role_name}\` found-`, "remove autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         command_data.server_config.autoRoles.splice(role_index, 1);
-                        command_data.msg.channel.send(`Removed auto role \`${role_name}\`-`).catch(e => { console.log(e); });
+                        command_data.msg.channel.send(`Removed auto role \`${role_name}\`-`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     default: {
-                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, "remove autoRole Newbie") }).catch(e => { console.log(e); });
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, "remove autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                         return;
                     }
                 }
@@ -257,13 +257,13 @@ module.exports = {
 
             case "set": {
                 if(command_data.args.length < 2) {
-                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help config set\` for help)`, "set welcomeMessages true") }).catch(e => { console.log(e); });
+                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help config set\` for help)`, "set welcomeMessages true") }).catch(e => { command_data.global_context.logger.api_error(e); });
                     return;
                 }
                 let property = command_data.args[1];
 
                 if(command_data.args.length < 3) {
-                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, "set " + property + " <newValue>") }).catch(e => { console.log(e); });
+                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, "set " + property + " <newValue>") }).catch(e => { command_data.global_context.logger.api_error(e); });
                     return;
                 }
                 let value = command_data.args[2];
@@ -273,7 +273,7 @@ module.exports = {
                     case "sayCommand": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -284,7 +284,7 @@ module.exports = {
                     case "welcomeMessages": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -294,7 +294,7 @@ module.exports = {
 
                     case "welcomeMessages_format": {
                         if(typeof(value) !== "string" || value.length < 1) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (text)`, `set ${property} Welcome <user>!`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (text)`, `set ${property} Welcome <user>!`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -306,7 +306,7 @@ module.exports = {
                     case "leaveMessages": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -316,7 +316,7 @@ module.exports = {
 
                     case "leaveMessages_format": {
                         if(typeof(value) !== "string" || value.length < 1) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (text)`, `set ${property} Farawell <user>!`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (text)`, `set ${property} Farawell <user>!`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -327,9 +327,9 @@ module.exports = {
 
                     case "welcomeMessages_channel": {
                         value = value.includes("<#") ? value.replace("<#", "").replace(">", "") : value;
-                        let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { console.log(e); });
+                        let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { command_data.global_context.logger.api_error(e); });
                         if(channel === undefined) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -344,9 +344,9 @@ module.exports = {
 
                     case "leaveMessages_channel": {
                         value = value.includes("<#") ? value.replace("<#", "").replace(">", "") : value;
-                        let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { console.log(e); });
+                        let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { command_data.global_context.logger.api_error(e); });
                         if(channel === undefined) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -362,7 +362,7 @@ module.exports = {
                     case "welcomeMessages_ping": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -371,28 +371,28 @@ module.exports = {
                     }
 
                     default: {
-                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help config set\` for help)`, "set welcomeMessages true") }).catch(e => { console.log(e); });
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help config set\` for help)`, "set welcomeMessages true") }).catch(e => { command_data.global_context.logger.api_error(e); });
                         return;
                     }
                 }
 
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
-                command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { console.log(e); });
+                command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                 break;
             }
 
             default: {
-                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set welcomeMessages true") }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set welcomeMessages true") }).catch(e => { command_data.global_context.logger.api_error(e); });
                 return;
             }
         }
 
         if(command_data.server_config.welcomeMessages == true && command_data.server_config.welcomeMessages_channel === "-1") {
-            command_data.msg.channel.send("Make sure to set `welcomeMessages_channel`, otherwise welcome messages won't work-").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Make sure to set `welcomeMessages_channel`, otherwise welcome messages won't work-").catch(e => { command_data.global_context.logger.api_error(e); });
         }
 
         if(command_data.server_config.leaveMessages == true && command_data.server_config.leaveMessages_channel === "-1") {
-            command_data.msg.channel.send("Make sure to set `leaveMessages_channel`, otherwise leave messages won't work-").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Make sure to set `leaveMessages_channel`, otherwise leave messages won't work-").catch(e => { command_data.global_context.logger.api_error(e); });
         }
     },
 };

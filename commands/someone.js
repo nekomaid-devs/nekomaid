@@ -17,6 +17,6 @@ module.exports = {
     execute(command_data) {
         // TODO: this won't work
         let user = command_data.global_context.utils.pick_random(Array.from(command_data.msg.guild.members.cache.values()));
-        command_data.msg.channel.send(`Pinged ${user}-`).catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Pinged ${user}-`).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

@@ -13,7 +13,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        let url = await command_data.global_context.modules.akaneko.neko().catch(e => { console.log(e); });
+        let url = await command_data.global_context.modules.akaneko.neko().catch(e => { command_data.global_context.logger.api_error(e); });
         let embedNeko = {
             title: "Here's a neko, just for you-",
             color: 8388736,
@@ -25,6 +25,6 @@ module.exports = {
             }
         }
         
-        command_data.msg.channel.send("", { embed: embedNeko }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedNeko }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

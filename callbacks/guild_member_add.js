@@ -26,7 +26,7 @@ module.exports = {
             }
         });
         
-        let mute_role = await member.guild.roles.fetch(server_config.muteRoleID).catch(e => { console.log(e); });
+        let mute_role = await member.guild.roles.fetch(server_config.muteRoleID).catch(e => { global_context.logger.api_error(e); });
         if(mute_role !== undefined) {
             server_mutes.forEach(mute => {
                 if(mute.userID === member.user.id) {
@@ -40,9 +40,9 @@ module.exports = {
             let member_display_name = server_config.welcomeMessages_ping ? `${member}` : "**" + member.user.tag + "**";
             format = format.replace("<user>", member_display_name);
 
-            let channel = await global_context.bot.channels.fetch(server_config.welcomeMessages_channel).catch(e => { console.log(e); });
+            let channel = await global_context.bot.channels.fetch(server_config.welcomeMessages_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
-                channel.send(format).catch(e => { console.log(e); });
+                channel.send(format).catch(e => { global_context.logger.api_error(e); });
             }
         }
 

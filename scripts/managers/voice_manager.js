@@ -35,9 +35,9 @@ class VoiceManager {
             }
 
             if(message !== -1) {
-                let guild = await global_context.bot.guilds.fetch(id).catch(e => { console.log(e); });
-                let channel = await guild.channels.fetch(global_context.neko_modules_clients.vm.connections.get(id).current.request_channel_ID).catch(e => { console.log(e); });
-                channel.send(message).catch(e => { console.log(e) }).catch(e => { console.log(e); });
+                let guild = await global_context.bot.guilds.fetch(id).catch(e => { global_context.logger.api_error(e); });
+                let channel = await guild.channels.fetch(global_context.neko_modules_clients.vm.connections.get(id).current.request_channel_ID).catch(e => { global_context.logger.api_error(e); });
+                channel.send(message).catch(e => { console.log(e) }).catch(e => { global_context.logger.api_error(e); });
             }
         }
 
@@ -69,10 +69,10 @@ class VoiceManager {
 
         let voice_data = global_context.neko_modules_clients.vm.connections.get(id);
         if(voice_data.connection.channel.members.size < 2) {
-            let guild = await global_context.bot.guilds.fetch(id).catch(e => { console.log(e); });
-            let channel = await guild.channels.fetch(voice_data.init_message_channel_ID).catch(e => { console.log(e); });
+            let guild = await global_context.bot.guilds.fetch(id).catch(e => { global_context.logger.api_error(e); });
+            let channel = await guild.channels.fetch(voice_data.init_message_channel_ID).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
-                channel.send(`I left \`${voice_data.connection.channel.name}\`, because I was left alone-`).catch(e => { console.log(e); });
+                channel.send(`I left \`${voice_data.connection.channel.name}\`, because I was left alone-`).catch(e => { global_context.logger.api_error(e); });
             }
 
             global_context.neko_modules_clients.vm.remove_connection(global_context, id);
@@ -99,13 +99,13 @@ class VoiceManager {
                     break;
 
                 case -2:
-                    msg.channel.send(`Failed to get video info(url: \`${url}\`)-`).catch(e => { console.log(e); });
+                    msg.channel.send(`Failed to get video info(url: \`${url}\`)-`).catch(e => { global_context.logger.api_error(e); });
                     break;
 
                 default: {
                     let current_length = global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(info.duration);
                     if(current_length.status != -1 && (current_length.hrs >= 3 || info.duration === "P0D") && diff > 3600) {
-                        msg.channel.send(`To play videos longer than \`3h\` please upvote the bot on here ˇˇ\nhttps://top.gg/bot/${global_context.bot.user.id}/vote`).catch(e => { console.log(e); });
+                        msg.channel.send(`To play videos longer than \`3h\` please upvote the bot on here ˇˇ\nhttps://top.gg/bot/${global_context.bot.user.id}/vote`).catch(e => { global_context.logger.api_error(e); });
                         return;
                     }
                     let current_length_2 = global_context.neko_modules_clients.tc.convert_time_data_to_string(current_length);
@@ -128,7 +128,7 @@ class VoiceManager {
                         }
                     });
                     stream.on("error", error => {
-                        msg.channel.send("There was an error while playing the video-").catch(e => { console.log(e); });
+                        msg.channel.send("There was an error while playing the video-").catch(e => { global_context.logger.api_error(e); });
                         console.error(error);
                         global_context.neko_modules_clients.vm.remove_connection(global_context, id, error);
                     });
@@ -147,7 +147,7 @@ class VoiceManager {
                     voice_data.persistent_queue = [ voice_request ]
                     global_context.neko_modules_clients.vm.connections.set(id, voice_data);
 
-                    msg.channel.send(`Playing \`${info.title}\` *(${current_length_2})*-`).catch(e => { console.log(e); });
+                    msg.channel.send(`Playing \`${info.title}\` *(${current_length_2})*-`).catch(e => { global_context.logger.api_error(e); });
                     break;
                 }
             }
@@ -158,13 +158,13 @@ class VoiceManager {
                     break;
 
                 case -2:
-                    msg.channel.send(`Failed to get video info(url: \`${url}\`)-`).catch(e => { console.log(e); });
+                    msg.channel.send(`Failed to get video info(url: \`${url}\`)-`).catch(e => { global_context.logger.api_error(e); });
                     break;
 
                 default: {
                     let current_length = global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(info.duration);
                     if(current_length.status != -1 && (current_length.hrs >= 3 || info.duration === "P0D") && diff > 3600) {
-                        msg.channel.send(`To play videos longer than \`3h\` please upvote the bot on here ˇˇ\nhttps://top.gg/bot/${global_context.bot.user.id}/vote`).catch(e => { console.log(e); });
+                        msg.channel.send(`To play videos longer than \`3h\` please upvote the bot on here ˇˇ\nhttps://top.gg/bot/${global_context.bot.user.id}/vote`).catch(e => { global_context.logger.api_error(e); });
                         return;
                     }
                     let current_length_2 = global_context.neko_modules_clients.tc.convert_time_data_to_string(current_length);
@@ -185,7 +185,7 @@ class VoiceManager {
 
                     let length = voice_data.queue.length;
                     if(log_added === true) {
-                        msg.channel.send(`Added \`${info.title}\` *(${current_length_2})* to the queue (\`${length}\` in the queue)-`).catch(e => { console.log(e); });
+                        msg.channel.send(`Added \`${info.title}\` *(${current_length_2})* to the queue (\`${length}\` in the queue)-`).catch(e => { global_context.logger.api_error(e); });
                     }
                     break;
                 }
@@ -226,8 +226,8 @@ class VoiceManager {
                 });
         
                 stream.on("error", async(error) => {
-                    let channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch(e => { console.log(e); });
-                    channel.send("There was an error while playing the video-").catch(e => { console.log(e); });
+                    let channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch(e => { global_context.logger.api_error(e); });
+                    channel.send("There was an error while playing the video-").catch(e => { global_context.logger.api_error(e); });
                     console.error(error);
                     global_context.neko_modules_clients.vm.remove_connection(global_context, id, error);
                 });
@@ -235,10 +235,10 @@ class VoiceManager {
                 voice_request.stream = stream;
                 voice_data.current = voice_request;
 
-                let channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch(e => { console.log(e); });
+                let channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch(e => { global_context.logger.api_error(e); });
                 let length = voice_data.queue.length - 1;
                 if(channel !== undefined) {
-                    channel.send(`Playing \`${voice_request.info.title}\` *(${current_length_2})* (\`${length}\` in the queue)-`).catch(e => { console.log(e); });
+                    channel.send(`Playing \`${voice_request.info.title}\` *(${current_length_2})* (\`${length}\` in the queue)-`).catch(e => { global_context.logger.api_error(e); });
                 }
 
                 voice_data.queue.shift();

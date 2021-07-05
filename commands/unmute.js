@@ -48,15 +48,15 @@ module.exports = {
                 return;
             }
             
-            let mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { console.log(e); });
+            let mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { command_data.global_context.logger.api_error(e); });
             command_data.tagged_member.roles.remove(mute_role);
 
-            command_data.msg.channel.send(`Unmuted \`${command_data.tagged_user.tag}\` (Reason: \`${unmute_reason}\`)`).catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Unmuted \`${command_data.tagged_user.tag}\` (Reason: \`${unmute_reason}\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
             command_data.global_context.neko_modules_clients.ssm.server_remove.remove_server_mute(command_data.global_context, previous_mute_ID);
 
             // TODO: drop this once a separate callback
             if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
-                let channel = await command_data.global_context.bot.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
+                let channel = await command_data.global_context.bot.channels.fetch(command_data.server_config.audit_channel).catch(e => { command_data.global_context.logger.api_error(e); });
                 if(channel !== undefined) {
                     let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                     let embedMute = {
@@ -85,7 +85,7 @@ module.exports = {
                     command_data.server_config.caseID += 1;
                     command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
-                    channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
+                    channel.send("", { embed: embedMute }).catch(e => { command_data.global_context.logger.api_error(e); });
                 }
             }
         }

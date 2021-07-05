@@ -21,6 +21,6 @@ module.exports = {
         voice_data.queue = [];
         voice_data.persistent_queue = [];
 
-        command_data.msg.channel.send("Cleared the current queue-").catch(e => { console.log(e); });
+        command_data.msg.channel.send("Cleared the current queue-").catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

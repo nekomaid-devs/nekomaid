@@ -31,6 +31,6 @@ module.exports = {
         command_data.tagged_server_user_config.xp = 0;
         command_data.global_context.neko_modules_clients.lvl.updateServerLevel(command_data, set_XP);
 
-        command_data.msg.channel.send(`Set \`${set_XP}\` XP to \`${command_data.tagged_user.tag}\`! (Current XP: \`${Math.round(command_data.taggedServerUserConfig.xp)}\`)`).catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Set \`${set_XP}\` XP to \`${command_data.tagged_user.tag}\`! (Current XP: \`${Math.round(command_data.taggedServerUserConfig.xp)}\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

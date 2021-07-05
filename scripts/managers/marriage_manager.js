@@ -37,11 +37,11 @@ class MarriageManager {
 
         switch(log) {
             case 1:
-                channel.send(`\`${marriage_proposal.source_tag}\` married \`${marriage_proposal.target_tag}\`!`).catch(e => { console.log(e); });
+                channel.send(`\`${marriage_proposal.source_tag}\` married \`${marriage_proposal.target_tag}\`!`).catch(e => { global_context.logger.api_error(e); });
                 break;
 
             case 2:
-                channel.send(`\`${marriage_proposal.source_tag}\` force married \`${marriage_proposal.target_tag}\`!`).catch(e => { console.log(e); });
+                channel.send(`\`${marriage_proposal.source_tag}\` force married \`${marriage_proposal.target_tag}\`!`).catch(e => { global_context.logger.api_error(e); });
                 break;
         }
 
@@ -53,15 +53,15 @@ class MarriageManager {
         if(global_context.neko_modules_clients.mm.marriage_proposals.has(target_user.id)) {
             let marriage_proposal = global_context.neko_modules_clients.mm.marriage_proposals.get(target_user.id);
             if(marriage_proposal.source_ID === source_user.id) {
-                channel.send("You've already proposed to this user-").catch(e => { console.log(e); });
+                channel.send("You've already proposed to this user-").catch(e => { global_context.logger.api_error(e); });
                 return;
             }
         }
 
         switch(log) {
             case 1:
-                channel.send(`\`${source_user.tag}\` wants to marry \`${target_user.tag}\`! They have 120s to accept the proposal.`).catch(e => { console.log(e); });
-                channel.send(`${target_user} type yes to accept the proposal~`).catch(e => { console.log(e); });
+                channel.send(`\`${source_user.tag}\` wants to marry \`${target_user.tag}\`! They have 120s to accept the proposal.`).catch(e => { global_context.logger.api_error(e); });
+                channel.send(`${target_user} type yes to accept the proposal~`).catch(e => { global_context.logger.api_error(e); });
                 break;
         }
 
@@ -93,15 +93,15 @@ class MarriageManager {
         if(global_context.neko_modules_clients.mm.marriage_proposals.has(marriage_proposal.target_ID)) {
             switch(log) {
                 case 1:
-                    channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` expired.`).catch(e => { console.log(e); });
+                    channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` expired.`).catch(e => { global_context.logger.api_error(e); });
                     break;
 
                 case 2:
-                    channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` was cancelled.`).catch(e => { console.log(e); });
+                    channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` was cancelled.`).catch(e => { global_context.logger.api_error(e); });
                     break;
 
                 case 3:
-                    channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` was refused.`).catch(e => { console.log(e); });
+                    channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` was refused.`).catch(e => { global_context.logger.api_error(e); });
                     break;
             }
 

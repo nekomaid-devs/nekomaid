@@ -48,7 +48,7 @@ module.exports = {
                 description: `Joined \`${command_data.msg.member.voice.channel.name}\` in \`${command_data.msg.guild.name}\``
             }
 
-            command_data.msg.channel.send("", { embed: embedJoin }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedJoin }).catch(e => { command_data.global_context.logger.api_error(e); });
         }
 
         if(command_data.args.length > 0) {
@@ -63,13 +63,13 @@ module.exports = {
                 color: 8388736,
                 description: `Fetching results for \`${url}\``
             }
-            let message = await command_data.msg.channel.send("", { embed: embedPlay }).catch(e => { console.log(e); });
+            let message = await command_data.msg.channel.send("", { embed: embedPlay }).catch(e => { command_data.global_context.logger.api_error(e); });
 
             if(command_data.global_context.modules.ytlist.validateID(url) === true) {
                 let result = await command_data.global_context.modules.ytlist(url)
                 .catch(e => {
                     console.error(e);
-                    command_data.msg.channel.send("Failed to get video results-").catch(e => { console.log(e); });
+                    command_data.msg.channel.send("Failed to get video results-").catch(e => { command_data.global_context.logger.api_error(e); });
                 });
                 if(result === undefined || result.items === undefined) { return; }
 
@@ -84,7 +84,7 @@ module.exports = {
 
                 embedPlay.author.name = `Added \`${result.items.length}\` songs to the queue-`;
                 embedPlay.description = "Done~ <:n_music:771823629570277396>";
-                message.edit("", { embed: embedPlay }).catch(e => { console.log(e); });
+                message.edit("", { embed: embedPlay }).catch(e => { command_data.global_context.logger.api_error(e); });
             } else if(command_data.global_context.modules.ytdl.validateURL(url) === true) {
                 url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
                 command_data.global_context.neko_modules_clients.vm.play_on_connection(command_data.global_context, command_data.msg, url);
@@ -93,7 +93,7 @@ module.exports = {
                 let infosByID = new Map();
                 let result = await command_data.global_context.modules.ytsr(command_data.total_argument, { limit: 5 })
                 .catch(e => {
-                    command_data.msg.channel.send("Failed to get video results-").catch(e => { console.log(e); });
+                    command_data.msg.channel.send("Failed to get video results-").catch(e => { command_data.global_context.logger.api_error(e); });
                     console.error(e);
                 });
                 if(result === undefined || result.items === undefined) { return; }
@@ -133,7 +133,7 @@ module.exports = {
 
                 embedPlay.author.name = `Select a song to play (type 1-${max}) <:n_music:771823629570277396>`;
                 embedPlay.description = description_text;
-                message.edit("", { embed: embedPlay }).catch(e => { console.log(e); });
+                message.edit("", { embed: embedPlay }).catch(e => { command_data.global_context.logger.api_error(e); });
             }
         }
     },

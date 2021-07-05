@@ -23,6 +23,6 @@ module.exports = {
         // TODO: add an option for "off/on" (and remember last slowmode)
         let time = parseInt(command_data.args[0]);
         command_data.msg.channel.setRateLimitPerUser(time);
-        command_data.msg.channel.send(`Set current channel's slowmode to \`${time}\` s.`).catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Set current channel's slowmode to \`${time}\` s.`).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

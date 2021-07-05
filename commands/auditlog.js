@@ -75,7 +75,7 @@ module.exports = {
                 ]
             }
 
-            command_data.msg.channel.send("", { embed: embedConfig }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedConfig }).catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
@@ -83,13 +83,13 @@ module.exports = {
         switch(action) {
             case "set": {
                 if(command_data.args.length < 2) {
-                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true") }).catch(e => { console.log(e); });
+                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true") }).catch(e => { command_data.global_context.logger.api_error(e); });
                     return;
                 }
                 let property = command_data.args[1];
 
                 if(command_data.args.length < 3) {
-                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`) }).catch(e => { console.log(e); });
+                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                     return;
                 }
                 let value = command_data.args[2];
@@ -99,7 +99,7 @@ module.exports = {
                     case "bans": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -110,7 +110,7 @@ module.exports = {
                     case "kicks": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -121,7 +121,7 @@ module.exports = {
                     case "mutes": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -132,7 +132,7 @@ module.exports = {
                     case "nicknames": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -143,7 +143,7 @@ module.exports = {
                     case "deletedMessages": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -154,7 +154,7 @@ module.exports = {
                     case "editedMessages": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -165,7 +165,7 @@ module.exports = {
                     case "warns": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -175,9 +175,9 @@ module.exports = {
 
                     case "audit_channel": {
                         value = value.includes("<#") ? value.replace("<#", "").replace(">", "") : value;
-                        let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { console.log(e); });
+                        let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { command_data.global_context.logger.api_error(e); });
                         if(channel === undefined) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -191,18 +191,18 @@ module.exports = {
                     }
 
                     default: {
-                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true") }).catch(e => { console.log(e); });
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true") }).catch(e => { command_data.global_context.logger.api_error(e); });
                         return;
                     }
                 }
 
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
-                command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { console.log(e); });
+                command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                 break;
             }
 
             default: {
-                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `set`)", "set bans true") }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `set`)", "set bans true") }).catch(e => { command_data.global_context.logger.api_error(e); });
                 break;
             }
         }

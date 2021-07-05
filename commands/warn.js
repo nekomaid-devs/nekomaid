@@ -30,7 +30,7 @@ module.exports = {
         let num_of_warnings = command_data.server_warns.filter(warn =>
             warn.userID === command_data.tagged_user.id
         ).length;
-        command_data.msg.channel.send(`Warned \`${command_data.tagged_user.tag}\` (Reason: \`${warn_reason}\`, Strikes: \`${num_of_warnings}\` => \`${(num_of_warnings + 1)}\`)-`).catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Warned \`${command_data.tagged_user.tag}\` (Reason: \`${warn_reason}\`, Strikes: \`${num_of_warnings}\` => \`${(num_of_warnings + 1)}\`)-`).catch(e => { command_data.global_context.logger.api_error(e); });
         command_data.global_context.bot.emit("guildMemberWarn", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: warn_reason });
     }
 };

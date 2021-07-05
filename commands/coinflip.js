@@ -71,9 +71,9 @@ module.exports = {
                 embedCoinflip.description = `You lost \`${bet_ammount}\` credits-`;
             }
 
-            command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });
         } else {
-            command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });
         }
     },
 };

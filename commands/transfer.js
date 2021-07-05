@@ -40,7 +40,7 @@ module.exports = {
                 credits_ammount = Math.round(command_data.author_config.credits / 2);
             }
         } else if(isNaN(credits_ammount) || credits_ammount <= 0) {
-            command_data.msg.channel.send("Invalid credits ammount-").catch(e => { console.log(e); });
+            command_data.msg.channel.send("Invalid credits ammount-").catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
@@ -59,6 +59,6 @@ module.exports = {
             color: 8388736,
             description: `Transfered \`${credits_ammount} 💵\` from \`${command_data.msg.author.tag}\` to \`${command_data.tagged_user.tag}\` (Current Credits: \`${command_data.author_config.credits}$\`)`
         }
-        command_data.msg.channel.send("", { embed: embedTransfer }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedTransfer }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

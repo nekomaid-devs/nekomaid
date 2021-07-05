@@ -21,7 +21,7 @@ module.exports = {
         if(married_text === "-1") {
             married_text = "Nobody";
         } else {
-            let married_user = await command_data.global_context.bot.users.fetch(married_text).catch(e => { console.log(e); });
+            let married_user = await command_data.global_context.bot.users.fetch(married_text).catch(e => { command_data.global_context.logger.api_error(e); });
             if(married_user !== undefined && married_user !== null) {
                 married_text = married_user.username + "#" + married_user.discriminator;
                 if(command_data.tagged_user_config.canDivorce == false) {
@@ -109,6 +109,6 @@ module.exports = {
                 text: `Requested by ${command_data.msg.author.tag} | Cool stuff on the support server releasing soon!`
             },
         }
-        command_data.msg.channel.send("", { embed: embedProfile }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedProfile }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

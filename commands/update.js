@@ -21,7 +21,7 @@ module.exports = {
             footer: `Version: Nekomaid ${command_data.global_context.config.version}`
         }
 
-        command_data.msg.channel.send("", { embed: embedUpdate }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedUpdate }).catch(e => { command_data.global_context.logger.api_error(e); });
 
         command_data.global_context.neko_modules_clients.web_updates.refresh_status(command_data.global_context);
         command_data.global_context.neko_modules_clients.web_updates.refresh_bot_list(command_data.global_context);

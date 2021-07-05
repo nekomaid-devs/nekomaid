@@ -37,6 +37,6 @@ module.exports = {
                 text: "Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
             }
         }
-        command_data.msg.channel.send("", { embed: embedDaily }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedDaily }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

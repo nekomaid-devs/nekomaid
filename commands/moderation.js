@@ -53,7 +53,7 @@ module.exports = {
                 ]
             }
 
-            command_data.msg.channel.send("", { embed: embedConfig }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedConfig }).catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
@@ -76,7 +76,7 @@ module.exports = {
                 switch(property) {
                     case "bannedWord": {
                         command_data.server_config.bannedWords.push(value);
-                        command_data.msg.channel.send(`Added \`${value}\` to bot's property \`${property}\``).catch(e => { console.log(e); });
+                        command_data.msg.channel.send(`Added \`${value}\` to bot's property \`${property}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
     
@@ -112,7 +112,7 @@ module.exports = {
                         }
 
                         command_data.server_config.bannedWords.splice(command_data.server_config.bannedWords.indexOf(command_data.args[2]), 1);
-                        command_data.msg.channel.send(`Removed \`${value}\` from bot's property \`${property}\``).catch(e => { console.log(e); });
+                        command_data.msg.channel.send(`Removed \`${value}\` from bot's property \`${property}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -145,7 +145,7 @@ module.exports = {
                     case "invites": {
                         let bool = value === 'true' ? true : (value === 'false' ? false : value);
                         if(typeof bool !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
@@ -154,18 +154,18 @@ module.exports = {
                     }
 
                     default: {
-                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help moderation set\` for help)`, "set invites true") }).catch(e => { console.log(e); });
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help moderation set\` for help)`, "set invites true") }).catch(e => { command_data.global_context.logger.api_error(e); });
                         return;
                     }
                 }
 
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
-                command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { console.log(e); });
+                command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                 break;
             }
     
             default: {
-                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set invites true") }).catch(e => { console.log(e); });
+                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set invites true") }).catch(e => { command_data.global_context.logger.api_error(e); });
                 break;
             }
         }

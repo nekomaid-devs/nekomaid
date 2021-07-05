@@ -18,6 +18,6 @@ module.exports = {
         }
 
         command_data.global_context.neko_modules_clients.vm.remove_connection(command_data.global_context, command_data.msg.guild.id);
-        command_data.msg.channel.send("Left the voice channel-").catch(e => { console.log(e); });
+        command_data.msg.channel.send("Left the voice channel-").catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

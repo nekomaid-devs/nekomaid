@@ -128,6 +128,6 @@ module.exports = {
                 text: `Update took ${sec_taken}s...`
             }
         }
-        command_data.msg.channel.send("", { embed: embedInfo }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedInfo }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

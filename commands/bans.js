@@ -24,7 +24,7 @@ module.exports = {
         .setAuthor(`❯ Bans (${command_data.server_bans.length})`, command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
 
         if(command_data.server_bans.length < 1) {
-            command_data.msg.channel.send("", { embed: embedBans }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedBans }).catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
@@ -42,7 +42,7 @@ module.exports = {
                 }
             });
         
-            command_data.msg.channel.send("", { embed: embedBans }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedBans }).catch(e => { command_data.global_context.logger.api_error(e); });
         })
     },
 };

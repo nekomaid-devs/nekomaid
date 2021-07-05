@@ -31,6 +31,6 @@ module.exports = {
                 text: "Thank you for voting 💖"
             }
         }
-        command_data.msg.channel.send("", { embed: embedUpvote }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedUpvote }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

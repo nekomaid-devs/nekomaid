@@ -32,7 +32,7 @@ module.exports = {
             return;
         }
 
-        command_data.msg.channel.send(command_data.total_argument).catch(e => { console.log(e); });
-        command_data.msg.delete().catch(e => { console.log(e); });
+        command_data.msg.channel.send(command_data.total_argument).catch(e => { command_data.global_context.logger.api_error(e); });
+        command_data.msg.delete().catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

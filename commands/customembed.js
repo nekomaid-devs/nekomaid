@@ -24,12 +24,12 @@ module.exports = {
                 description: "```" + err + "```"
             }
     
-            command_data.msg.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedError }).catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
         command_data.msg.channel.send("", { embed: custom_embed }).catch(err => {
-            command_data.msg.channel.send(`Error when creating embed -\n\`${err}\``).catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Error when creating embed -\n\`${err}\``).catch(e => { command_data.global_context.logger.api_error(e); });
         });
     },
 };

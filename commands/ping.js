@@ -11,7 +11,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        let m = await command_data.msg.channel.send("Ping?").catch(e => { console.log(e); });
+        let m = await command_data.msg.channel.send("Ping?").catch(e => { command_data.global_context.logger.api_error(e); });
         let embedPing = {
             color: 8388736,
             fields: [

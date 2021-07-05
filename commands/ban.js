@@ -55,7 +55,7 @@ module.exports = {
         if(previous_ban === -1) {
             ban_end = ban_start + extended_time;
             let ban_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(ban_end - ban_start);
-            command_data.msg.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${ban_reason}\`, Time: \`${ban_end_text}\`)-`).catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${ban_reason}\`, Time: \`${ban_end_text}\`)-`).catch(e => { command_data.global_context.logger.api_error(e); });
         } else {
             command_data.msg.reply(`\`${command_data.tagged_user.tag}\` is already banned-`);
             return;

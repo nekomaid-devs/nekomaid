@@ -31,7 +31,7 @@ module.exports = {
                 ],
                 footer: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`
             }
-            command_data.msg.channel.send("", { embed: embedPrefix }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedPrefix }).catch(e => { command_data.global_context.logger.api_error(e); });
         } else {
             if(command_data.total_argument.length > 10) {
                 command_data.msg.reply("Prefix can't be longer than 10 characters-");
@@ -51,7 +51,7 @@ module.exports = {
                     }
                 ]
             }
-            command_data.msg.channel.send("", { embed: embedPrefix }).catch(e => { console.log(e); });
+            command_data.msg.channel.send("", { embed: embedPrefix }).catch(e => { command_data.global_context.logger.api_error(e); });
         }
     },
 };

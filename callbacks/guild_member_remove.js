@@ -24,9 +24,9 @@ module.exports = {
             let member_display_name = "**" + member.user.tag + "**";
             format = format.replace("<user>", member_display_name);
 
-            let channel = await global_context.bot.channels.fetch(server_config.leaveMessages_channel).catch(e => { console.log(e); });
+            let channel = await global_context.bot.channels.fetch(server_config.leaveMessages_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
-                channel.send(format).catch(e => { console.log(e); });
+                channel.send(format).catch(e => { global_context.logger.api_error(e); });
             }
         }
 
@@ -40,17 +40,17 @@ module.exports = {
         }
         
         if(server_config.audit_kicks == true && server_config.audit_channel != "-1") {
-            let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { console.log(e); });
+            let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let audit = await member.guild.fetchAuditLogs();
                 let last_audit = audit.entries.first();
                 if(last_audit.action === "MEMBER_KICK" && last_audit.target.id === member.user.id) {
                     let executor = -1;
                     if(last_audit.executor.id === global_context.bot.user.id) {
-                        executor = await member.guild.members.fetch(moderation_action.moderator).catch(e => { console.log(e); });
+                        executor = await member.guild.members.fetch(moderation_action.moderator).catch(e => { global_context.logger.api_error(e); });
                         global_context.data.last_moderation_actions.delete(guild.id);
                     } else {
-                        executor = await member.guild.members.fetch(last_audit.executor.id).catch(e => { console.log(e); });
+                        executor = await member.guild.members.fetch(last_audit.executor.id).catch(e => { global_context.logger.api_error(e); });
                     }
 
                     let embedKick = {
@@ -76,7 +76,7 @@ module.exports = {
                         ]
                     }
 
-                    channel.send("", { embed: embedKick }).catch(e => { console.log(e); });
+                    channel.send("", { embed: embedKick }).catch(e => { global_context.logger.api_error(e); });
                 }
             }
         }

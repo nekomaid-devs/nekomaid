@@ -55,6 +55,6 @@ module.exports = {
                 text: `Page: ${post_info.pageNumber}/${post_info.numOfPages} Post: ${post_number}/${num_of_posts}`
             }
         }
-        command_data.msg.channel.send("", { embed: embedXbooru }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedXbooru }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

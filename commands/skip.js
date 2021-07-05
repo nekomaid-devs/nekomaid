@@ -21,7 +21,7 @@ module.exports = {
         voice_data.current.stream.destroy();
         voice_data.current = -1;
 
-        command_data.msg.channel.send(`Skipped \`${voice_request.info.title}\`- (\`${command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).queue.length}\` remaining)-`).catch(e => { console.log(e); });
+        command_data.msg.channel.send(`Skipped \`${voice_request.info.title}\`- (\`${command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).queue.length}\` remaining)-`).catch(e => { command_data.global_context.logger.api_error(e); });
         if(voice_data.mode === 0) {
             voice_data.persistent_queue.shift();
         }

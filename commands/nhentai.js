@@ -85,6 +85,6 @@ module.exports = {
                 text: `Requested by ${command_data.msg.author.tag}...`
             }
         }
-        command_data.msg.channel.send("", { embed: embedNHentai }).catch(e => { console.log(e); });
+        command_data.msg.channel.send("", { embed: embedNHentai }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

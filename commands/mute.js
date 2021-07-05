@@ -55,11 +55,11 @@ module.exports = {
         if(previous_mute === -1) {
             mute_end = mute_start + extended_time;
             let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(mute_end - mute_start);
-            command_data.msg.channel.send(`Muted \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Muted \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { command_data.global_context.logger.api_error(e); });
 
             // TODO: drop this once a separate callback
             if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
-                let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
+                let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { command_data.global_context.logger.api_error(e); });
                 if(channel !== undefined) {
                     let embedMute = {
                         author: {
@@ -91,18 +91,18 @@ module.exports = {
                     command_data.server_config.caseID += 1;
                     command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
-                    channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
+                    channel.send("", { embed: embedMute }).catch(e => { command_data.global_context.logger.api_error(e); });
                 }
             }
         } else {
             mute_end = previous_mute.end + extended_time;
             let prev_mute_end_text = previous_mute.end === 1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(previous_mute.end - mute_start);
             let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(mute_end - mute_start);
-            command_data.msg.channel.send(`Extended mute of \`${command_data.tagged_user.tag}\` by \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { console.log(e); });
+            command_data.msg.channel.send(`Extended mute of \`${command_data.tagged_user.tag}\` by \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { command_data.global_context.logger.api_error(e); });
 
             // TODO: drop this once a separate callback
             if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
-                let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { console.log(e); });
+                let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { command_data.global_context.logger.api_error(e); });
                 if(channel !== undefined) {
                     let embedMute = {
                         author: {
@@ -134,7 +134,7 @@ module.exports = {
                     command_data.server_config.caseID += 1;
                     command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
-                    channel.send("", { embed: embedMute }).catch(e => { console.log(e); });
+                    channel.send("", { embed: embedMute }).catch(e => { command_data.global_context.logger.api_error(e); });
                 }
             }
         }
@@ -151,7 +151,7 @@ module.exports = {
         if(command_data.server_config.muteRoleID === "-1") {
             this.create_mute_role_and_mute(command_data);
         } else {
-            let mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { console.log(e); });
+            let mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { command_data.global_context.logger.api_error(e); });
             if(mute_role === undefined) {
                 this.create_mute_role_and_mute(command_data);
             } else {
@@ -184,7 +184,7 @@ module.exports = {
                         channel.createOverwrite(mute_role, {
                             CONNECT: false,
                             SPEAK: false
-                        }).catch(e => { console.log(e); });
+                        }).catch(e => { command_data.global_context.logger.api_error(e); });
                     }
                 } catch(err) {
                     console.log("[mod] Skipped a permission overwrite because I didn't have permission-");
