@@ -15,7 +15,7 @@ module.exports = {
     },
 
     async refresh_website(global_context) {
-        if(global_context.bot.shard.ids[0] !== 0) { return; }
+        if(global_context.bot.shard.ids[0] !== 0 || global_context.config.nekomaid_API_update_stats === false) { return; }
 
         let shard_list = [];
         for(let i = 0; i < global_context.bot.shard.count; i++) {
@@ -114,7 +114,7 @@ module.exports = {
 			top_list: []
         }
 
-        global_context.modules.axios.post(`https://api.nekomaid.xyz/postStats`, { stats: stats }, {
+        global_context.modules.axios.post(`${global_context.config.nekomaid_API_endpoint}/postStats`, { stats: stats }, {
             headers: global_context.data.default_headers
         })
         .catch(error => {
@@ -123,7 +123,7 @@ module.exports = {
     },
   
     async refresh_bot_list(global_context) {
-        if(global_context.config.dev_mode === true) { return; }
+        if(global_context.config.dev_mode === true || global_context.config.nekomaid_API_update_bot_lists === false) { return; }
 
         let guild_count = 0;
         let user_count = 0;
