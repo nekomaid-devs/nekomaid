@@ -32,19 +32,23 @@ module.exports = {
         global_context.modules.akaneko = require("akaneko");
 
         //Import Sentry modules
-        global_context.modules.Sentry = require("@sentry/node");
-        global_context.modules.Tracing = require("@sentry/tracing");
+        if(global_context.config.sentry_enabled === true) {
+            global_context.modules.Sentry = require("@sentry/node");
+            global_context.modules.Tracing = require("@sentry/tracing");
+        }
         
         //Setup modules
         global_context.modules_clients.neko = new global_context.modules.NekoClient();
-        global_context.modules.Sentry.init({
-            dsn: global_context.config.sentry_dns,
-            integrations: [
-                new global_context.modules.Sentry.Integrations.Http({ tracing: true }),
-            ],
+        if(global_context.config.sentry_enabled === true) {
+            global_context.modules.Sentry.init({
+                dsn: global_context.config.sentry_dns,
+                integrations: [
+                    new global_context.modules.Sentry.Integrations.Http({ tracing: true }),
+                ],
 
-            tracesSampleRate: 1.0,
-        });
+                tracesSampleRate: 1.0,
+            });
+        }
 
         //Setup extra utils
         global_context.utils.pick_random = (array) => {

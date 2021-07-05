@@ -4,7 +4,9 @@ module.exports = {
             try {
                 await this.process(global_context, message);
             } catch(e) {
-                global_context.modules.Sentry.captureException(e);
+                if(global_context.config.sentry_enabled === true) {
+                    global_context.modules.Sentry.captureException(e);
+                }
                 global_context.logger.error("An exception occured and has been reported to Sentry");
             }
             
@@ -125,10 +127,15 @@ module.exports = {
             return;
         }
 
-        let transaction = command_data.global_context.modules.Sentry.startTransaction({ op: "execute_command", name: "[Command] Unknown" });
-        command_data.global_context.modules.Sentry.configureScope(scope => { scope.setSpan(transaction); });
-        command_data.global_context.modules.Sentry.setUser({ id: message.author.id, username: message.author.username });
-        let transaction_prepare = transaction.startChild({ op: "prepare_command" });
+        let transaction = -1;
+        let transaction_prepare = -1;
+        let transaction_process = -1;
+        if(global_context.config.sentry_enabled === true) {
+            transaction = global_context.modules.Sentry.startTransaction({ op: "execute_command", name: "[Command] Unknown" });
+            global_context.modules.Sentry.configureScope(scope => { scope.setSpan(transaction); });
+            global_context.modules.Sentry.setUser({ id: message.author.id, username: message.author.username });
+            transaction_prepare = transaction.startChild({ op: "prepare_command" });
+        }
 
         command_data.args = message.content.slice(command_data.server_config.prefix.length).split(' ');
         command_data.server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: message.guild.id });
@@ -148,7 +155,9 @@ module.exports = {
             return;
         }
 
-        transaction.setName(`[Command] ${command_name}`);
+        if(global_context.config.sentry_enabled === true) {
+            transaction.setName(`[Command] ${command_name}`);
+        }
         global_context.data.total_commands += 1;
         global_context.data.processed_commands += 1;
 
@@ -191,12 +200,16 @@ module.exports = {
         });
         command_data.tagged_user_tags = tagged_user_tags;
 
-        transaction_prepare.finish();
-        let transaction_process = transaction.startChild({ op: "process_command" });
+        if(global_context.config.sentry_enabled === true) {
+            transaction_prepare.finish();
+            transaction_process = transaction.startChild({ op: "process_command" });
+        }
         await command.execute(command_data);
 
-        transaction_process.finish();
-        transaction.finish();
-        command_data.global_context.modules.Sentry.configureScope(scope => { scope.setUser(null); });
+        if(global_context.config.sentry_enabled === true) {
+            transaction_process.finish();
+            transaction.finish();
+            global_context.modules.Sentry.configureScope(scope => { scope.setUser(null); });
+        }
     }
 }

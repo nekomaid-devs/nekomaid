@@ -14,6 +14,7 @@ let global_context = {
     utils: {},
     logger: {},
     bot_config: {},
+    
     cached_all_channels: [],
     cached_all_roles: [],
     cached_all_members: []

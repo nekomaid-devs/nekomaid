@@ -4,7 +4,9 @@ module.exports = {
             try {
                 await this.process(global_context, reaction);
             } catch(e) {
-                global_context.modules.Sentry.captureException(e);
+                if(global_context.config.sentry_enabled === true) {
+                    global_context.modules.Sentry.captureException(e);
+                }
                 global_context.logger.error("An exception occured and has been reported to Sentry");
             }
             
