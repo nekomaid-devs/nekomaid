@@ -1,9 +1,4 @@
 class OsuAPI {
-    constructor(_cheerio, _got) {
-        this.cheerio = _cheerio;
-        this.got = _got;
-    }
-    
     async osunews_result(ws) {
         //Get front page for tag
         var siteUrl0 = "https://osu.ppy.sh/home/news";

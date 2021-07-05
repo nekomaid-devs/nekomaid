@@ -1,7 +1,5 @@
 class ModerationManager {
-    constructor(global_context) {
-        this.global_context = global_context;
-
+    constructor() {
         /*setInterval(this.timeoutAllBans, 10000, this);
         setInterval(this.timeoutAllMutes, 10000, this);*/
     }

@@ -110,7 +110,7 @@ module.exports = {
 
         //Setup Nekomaid's modules
         global_context.neko_modules.ServerStructureManager = require('./scripts/data/server_structure_manager');
-        global_context.neko_modules_clients.ssm = new global_context.neko_modules.ServerStructureManager(global_context, sql_connection);
+        global_context.neko_modules_clients.ssm = new global_context.neko_modules.ServerStructureManager(sql_connection);
 
         global_context.neko_modules.Rule34API = require('./scripts/apis/rule34_api');
         global_context.neko_modules_clients.r34 = new global_context.neko_modules.Rule34API();
@@ -146,35 +146,35 @@ module.exports = {
         global_context.neko_modules_clients.lvl = new global_context.neko_modules.LevelingManager();
 
         global_context.neko_modules.ModerationManager = require('./scripts/modules/module_moderation_manager');
-        global_context.neko_modules_clients.moderator = new global_context.neko_modules.ModerationManager(global_context);
+        global_context.neko_modules_clients.moderator = new global_context.neko_modules.ModerationManager();
 
         global_context.neko_modules.MarriageProposal = require('./scripts/helpers/marriage_proposal');
         global_context.neko_modules.VoiceData = require('./scripts/helpers/voice_data');
         global_context.neko_modules.VoiceRequest = require('./scripts/helpers/voice_request');
 
         global_context.neko_modules.MarriageManager = require('./scripts/managers/marriage_manager');
-        global_context.neko_modules_clients.mm = new global_context.neko_modules.MarriageManager(global_context);
+        global_context.neko_modules_clients.mm = new global_context.neko_modules.MarriageManager();
 
         global_context.neko_modules.VoiceManager = require('./scripts/managers/voice_manager');
-        global_context.neko_modules_clients.vm = new global_context.neko_modules.VoiceManager(global_context);
+        global_context.neko_modules_clients.vm = new global_context.neko_modules.VoiceManager();
 
         global_context.neko_modules.UpvoteManager = require('./scripts/managers/upvote_manager');
-        global_context.neko_modules_clients.um = new global_context.neko_modules.UpvoteManager(global_context);
+        global_context.neko_modules_clients.um = new global_context.neko_modules.UpvoteManager();
 
         global_context.neko_modules.SupportServerManager = require('./scripts/managers/supportserver_manager');
-        global_context.neko_modules_clients.supm = new global_context.neko_modules.SupportServerManager(global_context);
+        global_context.neko_modules_clients.supm = new global_context.neko_modules.SupportServerManager();
 
         global_context.neko_modules.CounterManager = require('./scripts/managers/counter_manager');
-        global_context.neko_modules_clients.cm = new global_context.neko_modules.CounterManager(global_context);
+        global_context.neko_modules_clients.cm = new global_context.neko_modules.CounterManager();
 
         global_context.neko_modules.ReactionRolesManager = require('./scripts/managers/rr_manager');
-        global_context.neko_modules_clients.rrm = new global_context.neko_modules.ReactionRolesManager(global_context);
+        global_context.neko_modules_clients.rrm = new global_context.neko_modules.ReactionRolesManager();
 
         global_context.neko_modules.InventoryManager = require('./scripts/managers/inventory_manager');
-        global_context.neko_modules_clients.im = new global_context.neko_modules.InventoryManager(global_context);
+        global_context.neko_modules_clients.im = new global_context.neko_modules.InventoryManager();
 
         global_context.neko_modules.EventManager = require('./scripts/managers/event_manager');
-        global_context.neko_modules_clients.em = new global_context.neko_modules.EventManager(global_context);
+        global_context.neko_modules_clients.em = new global_context.neko_modules.EventManager();
 
         if(global_context.config.osu_enabled === true) {
             global_context.modules.OsuAPI = require('node-osu');
@@ -219,7 +219,7 @@ module.exports = {
         global_context.data.default_headers = {
             "Content-Type": 'application/json',
             "Authorization": global_context.config.nekomaid_API_key,
-            "Origin": "https://api.nekomaid.xyz"
+            "Origin": global_context.config.nekomaid_API_endpoint
         }
 
         /*let lastTimestamp = Date.now();

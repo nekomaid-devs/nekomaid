@@ -1,8 +1,4 @@
 class LevelingManager {
-    constructor(global_context) {
-        this.global_context = global_context;
-    }
-
     /*async updateServerLevel(data, xpToAdd, sendLevelupMessage = true) {
         if(data.msg.author.bot === true || command_data.server_config.module_level_enabled == false) {
             return;

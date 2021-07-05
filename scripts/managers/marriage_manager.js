@@ -1,7 +1,5 @@
 class MarriageManager {
-    constructor(global_context) {
-        this.global_context = global_context;
-
+    constructor() {
         this.marriage_proposals = new Map();
         this.timeout_proposals = new Map();
     }

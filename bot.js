@@ -136,6 +136,7 @@ setInterval(() => {
     bot.neko_data.total_commands = global_context.data.total_commands;
     if(global_context.neko_modules_clients.vm !== undefined) {
         bot.neko_data.vm_connections = global_context.neko_modules_clients.vm.connections.size;
+        global_context.neko_modules_clients.vm.check_for_timeouts(global_context);
     }
 
     global_context.data.processed_events = 0;
@@ -150,6 +151,9 @@ setInterval(() => {
 }, 2000);
 setInterval(() => {
     global_context.neko_modules.web_updates.refresh_bot_list(global_context);
+    if(global_context.neko_modules_clients.cm !== undefined) {
+        global_context.neko_modules_clients.cm.update_all_counters(global_context);
+    }
 }, 60000);
 setInterval(() => {
     global_context.neko_modules.web_updates.refresh_status(global_context);

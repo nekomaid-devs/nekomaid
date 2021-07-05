@@ -1,12 +1,7 @@
 class CounterManager {
-    constructor(global_context) {
-        this.global_context = global_context;
-
-        setInterval(this.update_all_counters, 60000, global_context);
-    }
-
     update_all_counters(global_context) {
         global_context.bot.guilds.cache.forEach(server => {
+            // TODO: this will be true, just if we have roles cached, probably make it guess and shoot the update anyways
             if(server.me.hasPermission("MANAGE_CHANNELS") === true) {
                 global_context.neko_modules_clients.cm.update_counters(global_context, server);
             }

@@ -1,8 +1,4 @@
 class EventManager {
-    constructor(global_context) {
-        this.global_context = global_context;
-    }
-
     /*async spawnEvent(em, channelID, type) {
         let channel = await em.bot.channels.fetch(channelID).catch(e => { console.log(e); })
         if(this.bot.shard.ids[0] !== this.bot.Discord.ShardClientUtil.shardIDForGuildID(channel.guild.id, this.bot.shard.count)) { return; }

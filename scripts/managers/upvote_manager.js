@@ -1,8 +1,4 @@
 class UpvoteManager {
-    constructor(global_context) {
-        this.global_context = global_context;
-    }
-
     /*async trySendingUpvoteMessage(um, id, siteID, isDouble = false) {
         var user = await um.bot.users.fetch(id).catch(e => { console.log(e); });
         var username = user.username;

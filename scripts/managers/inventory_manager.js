@@ -1,8 +1,4 @@
 class InventoryManager {
-    constructor(global_context) {
-        this.global_context = global_context;
-    }
-
     /*useItem(im, data, itemPrefab, targetIndexes) {
         switch(itemPrefab.type) {
             case "box": {

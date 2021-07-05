@@ -1,9 +1,6 @@
 class VoiceManager {
-    constructor(global_context) {
-        this.global_context = global_context;
+    constructor() {
         this.connections = new Map();
-        
-        setInterval(this.check_for_timeouts, 1000, global_context);
     }
 
     add_connection(global_context, id, voice_data) {

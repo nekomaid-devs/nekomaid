@@ -1,7 +1,5 @@
 class ReactionRolesManager {
-    constructor(global_context) {
-        this.global_context = global_context;
-
+    constructor() {
         /*this.collectors = new Map();*/
     }
 
