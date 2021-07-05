@@ -10,7 +10,7 @@ module.exports = {
     argumentsNeeded: [],
     permissionsNeeded: [],
     nsfw: false,
-    execute(command_data) {
+    async execute(command_data) {
         let elapsedCreated = new Date() - new Date(command_data.tagged_user.createdAt.toUTCString());
         let createdAgo = command_data.global_context.neko_modules_clients.tc.convert_time(elapsedCreated);
 

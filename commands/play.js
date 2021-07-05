@@ -43,6 +43,7 @@ module.exports = {
                     name: `Joined channel - ${command_data.msg.member.voice.channel.name}`,
                     icon_url: avatar_url,
                 },
+                color: 8388736,
                 description: `Joined \`${command_data.msg.member.voice.channel.name}\` in \`${command_data.msg.guild.name}\``
             }
 
@@ -55,7 +56,7 @@ module.exports = {
 
             let embedPlay = {
                 author: {
-                    name: "Loading... <a:loading:393852367751086090>",
+                    name: "Loading...",
                     icon_url: avatar_url,
                 },
                 color: 8388736,
