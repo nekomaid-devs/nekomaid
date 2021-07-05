@@ -48,9 +48,20 @@ class Argument {
                     return false;
                 }
                 break;
+            
+            case "int>0/all/half":
+                if(isNaN(parseInt(argument)) && argument !== "all" && argument !== "half") {
+                    command_data.msg.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
+                    return false;
+                }
+                break;
 
-                // TODO: add heads/tails
-                // TODO: add int>0/all/half
+            case "heads/tails":
+                if(argument !== "heads" && argument !== "tails") {
+                    command_data.msg.channel.send("", { embed: embedError }).catch(e => { console.log(e); });
+                    return false;
+                }
+                break;
         }
 
         return true;

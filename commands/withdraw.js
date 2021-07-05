@@ -26,6 +26,13 @@ module.exports = {
             } else {
                 credits_ammount = command_data.author_config.bank;
             }
+        } else if(command_data.args[0] === "half") {
+            if(command_data.author_config.bank <= 1) {
+                command_data.msg.reply(`Your bank account doesn't have enough credits to do this-`);
+                return;
+            } else {
+                credits_ammount = Math.round(command_data.author_config.bank / 2);
+            }
         }
 
         if(command_data.author_config.bank - credits_ammount < 0) {
