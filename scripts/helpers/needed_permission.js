@@ -25,7 +25,7 @@ class NeededPermission {
             }
 
             default:
-                console.log(`Invalid permission type - ${this.user_type}`);
+                global_context.logger.error(`Invalid permission type - ${this.user_type}`);
                 return false;
         }
     }

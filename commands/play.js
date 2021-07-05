@@ -67,8 +67,8 @@ module.exports = {
 
             if(command_data.global_context.modules.ytlist.validateID(url) === true) {
                 let result = await command_data.global_context.modules.ytlist(url)
-                .catch(e => {
-                    console.error(e);
+                .catch(err => {
+                    command_data.global_context.logger.error(err);
                     command_data.msg.channel.send("Failed to get video results-").catch(e => { command_data.global_context.logger.api_error(e); });
                 });
                 if(result === undefined || result.items === undefined) { return; }
@@ -92,9 +92,9 @@ module.exports = {
                 let max = 5;
                 let infosByID = new Map();
                 let result = await command_data.global_context.modules.ytsr(command_data.total_argument, { limit: 5 })
-                .catch(e => {
+                .catch(err => {
+                    command_data.global_context.logger.error(err);
                     command_data.msg.channel.send("Failed to get video results-").catch(e => { command_data.global_context.logger.api_error(e); });
-                    console.error(e);
                 });
                 if(result === undefined || result.items === undefined) { return; }
                 result.items = result.items.filter(l => { return l.type === "video"; })

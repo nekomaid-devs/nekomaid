@@ -78,23 +78,14 @@ let server = http.createServer((req, res) => {
                         var isDouble = post.isWeekend;
 
                         manager.broadcastEval("this.um.trySendingUpvoteMessage(this.um, '" + id + "', '" + post.siteID + "', " + isDouble + ")")
-                        .catch(err =>
-                            console.error(err)
-                        );
+                        .catch(e => {
+                            console.logger.error(e);
+                        });
 
                         manager.broadcastEval("this.um.updateUpvotedStatus(this.um, '" + id + "', '" + post.siteID + "', " + isDouble + ")")
-                        .catch(err =>
-                            console.error(err)
-                        );
-                        break;
-
-                    case 1:
-                        post.serverConfig2 = JSON.parse(post.serverConfig)
-                        console.log("[web] Recieved new config for Server(id: " + post.serverConfig2.serverID + ")-")
-                        manager.broadcastEval("if(this.guilds.cache.has('" + post.serverConfig2.serverID + "') === true) { this.ssm.server_edit.edit(this.ssm, { id: '" + post.serverConfig2.serverID + "', server: " + JSON.stringify(post.serverConfig) + ") }")
-                        .catch(err =>
-                            console.error(err)
-                        );
+                        .catch(e => {
+                            console.logger.error(e);
+                        });
                         break;
 
                     default:

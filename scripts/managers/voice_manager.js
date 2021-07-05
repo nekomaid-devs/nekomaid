@@ -34,7 +34,7 @@ class VoiceManager {
             if(message !== -1) {
                 let guild = await global_context.bot.guilds.fetch(id).catch(e => { global_context.logger.api_error(e); });
                 let channel = await guild.channels.fetch(global_context.neko_modules_clients.vm.connections.get(id).current.request_channel_ID).catch(e => { global_context.logger.api_error(e); });
-                channel.send(message).catch(e => { console.log(e) }).catch(e => { global_context.logger.api_error(e); });
+                channel.send(message).catch(e => { global_context.logger.api_error(e) });
             }
         }
 
@@ -118,16 +118,13 @@ class VoiceManager {
                             voice_data.persistent_queue.shift();
                         }
 
-                        try {
-                            global_context.neko_modules_clients.vm.try_playing_next(global_context, id);
-                        } catch(error) {
-                            console.error(error);
-                        }
+                        global_context.neko_modules_clients.vm.try_playing_next(global_context, id);
                     });
-                    stream.on("error", error => {
+                    stream.on("error", err => {
                         msg.channel.send("There was an error while playing the video-").catch(e => { global_context.logger.api_error(e); });
-                        console.error(error);
-                        global_context.neko_modules_clients.vm.remove_connection(global_context, id, error);
+                        global_context.logger.error(err);
+                        
+                        global_context.neko_modules_clients.vm.remove_connection(global_context, id, err);
                     });
 
                     let voice_request = new global_context.neko_modules.VoiceRequest();
@@ -215,18 +212,15 @@ class VoiceManager {
                         voice_data.persistent_queue.shift();
                     }
 
-                    try {
-                        global_context.neko_modules_clients.vm.try_playing_next(global_context, id);
-                    } catch(error) {
-                        console.error(error);
-                    }
+                    global_context.neko_modules_clients.vm.try_playing_next(global_context, id);
                 });
         
-                stream.on("error", async(error) => {
+                stream.on("error", async(err) => {
                     let channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch(e => { global_context.logger.api_error(e); });
                     channel.send("There was an error while playing the video-").catch(e => { global_context.logger.api_error(e); });
-                    console.error(error);
-                    global_context.neko_modules_clients.vm.remove_connection(global_context, id, error);
+                    global_context.logger.error(err);
+
+                    global_context.neko_modules_clients.vm.remove_connection(global_context, id, err);
                 });
 
                 voice_request.stream = stream;
@@ -256,9 +250,9 @@ class VoiceManager {
             id = url.substring(start, (start + 11));
         }
 
-        global_context.modules.ytinfo.retrieve(id, (error, result) => {
-            if (error) {
-                console.error(error);
+        global_context.modules.ytinfo.retrieve(id, (err, result) => {
+            if (err) {
+                global_context.logger.error(err);
                 return;
             }
             result = JSON.stringify(result);
@@ -267,17 +261,13 @@ class VoiceManager {
             let duration = parseInt(result.substring(a, result.indexOf('\\', a)));
             let b = result.indexOf("title") + "title".length + '\\":\\"'.length;
             let title = result.substring(b, result.indexOf('\\', b));
-            var result_m = {
+            let result_m = {
                 title: title.split("+").join(" "),
                 url: url,
                 duration: global_context.neko_modules_clients.tc.convert_time_data_to_string(global_context.neko_modules_clients.tc.convert_string_to_time_data(global_context.neko_modules_clients.tc.convert_time(duration * 1000)))
             }
 
-            if (error || result_m === undefined) {
-                global_context.neko_modules_clients.vm.play_on_connection(global_context, msg, url, -2, log_added);
-            } else {
-                global_context.neko_modules_clients.vm.play_on_connection(global_context, msg, url, result_m, log_added);
-            }
+            global_context.neko_modules_clients.vm.play_on_connection(global_context, msg, url, result_m, log_added);
         });
     }
 }

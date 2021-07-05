@@ -41,19 +41,19 @@ module.exports = {
             );
             target_messages = target_messages.slice(target_messages.length - num_messages, target_messages.length + 1);
 
-            command_data.msg.channel.bulkDelete(1, true).catch(e => { console.log(e) })
+            command_data.msg.channel.bulkDelete(1, true).catch(e => { command_data.global_context.logger.api_error(e); })
             command_data.msg.channel.bulkDelete(target_messages, true).then(messages => {
                 command_data.msg.channel.send(`Deleted \`${messages.size}\` messages from **${target_user.tag}**-`).then(message => 
-                    message.delete({ timeout: 3000 }).catch(e => { console.log(e) })
+                    message.delete({ timeout: 3000 }).catch(e => { command_data.global_context.logger.api_error(e); })
                 ).catch(e => { command_data.global_context.logger.api_error(e); });
-            }).catch(e => { console.log(e) })
+            }).catch(e => { command_data.global_context.logger.api_error(e); })
         } else {
             command_data.msg.channel.bulkDelete(num_messages + 1, true).then(messages => {
                 let delete_messages_size = messages.size - 1;
                 command_data.msg.channel.send(`Deleted \`${delete_messages_size}\` messages-`).then(message => 
-                    message.delete({ timeout: 3000 }).catch(e => { console.log(e) })
+                    message.delete({ timeout: 3000 }).catch(e => { command_data.global_context.logger.api_error(e); })
                 ).catch(e => { command_data.global_context.logger.api_error(e); });
-            }).catch(e => { console.log(e) })
+            }).catch(e => { command_data.global_context.logger.api_error(e); })
         }
     },
 };

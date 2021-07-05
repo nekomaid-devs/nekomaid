@@ -2,7 +2,7 @@ class DanbooruAPI {
     async danbooru_result(global_context, args) {
         //Get front page for tag
         var siteUrl0A = "https://danbooru.donmai.us/posts?tags=" + (args.length > 0 ? args.join("+") : "") + "&limit=1";
-        var result0A = await global_context.modules.axios.get(siteUrl0A).catch(e => { console.log(e); return { status: -1 }; })
+        var result0A = await global_context.modules.axios.get(siteUrl0A).catch(e => { global_context.logger.error(e); return { status: -1 }; })
 
         var a = result0A.data.lastIndexOf('class="paginator-page desktop-only" hidden=')
         var pages = parseInt(result0A.data.substring(result0A.data.indexOf(">", a) + 1, result0A.data.indexOf("<", a)));
@@ -13,7 +13,7 @@ class DanbooruAPI {
 
         //Get front page for tag
         var siteUrl0 = "https://danbooru.donmai.us/posts?page=" + pageIndex + "&tags=" + (args.length > 0 ? args.join("+") : "") + "&limit=20";
-        var result0 = await global_context.modules.axios.get(siteUrl0).catch(e => { console.log(e); return { status: -1 }; })
+        var result0 = await global_context.modules.axios.get(siteUrl0).catch(e => { global_context.logger.error(e); return { status: -1 }; })
         if(result0.data === undefined) { return { status: 0 }; }
 
         let posts = [];
@@ -30,7 +30,7 @@ class DanbooruAPI {
 
         //Get front page for tag
         var siteUrl1 = "https://danbooru.donmai.us/posts/" + postID + ".json";
-        var result1 = await global_context.modules.axios.get(siteUrl1).catch(e => { console.log(e); return { status: 0 }; })
+        var result1 = await global_context.modules.axios.get(siteUrl1).catch(e => { global_context.logger.error(e); return { status: 0 }; })
         if(result1.data === undefined) { return { status: 0 }; }
 
         //Construct object

@@ -20,8 +20,8 @@ module.exports = {
         let post_info = -1;
         try {
             post_info = await command_data.global_context.neko_modules_clients.xbooru.xbooru_result(command_data.global_context, command_data.args);
-        } catch(err) {
-            console.log(err);
+        } catch(e) {
+            command_data.global_context.logger.error(e);
             command_data.msg.reply("There was an error in processing this request-");
             return;
         }

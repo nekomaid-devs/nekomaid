@@ -20,7 +20,7 @@ module.exports = {
         try {
             post_info = await command_data.global_context.neko_modules_clients.nhentai.nhentai_result(command_data.global_context, command_data.args[0]);
         } catch(err) {
-            console.error(err);
+            command_data.global_context.logger.api_error(err);
             command_data.msg.reply("There was an error in processing this request-");
             return;
         }

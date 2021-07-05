@@ -174,30 +174,27 @@ module.exports = {
         }).then(async(mute_role) => {
             let channels = await command_data.msg.guild.channels.fetch();
             channels.forEach(channel => {
-                try {
-                    if(channel.type === "text") {
-                        channel.createOverwrite(mute_role, {
-                            SEND_MESSAGES: false,
-                            ADD_REACTIONS: false
-                        });
-                    } else if(channel.type === "voice") {
-                        channel.createOverwrite(mute_role, {
-                            CONNECT: false,
-                            SPEAK: false
-                        }).catch(e => { command_data.global_context.logger.api_error(e); });
-                    }
-                } catch(err) {
-                    console.log("[mod] Skipped a permission overwrite because I didn't have permission-");
+                if(channel.type === "text") {
+                    channel.createOverwrite(mute_role, {
+                        SEND_MESSAGES: false,
+                        ADD_REACTIONS: false
+                    }).catch(e => { command_data.global_context.logger.api_error(e); });
+                } else if(channel.type === "voice") {
+                    channel.createOverwrite(mute_role, {
+                        CONNECT: false,
+                        SPEAK: false
+                    }).catch(e => { command_data.global_context.logger.api_error(e); });
                 }
             })
 
+            // TODO: please just await
             command_data.tagged_member.roles.add(mute_role)
             .then(() => {
                 command_data.server_config.muteRoleID = mute_role.id;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
             })
             .catch(err => {
-                console.error(err);
+                command_data.global_context.logger.error(err);
                 command_data.msg.reply(`Couldn't mute \`${command_data.tagged_member.user.tag}\` (Try moving Nekomaid's permissions above the user you want to mute)-`);
             });
         })

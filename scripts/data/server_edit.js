@@ -1,6 +1,6 @@
 module.exports = {
     async edit(global_context, data) {
-        console.log("SQL - Editing data of type " + data.type + "..."); 
+        global_context.logger.log("[Database] Editing data of type " + data.type + "..."); 
 
         switch(data.type) {
             case "config": {

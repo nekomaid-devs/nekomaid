@@ -31,35 +31,35 @@ class CounterManager {
                         case "allMembers": {
                             await global_context.utils.verify_guild_members(server);
                             let member_count = Array.from(server.members.cache.values()).length;
-                            channel.setName(`All Members: ${member_count}`).catch(err => { console.error(err) });
+                            channel.setName(`All Members: ${member_count}`).catch(e => { global_context.logger.api_error(e) });
                             break;
                         }
 
                         case "members": {
                             await global_context.utils.verify_guild_members(server);
                             let member_count = Array.from(server.members.cache.values()).filter(e => { return e.user.bot === false; }).length;
-                            channel.setName(`Members: ${member_count}`).catch(err => { console.error(err) });
+                            channel.setName(`Members: ${member_count}`).catch(e => { global_context.logger.api_error(e) });
                             break;
                         }
 
                         case "roles": {
                             await global_context.utils.verify_guild_roles(server);
                             let roles_count = Array.from(server.members.cache.values()).length;
-                            channel.setName(`Roles: ${roles_count}`).catch(err => { console.error(err) });
+                            channel.setName(`Roles: ${roles_count}`).catch(e => { global_context.logger.api_error(e) });
                             break;
                         }
 
                         case "channels": {
                             await global_context.utils.verify_guild_channels(server);
                             let channels_count = Array.from(server.members.cache.values()).length;
-                            channel.setName(`Channels: ${channels_count}`).catch(err => { console.error(err) });
+                            channel.setName(`Channels: ${channels_count}`).catch(e => { global_context.logger.api_error(e) });
                             break;
                         }
 
                         case "bots": {
                             await global_context.utils.verify_guild_members(server);
                             let bot_count = Array.from(server.members.cache.values()).filter(e => { return e.user.bot === false; }).length;
-                            channel.setName(`Bots: ${bot_count}`).catch(err => { console.error(err) });
+                            channel.setName(`Bots: ${bot_count}`).catch(e => { global_context.logger.api_error(e) });
                             break;
                         }
                         
@@ -72,7 +72,7 @@ class CounterManager {
                                 );
                             });
 
-                            channel.setName(`Current Servers: ${guild_count}`).catch(err => { console.error(err) });
+                            channel.setName(`Current Servers: ${guild_count}`).catch(e => { global_context.logger.api_error(e) });
                             break;
                         }
 
@@ -85,12 +85,12 @@ class CounterManager {
                                 );
                             });
 
-                            channel.setName(`Current Users: ${member_count}`).catch(err => { console.error(err) });
+                            channel.setName(`Current Users: ${member_count}`).catch(e => { global_context.logger.api_error(e) });
                             break;
                         }
 
                         default: {
-                            console.log(`Invalid counter type - ${counter.type}.`)
+                            global_context.logger.error(`Invalid counter type - ${counter.type}.`)
                             break;
                         }
                     }

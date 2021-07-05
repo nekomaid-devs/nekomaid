@@ -22,7 +22,7 @@ module.exports = {
         await global_context.utils.verify_guild_roles(member.guild);
         member.guild.roles.cache.forEach(role => {
             if(server_config.autoRoles.includes(role.id) === true) {
-                member.roles.add(role).catch(e => { console.log(e) });
+                member.roles.add(role).catch(e => { global_context.logger.api_error(e) });
             }
         });
         
@@ -30,7 +30,7 @@ module.exports = {
         if(mute_role !== undefined) {
             server_mutes.forEach(mute => {
                 if(mute.userID === member.user.id) {
-                    member.roles.add(mute_role).catch(e => { console.log(e) });
+                    member.roles.add(mute_role).catch(e => { global_context.logger.api_error(e) });
                 }
             });
         }

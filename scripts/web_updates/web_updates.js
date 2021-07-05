@@ -1,11 +1,13 @@
 module.exports = {
     async refresh_status(global_context) {
         let guild_count = 0;
-        await global_context.bot.shard.fetchClientValues('guilds.cache.size').then(results => {
+        await global_context.bot.shard.broadcastEval('this.guilds.cache.size').then(results => {
             guild_count = results.reduce((prev, guild_count) =>
                 prev + guild_count, 0
             );
-        }).catch(e => { /*console.log(e);*/ })
+        }).catch(e => {
+            global_context.logger.error(e);
+        })
 
         let statuses = [
             "getting bullied by lamkas"
@@ -116,9 +118,8 @@ module.exports = {
 
         global_context.modules.axios.post(`${global_context.config.nekomaid_API_endpoint}/postStats`, { stats: stats }, {
             headers: global_context.data.default_headers
-        })
-        .catch(error => {
-            console.log("[Nekomaid API] " + error)
+        }).catch(e => {
+            global_context.logger.error("[Nekomaid API] " + e)
         })
     },
   
@@ -132,13 +133,13 @@ module.exports = {
             guild_count = results.reduce((prev, guild_count) =>
                 prev + guild_count, 0
             );
-        }).catch(e => { console.log(e); })
+        }).catch(e => { global_context.logger.error(e); })
         await global_context.bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)')
         .then(results => {
             user_count = results.reduce((prev, user_count) =>
                 prev + user_count, 0
             );
-        }).catch(e => { console.log(e); })
+        }).catch(e => { global_context.logger.error(e); })
     
         let data_1 = {
             guilds: guild_count,
@@ -177,32 +178,32 @@ module.exports = {
     
         global_context.modules.axios.post(`https://discordbotlist.com/api/v1/bots/${command_data.global_context.bot.user.id}/stats`, data_1, {
             headers: headers_POST_1
-        }).catch(error => {
-            console.log("[Discord Botlist] " + error)
+        }).catch(e => {
+            global_context.logger.error("[Discord Botlist] " + e)
         })
     
         global_context.modules.axios.post(`https://discord.bots.gg/api/v1/bots/${command_data.global_context.bot.user.id}/stats`, data_2, {
             headers: headers_POST_2
-        }).catch(error => {
-            console.log("[Discord Bots] " + error)
+        }).catch(e => {
+            global_context.logger.error("[Discord Bots] " + e)
         })
 
         global_context.modules.axios.post(`https://discord.boats/api/bot/${command_data.global_context.bot.user.id}`, data_3, {
             headers: headers_POST_3
-        }).catch(error => {
-            console.log("[Discord Boats] " + error)
+        }).catch(e => {
+            global_context.logger.error("[Discord Boats] " + e)
         })
 
         global_context.modules.axios.post(`https://botsfordiscord.com/api/bot/${command_data.global_context.bot.user.id}`, data_3, {
             headers: headers_POST_4
-        }).catch(error => {
-            console.log("[Bots For Discord] " + error)
+        }).catch(e => {
+            global_context.logger.error("[Bots For Discord] " + e)
         })
 
         global_context.modules.axios.post(`https://top.gg/api/bots/${command_data.global_context.bot.user.id}/stats`, data_3, {
             headers: headers_POST_5
-        }).catch(error => {
-            console.log("[Top GG] " + error)
+        }).catch(e => {
+            global_context.logger.error("[Top GG] " + e)
         })
     }
 }

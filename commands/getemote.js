@@ -53,7 +53,6 @@ module.exports = {
                 title: "<:n_error:771852301413384192> No image found at specified location!",
                 description: link
             }
-            console.log(emote_name);
 
             command_data.msg.channel.send("", { embed: embedError }).catch(e => { command_data.global_context.logger.api_error(e); });
         }

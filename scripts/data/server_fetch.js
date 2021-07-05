@@ -89,7 +89,7 @@ module.exports = {
             await creatingFunc();
             result = await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
             if(result.length < 1 || result[0].length < 1) {
-                console.log(`Error creating default object - '${query}'...`);
+                global_context.logger.error(`Error creating default object - '${query}'...`);
                 return undefined;
             }
         }
