@@ -18,7 +18,6 @@ class CounterManager {
         let was_edited = false;
         let new_counters = [];
 
-        // TODO: add force update argument and move first update from config here
         for(let i = 0; i < server_config.counters.length; i++) {
             let counter = server_config.counters[i];
 
@@ -34,11 +33,12 @@ class CounterManager {
                 let channel = await global_context.bot.channels.fetch(counter.channelID);
                 if(channel !== undefined) {
                     switch(counter.type) {
-                        case "allMembers":
+                        case "allMembers": {
                             await global_context.utils.verify_guild_members(server);
                             let member_count = Array.from(server.members.cache.values()).length;
                             channel.setName(`All Members: ${member_count}`).catch(err => { console.error(err) });
                             break;
+                        }
 
                         case "members": {
                             await global_context.utils.verify_guild_members(server);
@@ -47,13 +47,28 @@ class CounterManager {
                             break;
                         }
 
-                        case "bots":
+                        case "roles": {
+                            await global_context.utils.verify_guild_roles(server);
+                            let roles_count = Array.from(server.members.cache.values()).length;
+                            channel.setName(`Roles: ${roles_count}`).catch(err => { console.error(err) });
+                            break;
+                        }
+
+                        case "channels": {
+                            await global_context.utils.verify_guild_channels(server);
+                            let channels_count = Array.from(server.members.cache.values()).length;
+                            channel.setName(`Channels: ${channels_count}`).catch(err => { console.error(err) });
+                            break;
+                        }
+
+                        case "bots": {
                             await global_context.utils.verify_guild_members(server);
                             let bot_count = Array.from(server.members.cache.values()).filter(e => { return e.user.bot === false; }).length;
                             channel.setName(`Bots: ${bot_count}`).catch(err => { console.error(err) });
                             break;
+                        }
                         
-                        case "botServers":
+                        case "botServers": {
                             let guild_count = 0;
                             await cm.bot.shard.fetchClientValues("guilds.cache.size")
                             .then(results => {
@@ -64,6 +79,7 @@ class CounterManager {
 
                             channel.setName(`Current Servers: ${guild_count}`).catch(err => { console.error(err) });
                             break;
+                        }
 
                         case "botUsers": {
                             let member_count = 0;
@@ -78,9 +94,10 @@ class CounterManager {
                             break;
                         }
 
-                        default:
+                        default: {
                             console.log(`Invalid counter type - ${counter.type}.`)
                             break;
+                        }
                     }
                 }
 
