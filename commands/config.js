@@ -133,230 +133,61 @@ module.exports = {
                         break;
                     }
 
-                    // TODO: re-do this
                     case "counter": {
-                            //Permission check
-                            if(command_data.msg.guild.me.hasPermission("MANAGE_CHANNELS") === false) {
-                                let channel = await command_data.msg.guild.channels.cache.fetch(command_data.server_config.module_level_levelup_channelID);
-                                channel.send("The bot doesn't have required permissions to do this - `Manage Channels`\nPlease add required permissions and try again-").catch(e => { console.log(e); });
+                        if(command_data.msg.guild.me.hasPermission("MANAGE_CHANNELS") === false) {
+                            command_data.msg.channel.send("The bot doesn't have required permissions to do this - `Manage Channels`\nPlease add required permissions and try again-").catch(e => { console.log(e); });
+                            return;
+                        }
+
+                        if(command_data.args.length < 3) {
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `type`- (Types: `allMembers`, `members`, `roles`, `channels`, `bots`)", "add counter allMembers") }).catch(e => { console.log(e); });
+                            return;
+                        }
+
+                        let channel = -1;
+                        let counter_type = command_data.args[2];
+                        switch(counter_type) {
+                            case "allMembers":
+                            case "members":
+                            case "roles":
+                            case "channels":
+                            case "bots":
+                            case "botServers":
+                            case "botUsers": {
+                                channel = await command_data.msg.guild.channels.create("Loading...", {
+                                    type: "voice",
+                                    position: 0,
+                                    permissionOverwrites: [
+                                        {
+                                            id: command_data.msg.guild.roles.everyone,
+                                            deny: "CONNECT",
+                                            type: "role"
+                                        },
+                                        {
+                                            id: command_data.msg.guild.me.user.id,
+                                            allow: "MANAGE_CHANNELS",
+                                            type: "member"
+                                        },
+                                        {
+                                            id: command_data.msg.guild.me.user.id,
+                                            allow: "CONNECT",
+                                            type: "member"
+                                        }
+                                    ]
+                                });
+                                break;
+                            }
+
+                            default: {
+                                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid counter `type`- (Types: `allMembers`,`members`,`roles`,`channels`,`bots`)", "add counter allMembers") }).catch(e => { console.log(e); });
                                 return;
                             }
+                        }
 
-                            if(command_data.args.length < 3) {
-                                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `type`- (Types: `allMembers`,`members`,`roles`,`channels`,`bots`)", "add counter allMembers") }).catch(e => { console.log(e); });
-                                return;
-                            }
-                            var counterType = command_data.args[2]
-                            var channel = -1
-                            switch(counterType) {
-                                    case "allMembers":
-                                        channel = await command_data.msg.guild.channels.create("All Members: " + command_data.msg.guild.memberCount, {
-                                            type: "voice",
-                                            position: 0,
-                                            permissionOverwrites: [
-                                                {
-                                                    id: command_data.msg.guild.roles.everyone,
-                                                    deny: "CONNECT",
-                                                    type: "role"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "MANAGE_CHANNELS",
-                                                    type: "member"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "CONNECT",
-                                                    type: "member"
-                                                }
-                                            ]
-                                        })
-                                        break;
-
-                                    case "members": {
-                                        let memberCount = 0;
-                                        command_data.msg.guild.members.cache.forEach(member => {
-                                            if(member.user.bot === false) {
-                                                memberCount += 1;
-                                            }
-                                        })
-
-                                        channel = await command_data.msg.guild.channels.create("Members: " + memberCount, {
-                                            type: "voice",
-                                            position: 0,
-                                            permissionOverwrites: [
-                                                    {
-                                                        id: command_data.msg.guild.roles.everyone,
-                                                        deny: "CONNECT",
-                                                        type: "role"
-                                                    },
-                                                    {
-                                                        id: command_data.msg.guild.me.user.id,
-                                                        allow: "MANAGE_CHANNELS",
-                                                        type: "member"
-                                                    },
-                                                    {
-                                                        id: command_data.msg.guild.me.user.id,
-                                                        allow: "CONNECT",
-                                                        type: "member"
-                                                    }
-                                            ]
-                                        })
-                                        break;
-                                    }
-
-                                    case "roles":
-                                        channel = await command_data.msg.guild.channels.create("Roles: " + command_data.msg.guild.roles.size, {
-                                            type: "voice",
-                                            position: 0,
-                                            permissionOverwrites: [
-                                                {
-                                                    id: command_data.msg.guild.roles.everyone,
-                                                    deny: "CONNECT",
-                                                    type: "role"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "MANAGE_CHANNELS",
-                                                    type: "member"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "CONNECT",
-                                                    type: "member"
-                                                }
-                                            ]
-                                        })
-                                        break;
-
-                                    case "channels":
-                                        channel = await command_data.msg.guild.channels.create("Channels: " + command_data.msg.guild.channels.size, {
-                                            type: "voice",
-                                            position: 0,
-                                            permissionOverwrites: [
-                                                {
-                                                    id: command_data.msg.guild.roles.everyone,
-                                                    deny: "CONNECT",
-                                                    type: "role"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "MANAGE_CHANNELS",
-                                                    type: "member"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "CONNECT",
-                                                    type: "member"
-                                                }
-                                            ]
-                                        })
-                                        break;
-
-                                    case "bots":
-                                        var botCount = 0;
-                                        command_data.msg.guild.members.cache.forEach(member => {
-                                            if(member.user.bot === true) {
-                                                botCount += 1;
-                                            }
-                                        })
-
-                                        channel = await command_data.msg.guild.channels.create("Bots: " + botCount, {
-                                            type: "voice",
-                                            position: 0,
-                                            permissionOverwrites: [
-                                                {
-                                                    id: command_data.msg.guild.roles.everyone,
-                                                    deny: "CONNECT",
-                                                    type: "role"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "MANAGE_CHANNELS",
-                                                    type: "member"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "CONNECT",
-                                                    type: "member"
-                                                }
-                                            ]
-                                        })
-                                        break;
-
-                                    case "botServers":
-                                        var guildCount = 0;
-                                        await command_data.bot.shard.fetchClientValues('guilds.cache.size')
-                                            .then(results => {
-                                            guildCount = results.reduce((prev, guildCount) =>
-                                                prev + guildCount, 0
-                                            );
-                                        });
-
-                                        channel = await command_data.msg.guild.channels.create("Current Servers: " + guildCount, {
-                                            type: "voice",
-                                            position: 0,
-                                            permissionOverwrites: [
-                                                {
-                                                    id: command_data.msg.guild.roles.everyone,
-                                                    deny: "CONNECT",
-                                                    type: "role"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "MANAGE_CHANNELS",
-                                                    type: "member"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "CONNECT",
-                                                    type: "member"
-                                                }
-                                            ]
-                                        })
-                                        break;
-
-                                    case "botUsers": {
-                                        let memberCount = 0;
-                                        await command_data.bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)')
-                                            .then(results => {
-                                            memberCount = results.reduce((prev, memberCount) =>
-                                                prev + memberCount, 0
-                                            );
-                                        });
-
-                                        channel = await command_data.msg.guild.channels.create("Current Users: " + memberCount, {
-                                            type: "voice",
-                                            position: 0,
-                                            permissionOverwrites: [
-                                                {
-                                                    id: command_data.msg.guild.roles.everyone,
-                                                    deny: "CONNECT",
-                                                    type: "role"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "MANAGE_CHANNELS",
-                                                    type: "member"
-                                                },
-                                                {
-                                                    id: command_data.msg.guild.me.user.id,
-                                                    allow: "CONNECT",
-                                                    type: "member"
-                                                }
-                                            ]
-                                        })
-                                        break;
-                                    }
-
-                                    default:
-                                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid counter `type`- (Types: `allMembers`,`members`,`roles`,`channels`,`bots`)", "add counter allMembers") }).catch(e => { console.log(e); });
-                                        return;
-                            }
-
-                            command_data.server_config.counters.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), type: counterType, serverID: command_data.msg.guild.id, channelID: channel.id, lastUpdate: new Date().toUTCString() });
-                            command_data.msg.channel.send("Added new counter for `" + counterType + "`-").catch(e => { console.log(e); });
-                            break;
+                        setTimeout(() => { command_data.global_context.neko_modules_clients.cm.update_counters(command_data.global_context, command_data.msg.guild, true); }, 5000);
+                        command_data.server_config.counters.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), type: counter_type, serverID: command_data.msg.guild.id, channelID: channel.id, lastUpdate: new Date().toUTCString() });
+                        command_data.msg.channel.send(`Added new counter for \`${counter_type}\`.`).catch(e => { console.log(e); });
+                        break;
                     }
 
                     default: {

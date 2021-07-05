@@ -1,104 +1,100 @@
 class CounterManager {
     constructor(global_context) {
         this.global_context = global_context;
-        //setInterval(this.updateAllCounters, 60000, this);
+
+        setInterval(this.update_all_counters, 60000, global_context);
     }
 
-    /*updateAllCounters(cm) {
-        cm.bot.guilds.cache.forEach(server => {
-            if(cm.bot.isDatabaseReady === true && server.me !== undefined && server.me !== null && server.me.hasPermission("MANAGE_CHANNELS") === true) {
-                cm.updateCounters(cm, server);
+    update_all_counters(global_context) {
+        global_context.bot.guilds.cache.forEach(server => {
+            if(server.me.hasPermission("MANAGE_CHANNELS") === true) {
+                global_context.neko_modules_clients.cm.update_counters(global_context, server);
             }
         })
     }
 
-    async updateCounters(cm, server) {
-        var serverConfig = await cm.bot.ssm.server_fetch.fetch(cm.bot, { type: "server", id: server.id, containExtra: true });
-        var wasEdited = false;
-        var newCounters = [];
-        serverConfig.counters.forEach(async function(counter) {
-            var end = new Date();
-            var start = new Date(counter.lastUpdate);
+    async update_counters(global_context, server, force_update = false) {
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: server.id, containExtra: true });
+        let was_edited = false;
+        let new_counters = [];
 
-            var diff = (end.getTime() - start.getTime()) / 1000;
+        // TODO: add force update argument and move first update from config here
+        for(let i = 0; i < server_config.counters.length; i++) {
+            let counter = server_config.counters[i];
+
+            let end = new Date();
+            let start = new Date(counter.lastUpdate);
+            let diff = (end.getTime() - start.getTime()) / 1000;
             diff /= 60;
             diff = Math.abs(Math.round(diff));
         
-            if(diff >= 5) {
+            if(diff >= 5 || force_update === true) {
                 counter.lastUpdate = end.toUTCString();
-                var channel = server.channels.cache.get(counter.channelID);
 
+                let channel = await global_context.bot.channels.fetch(counter.channelID);
                 if(channel !== undefined) {
                     switch(counter.type) {
                         case "allMembers":
-                            channel.setName("All Members: " + server.memberCount).catch(err => { console.error(err) });
+                            await global_context.utils.verify_guild_members(server);
+                            let member_count = Array.from(server.members.cache.values()).length;
+                            channel.setName(`All Members: ${member_count}`).catch(err => { console.error(err) });
                             break;
 
                         case "members": {
-                            let memberCount = 0;
-                            server.members.cache.forEach(member => {
-                                if(member.user.bot === false) {
-                                    memberCount += 1;
-                                }
-                            })
-
-                            channel.setName("Members: " + memberCount).catch(err => { console.error(err) });
+                            await global_context.utils.verify_guild_members(server);
+                            let member_count = Array.from(server.members.cache.values()).filter(e => { return e.user.bot === false; }).length;
+                            channel.setName(`Members: ${member_count}`).catch(err => { console.error(err) });
                             break;
                         }
 
                         case "bots":
-                            var botCount = 0;
-                            server.members.cache.forEach(member => {
-                                if(member.user.bot === true) {
-                                    botCount += 1;
-                                }
-                            });
-
-                            channel.setName("Bots: " + botCount).catch(err => { console.error(err) });
+                            await global_context.utils.verify_guild_members(server);
+                            let bot_count = Array.from(server.members.cache.values()).filter(e => { return e.user.bot === false; }).length;
+                            channel.setName(`Bots: ${bot_count}`).catch(err => { console.error(err) });
                             break;
                         
                         case "botServers":
-                            var guildCount = 0;
-                            await cm.bot.shard.fetchClientValues('guilds.cache.size')
-                                .then(results => {
-                                guildCount = results.reduce((prev, guildCount) =>
-                                    prev + guildCount, 0
+                            let guild_count = 0;
+                            await cm.bot.shard.fetchClientValues("guilds.cache.size")
+                            .then(results => {
+                                guild_count = results.reduce((prev, guild_count) =>
+                                    prev + guild_count, 0
                                 );
                             });
 
-                            channel.setName("Current Servers: " + guildCount).catch(err => { console.error(err) });
+                            channel.setName(`Current Servers: ${guild_count}`).catch(err => { console.error(err) });
                             break;
 
                         case "botUsers": {
-                            let memberCount = 0;
-                            await cm.bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)')
-                                .then(results => {
-                                memberCount = results.reduce((prev, memberCount) =>
-                                    prev + memberCount, 0
+                            let member_count = 0;
+                            await cm.bot.shard.broadcastEval("this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)")
+                            .then(results => {
+                                member_count = results.reduce((prev, member_count) =>
+                                    prev + member_count, 0
                                 );
                             });
 
-                            channel.setName("Current Users: " + memberCount).catch(err => { console.error(err) });
+                            channel.setName(`Current Users: ${member_count}`).catch(err => { console.error(err) });
                             break;
                         }
 
                         default:
-                            console.log("Invalid counter type - " + counter.type + " (" + typeof counter.type + ")")
+                            console.log(`Invalid counter type - ${counter.type}.`)
                             break;
                     }
                 }
 
-                wasEdited = true;
+                was_edited = true;
             }
 
-            newCounters.push(counter);
-        })
-
-        if(wasEdited === true) {
-            serverConfig.counters = newCounters;
-            cm.bot.ssm.server_edit.edit(cm.bot.ssm, { type: "server", id: server.id, server: serverConfig });
+            new_counters.push(counter);
         }
-    }*/
+
+        if(was_edited === true) {
+            server_config.counters = new_counters;
+            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", id: server.id, server: server_config });
+        }
+    }
 }
 
 module.exports = CounterManager;
