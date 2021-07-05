@@ -97,8 +97,7 @@ module.exports = {
             bot.ssm.server_edit.edit_server_logs_in_structure(bot.ssm, message.guild, serverLogs);
         }*/
 
-        //Check marriage proposals
-        //global_context.neko_modules.mm.checkMarriageProposals(global_context, message);
+        global_context.neko_modules_clients.mm.check_marriage_proposals(global_context, message);
 
         //Update user's server level
         //global_context.neko_modules.lvl.updateServerLevel(command_data, command_data.server_config.module_level_message_exp);

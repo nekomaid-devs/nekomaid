@@ -2,92 +2,59 @@ class MarriageManager {
     constructor(global_context) {
         this.global_context = global_context;
 
-        /*this.marriageProposals = new Map();
-        this.timeoutProposals = new Map();*/
+        this.marriage_proposals = new Map();
+        this.timeout_proposals = new Map();
     }
 
-    /*async checkMarriageProposals(bot, msg) {
-        if(msg.author.bot === true) { return; }
-        if(bot.mm.marriageProposals.has(msg.member.user.id)) {
-            if(msg.content.toLowerCase() === "yes") {
-                var marriageProposal = bot.mm.marriageProposals.get(msg.member.id);
-                
-                //Check if the acceptation is valid
-                if(msg.channel.id != marriageProposal.channelID) {
+    async check_marriage_proposals(global_context, message) {
+        if(global_context.neko_modules_clients.mm.marriage_proposals.has(message.member.user.id)) {
+            if(message.content.toLowerCase() === "yes" || message.content.toLowerCase() === "no") {
+                let marriage_proposal = global_context.neko_modules_clients.mm.marriage_proposals.get(message.member.id);
+                if(message.channel.id !== marriage_proposal.channelID) {
                     return;
                 }
-                
-                //Get sourceUser
-                var sourceUser = await bot.users.fetch(marriageProposal.sourceID).catch(e => { console.log(e); });
-                
-                if(sourceUser === undefined) {
-                    msg.reply(`There was an error in fetching User-`);
-                    return;
+
+                if(message.content.toLowerCase() === "yes") {
+                    global_context.neko_modules_clients.mm.accept_marriage_proposal(global_context, message.channel, marriage_proposal);
+                } else {
+                    global_context.neko_modules_clients.mm.remove_marriage_proposal(global_context, message.channel, message.member.user, 3);
                 }
-                
-                //Accept the proposal
-                bot.mm.acceptMarryProposal(bot, msg, sourceUser, msg.member.user);
-            } else if(msg.content.toLowerCase() === "no") {
-                var marriageProposal2 = bot.mm.marriageProposals.get(msg.member.id);
-                
-                //Check if the refusal is valid
-                if(msg.channel.id != marriageProposal2.channelID) {
-                    return;
-                }
-                
-                bot.mm.removeMarriageProposal(bot.mm, msg.channel, msg.member.user, 3);
             }
         }
     }
 
-    async acceptMarryProposal(bot, msg, sourceUser, targetUser, log = 1) {
-        //Get display names
-        var authorDisplayName = sourceUser.username + "#" + sourceUser.discriminator;
-        var targetUserDisplayName = targetUser.username + "#" + targetUser.discriminator;
+    async accept_marriage_proposal(global_context, channel, marriage_proposal, log = 1) {
+        let source_user_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: marriage_proposal.source_ID });  
+        source_user_config.marriedID = marriage_proposal.target_ID;
+        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: marriage_proposal.source_ID, user: source_user_config });
       
-        //Changes the data in structure
-        var globalAuthorConfig = await bot.ssm.server_fetch.fetch(bot, { type: "global_user", id: sourceUser.id });  
-        globalAuthorConfig.marriedID = targetUser.id;
-
-        //Edits and broadcasts the change
-        bot.ssm.server_edit.edit(bot.ssm, { type: "global_user", id: sourceUser.id, user: globalAuthorConfig });
-      
-        var globalUserConfig = await bot.ssm.server_fetch.fetch(bot, { type: "global_user", id: targetUser.id });  
+        let target_user_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: marriage_proposal.target_ID });  
         if(log === 2) {
-            globalUserConfig.canDivorce = false;
+            target_user_config.canDivorce = false;
         }
-        globalUserConfig.marriedID = sourceUser.id;
+        target_user_config.marriedID = marriage_proposal.source_ID;
+        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: marriage_proposal.target_ID, user: target_user_config });
 
-        //Edits and broadcasts the change
-        bot.ssm.server_edit.edit(bot.ssm, { type: "global_user", id: targetUser.id, user: globalUserConfig });
-      
-        //Construct message and send it
-        console.log(`[marry] ${authorDisplayName} married ${targetUserDisplayName}!`);
+        console.log(`[marry] ${marriage_proposal.source_tag} married ${marriage_proposal.target_tag}!`);
 
         switch(log) {
             case 1:
-                msg.channel.send("`" + authorDisplayName + "` married `" + targetUserDisplayName + "`!").catch(e => { console.log(e); });
+                channel.send(`\`${marriage_proposal.source_tag}\` married \`${marriage_proposal.target_tag}\`!`).catch(e => { console.log(e); });
                 break;
 
             case 2:
-                msg.channel.send("`" + authorDisplayName + "` force married `" + targetUserDisplayName + "`!").catch(e => { console.log(e); });
+                channel.send(`\`${marriage_proposal.source_tag}\` force married \`${marriage_proposal.target_tag}\`!`).catch(e => { console.log(e); });
                 break;
         }
-      
-        //Remove timeout for the proposal
-        bot.mm.removeMarriageProposal(bot.mm, msg.channel, targetUser);
-        bot.mm.removeMarriageProposal_backwards(bot.mm, bot, msg.channel, sourceUser, 2);
+
+        global_context.neko_modules_clients.mm.remove_marriage_proposal(global_context, channel, marriage_proposal);
+        global_context.neko_modules_clients.mm.remove_marriage_proposal_backwards(global_context, channel, marriage_proposal);
     }
 
-    addMarriageProposal(bot, channel, sourceUser, targetUser, log = 1) {
-        var authorDisplayName = sourceUser.username + "#" + sourceUser.discriminator;
-        var targetUserDisplayName = targetUser.username + "#" + targetUser.discriminator;
-
-        //Check for pending proposal
-        if(bot.mm.marriageProposals.has(targetUser.id)) {
-            var marriageProposal = bot.mm.marriageProposals.get(targetUser.id);
-
-            if(marriageProposal.sourceID === sourceUser.id) {
+    add_marriage_proposal(global_context, channel, source_user, target_user, log = 1) {
+        if(global_context.neko_modules_clients.mm.marriage_proposals.has(target_user.id)) {
+            let marriage_proposal = global_context.neko_modules_clients.mm.marriage_proposals.get(target_user.id);
+            if(marriage_proposal.source_ID === source_user.id) {
                 channel.send("You've already proposed to this user-").catch(e => { console.log(e); });
                 return;
             }
@@ -95,71 +62,66 @@ class MarriageManager {
 
         switch(log) {
             case 1:
-                channel.send("`" + authorDisplayName + "` wants to marry `" + targetUserDisplayName + "`! They have 120s to accept the proposal-").catch(e => { console.log(e); });
-                channel.send(`${targetUser} type yes to accept the proposal-`).catch(e => { console.log(e); });
+                channel.send(`\`${source_user.tag}\` wants to marry \`${target_user.tag}\`! They have 120s to accept the proposal.`).catch(e => { console.log(e); });
+                channel.send(`${target_user} type yes to accept the proposal~`).catch(e => { console.log(e); });
                 break;
         }
 
-        //Construct MarriageProposal
-        var mp = new bot.MarriageProposal();
-        mp.sourceID = sourceUser.id;
-        mp.sourceDisplayName = sourceUser.username + "#" + sourceUser.discriminator;
-        mp.targetID = targetUser.id;
-        mp.targetDisplayName = targetUser.username + "#" + targetUser.discriminator;
-        mp.channelID = channel.id;
+        let marriage_proposal = new global_context.neko_modules.MarriageProposal();
+        marriage_proposal.source_ID = source_user.id;
+        marriage_proposal.source_tag = source_user.tag;
+        marriage_proposal.target_ID = target_user.id;
+        marriage_proposal.target_tag = target_user.tag;
+        marriage_proposal.channelID = channel.id;
 
-        bot.mm.marriageProposals.set(targetUser.id, mp);
-        bot.mm.timeoutMarriageProposal(bot.mm, channel, targetUser);
+        global_context.neko_modules_clients.mm.marriage_proposals.set(target_user.id, marriage_proposal);
+        global_context.neko_modules_clients.mm.timeout_marriage_proposal(global_context, channel, target_user);
+
+        return marriage_proposal;
     }
 
-    timeoutMarriageProposal(mm, channel, target) {
-        if(mm.timeoutProposals.has(target.id)) {
-            console.log("[mm] Cleared previous timeout of User(id: " + target.id + ")");
-            clearTimeout(mm.timeoutProposals.get(target.id));
+    timeout_marriage_proposal(global_context, channel, target_user) {
+        if(global_context.neko_modules_clients.mm.timeout_proposals.has(target_user.id)) {
+            console.log("[mm] Cleared previous timeout of User(id: " + target_user.id + ")");
+            clearTimeout(global_context.neko_modules_clients.mm.timeout_proposals.get(target_user.id));
         }
 
-        console.log("[mm] Added timeout to User(id: " + target.id + ")");
-        var timeoutProposal = setTimeout(function() { 
-            mm.removeMarriageProposal(mm, channel, target, 1); 
+        console.log("[mm] Added timeout to User(id: " + target_user.id + ")");
+        let timeout_proposal = setTimeout(() => { 
+            global_context.neko_modules_clients.mm.remove_marriage_proposal(global_context, channel, target_user, 1); 
         }, 120000);
-        mm.timeoutProposals.set(target.id, timeoutProposal);
+        global_context.neko_modules_clients.mm.timeout_proposals.set(target_user.id, timeout_proposal);
     }
 
-    removeMarriageProposal(mm, channel, target, log = -1) {
-        if(mm.marriageProposals.has(target.id)) {
-            var marriageProposal = mm.marriageProposals.get(target.id);
-            console.log("[mm] Removed proposal to User(id: " + target.id + ")");
+    remove_marriage_proposal(global_context, channel, marriage_proposal, log = -1) {
+        if(global_context.neko_modules_clients.mm.marriage_proposals.has(marriage_proposal.target_ID)) {
+            console.log("[mm] Removed proposal to User(id: " + marriage_proposal.target_ID + ")");
 
             switch(log) {
                 case 1:
-                    channel.send("Marriage proposal from `" +  marriageProposal.sourceDisplayName + "` to `" + marriageProposal.targetDisplayName + "` expired-").catch(e => { console.log(e); });
+                    channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` expired.`).catch(e => { console.log(e); });
                     break;
 
                 case 2:
-                    channel.send("Marriage proposal from `" +  marriageProposal.sourceDisplayName + "` to `" + marriageProposal.targetDisplayName + "` was cancelled-").catch(e => { console.log(e); });
+                    channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` was cancelled.`).catch(e => { console.log(e); });
                     break;
 
                 case 3:
-                    channel.send("Marriage proposal from `" +  marriageProposal.sourceDisplayName + "` to `" + marriageProposal.targetDisplayName + "` was refused-").catch(e => { console.log(e); });
+                    channel.send(`Marriage proposal from \`${marriage_proposal.source_tag}\` to \`${marriage_proposal.target_tag}\` was refused.`).catch(e => { console.log(e); });
                     break;
             }
 
-            mm.marriageProposals.delete(target.id);
+            global_context.neko_modules_clients.mm.marriage_proposals.delete(marriage_proposal.target_ID);
         }
     }
 
-    //bad programmer time
-    removeMarriageProposal_backwards(mm, bot, channel, source) {
-        mm.marriageProposals.forEach(async marriageProposal => {
-            if(marriageProposal.sourceID === source.id) {
-                var targetUser = await bot.users.fetch(marriageProposal.targetID).catch(e => { console.log(e); });
-
-                if(targetUser !== undefined) {
-                    mm.removeMarriageProposal(mm, channel, targetUser, 2);
-                }
+    remove_marriage_proposal_backwards(global_context, channel, _marriage_proposal) {
+        global_context.neko_modules_clients.mm.marriage_proposals.forEach(async(marriage_proposal) => {
+            if(marriage_proposal.source_ID === _marriage_proposal.source_ID) {
+                global_context.neko_modules_clients.mm.remove_marriage_proposal(global_context, channel, marriage_proposal, 2);
             }
         });
-    }*/
+    }
 }
 
 module.exports = MarriageManager;

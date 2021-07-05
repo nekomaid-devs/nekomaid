@@ -26,7 +26,7 @@ module.exports = {
                 command_data.msg.reply("There was an error in fetching User-");
             } else {
                 let tagged_user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id });    
-                let user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: marriedUser0.id });    
+                let user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: married_user.id });    
 
                 tagged_user_config.marriedID = "-1";
                 tagged_user_config.canDivorce = true;
@@ -34,7 +34,7 @@ module.exports = {
 
                 user_config.marriedID = "-1";
                 user_config.canDivorce = true;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: marriedUser0.id, user: globalUserConfig0 });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: married_user.id, user: user_config });
 
                 command_data.msg.channel.send(`Force divorced \`${command_data.tagged_user.tag}\` and \`${married_user.tag}\`!`).catch(e => { console.log(e); });
             }
@@ -47,10 +47,11 @@ module.exports = {
             return;
         }
 
+        // TODO: this part needs to be re-done
         let married_user = await command_data.global_context.bot.users.fetch(command_data.author_config.marriedID).catch(e => { console.log(e); });
         let user_config = -1;
         if(married_user !== undefined) {
-            user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: marriedUser.id });    
+            user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: married_user.id });    
         }
         if(command_data.author_config.canDivorce == false) {
             command_data.msg.reply(`You can't divorce \`${married_user.tag}\`, because you're going be with them forever...`);
@@ -63,7 +64,7 @@ module.exports = {
         if(user_config != -1) {
             user_config.marriedID = "-1";
             user_config.canDivorce = true;
-            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: marriedUser.id, user: globalUserConfig });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: married_user.id, user: user_config });
         }
 
         command_data.msg.channel.send(`\`${command_data.msg.author.tag}\` divorced \`${married_user.tag}\`!`).catch(e => { console.log(e); });

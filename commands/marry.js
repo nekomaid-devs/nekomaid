@@ -41,10 +41,10 @@ module.exports = {
         }
 
         if(force_marry === true) {
-            command_data.global_context.neko_modules_clients.mm.addMarriageProposal(command_data.bot, command_data.msg.channel, command_data.msg.author, command_data.tagged_user, 0);
-            command_data.global_context.neko_modules_clients.mm.acceptMarryProposal(command_data.bot, command_data.msg, command_data.msg.author, command_data.tagged_user, 2);
+            let marriage_proposal = command_data.global_context.neko_modules_clients.mm.add_marriage_proposal(command_data.global_context, command_data.msg.channel, command_data.msg.author, command_data.tagged_user, 0);
+            command_data.global_context.neko_modules_clients.mm.accept_marriage_proposal(command_data.global_context, command_data.msg.channel, marriage_proposal, 2);
         } else {
-            command_data.global_context.neko_modules_clients.mm.addMarriageProposal(command_data.bot, command_data.msg.channel, command_data.msg.author, command_data.tagged_user);
+            command_data.global_context.neko_modules_clients.mm.add_marriage_proposal(command_data.global_context, command_data.msg.channel, command_data.msg.author, command_data.tagged_user);
         }
     },
 };
