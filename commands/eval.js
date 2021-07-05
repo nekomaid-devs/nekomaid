@@ -24,19 +24,25 @@ module.exports = {
         let url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedEval = {
             author: {
-                name: `Result for - \`${(eval_query.length < 32 ? eval_query : eval_query.slice(0, 32) + "...")}\``,
+                name: "Result for eval (current context)",
                 icon_url: url,
-            }
+            },
+            description: "Waiting...",
+            footer: { text: "🕒 Took X ms..." }
         }
+        let message = await command_data.msg.channel.send("", { embed: embedEval }).catch(e => { command_data.global_context.logger.api_error(e); });
         
         try {
+            let t_start = command_data.global_context.modules.performance.now();
             let result = await eval(eval_query);
+            let t_end = command_data.global_context.modules.performance.now();
 
-            embedEval.description = result;
-            command_data.msg.channel.send("", { embed: embedEval }).catch(e => { console.log(e); });
+            embedEval.description = result === undefined ? "Undefined" : result;
+            embedEval.footer = { text: `🕒 Took ${(t_end - t_start).toFixed(1)}ms...` }
+            message.edit("", { embed: embedEval }).catch(e => { command_data.global_context.logger.api_error(e); });
         } catch(err) {
             embedEval.description = err;
-            command_data.msg.channel.send("", { embed: embedEval }).catch(e => { console.log(e); });
+            message.edit("", { embed: embedEval }).catch(e => { command_data.global_context.logger.api_error(e); });
         }
     },
 };
