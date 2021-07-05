@@ -3,12 +3,13 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "rr",
     category: "Utility",
-    description: "Creates a reaction roles menu-",
+    description: "Creates a reaction roles menu.",
     helpUsage: "`",
     hidden: false,
     aliases: ["reactionroles"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_ROLES"),
         new NeededPermission("me", "MANAGE_MESSAGES"),

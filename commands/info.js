@@ -1,12 +1,13 @@
 module.exports = {
     name: "info",
     category: "Help & Information",
-    description: "Displays info about the bot-",
+    description: "Displays info about the bot.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

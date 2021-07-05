@@ -10,6 +10,7 @@ module.exports = {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("me", "CONNECT"),
         new NeededPermission("me", "SPEAK")

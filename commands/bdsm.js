@@ -1,12 +1,13 @@
 module.exports = {
     name: "bdsm",
     category: "NSFW",
-    description: "Sends a random lewd bdsm image-",
+    description: "Sends a random lewd bdsm image.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: true,
     async execute(command_data) {

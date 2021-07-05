@@ -1,12 +1,13 @@
 module.exports = {
     name: "leave",
     category: "Music",
-    description: "Leaves the voice channel-",
+    description: "Leaves the voice channel.",
     helpUsage: "`",
     hidden: false,
     aliases: ["stop"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

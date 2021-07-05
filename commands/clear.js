@@ -1,17 +1,21 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
     name: "clear",
     category: "Moderation",
-    description: "Deletes messages in current channel-",
+    description: "Deletes messages in current channel.",
     helpUsage: "[numberOfMessages] [mention?]` *(1 optional argument)*",
     exampleUsage: "99 /user_tag/",
     hidden: false,
     aliases: ["purge"],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in number of messages-", "int>0")
+        new NeededArgument(1, "You need to type in number of messages.", "int>0")
+    ],
+    argumentsRecommended: [
+        new RecommendedArgument(2, "Argument needs to be a mention.", "mention")
     ],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_MESSAGES"),

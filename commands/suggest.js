@@ -3,15 +3,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "suggest",
     category: "Help & Information",
-    description: "Suggests a feature-",
+    description: "Suggests a feature.",
     helpUsage: "[suggestion]`",
     exampleUsage: "Add X/Improve X",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in a suggestion-", "none")
+        new NeededArgument(1, "You need to type in a suggestion.", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

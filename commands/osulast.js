@@ -1,12 +1,13 @@
 module.exports = {
     name: "osulast",
     category: "Utility",
-    description: "Shows latest osu! play-",
+    description: "Shows latest osu! play.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

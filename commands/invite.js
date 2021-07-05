@@ -1,12 +1,13 @@
 module.exports = {
     name: "invite",
     category: "Help & Information",
-    description: "Sends invite for the bot-",
+    description: "Sends invite for the bot.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

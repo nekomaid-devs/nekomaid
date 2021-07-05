@@ -4,15 +4,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "eval",
     category: "Utility",
-    description: "Returns result of eval-",
+    description: "Returns result of eval.",
     helpUsage: "[script]`",
     exampleUsage: "this.token",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in script to execute-", "none")
+        new NeededArgument(1, "You need to type in script to execute.", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "BOT_OWNER")
     ],

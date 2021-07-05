@@ -9,6 +9,7 @@ module.exports = {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("me", "CHANGE_NICKNAME"),
         new NeededPermission("me", "MANAGE_NICKNAMES")

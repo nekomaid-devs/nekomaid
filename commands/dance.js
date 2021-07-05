@@ -1,12 +1,13 @@
 module.exports = {
     name: "dance",
     category: "Emotes",
-    description: "Posts a dancing gif-",
+    description: "Posts a dancing gif.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

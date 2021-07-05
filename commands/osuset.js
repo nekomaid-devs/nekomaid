@@ -3,15 +3,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "osuset",
     category: "Utility",
-    description: "Sets user's osu! acount-",
+    description: "Sets user's osu! acount.",
     helpUsage: "[osuUsername]`",
     exampleUsage: "chocomint",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an osu! username-", "none")
+        new NeededArgument(1, "You need to type in an osu! username.", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

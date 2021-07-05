@@ -3,7 +3,7 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "moderation",
     category: "Modules",
-    description: "Changes moderation settings of the server-",
+    description: "Changes moderation settings of the server.",
     helpUsage: "[action?] [property?] [value?]` *(arguments depend on action)*",
     exampleUsage: "set invites false",
     hidden: false,
@@ -16,6 +16,7 @@ module.exports = {
     .set("set",
     "`<subcommand_prefix> invites [true/false]` - Enables/Disables posting Discord server invites"),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
          new NeededPermission("author", "MANAGE_GUILD")
     ],

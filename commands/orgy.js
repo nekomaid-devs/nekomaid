@@ -1,12 +1,13 @@
 module.exports = {
     name: "orgy",
     category: "NSFW",
-    description: "Sends a random lewd orgy image-",
+    description: "Sends a random lewd orgy image.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: true,
     async execute(command_data) {

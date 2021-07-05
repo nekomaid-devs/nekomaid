@@ -10,8 +10,9 @@ module.exports = {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in a JSON string to construct embed from-", "none")
+        new NeededArgument(1, "You need to type in a JSON string to construct embed from.", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

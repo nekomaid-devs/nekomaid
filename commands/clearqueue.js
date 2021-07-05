@@ -1,12 +1,13 @@
 module.exports = {
     name: "clearqueue",
     category: "Music",
-    description: "Clears the current queue-",
+    description: "Clears the current queue.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

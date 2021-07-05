@@ -1,3 +1,5 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
+
 module.exports = {
     name: "impostor",
     category: "Fun",
@@ -8,6 +10,9 @@ module.exports = {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [
+        new RecommendedArgument(1, "Argument needs to be a mention.", "mention")
+    ],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

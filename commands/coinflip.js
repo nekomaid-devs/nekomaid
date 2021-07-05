@@ -1,17 +1,23 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
+
 module.exports = {
     name: "coinflip",
     category: "Fun",
-    description: "Flips a coin- Also makes it possible to win credits by betting-",
-    helpUsage: "[bet?] [heads/tails?]` *(both argument optional)*",
+    description: "Flips a coin- Also makes it possible to win credits by betting.",
+    helpUsage: "[ammount/all/half?] [heads/tails?]` *(both argument optional)*",
     exampleUsage: "100 tails",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [
+        new RecommendedArgument(1, "Argument needs to be a bet ammount.", "int>0/all/half"),
+        new RecommendedArgument(2, "Argument needs to be heads/tails.", "heads/tails")
+    ],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let options = [ "heads", "tails" ];
+        let options = ["heads", "tails"];
         let result = command_data.global_context.utils.pick_random(options);
         let embedCoinflip = {
             title: `${command_data.msg.author.tag} flipped ${result}!`,
@@ -21,11 +27,6 @@ module.exports = {
         if(command_data.args.length > 0) {
             let bet_result = command_data.args.length > 1 ? command_data.args[1].toLowerCase() : "heads";
             let bet_ammount = parseInt(command_data.args[0]);
-
-            if(typeof(bet_result) != "string" || options.includes(bet_result) === false) {
-                command_data.msg.reply(`Invalid \`betResult\` for \`coinflip\`- (${options})`);
-                return;
-            }
 
             // TODO: add support for %
             let author_credits = command_data.author_config.credits;
@@ -43,9 +44,6 @@ module.exports = {
                 } else {
                     bet_ammount = Math.round(author_credits / 2);
                 }
-            } else if(isNaN(bet_ammount) || bet_ammount <= 0) {
-                command_data.msg.reply(`Invalid \`betAmmount\` for \`coinflip\`- (number)`);
-                return;
             }
 
             if(command_data.author_config.credits < bet_ammount) {

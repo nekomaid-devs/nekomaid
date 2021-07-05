@@ -3,15 +3,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "roleinfo",
     category: "Utility",
-    description: "Displays information about a role-",
+    description: "Displays information about a role.",
     helpUsage: "[role name/mention]`",
     exampleUsage: "Owner",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in a role name-", "none")
+        new NeededArgument(1, "You need to type in a role name.", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

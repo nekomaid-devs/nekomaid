@@ -1,12 +1,13 @@
 module.exports = {
     name: "daily",
     category: "Profile",
-    description: "Gets a daily reward to user-",
+    description: "Gets a daily reward to user.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

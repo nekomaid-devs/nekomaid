@@ -3,7 +3,7 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "config",
     category: "Modules",
-    description: "Changes settings of the server-",
+    description: "Changes settings of the server.",
     helpUsage: "[action?] [property?] [value?]` *(arguments depend on action)*",
     exampleUsage: "set welcomeMessages true",
     hidden: false,
@@ -24,6 +24,7 @@ module.exports = {
     "`<subcommand_prefix> leaveMessages_format [text]` - Changes the leave message (include <user> in your message to show username)\n" +
     "`<subcommand_prefix> leaveMessages_channel [channelMention]` - Changes the channel for leave messages"),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_GUILD")
     ],
@@ -115,7 +116,7 @@ module.exports = {
                         }
 
                         if(command_data.args.length < 3) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`-", "add autoRole Newbie") }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`.", "add autoRole Newbie") }).catch(e => { console.log(e); });
                             return;
                         }
                         let role_name = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[2], command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length));

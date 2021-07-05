@@ -1,17 +1,22 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
 const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
     name: "ban",
     category: "Moderation",
-    description: "Bans the tagged user-",
+    description: "Bans the tagged user.",
     helpUsage: "[mention] [?time] [?reason]` *(2 optional arguments)*",
     exampleUsage: "/user_tag/ 1h Spamming",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention somebody-", "mention")
+        new NeededArgument(1, "You need to mention somebody.", "mention")
+    ],
+    argumentsRecommended: [
+        new RecommendedArgument(2, "Argument needs to be a time format.", "none"),
+        new RecommendedArgument(3, "Argument needs to be a reason.", "none")
     ],
     permissionsNeeded: [
         new NeededPermission("author", "BAN_MEMBERS"),

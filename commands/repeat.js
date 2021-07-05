@@ -1,12 +1,13 @@
 module.exports = {
     name: "repeat",
     category: "Music",
-    description: "Repeats the current queue of songs-",
+    description: "Repeats the current queue of songs.",
     helpUsage: "`",
     hidden: false,
     aliases: ["loop"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

@@ -1,12 +1,13 @@
 module.exports = {
     name: "work",
     category: "Profile",
-    description: "Gets credits earned by working-",
+    description: "Gets credits earned by working.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

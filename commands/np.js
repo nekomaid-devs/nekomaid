@@ -1,12 +1,13 @@
 module.exports = {
     name: "np",
     category: "Music",
-    description: "Displays the current playing song-",
+    description: "Displays the current playing song.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

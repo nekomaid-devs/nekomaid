@@ -1,18 +1,20 @@
 const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
+// TODO: add unban reason
 module.exports = {
     name: "unban",
     category: "Moderation",
-    description: "Unbans the tagged user-",
+    description: "Unbans the tagged user.",
     helpUsage: "[username]`",
     exampleUsage: "/username/",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an username (ex. `LamkasDev` or `LamkasDev#4235`)-")
+        new NeededArgument(1, "You need to type in an username (ex. `LamkasDev` or `LamkasDev#4235`).")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "BAN_MEMBERS"),
         new NeededPermission("me", "BAN_MEMBERS")

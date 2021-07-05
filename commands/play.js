@@ -4,15 +4,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "play",
     category: "Music",
-    description: "Plays a song from url or searches it on youtube-",
+    description: "Plays a song from url or searches it on youtube.",
     helpUsage: "[url/songName?]`",
     exampleUsage: "Never gonna give you up",
     hidden: false,
     aliases: ["p"],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in a valid url/song name-", "none")
+        new NeededArgument(1, "You need to type in a valid url/song name.", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("me", "CONNECT"),
         new NeededPermission("me", "SPEAK")

@@ -1,3 +1,4 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
@@ -10,6 +11,9 @@ module.exports = {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [
+        new RecommendedArgument(1, "Argument needs to be a new prefix.", "none")
+    ],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_GUILD")
     ],

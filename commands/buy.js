@@ -3,15 +3,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "buy",
     category: "Profile",
-    description: "Buys an item-",
+    description: "Buys an item.",
     helpUsage: "[item name]`",
     exampleUsage: "Bank Upgrade I",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an item name-", "none")
+        new NeededArgument(1, "You need to type in an item name.", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

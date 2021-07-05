@@ -3,15 +3,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "tieup",
     category: "Actions",
-    description: "Ties up the tagged person-",
+    description: "Ties up the tagged person.",
     helpUsage: "[mention]`",
     exampleUsage: "/user_tag/",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention somebody-", "mention")
+        new NeededArgument(1, "You need to mention somebody.", "mention")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: true,
     nsfw: false,

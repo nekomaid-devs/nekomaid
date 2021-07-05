@@ -3,7 +3,7 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "botconfig",
     category: "Help & Information",
-    description: "Changes settings of the bot-",
+    description: "Changes settings of the bot.",
     helpUsage: "[action?] [property?] [value?]` *(arguments depend on action)*",
     exampleUsage: "add BotOwner /user_tag/",
     hidden: true,
@@ -14,6 +14,7 @@ module.exports = {
     .set("remove",
     "`<subcommand_prefix> botOwner [mention]` - Removes a bot owner"),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "BOT_OWNER")
     ],

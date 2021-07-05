@@ -3,15 +3,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "poll",
     category: "Utility",
-    description: "Creates a poll-",
+    description: "Creates a poll.",
     helpUsage: '"[question]" "[option1?]" "[option2?] ..."`',
     exampleUsage: '"Does pineapple belong on pizza?" "Yes!" "No..."',
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in a question-", "string")
+        new NeededArgument(1, "You need to type in a question.", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

@@ -4,15 +4,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "slowmode",
     category: "Moderation",
-    description: "Set a slowmode for current channel-",
+    description: "Set a slowmode for current channel.",
     helpUsage: "[seconds]`",
     exampleUsage: "10",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in number of seconds-", "int>0")
+        new NeededArgument(1, "You need to type in number of seconds.", "int>0")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_CHANNELS"),
         new NeededPermission("me", "MANAGE_CHANNELS"),

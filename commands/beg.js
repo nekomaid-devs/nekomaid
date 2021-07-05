@@ -1,12 +1,13 @@
 module.exports = {
     name: "beg",
     category: "Profile",
-    description: "Gets credits by begging from other people-",
+    description: "Gets credits by begging from other people.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

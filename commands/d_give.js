@@ -4,17 +4,18 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "d_give",
     category: "Testing",
-    description: "Adds an item to tagged user-",
+    description: "Adds an item to tagged user.",
     helpUsage: "[mention] [ammount] [itemID]`",
     exampleUsage: "/user_tag/ 1 0",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type mention somebody-", "mention"),
-        new NeededArgument(2, "You need to type in an ammount", "int>0"),
-        new NeededArgument(3, "You need to type in an item ID-", "int")
+        new NeededArgument(1, "You need to type mention somebody.", "mention"),
+        new NeededArgument(2, "You need to type in an ammount.", "int>0"),
+        new NeededArgument(3, "You need to type in an item ID.", "int")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "BOT_OWNER")
     ],

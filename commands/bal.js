@@ -1,13 +1,18 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
+
 module.exports = {
     name: "bal",
     category: "Profile",
-    description: "Displays the tagged user's balance-",
+    description: "Displays the tagged user's balance.",
     helpUsage: "[mention?]` *(optional argument)*",
     exampleUsage: "/user_tag/",
     hidden: false,
     aliases: ["balance", "bank"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [
+        new RecommendedArgument(1, "Argument needs to be a mention.", "mention")
+    ],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

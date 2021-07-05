@@ -1,17 +1,21 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 const NeededArgument = require("../scripts/helpers/needed_argument");
 
 module.exports = {
     name: "getemote",
     category: "Utility",
-    description: "Copies emote on the server-",
+    description: "Copies emote on the server.",
     helpUsage: "[emote or emote url] [?name]` *(1 optional argument)*",
     exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an emote-", "none")
+        new NeededArgument(1, "You need to type in an emote.", "none")
+    ],
+    argumentsRecommended: [
+        new RecommendedArgument(2, "Argument needs to be a name.", "none")
     ],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_EMOJIS"),

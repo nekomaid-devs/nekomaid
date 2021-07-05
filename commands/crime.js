@@ -1,12 +1,13 @@
 module.exports = {
     name: "crime",
     category: "Profile",
-    description: "Gets or loses credits by doing crimes-",
+    description: "Gets or loses credits by doing crimes.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

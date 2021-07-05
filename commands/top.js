@@ -1,13 +1,18 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
+
 module.exports = {
     name: "top",
     category: "Profile",
-    description: "Displays the richest people from all servers (or current one if you type `-server` after the command)-",
+    description: "Displays the richest people from all servers (or current one if you type `-server` after the command).",
     helpUsage: "[?property] [?-server]` *(all arguments optional)*",
     exampleUsage: "credits -server",
     hidden: false,
     aliases: ["leaderboard", "lb"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [
+        new RecommendedArgument(1, "Argument needs to be a property.", "none")
+    ],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

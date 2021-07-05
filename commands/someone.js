@@ -3,12 +3,13 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "someone",
     category: "Moderation",
-    description: "Pings a random person on the server-",
+    description: "Pings a random person on the server.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "MENTION_EVERYONE")
     ],

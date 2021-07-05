@@ -3,12 +3,13 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "neko",
     category: "Fun",
-    description: "Sends a random image of a neko-",
+    description: "Sends a random image of a neko.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

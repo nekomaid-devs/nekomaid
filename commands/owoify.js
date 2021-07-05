@@ -1,15 +1,19 @@
+const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
     name: "owoify",
     category: "Fun",
-    description: "Makes NekoMaid say something with a lot of uwus and owos (/-\\)-",
+    description: "Makes NekoMaid say something with a lot of uwus and owos (/-\\).",
     helpUsage: "[text]`",
     exampleUsage: "please i need help",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
+    argumentsNeeded: [
+        new NeededArgument(1, "You need to type in what you want Nekomaid to say.", "none")
+    ],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("me", "MANAGE_MESSAGES")
     ],

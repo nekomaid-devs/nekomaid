@@ -1,12 +1,13 @@
 module.exports = {
     name: "support",
     category: "Help & Information",
-    description: "Join the support server if you have any issues or questions-",
+    description: "Join the support server if you have any issues or questions.",
     helpUsage: "`",
     hidden: false,
     aliases: ["server"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

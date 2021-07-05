@@ -1,12 +1,17 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
+
 module.exports = {
     name: "shop",
     category: "Profile",
-    description: "Displays all buyable items-",
+    description: "Displays all buyable items.",
     helpUsage: "[page?]` *(optional argument)*",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [
+        new RecommendedArgument(1, "Argument needs to be a page number.", "int>0")
+    ],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

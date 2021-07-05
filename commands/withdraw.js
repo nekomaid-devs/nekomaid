@@ -3,15 +3,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "withdraw",
     category: "Profile",
-    description: "Transfers credits from bank to user-",
+    description: "Transfers credits from bank to user.",
     helpUsage: "[ammount/all]`",
     exampleUsage: "100",
     hidden: false,
     aliases: ["with"],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an ammount", "none")
+        new NeededArgument(1, "You need to type in an ammount", "int>0/all/half")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
@@ -25,9 +26,6 @@ module.exports = {
             } else {
                 credits_ammount = command_data.author_config.bank;
             }
-        } else if(isNaN(credits_ammount) || credits_ammount <= 0) {
-            command_data.msg.reply(`Invalid credits ammount-`);
-            return;
         }
 
         if(command_data.author_config.bank - credits_ammount < 0) {

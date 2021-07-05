@@ -1,17 +1,21 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
 const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
 module.exports = {
     name: "unmute",
     category: "Moderation",
-    description: "Unmutes the tagged user-",
+    description: "Unmutes the tagged user.",
     helpUsage: "[mention] [?reason]` *(optional argument)*",
     exampleUsage: "/user_tag/",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention an user-", "mention")
+        new NeededArgument(1, "You need to mention an user.", "mention")
+    ],
+    argumentsRecommended: [
+        new RecommendedArgument(2, "Argument needs to be a reason.", "none")
     ],
     permissionsNeeded: [
         new NeededPermission("author", "BAN_MEMBERS"),

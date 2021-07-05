@@ -3,12 +3,13 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "mutes",
     category: "Moderation",
-    description: "Displays all mutes on this server-",
+    description: "Displays all mutes on this server.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "BAN_MEMBERS")
     ],

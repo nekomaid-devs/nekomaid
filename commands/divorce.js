@@ -1,12 +1,13 @@
 module.exports = {
     name: "divorce",
     category: "Profile",
-    description: "Divorces married user-",
+    description: "Divorces married user.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

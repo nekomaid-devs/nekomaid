@@ -1,13 +1,19 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
+
 module.exports = {
     name: "help",
     category: "Help & Information",
-    description: "Displays all available commands-",
+    description: "Displays all available commands.",
     helpUsage: "[command?] [subcommand?]` *(both arguments optional)*",
     exampleUsage: "config set",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [
+        new RecommendedArgument(1, "Argument needs to be a command.", "none"),
+        new RecommendedArgument(2, "Argument needs to be a subcommand.", "none")
+    ],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

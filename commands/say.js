@@ -4,15 +4,16 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "say",
     category: "Utility",
-    description: "Makes NekoMaid say something-",
+    description: "Makes NekoMaid say something.",
     helpUsage: "[text]`",
     exampleUsage: "please i need help",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in what do you want me to say-", "none")
+        new NeededArgument(1, "You need to type in what you want Nekomaid to say.", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("me", "MANAGE_MESSAGES")
     ],

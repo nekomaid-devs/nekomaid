@@ -1,12 +1,13 @@
 module.exports = {
     name: "queue",
     category: "Music",
-    description: "Displays the queue-",
+    description: "Displays the queue.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

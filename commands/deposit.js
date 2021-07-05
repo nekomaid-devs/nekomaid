@@ -3,15 +3,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "deposit",
     category: "Profile",
-    description: "Deposits credits from user to bank-",
-    helpUsage: "[ammount/all]`",
+    description: "Deposits credits from user to bank.",
+    helpUsage: "[ammount/all/half]`",
     exampleUsage: "100",
     hidden: false,
     aliases: ["dep"],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an ammount-", "int>0")
+        new NeededArgument(1, "You need to type in an ammount.", "int>0/all/half")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

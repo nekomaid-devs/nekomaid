@@ -4,15 +4,16 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "d_giveinserver",
     category: "Testing",
-    description: "Adds an item to all users in a server-",
+    description: "Adds an item to all users in a server.",
     helpUsage: "[ammount] [itemID]`",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an ammount", "int>0"),
-        new NeededArgument(2, "You need to type in an item ID-", "int")
+        new NeededArgument(1, "You need to type in an ammount.", "int>0"),
+        new NeededArgument(2, "You need to type in an item ID.", "int")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "BOT_OWNER")
     ],

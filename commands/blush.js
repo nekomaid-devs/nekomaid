@@ -1,12 +1,13 @@
 module.exports = {
     name: "blush",
     category: "Emotes",
-    description: "Posts a blushing gif-",
+    description: "Posts a blushing gif.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

@@ -1,13 +1,18 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
+
 module.exports = {
     name: "userinfo",
     category: "Utility",
-    description: "Displays information about the tagged user-",
+    description: "Displays information about the tagged user.",
     helpUsage: "[mention?]` *(optional argument)*",
     exampleUsage: "/user_tag/",
     hidden: false,
     aliases: ["memberinfo"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [
+        new RecommendedArgument(1, "Argument needs to be a mention.", "mention")
+    ],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

@@ -3,7 +3,7 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "auditlog",
     category: "Modules",
-    description: "Changes logging settings of the server-",
+    description: "Changes logging settings of the server.",
     helpUsage: "[action?] [property?] [value?]` *(arguments depend on action)*",
     exampleUsage: "set bans true",
     hidden: false,
@@ -17,6 +17,7 @@ module.exports = {
     "`<subcommand_prefix> deletedMessages [true/false]` - Enables/Disables logging deleted messages\n\n" +
     "`<subcommand_prefix> audit_channel [channelMention]` - Changes the channel for logging"),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_GUILD"),
         new NeededPermission("me", "VIEW_AUDIT_LOG")

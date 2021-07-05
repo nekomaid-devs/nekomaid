@@ -1,12 +1,13 @@
 module.exports = {
     name: "leveltop",
     category: "Leveling",
-    description: "Displays people with highest level from this server-",
+    description: "Displays people with highest level from this server.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

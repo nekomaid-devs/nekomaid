@@ -1,12 +1,13 @@
 module.exports = {
     name: "hhelp",
     category: "Utility",
-    description: "-",
+    description: ".",
     helpUsage: "`",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

@@ -3,7 +3,7 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "nhentai",
     category: "NSFW",
-    description: "Finds a doujinshi with id-",
+    description: "Finds a doujinshi with id.",
     helpUsage: "[sauce?]` *(optional argument)*",
     exampleUsage: "177013",
     hidden: false,
@@ -12,6 +12,7 @@ module.exports = {
     argumentsNeeded: [
         new NeededArgument(1, "You need to type in a sauce- (ex. `177013`)", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: true,
     async execute(command_data) {

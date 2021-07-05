@@ -1,13 +1,20 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
+
 module.exports = {
     name: "roll",
     category: "Fun",
-    description: "Rolls a dice- Also makes it possible to win credits by betting-",
+    description: "Rolls a dice- Also makes it possible to win credits by betting.",
     helpUsage: "[numberOfSides?] [result?] [bet?]` *(all arguments optional)*",
     exampleUsage: "6 2 100",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [
+        new RecommendedArgument(1, "Argument needs to be a number of sides.", "int>0"),
+        new RecommendedArgument(2, "Argument needs to be a predicted result.", "int>0"),
+        new RecommendedArgument(3, "Argument needs to be a bet ammount.", "int>0/all/half")
+    ],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
@@ -17,16 +24,8 @@ module.exports = {
         }
 
         let options = [];
-        switch(roll_type) {
-            default:
-                if(isNaN(roll_type) || roll_type <= 1) {
-                    command_data.msg.reply("Invalid `numberOfSides` for `roll`- (number more than 1)");
-                    return;
-                } else {
-                    for(let i = 1; i <= roll_type; i++) {
-                        options.push(i);
-                    }
-                }
+        for(let i = 1; i <= roll_type; i++) {
+            options.push(i);
         }
 
         let result = command_data.global_context.utils.pick_random(options);
@@ -39,7 +38,7 @@ module.exports = {
             let bet_result = parseInt(command_data.args[1]);
             let bet_ammount = parseInt(command_data.args[2]);
 
-            if(isNaN(bet_result) || options.includes(bet_result) === false) {
+            if(options.includes(bet_result) === false) {
                 command_data.msg.reply(`Invalid \`bet_result\` for \`roll\`- (${options[0]}-${options[options.length - 1]})`);
                 return;
             }
@@ -60,9 +59,6 @@ module.exports = {
                 } else {
                     bet_ammount = Math.round(author_credits / 2);
                 }
-            } else if(isNaN(bet_ammount) || bet_ammount <= 0) {
-                command_data.msg.reply("Invalid `betAmmount` for `roll`- (number)");
-                return;
             }
 
             if(command_data.author_config.credits < bet_ammount) {

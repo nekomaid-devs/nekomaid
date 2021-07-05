@@ -170,6 +170,11 @@ module.exports = {
                 passed = false;
             }
         });
+        command.argumentsRecommended.forEach(arg => {
+            if(passed === true && arg.passes(command_data, command) === false) {
+                passed = false;
+            }
+        });
         if(command.nsfw === true && message.channel.nsfw === false) {
             message.reply("Cannot use this command in SFW channel-");
             passed = false;

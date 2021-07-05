@@ -1,12 +1,13 @@
 module.exports = {
     name: "skip",
     category: "Music",
-    description: "Skips a song from the queue-",
+    description: "Skips a song from the queue.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

@@ -3,7 +3,7 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "leveling",
     category: "Modules",
-    description: "Changes settings of the leveling module-",
+    description: "Changes settings of the leveling module.",
     helpUsage: "[action?] [property?] [value?]` *(arguments depend on action)*",
     exampleUsage: "set enabled true",
     hidden: false,
@@ -27,6 +27,7 @@ module.exports = {
     "`<subcommand_prefix> level_exp [number]` - Changes the XP required for a level\n" +
     "`<subcommand_prefix> level_multiplier [number]` - Changes the multiplier with which each level increases required XP"),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_GUILD")
     ],
@@ -241,7 +242,7 @@ module.exports = {
                 switch(property) {
                     case "rank": {
                         if(command_data.args.length < 3) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `rankName`-", "remove rank Trusted") }).catch(e => { console.log(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `rankName`.", "remove rank Trusted") }).catch(e => { console.log(e); });
                             return;
                         }
                         let rank_name = command_data.args[2];

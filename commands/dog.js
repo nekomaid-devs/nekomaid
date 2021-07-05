@@ -1,12 +1,13 @@
 module.exports = {
     name: "dog",
     category: "Fun",
-    description: "Sends a random image of a dog-",
+    description: "Sends a random image of a dog.",
     helpUsage: "`",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

@@ -4,16 +4,17 @@ const NeededPermission = require("../scripts/helpers/needed_permission");
 module.exports = {
     name: "addserverxp",
     category: "Leveling",
-    description: "Adds XP to the tagged user-",
+    description: "Adds XP to the tagged user.",
     helpUsage: "[mention] [ammount]`",
     exampleUsage: "/user_tag/ 100",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention somebody-", "mention"),
-        new NeededArgument(2, "You need to type in an ammount-", "float>0", "Invalid XP ammount-")
+        new NeededArgument(1, "You need to mention somebody.", "mention"),
+        new NeededArgument(2, "You need to type in an ammount.", "float>0", "Invalid XP ammount!")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [
         new NeededPermission("author", "MANAGE_GUILD")
     ],

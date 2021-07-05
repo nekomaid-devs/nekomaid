@@ -12,6 +12,7 @@ module.exports = {
     argumentsNeeded: [
         new NeededArgument(1, "You need to type in a tag- (ex. `catgirl`, `foxgirl`, ...)", "none")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {

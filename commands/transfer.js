@@ -3,16 +3,17 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "transfer",
     category: "Profile",
-    description: "Transfers credits to another user-",
+    description: "Transfers credits to another user.",
     helpUsage: "[ammount/all] [mention]`",
     exampleUsage: "100 /user_tag/",
     hidden: false,
     aliases: ["pay"],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention somebody-", "mention"),
-        new NeededArgument(1, "You need to type in an ammount-", "none"),
+        new NeededArgument(1, "You need to mention somebody.", "mention"),
+        new NeededArgument(1, "You need to type in an ammount.", "none"),
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {

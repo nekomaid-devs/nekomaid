@@ -3,15 +3,16 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "rep",
     category: "Profile",
-    description: "Adds a reputation point to the tagged user-",
+    description: "Adds a reputation point to the tagged user.",
     helpUsage: "[mention]`",
     exampleUsage: "/user_tag/",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention an user-", "mention")
+        new NeededArgument(1, "You need to mention an user.", "mention")
     ],
+    argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
