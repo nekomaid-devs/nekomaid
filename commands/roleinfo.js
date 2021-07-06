@@ -40,6 +40,7 @@ module.exports = {
                 permissions += ", ";
             }
         });
+        if(permissions === "") { permissions = "`None`"; }
 
         let embedRole = {
             color: 8388736,
@@ -78,7 +79,7 @@ module.exports = {
                 },
                 {
                     name: '❯ Color',
-                    value: `${role.hexColor} (` + role + `)`,
+                    value: `${role.hexColor}`,
                     inline: true
                 },
                 {
@@ -90,7 +91,6 @@ module.exports = {
                     text: `Requested by ${command_data.msg.author.tag}`
             },
         }
-
         command_data.msg.channel.send("", { embed: embedRole }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };
