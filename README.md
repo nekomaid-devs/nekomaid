@@ -41,7 +41,6 @@
 
 	"invite_code": "xxx",
 	"owner_id": "xxx",
-	"suggestion_channel": "xxx",
 
 	"sentry_enabled": false,
 	"sentry_dns": "xxx",
