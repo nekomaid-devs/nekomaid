@@ -1,154 +1,94 @@
 class XBooruAPI {
     async xbooru_result(global_context, args) {
-        //Get front page for tag
-        var siteUrl0 = "https://xbooru.com/index.php?page=post&s=list" + (args.length > 0 ? "&tags=" + args.join("+") : "");
+        // TODO: redirect errors into their own logger
+        let site_url_main = `https://xbooru.com/index.php?page=post&s=list${(args.length > 0 ? "&tags=" + args.join("+") : "")}`;
+        let result_main = await global_context.modules.axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+        if(result_main === undefined || result_main.data === undefined) { return { status: -1 }; }
+        let $0 = await global_context.modules.cheerio.load(result_main.data);
 
-        //Get banned tags
-        var bannedTags = [];
-        args.forEach(function(arg) {
-            if(arg.startsWith("!")) {
-                bannedTags.push(arg.replace("!", ""));
-            }
-        });
+        let pages = [];
+        let next_page = -1;
+        let last_page = -1;
 
-        //Get starting and last page for this tag
-        var result0 = await global_context.modules.axios.get(siteUrl0);
-        var $0 = await global_context.modules.cheerio.load(result0.data);
-
-        var pages = [];
-        var nextPage = null;
-        var lastPage = null;
-
-        var navigationElemets = $0("#paginator").children();
-        navigationElemets.each(function () {
-            var child = $0(this);
-
-            var alt = child.attr("alt");
+        let navigation_elements = $0(".pagination").children();
+        navigation_elements.each(function() {
+            let child = $0(this);
+            let alt = child.attr("alt");
 
             switch(alt) {
                 case "next":
-                    nextPage = child;
+                    next_page = child;
                     break;
 
                 case "last page":
-                    lastPage = child;
+                    last_page = child;
                     break;
             }
         });
 
-        //Check if there are results
-        if(nextPage == null || lastPage == null) {
-            var failed = {
-                status: 0
-            }
-
-            return failed;
+        if(next_page === -1 || last_page === -1) {
+            return { status: -1 };
         }
 
-        //Calculate page links from startID to endID
-        var currentID = 0;
-
-        var endingLink = lastPage.attr("href");
-        var endingID = parseInt(endingLink.substring(endingLink.indexOf("pid=") + "pid=".length));
-
-        //console.log("Getting pages(start: " + currentID + ", end: " + endingID + ") for tag(tag: " + args.join("+") + ")...");
-
-        while(currentID <= endingID) {
-            pages.push("?page=post&s=list" + (args.length > 0 ? "&tags=" + args.join("+") : "") + "&pid=" + currentID);
-
-            currentID += 42;
+        let current_ID = 0;
+        let ending_link = last_page.attr("href");
+        let ending_ID = parseInt(ending_link.substring(ending_link.indexOf("pid=") + "pid=".length));
+        while(current_ID <= ending_ID) {
+            pages.push(`?page=post&s=list${(args.length > 0 ? "&tags=" + args.join("+") : "")}&pid=${current_ID}`);
+            current_ID += 42;
         }
 
-        //Get number of tries
-        var numOfResultPages = pages.length;
-        var numOfTries = 5;
-        var triesCount = 1;
+        let num_of_tries = 5;
+        let current_tries = 1;
+        while(current_tries <= num_of_tries) {
+            let page = global_context.utils.pick_random(pages);
 
-        while(triesCount <= numOfTries) {
-            //Gets a random page
-            var pageResultNumber = Math.floor(Math.random() * numOfResultPages) + 1;
-            var page = pages[pageResultNumber - 1];
+            let site_url_posts = `https://xbooru.com/index.php${page}`;
+            let result_posts = await global_context.modules.axios.get(site_url_posts, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+            if(result_posts === undefined || result_posts.data === undefined) { return { status: -1 }; }
+            let $1 = await global_context.modules.cheerio.load(result_posts.data);
 
-            //console.log("Searching the page(num:" + pageResultNumber + ")- Try(" + triesCount + "/" + numOfTries + ")...");
+            let post_links = [];
+            $1(".preview").each(function() {
+                let preview = $1(this);
+                let parent = preview.parent();
+                let href = parent.attr("href");
+                let tags_attr = preview.attr("alt");
+                let tags = tags_attr.split(" ");
 
-            //Get results from target page of tag
-            var siteUrl1 = "https://xbooru.com/index.php" + page;
-            var result1 = await global_context.modules.axios.get(siteUrl1);
-            var $1 = await global_context.modules.cheerio.load(result1.data);
-
-            var postLinks = [];
-
-            //Get links to posts
-            $1(".thumbnail-preview").each(function () {
-                var preview = $1(this);
-                var href = -1;
-                preview.children().each(function() {
-                    href = $1(this).attr("href");
-                });
-                var tagsAttr = -1;
-                preview.children().each(function() {
-                    $1(this).children().each(function() {
-                        tagsAttr = $1(this).attr("alt");
-                    });
-                });
-                var tags = tagsAttr.substring("Rule 34 | ".length).split(", ");
-
-                //Check banned tags
-                var valid = true;
-
-                bannedTags.forEach(function(tag) {
-                    if(tags.includes(tag)) {
-                        valid = false;
-                    }
-                });
-
-                if(valid === true) {
-                    postLinks.push(href);
-                }
+                post_links.push(`https://xbooru.com/${href}`);
             });
 
-            if(postLinks.length > 1) {
-                //Get random link from results
-                var numOfPostLinks = postLinks.length;
-                var postLinkNumber = Math.floor(Math.random() * numOfPostLinks) + 1;
+            if(post_links.length > 1) {
+                let site_url_post = global_context.utils.pick_random(post_links);
+                let result_post = await global_context.modules.axios.get(site_url_post, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+                if(result_post === undefined || result_post.data === undefined) { return { status: -1 }; }
+                let $2 = await global_context.modules.cheerio.load(result_post.data);
 
-                var postlink = postLinks[postLinkNumber - 1];
+                let image = $2("#image");
+                let image_link = image.attr("src");
 
-                //Get postInfo from the post
-                const result2 = await global_context.modules.axios.get(postlink);
-                var $2 = await global_context.modules.cheerio.load(result2.data);
+                let tags_attr = image.attr("alt");
+                let tags = tags_attr.split(" ");
 
-                var image = $2("#image");
-                var imageLink = image.attr("src");
-
-                var imageContainer = $2(".image-container");
-                var tagsAttr2 = imageContainer.attr("data-tags");
-                var tags2 = tagsAttr2.split(" ");
-
-                //Construct object
-                var postInfo = {
+                let page_number = pages.indexOf(page);
+                let post_info = {
                     status: 1,
-                    link: imageLink,
-                    pageNumber: pageResultNumber,
-                    numOfPages: numOfResultPages,
-                    postNumber: postLinkNumber,
-                    numOfPosts: numOfPostLinks,
-                    postTags: tags2
+                    link: image_link,
+                    page_number: pages.indexOf(page),
+                    num_of_pages: pages.length,
+                    post_number: page_number * 42 + post_links.indexOf(site_url_post),
+                    num_of_posts: pages.length * 42,
+                    post_tags: tags
                 }
 
-                //Return object with postInfo
-                return postInfo;
+                return post_info;
             }
 
-            triesCount += 1;
+            current_tries += 1;
         }
 
-        //Failed because system ran out of tries
-        var failed2 = {
-            status: 2
-        }
-
-        return failed2;
+        return { status: -1 };
     }
 }
 

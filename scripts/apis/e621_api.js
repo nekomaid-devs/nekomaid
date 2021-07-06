@@ -1,51 +1,47 @@
 class E621API {
     async e621_result(global_context, args) {
-        //Get front page for tag
-        var siteUrl0A = "https://e621.net/posts?tags=" + (args.length > 0 ? args.join("+") : "") + "&limit=1";
-        var result0A = await global_context.modules.axios.get(siteUrl0A, { headers: { "Cookie": "gw=seen;" } }).catch(e => { global_context.logger.error(e); return { status: -1 }; });
+        // TODO: redirect errors into their own logger
+        let site_url_pages = `https://e621.net/posts?tags=${(args.length > 0 ? args.join("+") : "")}&limit=1`;
+        let result_pages = await global_context.modules.axios.get(site_url_pages, { headers: { "Cookie": "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); });
+        if(result_pages.data === undefined) { return { status: -1 }; }
 
-        var a = result0A.data.lastIndexOf('a href="/posts?limit=1')
-        var pages = parseInt(result0A.data.substring(result0A.data.indexOf(">", a) + 1, result0A.data.indexOf("<", a)));
-        var pageIndex = 1001;
-        while(pageIndex > 1000) {
-            pageIndex = Math.floor(Math.random() * pages) + 1;
+        let pages_navigator = result_pages.data.lastIndexOf('a href="/posts?limit=1')
+        let pages = parseInt(result_pages.data.substring(result_pages.data.indexOf(">", pages_navigator) + 1, result_pages.data.indexOf("<", pages_navigator)));
+        let page_index = 1001;
+        while(page_index > 1000) {
+            page_index = Math.floor(Math.random() * pages) + 1;
         }
 
-        //Get front page for tag
-        var siteUrl0 = "https://e621.net/posts?page=" + pageIndex + "&tags=" + (args.length > 0 ? args.join("+") : "") + "&limit=20";
-        var result0 = await global_context.modules.axios.get(siteUrl0, { headers: { "Cookie": "gw=seen;" } }).catch(e => { global_context.logger.error(e); return { status: -1 }; })
-        if(result0.data === undefined) { return { status: 0 }; }
+        let site_url_main = `https://e621.net/posts?page=${page_index}&tags=${(args.length > 0 ? args.join("+") : "")}&limit=1`;
+        let result_main = await global_context.modules.axios.get(site_url_main, { headers: { "Cookie": "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+        if(result_main === undefined || result_main.data === undefined) { return { status: -1 }; }
 
         let posts = [];
         let i = 0;
-        while(result0.data.indexOf('data-id="', i) > 0) {
-            let i2 = result0.data.indexOf('data-id="', i) + 'data-id="'.length;
-            let postID = result0.data.substring(i2, result0.data.indexOf('"', i2))
-            posts.push(postID);
-            i = i2;
+        while(result_main.data.indexOf('data-id="', i) > 0) {
+            let i_2 = result_main.data.indexOf('data-id="', i) + 'data-id="'.length;
+            let post_ID = result_main.data.substring(i_2, result_main.data.indexOf('"', i_2))
+            posts.push(post_ID);
+
+            i = i_2;
         }
 
-        var postIndex = Math.floor(Math.random() * posts.length) + 1;
-        var postID = posts[postIndex];
+        let post_ID = global_context.utils.pick_random(posts);
+        let site_url_post = `https://e621.net/posts/${post_ID}.json`;
+        let result_post = await global_context.modules.axios.get(site_url_post, { headers: { "Cookie": "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+        if(result_post === undefined || result_post.data === undefined) { return { status: -1 }; }
 
-        //Get front page for tag
-        var siteUrl1 = "https://e621.net/posts/" + postID + ".json";
-        var result1 = await global_context.modules.axios.get(siteUrl1, { headers: { "Cookie": "gw=seen;" } }).catch(e => { global_context.logger.error(e); return { status: 0 }; })
-        if(result1.data === undefined) { return { status: 0 }; }
-
-        //Construct object
-        var postInfo = {
+        let post_info = {
             status: 1,
-            link: result1.data.post.file.url,
-            pageNumber: pageIndex,
-            numOfPages: pages + 1,
-            postNumber: postIndex,
-            numOfPosts: (pages + 1) * 20,
-            postTags: result0.data.tags
+            link: result_post.data.post.file.url,
+            page_number: page_index,
+            num_of_pages: pages + 1,
+            post_number: page_index,
+            num_of_posts: pages + 1,
+            post_tags: result_main.data.tags
         }
 
-        //Return object with postInfo
-        return postInfo;
+        return post_info;
     }
 }
 

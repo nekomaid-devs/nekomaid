@@ -1,39 +1,31 @@
 class SafebooruAPI {
     async safebooru_result(global_context, args) {
-        //Get front page for tag
-        var siteUrl0A = "https://safebooru.org/index.php?page=dapi&s=post&q=index&tags=" + (args.length > 0 ? args.join("+") : "") + "&limit=1";
-        var result0A = await global_context.modules.axios.get(siteUrl0A).catch(e => { global_context.logger.error(e); return { status: -1 }; })
-        var json0 = JSON.parse(global_context.modules.xmlconvert.xml2json(result0A.data));
+        // TODO: redirect errors into their own logger
+        let site_url_pages = `https://safebooru.org/index.php?page=dapi&s=post&q=index&tags=${(args.length > 0 ? args.join("+") : "")}&limit=1`;
+        let result_pages = await global_context.modules.axios.get(site_url_pages, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); return { status: -1 }; })
+        
+        let pages_navigator = JSON.parse(global_context.modules.xmlconvert.xml2json(result_pages.data));
+        let pages = pages_navigator.elements[0].attributes.count - 1;
+        let page_index = Math.floor(Math.random() * pages) + 1;
 
-        var pages = Math.ceil(json0.elements[0].attributes.count / 100) - 1;
-        var pageIndex = Math.floor(Math.random() * pages) + 1;
+        let site_url_main = `https://safebooru.org/index.php?page=dapi&s=post&q=index&tags=${(args.length > 0 ? args.join("+") : "")}&limit=1&pid=${(page_index - 1)}`;
+        let result_main = await global_context.modules.axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); return { status: -1 }; })
 
-        //Get front page for tag
-        var siteUrl0 = "https://safebooru.org/index.php?page=dapi&s=post&q=index&tags=" + (args.length > 0 ? args.join("+") : "") + "&pid=" + (pageIndex - 1);
+        let posts = JSON.parse(global_context.modules.xmlconvert.xml2json(result_main.data));
+        if(posts.elements[0].elements === undefined || posts.elements[0].elements.length < 1) { return { status: -1 } }
+        let result_post = posts.elements[0].elements[0];
 
-        //Get starting and last page for this tag
-        var result0 = await global_context.modules.axios.get(siteUrl0).catch(e => { global_context.logger.error(e); return { status: -1 }; })
-        var json = JSON.parse(global_context.modules.xmlconvert.xml2json(result0.data));
-
-        var numOfPosts = json0.elements[0].attributes.count > 100 ? 100 : json0.elements[0].attributes.count;
-        var postIndex = Math.floor(Math.random() * numOfPosts) + 1;
-        if(json.elements[0].elements == null) { return { status: 0 } }
-
-        var post = json.elements[0].elements[postIndex]
-
-        //Construct object
-        var postInfo = {
+        let post_info = {
             status: 1,
-            link: post.attributes.file_url,
-            pageNumber: pageIndex,
-            numOfPages: pages + 1,
-            postNumber: postIndex,
-            numOfPosts: json0.elements[0].attributes.count,
-            postTags: post.attributes.tags
+            link: result_post.attributes.file_url,
+            page_number: page_index,
+            num_of_pages: pages + 1,
+            post_number: page_index,
+            num_of_posts: pages + 1,
+            post_tags: result_post.attributes.tags
         }
 
-        //Return object with postInfo
-        return postInfo;
+        return post_info;
     }
 }
 

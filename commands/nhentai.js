@@ -16,15 +16,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: true,
     async execute(command_data) {
-        let post_info = -1;
-        try {
-            post_info = await command_data.global_context.neko_modules_clients.nhentai.nhentai_result(command_data.global_context, command_data.args[0]);
-        } catch(err) {
-            command_data.global_context.logger.api_error(err);
-            command_data.msg.reply("There was an error in processing this request-");
-            return;
-        }
-
+        let post_info = await command_data.global_context.neko_modules_clients.nhentai.nhentai_result(command_data.global_context, command_data.args[0]);
         switch(post_info.status) {
             case 0:
                 command_data.msg.reply("No results found-");
@@ -66,7 +58,7 @@ module.exports = {
                 },
                 {
                     name: 'Pages:',
-                    value: `\`${post_info.numOfPages}\``
+                    value: `\`${post_info.num_of_pages}\``
                 },
                 {
                     name: 'Tags:',

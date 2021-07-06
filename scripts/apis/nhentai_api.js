@@ -1,59 +1,41 @@
 class NHentaiAPI {
-    async nhentai_result(global_context, input) {
-        //Get front page for tag
-        var siteUrl0 = "https://nhentai.net/g/" + input;
+    async nhentai_result(global_context, args) {
+        // TODO: redirect errors into their own logger
+        let site_url_main = `https://nhentai.net/g/${args}`;
+        let result_main = await global_context.modules.axios.get(site_url_main).catch(e => { global_context.logger.error(e); })
+        let $0 = await global_context.modules.cheerio.load(result_main.data);
 
-        //Get starting and last page for this tag
-        var result0 = await global_context.modules.axios.get(siteUrl0).catch(function() {
-            var failed = {
-                status: 0
-            }
-
-            return failed;
-        })
-
-        var $0 = await global_context.modules.cheerio.load(result0.data);
-
-        //Construct object
-        var infoHtml = $0("#info").html();
-        var titleHTML = infoHtml.substring(infoHtml.indexOf('<span class="pretty">') + '<span class="pretty">'.length, infoHtml.indexOf('</span>', infoHtml.indexOf('<span class="pretty">')));
-        var allTags = [];
-        var allLanguages = [];
-        var allFavourites = 0;
+        let result_html = $0("#info").html();
+        let title = result_html.substring(result_html.indexOf('<span class="pretty">') + '<span class="pretty">'.length, result_html.indexOf('</span>', result_html.indexOf('<span class="pretty">')));
+        let num_of_pages = result_html.substring(result_html.indexOf('<span class="name">', result_html.indexOf("Pages:")) + '<span class="name">'.length, result_html.indexOf('</span>', result_html.indexOf("Pages:")));
+        let all_tags = [];
+        let all_languages = [];
+        let all_favourites = 0;
 
         $0(".tag").each(function () {
-            var tag = $0(this);
-            var href = tag.attr("href");
+            let tag = $0(this);
+            let href = tag.attr("href");
             if(href.includes("/tag/")) {
-                allTags.push(
-                    href
-                    .replace("/tag/", "")
-                    .replace("/", ""))
+                all_tags.push(href.replace("/tag/", "").replace("/", ""));
             } else if(href.includes("/language/")) {
-                allLanguages.push(
-                    href
-                    .replace("/language/", "")
-                    .replace("/", ""))
+                all_languages.push(href.replace("/language/", "").replace("/", ""));
             }
         });
 
         $0(".nobold").each(function() {
-            allFavourites = $0(this).html()
-            .replace("(", "")
-            .replace(")", "");
+            all_favourites = $0(this).html().replace("(", "").replace(")", "");
         })
 
-        var postInfo = {
+        let post_info = {
             status: 1,
-            title: titleHTML,
-            numOfPages: infoHtml.substring(infoHtml.indexOf('<span class="name">', infoHtml.indexOf("Pages:")) + '<span class="name">'.length, infoHtml.indexOf('</span>', infoHtml.indexOf("Pages:"))),
-            tags: allTags,
-            languages: allLanguages,
-            favourites: allFavourites
+            title: title,
+            num_of_pages: num_of_pages,
+            tags: all_tags,
+            languages: all_languages,
+            favourites: all_favourites
         }
 
-        //Return object with postInfo
-        return postInfo;
+        return post_info;
     }
 }
 
