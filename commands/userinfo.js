@@ -32,6 +32,7 @@ module.exports = {
         });
 
         let presence = "";
+        // TODO: this will always show offline
         switch(command_data.tagged_user.presence.status) {
             case "online": {
                 presence = "Online <:n_online:725010541352976414>";
@@ -56,27 +57,8 @@ module.exports = {
 
         await command_data.global_context.utils.verify_guild_members(command_data.msg.guild);
         let join_score_array = Array.from(command_data.msg.guild.members.cache.values()).sort((a, b) => { return a.joinedTimestamp - b.joinedTimestamp });
-        let join_score = -1;
-        let join_score_suffix = "th";
+        let join_score = join_score_array.findIndex(member => { return member.user.id === command_data.tagged_member.user.id }) + 1;
         let join_score_max = command_data.msg.guild.members.cache.size;
-        join_score_array.forEach((member, i) => {
-            if(member.user.id === command_data.tagged_member.user.id) {
-                join_score = i;
-            }
-        });
-        switch(join_score_suffix) {
-            case 1:
-                join_score_suffix = "st";
-                break;
-
-            case 2:
-                join_score_suffix = "nd";
-                break;
-
-            case 3:
-                join_score_suffix = "rd";
-                break;
-        }
 
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedMember = {
@@ -111,7 +93,7 @@ module.exports = {
                     },
                     {
                         name: '❯ Join Score',
-                        value: `${join_score} (${join_score}${join_score_suffix} out of ${join_score_max})`
+                        value: `${join_score} (${join_score} out of ${join_score_max})`
                     },
                     {
                         name: '❯ Roles [' + command_data.tagged_member.roles.cache.size + ']',
