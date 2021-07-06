@@ -100,10 +100,10 @@ module.exports = {
                 ['Leveling', { prefix: "<:n_leveling:771822966181724170> ", items: [], nsfw: false }],
                 ['Testing', { prefix: "", items: [], nsfw: false }]
             ]);
-            commands.forEach(command => {
-                if((show_hidden === true || command.hidden === false) && categories.has(command.category)) {
-                    categories.get(command.category).items.push(command);
-                }
+            commands
+            .filter(e => { return (show_hidden === true || e.hidden === false) && categories.has(e.category); })
+            .forEach(command => {
+                categories.get(command.category).items.push(command);
             });
 
             let url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
@@ -121,7 +121,7 @@ module.exports = {
                 let commands_keys = category.items;
     
                 commands_keys.sort((a,b) => { return a.name.localeCompare(b.name); });
-                commands_keys.forEach(function(command, index) {
+                commands_keys.forEach((command, index) => {
                     let command_text = show_hidden === true && command.hidden === true ? "❓" + command.name : command.name;
                     command.aliases.forEach((alias) => {
                         command_text += "/" + alias;

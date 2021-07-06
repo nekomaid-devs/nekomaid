@@ -54,7 +54,7 @@ module.exports = {
                 command_data.msg.channel.send(`Unbanned \`${ban_info.user.tag}\`-`).catch(e => { command_data.global_context.logger.api_error(e); });
                 
                 if(previous_ban != -1) {
-                    command_data.global_context.data.last_moderation_actions.set(command_data.guild.id, { moderator: command_data.msg.author.id });
+                    command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id });
                     command_data.global_context.neko_modules_clients.ssm.server_remove.remove_server_ban(command_data.global_context, previous_ban.id);
                 }
             }

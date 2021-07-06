@@ -26,13 +26,8 @@ module.exports = {
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
         if(command_data.args.length < 1) {
-            let banned_words = "";
-            command_data.server_config.bannedWords.forEach((userID, index) => {
-                banned_words += "`" + userID + "`";
-                if(command_data.server_config.bannedWords.length - 1 > index) {
-                    banned_words += ", ";
-                }
-            });
+            let banned_words = command_data.server_config.bannedWords.reduce((acc, curr) => { acc += "`" + curr + "`, "; return acc; }, "");
+            banned_words = banned_words.slice(0, banned_words.length - 2);
             if(banned_words === "") {
                 banned_words = "`None`";
             }

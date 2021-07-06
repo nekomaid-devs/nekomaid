@@ -18,14 +18,8 @@ module.exports = {
     execute(command_data) {
         // TODO: maybe add some more cool information
         let item_name = command_data.total_argument;
-        let target_item = -1;
-        command_data.global_context.bot_config.items.forEach(item => {
-            if(item.displayName.toLowerCase() === item_name.toLowerCase()) {
-                target_item = item;
-            }
-        });
-
-        if(target_item === -1) {
+        let target_item = Array.from(command_data.global_context.bot_config.items.values()).find(e => { return e.displayName.toLowerCase() === item_name.toLowerCase(); });
+        if(target_item === undefined) {
             command_data.msg.reply(`Haven't found any item with name \`${item_name}\`-`);
             return;
         }

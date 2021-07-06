@@ -16,7 +16,7 @@ module.exports = {
     },
 
     async process(global_context, member) {
-        let moderation_action = global_context.data.last_moderation_actions.get(guild.id);
+        let moderation_action = global_context.data.last_moderation_actions.get(member.guild.id);
         let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_remove", id: member.guild.id });
 
         if(server_config.leaveMessages == true) {

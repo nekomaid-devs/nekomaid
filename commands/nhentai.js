@@ -28,21 +28,17 @@ module.exports = {
             return;
         }
 
-        let tags_text = "";
-        post_info.tags.forEach((tag, index) => {
-            tags_text += "`" + tag.split("-").join(" ") + "`";
-            if(post_info.tags.length - 1 > index) {
-                tags_text += ", ";
-            }
-        })
+        let tags_text = post_info.tags.reduce((acc, curr) => { acc += "`" + curr + "`, "; return acc; }, "");
+        tags_text = tags_text.slice(0, tags_text.length - 2);
+        if(tags_text === "") {
+            tags_text = "`None`";
+        }
 
-        let languages_text = "";
-        post_info.languages.forEach((language, index) => {
-            languages_text += "`" + language + "`"
-            if(post_info.languages.length - 1 > index) {
-                languages_text += ", ";
-            }
-        })
+        let languages_text = post_info.languages.reduce((acc, curr) => { acc += "`" + curr.toString() + "`, "; return acc; }, "");
+        languages_text = languages_text.slice(0, languages_text.length - 2);
+        if(languages_text === "") {
+            languages_text = "`None`";
+        }
 
         let embedNHentai = {
             title: `Sauce for - ${command_data.args[0]}`,

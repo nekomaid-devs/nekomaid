@@ -20,19 +20,17 @@ module.exports = {
         let server_mutes = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_mutes", id: member.guild.id });
 
         await global_context.utils.verify_guild_roles(member.guild);
-        member.guild.roles.cache.forEach(role => {
-            if(server_config.autoRoles.includes(role.id) === true) {
-                member.roles.add(role).catch(e => { global_context.logger.api_error(e) });
-            }
+        member.guild.roles.cache
+        .filter(e => { return server_config.autoRoles.includes(e.id); })
+        .forEach(role => {
+            member.roles.add(role).catch(e => { global_context.logger.api_error(e) });
         });
         
         let mute_role = await member.guild.roles.fetch(server_config.muteRoleID).catch(e => { global_context.logger.api_error(e); });
         if(mute_role !== undefined) {
-            server_mutes.forEach(mute => {
-                if(mute.userID === member.user.id) {
-                    member.roles.add(mute_role).catch(e => { global_context.logger.api_error(e) });
-                }
-            });
+            if(server_mutes.some(e => { return e.userID === member.user.id; })) {
+                member.roles.add(mute_role).catch(e => { global_context.logger.api_error(e) });
+            }
         }
 
         if(server_config.welcomeMessages == true) {

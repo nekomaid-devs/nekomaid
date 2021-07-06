@@ -90,7 +90,6 @@ module.exports = {
         let limit = items.length < 10 ? items.length : 10;
         for(let i = 0; i < limit; i += 1) {
             let user_config = items[i];
-            let net = 0;
             if(i === 8 && authorPos > 10) {
                 embedTop.addField("...", "...");
                 continue;
@@ -99,10 +98,7 @@ module.exports = {
                 i = author_pos;
             }
 
-            props.forEach(prop => {
-                net += user_config[prop];
-            });
-
+            let net = props.reduce((acc, curr) => { acc += user_config[curr]; return acc; }, 0);
             let target_user = await command_data.global_context.bot.users.fetch(user_config.userID).catch(e => { command_data.global_context.logger.api_error(e); });
             embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `${net} ${top_user_text}`);
         }

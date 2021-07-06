@@ -107,11 +107,11 @@ class MarriageManager {
         }
     }
 
-    remove_marriage_proposal_backwards(global_context, channel, _marriage_proposal) {
-        global_context.neko_modules_clients.mm.marriage_proposals.forEach(async(marriage_proposal) => {
-            if(marriage_proposal.source_ID === _marriage_proposal.source_ID) {
-                global_context.neko_modules_clients.mm.remove_marriage_proposal(global_context, channel, marriage_proposal, 2);
-            }
+    remove_marriage_proposal_backwards(global_context, channel, marriage_proposal) {
+        global_context.neko_modules_clients.mm.marriage_proposals
+        .filter(e => { return e.source_ID === marriage_proposal.source_ID; })
+        .forEach(e => {
+            global_context.neko_modules_clients.mm.remove_marriage_proposal(global_context, channel, e, 2);
         });
     }
 }

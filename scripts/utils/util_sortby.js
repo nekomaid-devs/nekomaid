@@ -5,12 +5,8 @@ class SortBy {
 
     create_comparator(props) {
         return (a, b) => {
-            let a_net = 0;
-            let b_net = 0;
-            props.forEach(prop => {
-                a_net += isNaN(parseFloat(a[prop])) ? 0 : parseFloat(a[prop]);
-                b_net += isNaN(parseFloat(b[prop])) ? 0 : parseFloat(b[prop]);
-            })
+            let a_net = props.reduce((acc, curr) => { acc += isNaN(parseFloat(a[curr])) ? 0 : parseFloat(a[curr]); return acc; }, 0);
+            let b_net = props.reduce((acc, curr) => { acc += isNaN(parseFloat(b[curr])) ? 0 : parseFloat(b[curr]); return acc; }, 0);
             
             return b_net - a_net;
         }

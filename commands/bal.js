@@ -21,15 +21,6 @@ module.exports = {
         let credits = command_data.tagged_user_config.credits;
         let bank = command_data.tagged_user_config.bank;
 
-        let bankUpgrade = 0;
-        command_data.tagged_user_config.inventory.forEach(item => {
-            command_data.global_context.bot_config.items.forEach(item_2 => {
-                if(item_2.id === item && item_2.type === "bankLimit") {
-                    bankUpgrade += item_2.limit;
-                }
-            });
-        });
-
         let embedBalance = {
             color: 8388736,
             author: {
@@ -44,7 +35,7 @@ module.exports = {
                 },
                 {
                     name: '🏦    Bank:',
-                    value: `$ ${bank}/${(command_data.global_context.bot_config.bankLimit + bankUpgrade)}`,
+                    value: `$ ${bank}/${command_data.tagged_user_config.bank_limit}`,
                     inline: true
                 }
             ],

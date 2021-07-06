@@ -31,16 +31,11 @@ module.exports = {
 
         let elapsed = new Date() - new Date(role.createdAt.toUTCString());
         let createdAgo = command_data.global_context.neko_modules_clients.tc.convert_time(elapsed);
-
-        let permissions = "";
-        let permissionsArray = role.permissions.toArray();
-        permissionsArray.forEach((permission, index) => {
-            permissions += "`" + permission + "`"
-            if(permissionsArray.length - 1 > index) {
-                permissions += ", ";
-            }
-        });
-        if(permissions === "") { permissions = "`None`"; }
+        let permissions = role.permissions.toArray().reduce((acc, curr) => { acc += "`" + curr + "`, "; return acc; }, "");
+        permissions = permissions.slice(0, permissions.length - 2);
+        if(permissions === "") {
+            permissions = "`None`";
+        }
 
         let embedRole = {
             color: 8388736,

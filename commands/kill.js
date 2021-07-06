@@ -16,14 +16,8 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let is_allowed = true;
-        command_data.tagged_users.forEach(user => {
-            if(user.id === command_data.msg.author.id) {
-                is_allowed = false;
-            }
-        });
-
-        if(is_allowed === false) {
+        let is_self = command_data.tagged_users.some(e => { return e.id === command_data.msg.author.id; });
+        if(is_self === true) {
             command_data.msg.reply("Let's not do that ;-;");
             return;
         }

@@ -33,14 +33,8 @@ module.exports = {
             unmute_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[1]))
         }
 
-        let previous_mute_ID = -1;
-        command_data.server_mutes.forEach((mute) => {
-            if(mute.userID === command_data.tagged_user.id) {
-                previous_mute_ID = mute.id;
-            }
-        });
-
-        if(previous_mute_ID === -1) {
+        let previous_mute = command_data.server_mutes.find(e => { return e.userID === command_data.tagged_user.id; });
+        if(previous_mute === undefined) {
             command_data.msg.reply(`\`${command_data.tagged_user.tag}\` isn't muted-`);
         } else {
             if(command_data.msg.guild.roles.cache.has(command_data.server_config.muteRoleID) === false) {
@@ -52,7 +46,7 @@ module.exports = {
             command_data.tagged_member.roles.remove(mute_role);
 
             command_data.msg.channel.send(`Unmuted \`${command_data.tagged_user.tag}\` (Reason: \`${unmute_reason}\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
-            command_data.global_context.neko_modules_clients.ssm.server_remove.remove_server_mute(command_data.global_context, previous_mute_ID);
+            command_data.global_context.neko_modules_clients.ssm.server_remove.remove_server_mute(command_data.global_context, previous_mute.id);
 
             // TODO: drop this once a separate callback
             if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {

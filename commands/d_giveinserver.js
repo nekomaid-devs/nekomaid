@@ -21,9 +21,9 @@ module.exports = {
     async execute(command_data) {
         let ammount = parseInt(command_data.args[0]);
         let item_ID = command_data.args[1];
+        let target_item = Array.from(command_data.global_context.bot_config.items.values()).find(e => { return e.id === item_ID; });
 
-        let target_item = command_data.global_context.bot_config.items.has(item_ID) === true ? command_data.global_context.bot_config.items.get(item_ID) : -1;
-        if(target_item === -1) {
+        if(target_item === undefined) {
             command_data.msg.reply(`There isn't any item with id \`${item_ID}\`-`);
             return;
         }

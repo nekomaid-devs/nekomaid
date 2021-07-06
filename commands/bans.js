@@ -28,12 +28,8 @@ module.exports = {
             return;
         }
 
-        let serverBansByID = new Map();
         command_data.msg.guild.fetchBans().then(serverBansResult => {
-            serverBansResult.forEach(ban => {
-                serverBansByID.set(ban.user.id, ban);
-            });
-
+            let serverBansByID = serverBansResult.reduce((acc, curr) => { acc.set(curr.user.id, curr); return acc; }, new Map());
             command_data.server_bans.slice(-25).forEach(ban => {
                 let bannedMember = serverBansByID.get(ban.userID);
                 if(bannedMember !== undefined) {

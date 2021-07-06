@@ -16,6 +16,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
+        // TODO: this needs to be refactored fr
         if(command_data.args.length < 1) {
             command_data.msg.reply(`You need to type in an item name-`);
             return;

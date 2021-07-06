@@ -95,13 +95,7 @@ module.exports = {
             });
         });
 
-        let command_list = [];
-        global_context.commands.forEach(command => {
-            if(command.hidden === false) {
-                command_list.push({ name: command.name, description: command.description, category: command.category, aliases: command.aliases })
-            }
-        });
-
+        let command_list = global_context.commands.filter(e => { return command.hidden === false; }).reduce((acc, curr) => { acc.push({ name: curr.name, description: curr.description, category: curr.category, aliases: curr.aliases }); return acc; });
         let stats = {
             start: global_context.data.uptime_start,
 			hosts: 1,

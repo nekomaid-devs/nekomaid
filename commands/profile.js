@@ -58,15 +58,6 @@ module.exports = {
         diff = Math.abs(Math.round(diff));
         let premium_text = diff < 1440 ? " (Premium ⭐)" : "";
 
-        let bank_upgrade = 0;
-        command_data.tagged_user_config.inventory.forEach(item => {
-            command_data.global_context.bot_config.items.forEach(item2 => {
-                if(item2.id === item && item2.type === "bankLimit") {
-                    bank_upgrade += item2.limit;
-                }
-            });
-        });
-
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedProfile = {
             color: 8388736,
@@ -82,7 +73,7 @@ module.exports = {
                     },
                     {
                         name: '🏦    Bank:',
-                        value: `$ ${command_data.tagged_user_config.bank}/${(command_data.global_context.bot_config.bankLimit + bank_upgrade)}`,
+                        value: `$ ${command_data.tagged_user_config.bank}/${command_data.tagged_user_config.bank_limit}`,
                         inline: true
                     },
                     {

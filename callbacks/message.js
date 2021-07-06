@@ -64,30 +64,23 @@ module.exports = {
             manages_guild = message.member.hasPermission("MANAGE_GUILD");
         }
 
-        let is_banned = false;
-        if(command_data.server_config.bannedWords.length > 0) {
-            command_data.server_config.bannedWords.forEach(banned_word => {
-                if(message.content.toLowerCase().includes(banned_word.toLowerCase()) === true && manages_guild === false) {
+        if(manages_guild === false) {
+            for(let i = 0; i < command_data.server_config.bannedWords.length; i++) {
+                let banned_word = command_data.server_config.bannedWords[i];
+                if(message.content.toLowerCase().includes(banned_word.toLowerCase()) === true) {
                     message.reply("That word isn't allowed on here-");
                     message.delete().catch(e => { global_context.logger.error(e); });
-                    is_banned = true;
+                    return;
                 }
-            });
-        }
-        if(is_banned === true) {
-            return;
-        }
-
-        let is_invite = false;
-        if(command_data.server_config.invites == false) {
-            if((message.content.toLowerCase().includes("discord.gg") === true || message.content.toLowerCase().includes("discordapp.com/invite") === true || message.content.toLowerCase().includes("discord.com/invite") === true) && manages_guild === false) {
-                message.reply("Sending invites isn't allowed on here-");
-                message.delete().catch(e => { global_context.logger.error(e); });
-                is_invite = true;
             }
-        }
-        if(is_invite === true) {
-            return;
+
+            if(command_data.server_config.invites == false) {
+                if(message.content.toLowerCase().includes("discord.gg") === true || message.content.toLowerCase().includes("discordapp.com/invite") === true || message.content.toLowerCase().includes("discord.com/invite") === true) {
+                    message.reply("Sending invites isn't allowed on here-");
+                    message.delete().catch(e => { global_context.logger.error(e); });
+                    return;
+                }
+            }
         }
 
         /*let log_messages = true;
@@ -139,7 +132,7 @@ module.exports = {
 
         command_data.args = message.content.slice(command_data.server_config.prefix.length).split(' ');
         command_data.server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: message.guild.id });
-        command_data.server_bans = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverBans", id: message.guild.id });
+        command_data.server_bans = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_bans", id: message.guild.id });
         command_data.server_mutes = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_mutes", id: message.guild.id });
         command_data.server_warns = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_warnings", id: message.guild.id });
         command_data.author_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: message.author.id });
@@ -165,39 +158,33 @@ module.exports = {
 
         global_context.logger.log(`[${message.guild.name}] Called command: ${command_name}`);
         let command = global_context.commands.get(command_name);
-        let passed = true;
         await global_context.utils.verify_guild_roles(message.guild);
         await global_context.utils.verify_guild_channels(message.guild);
-        command.permissionsNeeded.forEach(perm => {
-            if(passed === true && perm.passes(command_data, command) === false) {
-                passed = false;
+        for(let i = 0; i < command.permissionsNeeded.length; i++) {
+            let perm = command.permissionsNeeded[i];
+            if(perm.passes(command_data, command) === false) {
+                return;
             }
-        });
-        command.argumentsNeeded.forEach(arg => {
-            if(passed === true && arg.passes(command_data, command) === false) {
-                passed = false;
+        }
+        for(let i = 0; i < command.argumentsNeeded.length; i++) {
+            let arg = command.argumentsNeeded[i];
+            if(arg.passes(command_data, command) === false) {
+                return;
             }
-        });
-        command.argumentsRecommended.forEach(arg => {
-            if(passed === true && arg.passes(command_data, command) === false) {
-                passed = false;
+        }
+        for(let i = 0; i < command.argumentsRecommended.length; i++) {
+            let arg = command.argumentsRecommended[i];
+            if(arg.passes(command_data, command) === false) {
+                return;
             }
-        });
+        }
         if(command.nsfw === true && message.channel.nsfw === false) {
             message.reply("Cannot use this command in SFW channel-");
-            passed = false;
-        }
-        if(passed === false) {
             return;
         }
 
-        let tagged_user_tags = "";
-        message.mentions.users.array().forEach((user, index) => {
-            tagged_user_tags += user.tag;
-            if(message.mentions.users.array().length - 1 > index) {
-                tagged_user_tags += ", ";
-            }
-        });
+        let tagged_user_tags = message.mentions.users.array().reduce((acc, curr) => { acc += curr.tag + ", "; return acc; }, "");
+        tagged_user_tags = tagged_user_tags.slice(0, tagged_user_tags.length - 2);
         command_data.tagged_user_tags = tagged_user_tags;
 
         if(global_context.config.sentry_enabled === true) {

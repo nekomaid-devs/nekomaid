@@ -40,16 +40,7 @@ module.exports = {
             return;
         }
 
-        let bank_upgrade = 0;
-        command_data.author_config.inventory.forEach(item => {
-            command_data.global_context.bot_config.items.forEach(item_2 => {
-                if(item_2.id === item && item_2.type === "bankLimit") {
-                    bank_upgrade += item_2.limit;
-                }
-            });
-        });
-
-        if(command_data.author_config.bank + credits_ammount > command_data.global_context.bot_config.bankLimit + bank_upgrade) {
+        if(command_data.author_config.bank + credits_ammount > command_data.tagged_user_config.bank_limit) {
             command_data.msg.reply(`You can't transfer that much-`);
             return;
         }

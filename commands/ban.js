@@ -40,19 +40,14 @@ module.exports = {
         if(command_data.args.length > 2) {
             ban_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1)
         }
-        let previous_ban = -1;
-        command_data.server_bans.forEach((ban) => {
-            if(ban.userID === command_data.tagged_user.id) {
-                previous_ban = ban;
-            }
-        });
+        let previous_ban = command_data.server_bans.find(e => { return e.userID === command_data.tagged_user.id });
 
         let ban_start = Date.now();
         let ban_end = -1;
         let extended_time = (time.days * 86400000) + (time.hrs * 3600000) + (time.mins * 60000) + (time.secs * 1000);
         let extended_time_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(extended_time);
 
-        if(previous_ban === -1) {
+        if(previous_ban === undefined) {
             ban_end = ban_start + extended_time;
             let ban_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(ban_end - ban_start);
             command_data.msg.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${ban_reason}\`, Time: \`${ban_end_text}\`)-`).catch(e => { command_data.global_context.logger.api_error(e); });
@@ -70,7 +65,7 @@ module.exports = {
             end: time === -1 ? -1 : ban_end
         }
 
-        command_data.global_context.data.last_moderation_actions.set(command_data.guild.id, { moderator: command_data.msg.author.id, duration: extended_time_text });
+        command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id, duration: extended_time_text });
         command_data.global_context.neko_modules_clients.ssm.server_add.add_server_ban(command_data.global_context, server_ban);
         command_data.tagged_member.ban({ reason: ban_reason });
     }

@@ -22,14 +22,11 @@ module.exports = {
         let elapsedJoined = new Date() - new Date(command_data.tagged_member.joinedAt.toUTCString());
         let joinedAgo = command_data.global_context.neko_modules_clients.tc.convert_time(elapsedJoined);
 
-        let roles = "";
-        let rolesArray = Array.from(command_data.tagged_member.roles.cache.values());
-        rolesArray.forEach((role, index) => {
-            roles += role.toString();
-            if(rolesArray.length - 1 > index) {
-                roles += ", ";
-            }
-        });
+        let roles = Array.from(command_data.tagged_member.roles.cache.values()).reduce((acc, curr) => { acc += curr.toString() + ", "; return acc; }, "");
+        roles = roles.slice(0, roles.length - 2);
+        if(roles === "") {
+            roles = "`None`";
+        }
 
         let presence = "";
         // TODO: this will always show offline

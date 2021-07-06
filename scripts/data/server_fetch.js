@@ -55,10 +55,10 @@ module.exports = {
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM reactionroles WHERE serverID='" + data.id + "'", this.format_reaction_role);
 
             case "global_user":
-                return await this.fetch_data(global_context, "SELECT * FROM globalusers WHERE userID='" + data.id + "'", this.format_global_user, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_global_user(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT * FROM globalusers WHERE userID='" + data.id + "'", (e) => { return this.format_global_user(global_context, e); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_global_user(global_context, { id: data.id }); });
 
             case "global_users":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM globalusers", this.format_global_user);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM globalusers", (e) => { return this.format_global_user(global_context, e); });
 
             case "server_bans":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM serverbans WHERE serverID='" + data.id + "'", defaultFormat);
@@ -104,12 +104,8 @@ module.exports = {
             return [];
         }
 
-        var res = result[0]
-        res.forEach(_res => {
-            _res = formattingFunc(_res)
-        });
-
-        return res;
+        result = result[0].reduce((acc, curr) => { acc.push(formattingFunc(curr)); return acc; }, []);
+        return result;
     },
 
     format_config(config) {
@@ -203,7 +199,7 @@ module.exports = {
         return config;
     },
 
-    async format_server(global_context, server, containExtra=false, containRanks=false) {
+    async format_server(global_context, server, containExtra = false, containRanks = false) {
         server.bannedWords = server.bannedWords == null ? server.bannedWords : server.bannedWords.split(",").filter(a => a.length > 0);
         server.autoRoles = server.autoRoles == null ? server.autoRoles : server.autoRoles.split(",").filter(a => a.length > 0);
         server.module_level_ignoredChannels = server.module_level_ignoredChannels == null ? server.module_level_ignoredChannels : server.module_level_ignoredChannels.split(",").filter(a => a.length > 0);
@@ -218,15 +214,23 @@ module.exports = {
         return server;
     },
 
-    format_global_user(user) {
-        user.inventory = user.inventory.split(",").filter(a => a.length > 0)
+    format_global_user(global_context, user) {
+        user.inventory = user.inventory.split(",").filter(a => a.length > 0);
+        
+        user.bank_limit = global_context.bot_config.bankLimit;
+        user.bank_limit += user.inventory
+        .filter(e => { return global_context.bot_config.items.get(e).type === "bankLimit"; })
+        .reduce((acc, curr) => {
+            let curr_item = global_context.bot_config.items.get(curr);
+            acc += curr_item.limit; return acc;
+        }, 0);
 
         return user;
     },
 
     format_reaction_role(rr) {
-        rr.reactionRoles = rr.reactionRoles.split(",").filter(a => a.length > 0)
-        rr.reactionRoleEmojis = rr.reactionRoleEmojis.split(",").filter(a => a.length > 0)
+        rr.reactionRoles = rr.reactionRoles.split(",").filter(a => a.length > 0);
+        rr.reactionRoleEmojis = rr.reactionRoleEmojis.split(",").filter(a => a.length > 0);
 
         return rr;
     }
