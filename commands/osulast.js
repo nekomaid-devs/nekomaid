@@ -12,22 +12,20 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         if(command_data.global_context.config.osu_enabled === false) { command_data.msg.channel.send("The osu! module is disabled for this bot.").catch(e => { command_data.global_context.logger.api_error(e); }); return; }
-
-        // TODO: make tagged user instead of author
-        if(command_data.author_config.osuUsername === "-1") {
+        if(command_data.tagged_user_config.osuUsername === "-1") {
             command_data.msg.channel.send(`You haven't set an osu! profile yet~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)`)
             return;
         }
 
-        let user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.author_config.osuUsername }).catch(e => { command_data.global_context.logger.api_error(e); });
+        let user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.tagged_user_config.osuUsername }).catch(e => { command_data.global_context.logger.api_error(e); });
         if(user.id === undefined) {
             command_data.msg.channel.send(`No osu! profile found~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)-`);
             return;
         }
 
-        let last = await command_data.global_context.modules_clients.osu.getUserRecent({ u: command_data.author_config.osuUsername }).catch(e => { command_data.global_context.logger.api_error(e); });
+        let last = await command_data.global_context.modules_clients.osu.getUserRecent({ u: command_data.tagged_user_config.osuUsername }).catch(e => { command_data.global_context.logger.api_error(e); });
         if(last.length === undefined || last.length < 1) {
-            command_data.msg.reply("There was an error in processing this request-");
+            command_data.msg.reply("No play in the last 24 hours.");
             return;
         }
 
@@ -63,7 +61,7 @@ module.exports = {
             rank = play.rank === "F" ? "<:n_F:725012761465061531>" : rank;
 
             plays_description += `**[${play.beatmap.title}](https://osu.ppy.sh/beatmaps/${play.beatmap.id}) ${mods}** [${parseFloat(play.beatmap.difficulty.rating).toFixed(2)}★]\n`;
-            plays_description += `**▸ ${rank} ▸ ??pp ▸** ${parseFloat(play.accuracy * 100).toFixed(2)}%\n`;
+            plays_description += `**▸ ${rank} ▸ ${(play.pp == null ? "??": play.pp)}pp ▸** ${parseFloat(play.accuracy * 100).toFixed(2)}%\n`;
             plays_description += `▸ ${play.score} ▸ ${play.maxCombo}/${play.beatmap.maxCombo}x ▸ [${play.counts['300']}/${play.counts['100']}/${play.counts['50']}/${play.counts.miss}]\n`;
             plays_description += `▸ ${ago} ago\n`;
         } else {
@@ -74,7 +72,7 @@ module.exports = {
         let embedOsu = {
             color: 8388736,
             author: {
-                name: `osu! latest play for ${command_data.author_config.osuUsername}`,
+                name: `osu! latest play for ${command_data.tagged_user_config.osuUsername}`,
                 icon_url: `http://s.ppy.sh/a/${user.id}`,
                 url: `https://osu.ppy.sh/users/${user.id}`
             },
