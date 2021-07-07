@@ -31,7 +31,7 @@ module.exports = {
         let target_index = -1;
 
         command_data.global_context.bot_config.items.forEach(item => {
-            if(item.displayName.toLowerCase() === itemName.toLowerCase()) {
+            if(item.display_name.toLowerCase() === item_name.toLowerCase()) {
                 item_ID = item.id;
                 item_prefab = item;
             }
@@ -43,10 +43,10 @@ module.exports = {
             }
         });
         if(target_index === -1) {
-            command_data.msg.reply(`You don't have any item called \`${itemName}\`-`);
+            command_data.msg.reply(`You don't have any item called \`${item_name}\`-`);
             return;
         }
 
-        command_data.global_context.neko_modules_clients.im.useItem(command_data.global_context.neko_modules_clients.im, command_data, item_prefab, [ target_index ]);
+        command_data.global_context.neko_modules_clients.im.use_item(command_data, item_prefab, [ target_index ]);
     },
 };

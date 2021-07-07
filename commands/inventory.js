@@ -32,7 +32,7 @@ module.exports = {
                 if(inventory_text != "") { inventory_text += ", " }
                 if(command_data.global_context.bot_config.items.has(id) === true) {
                     let item = command_data.global_context.bot_config.items.get(id);
-                    inventory_text += "`" + count + "x " + item.displayName + "`";
+                    inventory_text += "`" + count + "x " + item.display_name + "`";
                 }
             });
         }
