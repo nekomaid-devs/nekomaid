@@ -34,7 +34,7 @@ module.exports = {
             return;
         }
 
-        command_data.author_config.last_steal_time = end.toUTCString();
+        command_data.author_config.last_steal_time = end.getTime();
 
         var min_credits = 0;
         var max_credits = Math.round((command_data.tagged_user_config.credits / 100) * command_data.global_context.bot_config.steal_percentage);

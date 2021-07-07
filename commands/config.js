@@ -184,7 +184,7 @@ module.exports = {
                         }
 
                         setTimeout(() => { command_data.global_context.neko_modules_clients.cm.update_counters(command_data.global_context, command_data.msg.guild, true); }, 5000);
-                        command_data.server_config.counters.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), type: counter_type, server_ID: command_data.msg.guild.id, channel_ID: channel.id, last_update: new Date().toUTCString() });
+                        command_data.server_config.counters.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), type: counter_type, server_ID: command_data.msg.guild.id, channel_ID: channel.id, last_update: new Date().getTime() });
                         command_data.msg.channel.send(`Added new counter for \`${counter_type}\`.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }

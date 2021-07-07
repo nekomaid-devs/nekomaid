@@ -24,7 +24,7 @@ module.exports = {
             return;
         }
 
-        command_data.author_config.last_crime_time = end.toUTCString();
+        command_data.author_config.last_crime_time = end.getTime();
 
         let min_credits = command_data.global_context.bot_config.min_crime_credits;
         let max_credits = command_data.global_context.bot_config.max_crime_credits;

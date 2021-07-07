@@ -24,7 +24,7 @@ module.exports = {
             return;
         }
 
-        command_data.author_config.last_work_time = end.toUTCString();
+        command_data.author_config.last_work_time = end.getTime();
 
         let min_credits = command_data.global_context.bot_config.min_work_credits;
         let max_credits = command_data.global_context.bot_config.max_work_credits;

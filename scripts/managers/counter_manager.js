@@ -23,7 +23,7 @@ class CounterManager {
             diff = Math.abs(Math.round(diff));
         
             if(diff >= 5 || force_update === true) {
-                counter.last_update = end.toUTCString();
+                counter.last_update = end.getTime();
 
                 let channel = await global_context.bot.channels.fetch(counter.channel_ID);
                 if(channel !== undefined) {

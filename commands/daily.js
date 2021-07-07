@@ -24,7 +24,7 @@ module.exports = {
             return;
         }
 
-        command_data.author_config.last_daily_time = end.toUTCString();
+        command_data.author_config.last_daily_time = end.getTime();
 
         command_data.author_config.credits += command_data.global_context.bot_config.daily_credits;
         command_data.author_config.net_worth += command_data.global_context.bot_config.daily_credits;
