@@ -11,6 +11,9 @@ module.exports = {
     guild_member_nickname_update: require('./guild_member_nickname_update'),
     guild_member_update: require('./guild_member_update'),
     guild_member_remove: require('./guild_member_remove'),
+    
+    guild_member_warn: require('./guild_member_warn'),
+    guild_member_clear_warns: require('./guild_member_clear_warns'),
 
     message_delete: require('./message_delete'),
     message_update: require('./message_update'),

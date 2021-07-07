@@ -1,6 +1,6 @@
 module.exports = {
     hook(global_context) {
-        global_context.bot.on("guildMemberWarn", async(event) => {
+        global_context.bot.on("guildMemberClearWarns", async(event) => {
             try {
                 await this.process(global_context, event);
             } catch(e) {
@@ -22,9 +22,9 @@ module.exports = {
             let channel = await event.member.guild.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let url = event.member.user.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-                let embedWarn = {
+                let embedClearWarns = {
                     author: {
-                        name: `Case ${server_config.caseID}# | Warn | ${event.member.user.tag}`,
+                        name: `Case ${server_config.caseID}# | Cleared warnings | ${event.member.user.tag}`,
                         icon_url: url,
                     },
                     fields: [
@@ -44,7 +44,7 @@ module.exports = {
                         },
                         {
                             name: "Strikes:",
-                            value: `${num_of_warnings} => ${(num_of_warnings + 1)}`
+                            value: `${warns.length} => 0`
                         }
                     ]
                 }
@@ -52,18 +52,10 @@ module.exports = {
                 server_config.caseID += 1;
                 global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", id: event.member.guild.id, server: server_config });
 
-                channel.send("", { embed: embedWarn }).catch(e => { global_context.logger.api_error(e); });
+                channel.send("", { embed: embedClearWarns }).catch(e => { global_context.logger.api_error(e); });
             }
         }
 
-        let server_warning = {
-            id: global_context.modules.crypto.randomBytes(16).toString("hex"),
-            serverID: event.member.guild.id,
-            userID: event.member.user.id,
-            start: Date.now(),
-            reason: event.reason
-        }
-
-        global_context.neko_modules_clients.ssm.server_add.add_server_warning(global_context, server_warning, event.member.guild);
+        global_context.neko_modules_clients.ssm.server_remove.remove_server_warnings_from_user(global_context, event.member.guild, event.member.user);
     }
 }
