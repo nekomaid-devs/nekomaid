@@ -81,6 +81,7 @@ module.exports = {
     steal: require('./steal'),
     item: require('./item'),
     buy: require('./buy'),
+    inventory: require('./inventory'),
     
     ass: require('./ass'),
     maid: require('./maid'),

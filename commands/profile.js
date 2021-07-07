@@ -16,7 +16,6 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        // TODO: add inventory command and remove inventory from here
         let married_text = command_data.tagged_user_config.married_ID;
         if(married_text === "-1") {
             married_text = "Nobody";
@@ -28,27 +27,6 @@ module.exports = {
                     married_text += " (🔒)";
                 }
             }
-        }
-
-        let inventory = command_data.tagged_user_config.inventory;
-        let inventory_text = "";
-        if(inventory.length < 1) {
-            inventory_text = "Empty";
-        } else {
-            let inventoryMap = new Map();
-            inventory.forEach(id => {
-                inventoryMap.set(id, inventoryMap.has(id) === true ? inventoryMap.get(id) + 1 : 1);
-            });
-
-            Array.from(inventoryMap.keys()).forEach(id => {
-                let count = inventoryMap.get(id);
-
-                if(inventory_text != "") { inventory_text += ", " }
-                if(command_data.global_context.bot_config.items.has(id) === true) {
-                    let item = command_data.global_context.bot_config.items.get(id);
-                    inventory_text += "`" + count + "x " + item.displayName + "`";
-                }
-            });
         }
 
         let end = new Date();
@@ -79,19 +57,17 @@ module.exports = {
                 },
                 {
                     name: '⚡    Level:',
-                    value: `${command_data.tagged_user_config.level} (XP: ${command_data.tagged_user_config.xp}/${command_data.global_context.bot_config.level_XP})`
+                    value: `${command_data.tagged_user_config.level} (XP: ${command_data.tagged_user_config.xp}/${command_data.global_context.bot_config.level_XP})`,
+                    inline: true
                 },
                 {
                     name: '🎖️    Reputation:',
-                    value: `${command_data.tagged_user_config.rep}`
+                    value: `${command_data.tagged_user_config.rep}`,
+                    inline: true
                 },
                 {
                     name: '❤️    Married with:',
                     value: `${married_text}`
-                },
-                {
-                    name: '📁    Inventory:',
-                    value: `${inventory_text.length < 1024 ? inventory_text : inventory_text.substring(0, 1021) + "..."}`
                 }
             ],
             thumbnail: {
