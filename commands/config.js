@@ -10,19 +10,19 @@ module.exports = {
     aliases: [],
     subcommandHelp: new Map()
     .set("add",
-    "`<subcommand_prefix> autoRole [roleName]` - Adds auto role\n" +
-    "`<subcommand_prefix> counter [allMembers/members/roles/channels/bots]` - Adds a counter")
+    "`<subcommand_prefix> auto_role [roleName]` - Adds auto role\n" +
+    "`<subcommand_prefix> counter [all_members/members/roles/channels/bots]` - Adds a counter")
     .set("remove",
-    "`<subcommand_prefix> autoRole [roleName]` - Removes auto role")
+    "`<subcommand_prefix> auto_role [roleName]` - Removes auto role")
     .set("set",
     "`<subcommand_prefix> say_command [true/false]` - Enables/Disables the say command\n\n" + 
     "`<subcommand_prefix> welcome_messages [true/false]` - Enables/Disables welcome messages\n" + 
     "`<subcommand_prefix> welcome_messages_format [text]` - Changes the welcome message (include <user> in your message to show username)\n" +
-    "`<subcommand_prefix> welcome_messages_channel [channelMention]` - Changes the channel for welcome messages\n" +
+    "`<subcommand_prefix> welcome_messages_channel [channel_mention]` - Changes the channel for welcome messages\n" +
     "`<subcommand_prefix> welcome_messages_ping [true/false]` - Enables/Disables mentions in welcome messages\n\n" +
     "`<subcommand_prefix> leave_messages [true/false]` - Enables/Disables leave messages\n" +
     "`<subcommand_prefix> leave_messages_format [text]` - Changes the leave message (include <user> in your message to show username)\n" +
-    "`<subcommand_prefix> leave_messages_channel [channelMention]` - Changes the channel for leave messages"),
+    "`<subcommand_prefix> leave_messages_channel [channel_mention]` - Changes the channel for leave messages"),
     argumentsNeeded: [],
     argumentsRecommended: [],
     permissionsNeeded: [
@@ -30,7 +30,6 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: normalize names of settings
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
         command_data.server_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
@@ -46,8 +45,8 @@ module.exports = {
             }
 
             let auto_roles_text = "";
-            for(let i = 0; i < command_data.server_config.autoRoles.length; i++) {
-                let role_ID = command_data.server_config.autoRoles[i];
+            for(let i = 0; i < command_data.server_config.auto_roles.length; i++) {
+                let role_ID = command_data.server_config.auto_roles[i];
                 let role = await command_data.msg.guild.roles.fetch(role_ID).catch(e => { command_data.global_context.logger.api_error(e); });
                 if(role === undefined) {
                     auto_roles_text += "`" + role_ID + "`";
@@ -55,11 +54,11 @@ module.exports = {
                     auto_roles_text += "`" + role.name + "`";
                 }
 
-                if(command_data.server_config.autoRoles.length - 1 > i) {
+                if(command_data.server_config.auto_roles.length - 1 > i) {
                     auto_roles_text += ", ";
                 }
             }
-            if(command_data.server_config.autoRoles.length === 0) {
+            if(command_data.server_config.auto_roles.length === 0) {
                 auto_roles_text = "`None`";
             }
 
@@ -109,14 +108,14 @@ module.exports = {
                 let property = command_data.args[1];
 
                 switch(property) {
-                    case "autoRole": {
+                    case "auto_role": {
                         if(command_data.msg.guild.me.hasPermission("MANAGE_ROLES") === false) {
                             command_data.msg.channel.send("The bot doesn't have required permissions to do this - `Manage Roles`\nPlease add required permissions and try again-").catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         if(command_data.args.length < 3) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`.", "add autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`.", "add auto_role Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
                         let role_name = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[2], command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length));
@@ -124,11 +123,11 @@ module.exports = {
                             role_temp.name === role_name
                         );
                         if(role === undefined) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name .\`${role_name}\` found-`, "add autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name .\`${role_name}\` found-`, "add auto_role Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
-                        command_data.server_config.autoRoles.push(role.id);
+                        command_data.server_config.auto_roles.push(role.id);
                         command_data.msg.channel.send(`Added auto role \`${role_name}\`-`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
@@ -147,13 +146,13 @@ module.exports = {
                         let channel = -1;
                         let counter_type = command_data.args[2];
                         switch(counter_type) {
-                            case "allMembers":
+                            case "all_members":
                             case "members":
                             case "roles":
                             case "channels":
                             case "bots":
-                            case "botServers":
-                            case "botUsers": {
+                            case "bot_servers":
+                            case "bot_users": {
                                 channel = await command_data.msg.guild.channels.create("Loading...", {
                                     type: "voice",
                                     position: 0,
@@ -179,7 +178,7 @@ module.exports = {
                             }
 
                             default: {
-                                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid counter `type`- (Types: `allMembers`,`members`,`roles`,`channels`,`bots`)", "add counter allMembers") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid counter `type`- (Types: `all_members`, `members`, `roles`, `channels`, `bots`)", "add counter all_members") }).catch(e => { command_data.global_context.logger.api_error(e); });
                                 return;
                             }
                         }
@@ -191,7 +190,7 @@ module.exports = {
                     }
 
                     default: {
-                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help config add\` for help)`, "add autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help config add\` for help)`, "add auto_role Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                         return;
                     }
                 }
@@ -208,7 +207,7 @@ module.exports = {
                 let property = command_data.args[1];
 
                 switch(property) {
-                    case "autoRole": {
+                    case "auto_role": {
                         if(command_data.msg.guild.me.hasPermission("MANAGE_ROLES") === false) {
                             command_data.msg.channel.send("The bot doesn't have required permissions to do this - `Manage Roles`\nPlease add required permissions and try again-").catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
@@ -223,30 +222,30 @@ module.exports = {
                             role_temp.name === role_name
                         );
                         if(role === undefined) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name \`${roleName}\` found-`, "remove autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name \`${roleName}\` found-`, "remove auto_role Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         let i = 0;
                         let role_index = -1;
-                        command_data.server_config.autoRoles.forEach((role_ID) => {
+                        command_data.server_config.auto_roles.forEach((role_ID) => {
                             if(role.id === role_ID) {
                                 role_index = i;
                             }
                             i += 1;
                         });
                         if(role_index < 0) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No \`autoRole\` with name \`${role_name}\` found-`, "remove autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No \`auto_role\` with name \`${role_name}\` found-`, "remove auto_role Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
-                        command_data.server_config.autoRoles.splice(role_index, 1);
+                        command_data.server_config.auto_roles.splice(role_index, 1);
                         command_data.msg.channel.send(`Removed auto role \`${role_name}\`-`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     default: {
-                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, "remove autoRole Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, "remove auto_role Newbie") }).catch(e => { command_data.global_context.logger.api_error(e); });
                         return;
                     }
                 }

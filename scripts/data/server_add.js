@@ -1,6 +1,6 @@
 module.exports = {
     async add_server(global_context, server) {
-        var query = "INSERT IGNORE INTO servers (server_ID, autoRoles, module_level_ignored_channels, banned_words) VALUES('" + server.id + "', '', '', '')";
+        var query = "INSERT IGNORE INTO servers (server_ID, auto_roles, module_level_ignored_channels, banned_words) VALUES('" + server.id + "', '', '', '')";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     },
 

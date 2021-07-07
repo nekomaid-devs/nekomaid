@@ -28,7 +28,7 @@ class CounterManager {
                 let channel = await global_context.bot.channels.fetch(counter.channel_ID);
                 if(channel !== undefined) {
                     switch(counter.type) {
-                        case "allMembers": {
+                        case "all_members": {
                             await global_context.utils.verify_guild_members(server);
                             let member_count = Array.from(server.members.cache.values()).length;
                             channel.setName(`All Members: ${member_count}`).catch(e => { global_context.logger.api_error(e) });
@@ -63,7 +63,7 @@ class CounterManager {
                             break;
                         }
                         
-                        case "botServers": {
+                        case "bot_servers": {
                             let guild_count = 0;
                             await cm.bot.shard.fetchClientValues("guilds.cache.size")
                             .then(results => {
@@ -76,7 +76,7 @@ class CounterManager {
                             break;
                         }
 
-                        case "botUsers": {
+                        case "bot_users": {
                             let member_count = 0;
                             await cm.bot.shard.broadcastEval("this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)")
                             .then(results => {

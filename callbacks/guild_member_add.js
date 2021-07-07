@@ -21,7 +21,7 @@ module.exports = {
 
         await global_context.utils.verify_guild_roles(member.guild);
         member.guild.roles.cache
-        .filter(e => { return server_config.autoRoles.includes(e.id); })
+        .filter(e => { return server_config.auto_roles.includes(e.id); })
         .forEach(role => {
             member.roles.add(role).catch(e => { global_context.logger.api_error(e) });
         });
@@ -42,15 +42,6 @@ module.exports = {
             if(channel !== undefined) {
                 channel.send(format).catch(e => { global_context.logger.api_error(e); });
             }
-        }
-
-        let log_members = true;
-        if(log_members) {
-            //var serverLogs = await bot.ssm.server_fetch.fetchServerLogs(bot, member.guild.id);
-            
-            //var log = { guildID: member.guild.id, type: "guildMemberAdd", user_ID: member.id, tag: member.user.tag, time: Date.now() }
-            //serverLogs.logs.push(log);
-            //bot.ssm.server_edit.edit_server_logs_in_structure(bot.ssm, member.guild, serverLogs);
         }
     }
 }

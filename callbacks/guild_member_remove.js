@@ -29,15 +29,6 @@ module.exports = {
                 channel.send(format).catch(e => { global_context.logger.api_error(e); });
             }
         }
-
-        let log_members = true;
-        if(log_members) {
-            //var serverLogs = await bot.ssm.server_fetch.fetchServerLogs(bot, member.guild.id);
-            
-            //var log = { guildID: member.guild.id, type: "guildMemberRemove", user_ID: member.id, tag: member.user.tag, time: Date.now() }
-            //serverLogs.logs.push(log);
-            //bot.ssm.server_edit.edit_server_logs_in_structure(bot.ssm, member.guild, serverLogs);
-        }
         
         if(server_config.audit_kicks == true && server_config.audit_channel != "-1") {
             let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });

@@ -14,8 +14,8 @@ module.exports = {
     "`<subcommand_prefix> kicks [true/false]` - Enables/Disables logging kicks\n" + 
     "`<subcommand_prefix> mutes [true/false]` - Enables/Disables logging mutes\n\n" +
     "`<subcommand_prefix> nicknames [true/false]` - Enables/Disables logging nickname changes\n\n" +
-    "`<subcommand_prefix> deletedMessages [true/false]` - Enables/Disables logging deleted messages\n\n" +
-    "`<subcommand_prefix> audit_channel [channelMention]` - Changes the channel for logging"),
+    "`<subcommand_prefix> deleted_messages [true/false]` - Enables/Disables logging deleted messages\n\n" +
+    "`<subcommand_prefix> audit_channel [channel_mention]` - Changes the channel for logging"),
     argumentsNeeded: [],
     argumentsRecommended: [],
     permissionsNeeded: [
@@ -24,7 +24,6 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        // TODO: normalize names of settings
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
         if(command_data.args.length < 1) {
@@ -140,7 +139,7 @@ module.exports = {
                         break;
                     }
 
-                    case "deletedMessages": {
+                    case "deleted_messages": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
                             command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
@@ -151,7 +150,7 @@ module.exports = {
                         break;
                     }
 
-                    case "editedMessages": {
+                    case "edited_messages": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
                             command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });

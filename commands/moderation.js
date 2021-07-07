@@ -10,9 +10,9 @@ module.exports = {
     aliases: [],
     subcommandHelp: new Map()
     .set("add",
-    "`<subcommand_prefix> bannedWord [word]` - Adds a banned word")
+    "`<subcommand_prefix> banned_word [word]` - Adds a banned word")
     .set("remove",
-    "`<subcommand_prefix> bannedWord [word]` - Removes a banned word")
+    "`<subcommand_prefix> banned_word [word]` - Removes a banned word")
     .set("set",
     "`<subcommand_prefix> invites [true/false]` - Enables/Disables posting Discord server invites"),
     argumentsNeeded: [],
@@ -22,7 +22,6 @@ module.exports = {
     ],
     nsfw: false,
     execute(command_data) {
-        // TODO: normalize names of settings
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
         if(command_data.args.length < 1) {
@@ -69,7 +68,7 @@ module.exports = {
                 let value = args_temp.join(" ");
     
                 switch(property) {
-                    case "bannedWord": {
+                    case "banned_word": {
                         command_data.server_config.banned_words.push(value);
                         command_data.msg.channel.send(`Added \`${value}\` to bot's property \`${property}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
@@ -100,7 +99,7 @@ module.exports = {
                 let value = args_temp.join(" ");
     
                 switch(property) {
-                    case "bannedWord": {
+                    case "banned_word": {
                         if(command_data.server_config.banned_words.includes(value) === false) {
                             command_data.msg.reply(`Word \`${value}\` isn't a banned-`);
                             return;

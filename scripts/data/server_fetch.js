@@ -15,7 +15,7 @@ module.exports = {
                 return await this.fetch_data(global_context, "SELECT server_ID, audit_channel, audit_bans, case_ID FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_guild_member_add":
-                return await this.fetch_data(global_context, "SELECT server_ID, autoRoles, mute_role_ID, welcome_messages, welcome_messages_format, welcome_messages_channel, welcome_messages_ping FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, auto_roles, mute_role_ID, welcome_messages, welcome_messages_format, welcome_messages_channel, welcome_messages_ping FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_guild_member_remove":
                 return await this.fetch_data(global_context, "SELECT server_ID, leave_messages, leave_messages_format, leave_messages_channel, audit_channel, audit_kicks FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
@@ -201,7 +201,7 @@ module.exports = {
 
     async format_server(global_context, server, containExtra = false, containRanks = false) {
         server.banned_words = server.banned_words == null ? server.banned_words : server.banned_words.split(",").filter(a => a.length > 0);
-        server.autoRoles = server.autoRoles == null ? server.autoRoles : server.autoRoles.split(",").filter(a => a.length > 0);
+        server.auto_roles = server.auto_roles == null ? server.auto_roles : server.auto_roles.split(",").filter(a => a.length > 0);
         server.module_level_ignored_channels = server.module_level_ignored_channels == null ? server.module_level_ignored_channels : server.module_level_ignored_channels.split(",").filter(a => a.length > 0);
         if(containExtra === true) {
             server.counters = await this.fetch(global_context, { type: "counters", id: server.server_ID });

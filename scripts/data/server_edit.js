@@ -15,11 +15,11 @@ module.exports = {
             case "server": {
                 let server = data.server;
 
-                let query_0 = "prefix=?, say_command=?, welcome_messages=?, welcome_messages_format=?, welcome_messages_channel=?, welcome_messages_ping=?, leave_messages=?, leave_messages_format=?, leave_messages_channel=?, autoRoles=?, " +
+                let query_0 = "prefix=?, say_command=?, welcome_messages=?, welcome_messages_format=?, welcome_messages_channel=?, welcome_messages_ping=?, leave_messages=?, leave_messages_format=?, leave_messages_channel=?, auto_roles=?, " +
                 "module_level_enabled=?, module_level_message_exp=?, module_level_level_exp=?, module_level_levelup_messages=?, module_level_levelup_messages_format=?, module_level_levelup_messages_channel=?, module_level_levelup_messages_ping=?, module_level_ignored_channels=?, " + 
                 "module_level_level_multiplier=?, audit_channel=?, audit_bans=?, audit_kicks=?, audit_mutes=?, audit_warns=?, audit_nicknames=?, audit_deleted_messages=?, banned_words=?, case_ID=?, invites=?, mute_role_ID=?"
                 
-                let query_data = [ server.prefix, server.say_command, server.welcome_messages, server.welcome_messages_format, server.welcome_messages_channel, server.welcome_messages_ping, server.leave_messages, server.leave_messages_format, server.leave_messages_channel, server.autoRoles.join(","),
+                let query_data = [ server.prefix, server.say_command, server.welcome_messages, server.welcome_messages_format, server.welcome_messages_channel, server.welcome_messages_ping, server.leave_messages, server.leave_messages_format, server.leave_messages_channel, server.auto_roles.join(","),
                 server.module_level_enabled, server.module_level_message_exp, server.module_level_level_exp, server.module_level_levelup_messages, server.module_level_levelup_messages_format, server.module_level_levelup_messages_channel, server.module_level_levelup_messages_ping, server.module_level_ignored_channels.join(","),
                 server.module_level_level_multiplier, server.audit_channel, server.audit_bans, server.audit_kicks, server.audit_mutes, server.audit_warns, server.audit_nicknames, server.audit_deleted_messages, server.banned_words.join(","), server.case_ID, server.invites, server.mute_role_ID ]
 
