@@ -17,15 +17,15 @@ class CounterManager {
             let counter = server_config.counters[i];
 
             let end = new Date();
-            let start = new Date(counter.lastUpdate);
+            let start = new Date(counter.last_update);
             let diff = (end.getTime() - start.getTime()) / 1000;
             diff /= 60;
             diff = Math.abs(Math.round(diff));
         
             if(diff >= 5 || force_update === true) {
-                counter.lastUpdate = end.toUTCString();
+                counter.last_update = end.toUTCString();
 
-                let channel = await global_context.bot.channels.fetch(counter.channelID);
+                let channel = await global_context.bot.channels.fetch(counter.channel_ID);
                 if(channel !== undefined) {
                     switch(counter.type) {
                         case "allMembers": {

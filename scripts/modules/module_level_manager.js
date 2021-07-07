@@ -25,7 +25,7 @@ class LevelingManager {
         var processingRoles = [];
         var processRanks = async() => {
             if(command_data.server_config.module_level_ranks.length > 0 && command_data.msg.guild.me.hasPermission("MANAGE_ROLES") === false) {
-                var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.module_level_levelupMessages_channel).catch(e => { console.log(e); });
+                var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.module_level_levelup_messages_channel).catch(e => { console.log(e); });
                 channel.send("Ranks are setup, but the bot doesn't have required permissions - `Manage Roles`\nPlease add required permissions and try again-").catch(e => { console.log(e); });
                 return;
             }
@@ -114,7 +114,7 @@ class LevelingManager {
 
             //Send levelup message
             if(command_data.server_config.module_level_levelupMessages == true && sendLevelupMessage == true) {
-                var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.module_level_levelupMessages_channel).catch(e => { console.log(e); });
+                var channel = await command_data.msg.guild.channels.fetch(command_data.server_config.module_level_levelup_messages_channel).catch(e => { console.log(e); });
                 if(channel !== undefined) {
                     channel.send(levelupMessage + rankMessage).catch(e => { console.log(e); });
                 }

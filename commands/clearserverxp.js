@@ -26,9 +26,9 @@ module.exports = {
             server_user_config.xp = 0;
 
             //TODO: this won't work
-            if(command_data.msg.guild.members.cache.has(server_user_config.userID) === true) {
+            if(command_data.msg.guild.members.cache.has(server_user_config.user_ID) === true) {
                 command_data.taggedServerUserConfig = server_user_config;
-                command_data.tagged_member = await command_data.msg.guild.members.fetch(server_user_config.userID).catch(e => { command_data.global_context.logger.api_error(e); });
+                command_data.tagged_member = await command_data.msg.guild.members.fetch(server_user_config.user_ID).catch(e => { command_data.global_context.logger.api_error(e); });
                 command_data.bot.lvl.updateServerLevel(command_data, 0);
             }
         });

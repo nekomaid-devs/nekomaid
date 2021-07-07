@@ -20,7 +20,7 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         // TODO: disable this shit by default lmao
-        if(command_data.server_config.sayCommand == false) {
+        if(command_data.server_config.say_command == false) {
             return;
         }
         if(command_data.msg.mentions.members.size > 0 || command_data.msg.mentions.roles.size > 0 || command_data.msg.mentions.everyone === true) {

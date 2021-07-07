@@ -19,7 +19,7 @@ module.exports = {
     execute(command_data) {
         let show_hidden = false;
         if(command_data.args.includes("-h")) {
-            if(command_data.global_context.bot_config.botOwners.includes(command_data.msg.author.id) === false) {
+            if(command_data.global_context.bot_config.bot_owners.includes(command_data.msg.author.id) === false) {
                 command_data.msg.reply("You aren't the bot owner-");
                 return;
             }

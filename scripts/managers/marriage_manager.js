@@ -8,7 +8,7 @@ class MarriageManager {
         if(global_context.neko_modules_clients.mm.marriage_proposals.has(message.member.user.id)) {
             if(message.content.toLowerCase() === "yes" || message.content.toLowerCase() === "no") {
                 let marriage_proposal = global_context.neko_modules_clients.mm.marriage_proposals.get(message.member.id);
-                if(message.channel.id !== marriage_proposal.channelID) {
+                if(message.channel.id !== marriage_proposal.channel_ID) {
                     return;
                 }
 
@@ -23,14 +23,14 @@ class MarriageManager {
 
     async accept_marriage_proposal(global_context, channel, marriage_proposal, log = 1) {
         let source_user_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: marriage_proposal.source_ID });  
-        source_user_config.marriedID = marriage_proposal.target_ID;
+        source_user_config.married_ID = marriage_proposal.target_ID;
         global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: marriage_proposal.source_ID, user: source_user_config });
       
         let target_user_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: marriage_proposal.target_ID });  
         if(log === 2) {
-            target_user_config.canDivorce = false;
+            target_user_config.can_divorce = false;
         }
-        target_user_config.marriedID = marriage_proposal.source_ID;
+        target_user_config.married_ID = marriage_proposal.source_ID;
         global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: marriage_proposal.target_ID, user: target_user_config });
 
         switch(log) {
@@ -68,7 +68,7 @@ class MarriageManager {
         marriage_proposal.source_tag = source_user.tag;
         marriage_proposal.target_ID = target_user.id;
         marriage_proposal.target_tag = target_user.tag;
-        marriage_proposal.channelID = channel.id;
+        marriage_proposal.channel_ID = channel.id;
 
         global_context.neko_modules_clients.mm.marriage_proposals.set(target_user.id, marriage_proposal);
         global_context.neko_modules_clients.mm.timeout_marriage_proposal(global_context, channel, target_user);

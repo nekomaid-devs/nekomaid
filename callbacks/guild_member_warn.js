@@ -24,7 +24,7 @@ module.exports = {
                 let url = event.member.user.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 let embedWarn = {
                     author: {
-                        name: `Case ${server_config.caseID}# | Warn | ${event.member.user.tag}`,
+                        name: `Case ${server_config.case_ID}# | Warn | ${event.member.user.tag}`,
                         icon_url: url,
                     },
                     fields: [
@@ -49,7 +49,7 @@ module.exports = {
                     ]
                 }
 
-                server_config.caseID += 1;
+                server_config.case_ID += 1;
                 global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", id: event.member.guild.id, server: server_config });
 
                 channel.send("", { embed: embedWarn }).catch(e => { global_context.logger.api_error(e); });
@@ -58,8 +58,8 @@ module.exports = {
 
         let server_warning = {
             id: global_context.modules.crypto.randomBytes(16).toString("hex"),
-            serverID: event.member.guild.id,
-            userID: event.member.user.id,
+            server_ID: event.member.guild.id,
+            user_ID: event.member.user.id,
             start: Date.now(),
             reason: event.reason
         }

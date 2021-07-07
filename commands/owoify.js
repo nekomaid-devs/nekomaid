@@ -19,7 +19,7 @@ module.exports = {
     ],
     nsfw: false,
     async execute(command_data) {
-        if(command_data.server_config.sayCommand == false) {
+        if(command_data.server_config.say_command == false) {
             return;
         }
         if(command_data.args.length < 1) {

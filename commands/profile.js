@@ -17,14 +17,14 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         // TODO: add inventory command and remove inventory from here
-        let married_text = command_data.tagged_user_config.marriedID;
+        let married_text = command_data.tagged_user_config.married_ID;
         if(married_text === "-1") {
             married_text = "Nobody";
         } else {
             let married_user = await command_data.global_context.bot.users.fetch(married_text).catch(e => { command_data.global_context.logger.api_error(e); });
             if(married_user !== undefined && married_user !== null) {
                 married_text = married_user.username + "#" + married_user.discriminator;
-                if(command_data.tagged_user_config.canDivorce == false) {
+                if(command_data.tagged_user_config.can_divorce == false) {
                     married_text += " (🔒)";
                 }
             }
@@ -52,12 +52,13 @@ module.exports = {
         }
 
         let end = new Date();
-        let start = new Date(command_data.author_config.lastUpvotedTime);
+        let start = new Date(command_data.author_config.last_upvoted_time);
         let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
         diff = Math.abs(Math.round(diff));
         let premium_text = diff < 1440 ? " (Premium ⭐)" : "";
 
+        // TODO: update level_XP to the actual ammount needed for next level
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedProfile = {
             color: 8388736,
@@ -66,32 +67,32 @@ module.exports = {
                 icon_url: url
             },
             fields: [ 
-                    {
-                        name: '💵    Credits:',
-                        value: `$ ${command_data.tagged_user_config.credits}`,
-                        inline: true
-                    },
-                    {
-                        name: '🏦    Bank:',
-                        value: `$ ${command_data.tagged_user_config.bank}/${command_data.tagged_user_config.bank_limit}`,
-                        inline: true
-                    },
-                    {
-                        name: '⚡    Level:',
-                        value: `${command_data.tagged_user_config.level} (XP: ${command_data.tagged_user_config.xp}/${command_data.global_context.bot_config.levelXP})`
-                    },
-                    {
-                        name: '🎖️    Reputation:',
-                        value: `${command_data.tagged_user_config.rep}`
-                    },
-                    {
-                        name: '❤️    Married with:',
-                        value: `${married_text}`
-                    },
-                    {
-                        name: '📁    Inventory:',
-                        value: `${inventory_text.length < 1024 ? inventory_text : inventory_text.substring(0, 1021) + "..."}`
-                    }
+                {
+                    name: '💵    Credits:',
+                    value: `$ ${command_data.tagged_user_config.credits}`,
+                    inline: true
+                },
+                {
+                    name: '🏦    Bank:',
+                    value: `$ ${command_data.tagged_user_config.bank}/${command_data.tagged_user_config.bank_limit}`,
+                    inline: true
+                },
+                {
+                    name: '⚡    Level:',
+                    value: `${command_data.tagged_user_config.level} (XP: ${command_data.tagged_user_config.xp}/${command_data.global_context.bot_config.level_XP})`
+                },
+                {
+                    name: '🎖️    Reputation:',
+                    value: `${command_data.tagged_user_config.rep}`
+                },
+                {
+                    name: '❤️    Married with:',
+                    value: `${married_text}`
+                },
+                {
+                    name: '📁    Inventory:',
+                    value: `${inventory_text.length < 1024 ? inventory_text : inventory_text.substring(0, 1021) + "..."}`
+                }
             ],
             thumbnail: {
                 url: url

@@ -48,7 +48,7 @@ module.exports = {
             server_warns: [],
 
             author_user_config: {},
-            author_server_user_config: await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", serverID: message.guild.id, userID: message.member.user.id }),
+            author_server_user_config: await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", server_ID: message.guild.id, user_ID: message.member.user.id }),
         
             tagged_user_config: {},
             tagged_server_user_config: {}
@@ -59,14 +59,14 @@ module.exports = {
         global_context.data.processed_events += 1;
 
         let manages_guild = false;
-        if(command_data.server_config.bannedWords.length > 0 || command_data.server_config.invites == false) {
+        if(command_data.server_config.banned_words.length > 0 || command_data.server_config.invites == false) {
             await global_context.utils.verify_guild_roles(message.guild);
             manages_guild = message.member.hasPermission("MANAGE_GUILD");
         }
 
         if(manages_guild === false) {
-            for(let i = 0; i < command_data.server_config.bannedWords.length; i++) {
-                let banned_word = command_data.server_config.bannedWords[i];
+            for(let i = 0; i < command_data.server_config.banned_words.length; i++) {
+                let banned_word = command_data.server_config.banned_words[i];
                 if(message.content.toLowerCase().includes(banned_word.toLowerCase()) === true) {
                     message.reply("That word isn't allowed on here-");
                     message.delete().catch(e => { global_context.logger.error(e); });
@@ -87,7 +87,7 @@ module.exports = {
         if(log_messages === true) {
             var serverLogs = await bot.ssm.server_fetch.fetchServerLogs(bot, message.guild.id);
 
-            var log = { guildID: message.guild.id, type: "message", messageID: message.id, userID: message.author.id, tag: message.author.tag, content: message.content.split("\n").join("<br>"), time: Date.now() }
+            var log = { guildID: message.guild.id, type: "message", messageID: message.id, user_ID: message.author.id, tag: message.author.tag, content: message.content.split("\n").join("<br>"), time: Date.now() }
             serverLogs.logs.push(log);
             bot.ssm.server_edit.edit_server_logs_in_structure(bot.ssm, message.guild, serverLogs);
         }*/
@@ -136,7 +136,7 @@ module.exports = {
         command_data.server_mutes = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_mutes", id: message.guild.id });
         command_data.server_warns = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_warnings", id: message.guild.id });
         command_data.author_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: message.author.id });
-        command_data.tagged_server_user_config = message.mentions.users.array().length < 1 ? command_data.author_server_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", serverID: message.guild.id, userID: message.mentions.users.array()[0].id });
+        command_data.tagged_server_user_config = message.mentions.users.array().length < 1 ? command_data.author_server_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", server_ID: message.guild.id, user_ID: message.mentions.users.array()[0].id });
         command_data.tagged_user_config = message.mentions.users.array().length < 1 ? command_data.author_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: message.mentions.users.array()[0].id });    
         
         let command_name = command_data.args.shift().toLowerCase();

@@ -21,7 +21,7 @@ module.exports = {
         }
         
         let serverConfig = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_message_update", id: newMessage.guild.id });
-        if(serverConfig.audit_editedMessages == true && serverConfig.audit_channel != "-1") {
+        if(serverConfig.audit_edited_messages == true && serverConfig.audit_channel != "-1") {
             let channel = await global_context.bot.channels.fetch(serverConfig.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let embedMessageEdit = {

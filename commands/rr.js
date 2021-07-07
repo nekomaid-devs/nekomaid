@@ -50,13 +50,13 @@ module.exports = {
 
                     let reactionRoleMenuInfo = {
                         id: global_context.modules.crypto.randomBytes(16).toString("hex"),
-                        serverID: msg.guild.id,
-                        channelID: msg.channel.id,
-                        messageID: msg.id,
-                        reactionRoles: roles_array,
-                        reactionRoleEmojis: roles_emojis_array
+                        server_ID: msg.guild.id,
+                        channel_ID: msg.channel.id,
+                        message_ID: msg.id,
+                        reaction_roles: roles_array,
+                        reaction_role_emojis: roles_emojis_array
                     }
-                    server_config.reactionRoles.push(reactionRoleMenuInfo);
+                    server_config.reaction_roles.push(reactionRoleMenuInfo);
 
                     role_messages.forEach(rmsg => {
                         rmsg.delete().catch(e => { command_data.global_context.logger.api_error(e); });

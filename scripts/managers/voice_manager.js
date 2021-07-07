@@ -84,7 +84,7 @@ class VoiceManager {
 
         let user_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: msg.member.id });  
         let end = new Date();
-        let start = new Date(user_config.lastUpvotedTime);
+        let start = new Date(user_config.last_upvoted_time);
         let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
         diff = Math.abs(Math.round(diff));

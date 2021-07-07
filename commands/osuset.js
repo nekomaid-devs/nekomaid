@@ -24,7 +24,7 @@ module.exports = {
             return;
         }
 
-        command_data.author_config.osuUsername = command_data.total_argument;
+        command_data.author_config.osu_username = command_data.total_argument;
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
         command_data.msg.channel.send(`Set username as \`${command_data.total_argument}\`-`).catch(e => { command_data.global_context.logger.api_error(e); });

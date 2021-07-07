@@ -21,8 +21,8 @@ module.exports = {
         }
 
         let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_channel_create", id: channel.guild.id });
-        if(server_config.muteRoleID !== "-1") {
-            let mute_role = await channel.guild.roles.fetch(server_config.muteRoleID).catch(e => { global_context.logger.api_error(e); });
+        if(server_config.mute_role_ID !== "-1") {
+            let mute_role = await channel.guild.roles.fetch(server_config.mute_role_ID).catch(e => { global_context.logger.api_error(e); });
             if(mute_role !== undefined) {
                 if(channel.type === "text") {
                     channel.createOverwrite(mute_role, {

@@ -30,7 +30,7 @@ module.exports = {
         let loadedMutes = 0;
         let expectedMutes = command_data.server_mutes.length < 25 ? command_data.server_mutes.length : 25;
         command_data.server_mutes.slice(command_data.server_mutes.length - 25).forEach(async(mute) => {
-            let mutedUser = await command_data.global_context.bot.users.fetch(mute.userID).catch(e => { command_data.global_context.logger.api_error(e); });
+            let mutedUser = await command_data.global_context.bot.users.fetch(mute.user_ID).catch(e => { command_data.global_context.logger.api_error(e); });
             if(mutedUser !== undefined) {
                 let remainingText = mute.end === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(mute.end - now);
                 embedMutes.addField(`Mute - ${mutedUser.tag}`, `Remaining: \`${remainingText}\``);

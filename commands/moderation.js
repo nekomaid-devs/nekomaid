@@ -26,7 +26,7 @@ module.exports = {
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
         if(command_data.args.length < 1) {
-            let banned_words = command_data.server_config.bannedWords.reduce((acc, curr) => { acc += "`" + curr + "`, "; return acc; }, "");
+            let banned_words = command_data.server_config.banned_words.reduce((acc, curr) => { acc += "`" + curr + "`, "; return acc; }, "");
             banned_words = banned_words.slice(0, banned_words.length - 2);
             if(banned_words === "") {
                 banned_words = "`None`";
@@ -70,7 +70,7 @@ module.exports = {
     
                 switch(property) {
                     case "bannedWord": {
-                        command_data.server_config.bannedWords.push(value);
+                        command_data.server_config.banned_words.push(value);
                         command_data.msg.channel.send(`Added \`${value}\` to bot's property \`${property}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
@@ -101,12 +101,12 @@ module.exports = {
     
                 switch(property) {
                     case "bannedWord": {
-                        if(command_data.server_config.bannedWords.includes(value) === false) {
+                        if(command_data.server_config.banned_words.includes(value) === false) {
                             command_data.msg.reply(`Word \`${value}\` isn't a banned-`);
                             return;
                         }
 
-                        command_data.server_config.bannedWords.splice(command_data.server_config.bannedWords.indexOf(command_data.args[2]), 1);
+                        command_data.server_config.banned_words.splice(command_data.server_config.banned_words.indexOf(command_data.args[2]), 1);
                         command_data.msg.channel.send(`Removed \`${value}\` from bot's property \`${property}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }

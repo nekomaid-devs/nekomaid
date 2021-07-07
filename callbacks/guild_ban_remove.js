@@ -39,7 +39,7 @@ module.exports = {
                     let url = user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                     let embedBan = {
                         author: {
-                            name: `Case ${server_config.caseID}# | Unban | ${user.tag}`,
+                            name: `Case ${server_config.case_ID}# | Unban | ${user.tag}`,
                             icon_url: url,
                         },
                         fields: [
@@ -60,7 +60,7 @@ module.exports = {
                         ]
                     }
 
-                    server_config.caseID += 1;
+                    server_config.case_ID += 1;
                     global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server_cb", id: guild.id, server: server_config });
             
                     channel.send("", { embed: embedBan }).catch(e => { global_context.logger.api_error(e); });

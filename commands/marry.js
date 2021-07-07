@@ -23,7 +23,7 @@ module.exports = {
 
         let force_marry = false;
         if(command_data.args.length > 1 && command_data.args[1] === "-fm") {
-            if(command_data.global_context.bot_config.botOwners.includes(command_data.msg.author.id) === false) {
+            if(command_data.global_context.bot_config.bot_owners.includes(command_data.msg.author.id) === false) {
                 command_data.msg.reply("You aren't the bot owner-");
                 return;
             }
@@ -31,11 +31,11 @@ module.exports = {
             force_marry = true;
         }
 
-        if(command_data.author_config.marriedID != "-1") {
+        if(command_data.author_config.married_ID != "-1") {
             command_data.msg.reply("You need to divorce first-");
             return;
         }
-        if(command_data.tagged_user_config.marriedID != "-1") {
+        if(command_data.tagged_user_config.married_ID != "-1") {
             command_data.msg.reply("This user is already married-");
             return;
         }

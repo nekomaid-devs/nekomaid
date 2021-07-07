@@ -28,7 +28,7 @@ module.exports = {
         }
 
         let warns = command_data.server_warns.filter(warn =>
-            warn.userID === command_data.tagged_user.id
+            warn.user_ID === command_data.tagged_user.id
         )
         command_data.msg.channel.send(`Cleared warnings of \`${command_data.tagged_user.tag}\` (Reason: \`${warn_reason}\`, Strikes: \`${warns.length}\` => \`0\`)-`).catch(e => { command_data.global_context.logger.api_error(e); });
         command_data.global_context.bot.emit("guildMemberClearWarns", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: warn_reason });

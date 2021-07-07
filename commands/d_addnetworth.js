@@ -21,9 +21,9 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         let credits_ammount = parseInt(command_data.args[1]);
-        command_data.tagged_user_config.netWorth += credits_ammount;
+        command_data.tagged_user_config.net_worth += credits_ammount;
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
-        command_data.msg.channel.send(`Added \`${credits_ammount}\` net worth to \`${command_data.tagged_user.tag}\`! (Current net worth: \`${command_data.tagged_user_config.netWorth}$\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
+        command_data.msg.channel.send(`Added \`${credits_ammount}\` net worth to \`${command_data.tagged_user.tag}\`! (Current net worth: \`${command_data.tagged_user_config.net_worth}$\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

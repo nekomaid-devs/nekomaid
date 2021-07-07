@@ -12,7 +12,7 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         let end = new Date();
-        let start = new Date(command_data.author_config.lastDailyTime);
+        let start = new Date(command_data.author_config.last_daily_time);
         let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= (60 * 60);
         diff = Math.abs(Math.round(diff));
@@ -24,15 +24,15 @@ module.exports = {
             return;
         }
 
-        command_data.author_config.lastDailyTime = end.toUTCString();
+        command_data.author_config.last_daily_time = end.toUTCString();
 
-        command_data.author_config.credits += command_data.global_context.bot_config.dailyCredits;
-        command_data.author_config.netWorth += command_data.global_context.bot_config.dailyCredits;
+        command_data.author_config.credits += command_data.global_context.bot_config.daily_credits;
+        command_data.author_config.net_worth += command_data.global_context.bot_config.daily_credits;
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedDaily = {
             color: 6732650,
-            description: `Picked up daily reward of \`${command_data.global_context.bot_config.dailyCredits} 💵\`! (Current Credits: \`${command_data.author_config.credits}$\`)`,
+            description: `Picked up daily reward of \`${command_data.global_context.bot_config.daily_credits} 💵\`! (Current Credits: \`${command_data.author_config.credits}$\`)`,
             footer: {
                 text: "Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
             }

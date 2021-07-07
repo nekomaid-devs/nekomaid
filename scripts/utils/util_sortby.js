@@ -14,13 +14,13 @@ class SortBy {
 
     create_comparator_server_level(server_config) {
         return (a, b) => {
-            let levelXP = server_config.module_level_level_exp;
+            let level_XP = server_config.module_level_level_exp;
             for(let i = 1; i < a.level; i++) {
-                levelXP *= server_config.module_level_level_multiplier;
+                level_XP *= server_config.module_level_level_multiplier;
             }
 
-            let a_net = a.level + (a.xp / levelXP);
-            let b_net = b.level + (b.xp / levelXP);
+            let a_net = a.level + (a.xp / level_XP);
+            let b_net = b.level + (b.xp / level_XP);
             
             return b_net - a_net;
         }
@@ -36,7 +36,7 @@ class SortBy {
     async get_top_server(global_context, server, props) {
         await global_context.utils.verify_guild_members(server);
         let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
-        items = items.filter(val => { return server.members.cache.has(val.userID); });
+        items = items.filter(val => { return server.members.cache.has(val.user_ID); });
         items.sort(this.create_comparator(props));
 
         return items;

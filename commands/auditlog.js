@@ -69,7 +69,7 @@ module.exports = {
                     },
                     {
                         name: "Deleted Messages:",
-                        value:  `${command_data.server_config.audit_deletedMessages}`,
+                        value:  `${command_data.server_config.audit_deleted_messages}`,
                         inline: true
                     }
                 ]
@@ -147,7 +147,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.server_config.audit_deletedMessages = bool;
+                        command_data.server_config.audit_deleted_messages = bool;
                         break;
                     }
 
@@ -158,7 +158,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.server_config.audit_editedMessages = bool;
+                        command_data.server_config.audit_edited_messages = bool;
                         break;
                     }
 

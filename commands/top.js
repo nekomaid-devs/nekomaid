@@ -80,7 +80,7 @@ module.exports = {
         let author_config = -1;
         for(let i = 0; i < items.length; i += 1) {
             let user = items[i];
-            if(user.userID === command_data.msg.author.id) {
+            if(user.user_ID === command_data.msg.author.id) {
                 author_pos = i;
                 author_config = user;
                 break;
@@ -99,7 +99,7 @@ module.exports = {
             }
 
             let net = props.reduce((acc, curr) => { acc += user_config[curr]; return acc; }, 0);
-            let target_user = await command_data.global_context.bot.users.fetch(user_config.userID).catch(e => { command_data.global_context.logger.api_error(e); });
+            let target_user = await command_data.global_context.bot.users.fetch(user_config.user_ID).catch(e => { command_data.global_context.logger.api_error(e); });
             embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `${net} ${top_user_text}`);
         }
         

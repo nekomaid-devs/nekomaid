@@ -42,7 +42,7 @@ module.exports = {
         }
         let previous_mute = -1;
         command_data.server_mutes.forEach((mute) => {
-            if(mute.userID === command_data.tagged_user.id) {
+            if(mute.user_ID === command_data.tagged_user.id) {
                 previous_mute = mute;
             }
         });
@@ -63,7 +63,7 @@ module.exports = {
                 if(channel !== undefined) {
                     let embedMute = {
                         author: {
-                            name: `Case ${command_data.server_config.caseID}# | Mute | ${command_data.tagged_user.tag}`,
+                            name: `Case ${command_data.server_config.case_ID}# | Mute | ${command_data.tagged_user.tag}`,
                             icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                         },
                         fields: [
@@ -88,7 +88,7 @@ module.exports = {
                         ]
                     }
 
-                    command_data.server_config.caseID += 1;
+                    command_data.server_config.case_ID += 1;
                     command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { command_data.global_context.logger.api_error(e); });
@@ -106,7 +106,7 @@ module.exports = {
                 if(channel !== undefined) {
                     let embedMute = {
                         author: {
-                            name: `Case ${command_data.server_config.caseID}# | Mute Extension | ${command_data.tagged_user.tag}`,
+                            name: `Case ${command_data.server_config.case_ID}# | Mute Extension | ${command_data.tagged_user.tag}`,
                             icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                         },
                         fields: [
@@ -131,7 +131,7 @@ module.exports = {
                         ]
                     }
 
-                    command_data.server_config.caseID += 1;
+                    command_data.server_config.case_ID += 1;
                     command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { command_data.global_context.logger.api_error(e); });
@@ -141,17 +141,17 @@ module.exports = {
 
         let server_mute = {
             id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
-            serverID: command_data.msg.guild.id,
-            userID: command_data.tagged_user.id,
+            server_ID: command_data.msg.guild.id,
+            user_ID: command_data.tagged_user.id,
             start: mute_start,
             reason: mute_reason,
             end: time === -1 ? -1 : mute_end
         }
 
-        if(command_data.server_config.muteRoleID === "-1") {
+        if(command_data.server_config.mute_role_ID === "-1") {
             this.create_mute_role_and_mute(command_data);
         } else {
-            let mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { command_data.global_context.logger.api_error(e); });
+            let mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.mute_role_ID).catch(e => { command_data.global_context.logger.api_error(e); });
             if(mute_role === undefined) {
                 this.create_mute_role_and_mute(command_data);
             } else {
@@ -190,7 +190,7 @@ module.exports = {
             // TODO: please just await
             command_data.tagged_member.roles.add(mute_role)
             .then(() => {
-                command_data.server_config.muteRoleID = mute_role.id;
+                command_data.server_config.mute_role_ID = mute_role.id;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
             })
             .catch(err => {

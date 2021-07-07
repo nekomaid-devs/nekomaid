@@ -40,7 +40,7 @@ module.exports = {
         if(command_data.args.length > 2) {
             ban_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1)
         }
-        let previous_ban = command_data.server_bans.find(e => { return e.userID === command_data.tagged_user.id });
+        let previous_ban = command_data.server_bans.find(e => { return e.user_ID === command_data.tagged_user.id });
 
         let ban_start = Date.now();
         let ban_end = -1;
@@ -58,8 +58,8 @@ module.exports = {
 
         let server_ban = {
             id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
-            serverID: command_data.msg.guild.id,
-            userID: command_data.tagged_user.id,
+            server_ID: command_data.msg.guild.id,
+            user_ID: command_data.tagged_user.id,
             start: ban_start,
             reason: ban_reason,
             end: time === -1 ? -1 : ban_end

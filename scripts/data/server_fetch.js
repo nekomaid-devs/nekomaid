@@ -8,75 +8,75 @@ module.exports = {
                 return await this.fetch_data(global_context, "SELECT * FROM configs WHERE id='" + data.id + "'", this.format_config);
 
             case "server_channel_create":
-                return await this.fetch_data(global_context, "SELECT serverID, muteRoleID FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, mute_role_ID FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_guild_ban_add":
             case "server_guild_ban_remove":
-                return await this.fetch_data(global_context, "SELECT serverID, audit_channel, audit_bans, caseID FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, audit_channel, audit_bans, case_ID FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_guild_member_add":
-                return await this.fetch_data(global_context, "SELECT serverID, autoRoles, muteRoleID, welcomeMessages, welcomeMessages_format, welcomeMessages_channel, welcomeMessages_ping FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, autoRoles, mute_role_ID, welcome_messages, welcome_messages_format, welcome_messages_channel, welcome_messages_ping FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_guild_member_remove":
-                return await this.fetch_data(global_context, "SELECT serverID, leaveMessages, leaveMessages_format, leaveMessages_channel, audit_channel, audit_kicks FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, leave_messages, leave_messages_format, leave_messages_channel, audit_channel, audit_kicks FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
             
             case "server_message_delete":
-                return await this.fetch_data(global_context, "SELECT serverID, audit_channel, audit_deletedMessages FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, audit_channel, audit_deleted_messages FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_message_update":
-                return await this.fetch_data(global_context, "SELECT serverID, audit_channel, audit_editedMessages FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, audit_channel, audit_edited_messages FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_guild_member_nickname_update":
-                return await this.fetch_data(global_context, "SELECT serverID, audit_channel, audit_nicknames FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, audit_channel, audit_nicknames FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_guild_member_warn":
-                return await this.fetch_data(global_context, "SELECT serverID, audit_channel, audit_warns, caseID FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, audit_channel, audit_warns, case_ID FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_message":
-                return await this.fetch_data(global_context, "SELECT serverID, prefix, bannedWords, invites, module_level_enabled, module_level_message_exp FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT server_ID, prefix, banned_words, invites, module_level_enabled, module_level_message_exp FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server":
-                return await this.fetch_data(global_context, "SELECT * FROM servers WHERE serverID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT * FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
             case "server_user":
-                let fastFindID = data.serverID + "-" + data.userID;
-                return await this.fetch_data(global_context, "SELECT * FROM serverusers WHERE fastFindID='" + fastFindID + "'", defaultFormat, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server_user(global_context, { id: data.serverID }, { id: data.userID }); });
+                let fast_find_ID = data.server_ID + "-" + data.user_ID;
+                return await this.fetch_data(global_context, "SELECT * FROM server_users WHERE fast_find_ID='" + fast_find_ID + "'", defaultFormat, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server_user(global_context, { id: data.server_ID }, { id: data.user_ID }); });
 
             case "server_users":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM serverusers WHERE serverID='" + data.id + "'", defaultFormat);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_users WHERE server_ID='" + data.id + "'", defaultFormat);
 
             case "counters":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM counters WHERE serverID='" + data.id + "'", defaultFormat);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_counters WHERE server_ID='" + data.id + "'", defaultFormat);
 
             case "ranks":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM ranks WHERE serverID='" + data.id + "'", defaultFormat);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_ranks WHERE server_ID='" + data.id + "'", defaultFormat);
 
             case "reaction_roles":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM reactionroles WHERE serverID='" + data.id + "'", this.format_reaction_role);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_reaction_roles WHERE server_ID='" + data.id + "'", this.format_reaction_role);
 
             case "global_user":
-                return await this.fetch_data(global_context, "SELECT * FROM globalusers WHERE userID='" + data.id + "'", (e) => { return this.format_global_user(global_context, e); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_global_user(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT * FROM global_users WHERE user_ID='" + data.id + "'", (e) => { return this.format_global_user(global_context, e); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_global_user(global_context, { id: data.id }); });
 
             case "global_users":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM globalusers", (e) => { return this.format_global_user(global_context, e); });
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM global_users", (e) => { return this.format_global_user(global_context, e); });
 
             case "server_bans":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM serverbans WHERE serverID='" + data.id + "'", defaultFormat);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_bans WHERE server_ID='" + data.id + "'", defaultFormat);
 
             case "server_mutes":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM servermutes WHERE serverID='" + data.id + "'", defaultFormat);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_mutes WHERE server_ID='" + data.id + "'", defaultFormat);
 
             case "all_server_bans":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM serverbans", defaultFormat);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_bans", defaultFormat);
 
             case "all_server_mutes":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM servermutes", defaultFormat);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_mutes", defaultFormat);
 
             case "server_warnings":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM serverwarnings WHERE serverID='" + data.id + "'", defaultFormat);
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_warnings WHERE server_ID='" + data.id + "'", defaultFormat);
 
             case "server_logs":
-                /*return await this.fetch_data(bot, "SELECT * FROM serverLogs WHERE serverID='" + data.id + "'", defaultFormat);*/
+                /*return await this.fetch_data(bot, "SELECT * FROM serverLogs WHERE server_ID='" + data.id + "'", defaultFormat);*/
                 return global_context.neko_modules_clients.ssm.server_prefabs.getServerLogsPrefab({ id: data.id });
         }
 
@@ -109,12 +109,12 @@ module.exports = {
     },
 
     format_config(config) {
-        config.botOwners = config.botOwners.split(",").filter(a => a.length > 0)
-        config.crimeSuccessAnswers = config.crimeSuccessAnswers.split(",").filter(a => a.length > 0)
-        config.crimeFailedAnswers = config.crimeFailedAnswers.split(",").filter(a => a.length > 0)
-        config.begSuccessAnswers = config.begSuccessAnswers.split(",").filter(a => a.length > 0)
-        config.begFailedAnswers = config.begFailedAnswers.split(",").filter(a => a.length > 0)
-        config.workAnswers = config.workAnswers.split(",").filter(a => a.length > 0)
+        config.bot_owners = config.bot_owners.split(",").filter(a => a.length > 0)
+        config.crime_success_answers = config.crime_success_answers.split(",").filter(a => a.length > 0)
+        config.crime_failed_answers = config.crime_failed_answers.split(",").filter(a => a.length > 0)
+        config.beg_success_answers = config.beg_success_answers.split(",").filter(a => a.length > 0)
+        config.beg_failed_answers = config.beg_failed_answers.split(",").filter(a => a.length > 0)
+        config.work_answers = config.work_answers.split(",").filter(a => a.length > 0)
 
         // box - Instant lootbox with cash payout
         // cash - Instant cash payout
@@ -200,15 +200,15 @@ module.exports = {
     },
 
     async format_server(global_context, server, containExtra = false, containRanks = false) {
-        server.bannedWords = server.bannedWords == null ? server.bannedWords : server.bannedWords.split(",").filter(a => a.length > 0);
+        server.banned_words = server.banned_words == null ? server.banned_words : server.banned_words.split(",").filter(a => a.length > 0);
         server.autoRoles = server.autoRoles == null ? server.autoRoles : server.autoRoles.split(",").filter(a => a.length > 0);
-        server.module_level_ignoredChannels = server.module_level_ignoredChannels == null ? server.module_level_ignoredChannels : server.module_level_ignoredChannels.split(",").filter(a => a.length > 0);
+        server.module_level_ignored_channels = server.module_level_ignored_channels == null ? server.module_level_ignored_channels : server.module_level_ignored_channels.split(",").filter(a => a.length > 0);
         if(containExtra === true) {
-            server.counters = await this.fetch(global_context, { type: "counters", id: server.serverID });
-            server.reactionRoles = await this.fetch(global_context, { type: "reaction_roles", id: server.serverID });
+            server.counters = await this.fetch(global_context, { type: "counters", id: server.server_ID });
+            server.reaction_roles = await this.fetch(global_context, { type: "reaction_roles", id: server.server_ID });
         }
         if(containExtra === true || containRanks === true) {
-            server.module_level_ranks = await this.fetch(global_context, { type: "ranks", id: server.serverID });
+            server.module_level_ranks = await this.fetch(global_context, { type: "ranks", id: server.server_ID });
         }
 
         return server;
@@ -217,7 +217,7 @@ module.exports = {
     format_global_user(global_context, user) {
         user.inventory = user.inventory.split(",").filter(a => a.length > 0);
         
-        user.bank_limit = global_context.bot_config.bankLimit;
+        user.bank_limit = global_context.bot_config.bank_limit;
         user.bank_limit += user.inventory
         .filter(e => { return global_context.bot_config.items.get(e).type === "bankLimit"; })
         .reduce((acc, curr) => {
@@ -229,8 +229,8 @@ module.exports = {
     },
 
     format_reaction_role(rr) {
-        rr.reactionRoles = rr.reactionRoles.split(",").filter(a => a.length > 0);
-        rr.reactionRoleEmojis = rr.reactionRoleEmojis.split(",").filter(a => a.length > 0);
+        rr.reaction_roles = rr.reaction_roles.split(",").filter(a => a.length > 0);
+        rr.reaction_role_emojis = rr.reaction_role_emojis.split(",").filter(a => a.length > 0);
 
         return rr;
     }

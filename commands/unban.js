@@ -46,7 +46,7 @@ module.exports = {
 
                 let previous_ban = -1;
                 command_data.server_bans.forEach((ban) => {
-                    if(ban.userID === ban_info.user.id) {
+                    if(ban.user_ID === ban_info.user.id) {
                         previous_ban = ban;
                     }
                 });

@@ -33,16 +33,16 @@ module.exports = {
             unmute_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[1]))
         }
 
-        let previous_mute = command_data.server_mutes.find(e => { return e.userID === command_data.tagged_user.id; });
+        let previous_mute = command_data.server_mutes.find(e => { return e.user_ID === command_data.tagged_user.id; });
         if(previous_mute === undefined) {
             command_data.msg.reply(`\`${command_data.tagged_user.tag}\` isn't muted-`);
         } else {
-            if(command_data.msg.guild.roles.cache.has(command_data.server_config.muteRoleID) === false) {
+            if(command_data.msg.guild.roles.cache.has(command_data.server_config.mute_role_ID) === false) {
                 command_data.msg.reply("Couldn't find the Muted role- (Did somebody delete it?)-");
                 return;
             }
             
-            let mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.muteRoleID).catch(e => { command_data.global_context.logger.api_error(e); });
+            let mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.mute_role_ID).catch(e => { command_data.global_context.logger.api_error(e); });
             command_data.tagged_member.roles.remove(mute_role);
 
             command_data.msg.channel.send(`Unmuted \`${command_data.tagged_user.tag}\` (Reason: \`${unmute_reason}\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
@@ -55,7 +55,7 @@ module.exports = {
                     let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                     let embedMute = {
                         author: {
-                            name: `Case ${command_data.server_config.caseID}# | Unmute | ${command_data.tagged_user.tag}`,
+                            name: `Case ${command_data.server_config.case_ID}# | Unmute | ${command_data.tagged_user.tag}`,
                             icon_url: url,
                         },
                         fields: [
@@ -76,7 +76,7 @@ module.exports = {
                         ]
                     }
 
-                    command_data.server_config.caseID += 1;
+                    command_data.server_config.case_ID += 1;
                     command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
 
                     channel.send("", { embed: embedMute }).catch(e => { command_data.global_context.logger.api_error(e); });

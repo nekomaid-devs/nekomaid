@@ -12,7 +12,7 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         let end = new Date();
-        let start = new Date(command_data.author_config.lastBegTime);
+        let start = new Date(command_data.author_config.last_beg_time);
         let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
         diff = Math.abs(Math.round(diff));
@@ -24,19 +24,19 @@ module.exports = {
             return;
         }
 
-        command_data.author_config.lastBegTime = end.toUTCString();
+        command_data.author_config.last_beg_time = end.toUTCString();
 
-        let min_credits = command_data.global_context.bot_config.minBegCredits;
-        let max_credits = command_data.global_context.bot_config.maxBegCredits;
+        let min_credits = command_data.global_context.bot_config.min_beg_credits;
+        let max_credits = command_data.global_context.bot_config.max_beg_credits;
         let credits_ammount = Math.floor((Math.random() * (max_credits - min_credits + 1)) + min_credits);
 
         let chance = Math.floor(Math.random() * 100) + 1;
         let answers = [];
         let answer_color = 6732650;
-        if(chance <= command_data.global_context.bot_config.begSuccessChance) {
-            answers = command_data.global_context.bot_config.begSuccessAnswers;
+        if(chance <= command_data.global_context.bot_config.beg_success_chance) {
+            answers = command_data.global_context.bot_config.beg_success_answers;
         } else {
-            answers = command_data.global_context.bot_config.begFailedAnswers;
+            answers = command_data.global_context.bot_config.beg_failed_answers;
             answer_color = 15483730;
             creditsAmmount = -credits_ammount;
         }
@@ -48,7 +48,7 @@ module.exports = {
         answer = answer.replace("<user>", "`" + member.user.tag + "`");
 
         command_data.author_config.credits += credits_ammount;
-        command_data.author_config.netWorth += credits_ammount;
+        command_data.author_config.net_worth += credits_ammount;
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedBeg = {

@@ -12,18 +12,18 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         if(command_data.global_context.config.osu_enabled === false) { command_data.msg.channel.send("The osu! module is disabled for this bot.").catch(e => { command_data.global_context.logger.api_error(e); }); return; }
-        if(command_data.tagged_user_config.osuUsername === "-1") {
+        if(command_data.tagged_user_config.osu_username === "-1") {
             command_data.msg.channel.send(`You haven't set an osu! profile yet~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)`)
             return;
         }
 
-        let user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.tagged_user_config.osuUsername }).catch(e => { command_data.global_context.logger.api_error(e); });
+        let user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.tagged_user_config.osu_username }).catch(e => { command_data.global_context.logger.api_error(e); });
         if(user.id === undefined) {
             command_data.msg.channel.send(`No osu! profile found~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)-`);
             return;
         }
 
-        let top = await command_data.global_context.modules_clients.osu.getUserBest({ u: command_data.tagged_user_config.osuUsername }).catch(e => { command_data.global_context.logger.api_error(e); });
+        let top = await command_data.global_context.modules_clients.osu.getUserBest({ u: command_data.tagged_user_config.osu_username }).catch(e => { command_data.global_context.logger.api_error(e); });
         if(top.length === undefined || top.length < 5) {
             command_data.msg.reply("No top plays found.");
             return;
@@ -69,7 +69,7 @@ module.exports = {
         let embedOsu = {
             color: 8388736,
             author: {
-                name: `osu! top plays for ${command_data.tagged_user_config.osuUsername}`,
+                name: `osu! top plays for ${command_data.tagged_user_config.osu_username}`,
                 icon_url: `http://s.ppy.sh/a/${user.id}`,
                 url: `https://osu.ppy.sh/users/${user.id}`
             },

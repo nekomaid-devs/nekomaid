@@ -26,7 +26,7 @@ module.exports = {
         let author_config = -1;
         for(let i = 0; i < items.length; i += 1) {
             let user = items[i];
-            if(user.userID === command_data.msg.author.id) {
+            if(user.user_ID === command_data.msg.author.id) {
                 author_pos = i;
                 author_config = user;
                 break;
@@ -51,7 +51,7 @@ module.exports = {
             }
             let net_2 = (user_config.xp / level_XP) * 100;
 
-            let target_user = await command_data.global_context.bot.users.fetch(user_config.userID).catch(e => { command_data.global_context.logger.api_error(e); });
+            let target_user = await command_data.global_context.bot.users.fetch(user_config.user_ID).catch(e => { command_data.global_context.logger.api_error(e); });
             embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `Level ${net} (${Math.round(net_2)} %)`);
         }
         

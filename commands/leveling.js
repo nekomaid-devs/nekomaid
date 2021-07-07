@@ -38,26 +38,26 @@ module.exports = {
         // TODO: check for wrong error embeds
         command_data.server_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         if(command_data.args.length < 1) {
-            let channel = `<#${command_data.server_config.module_level_levelupMessages_channel}>`;
-            if(command_data.server_config.module_level_levelupMessages_channel === "-1") {
-                channel = command_data.server_config.module_level_enabled == true && command_data.server_config.module_level_levelupMessages == true ? "`None❗`" : "`None`";
+            let channel = `<#${command_data.server_config.module_level_levelup_messages_channel}>`;
+            if(command_data.server_config.module_level_levelup_messages_channel === "-1") {
+                channel = command_data.server_config.module_level_enabled == true && command_data.server_config.module_level_levelup_messages == true ? "`None❗`" : "`None`";
             }
 
             let ignored_channels_text = "";
-            for(let i = 0; i < command_data.server_config.module_level_ignoredChannels.length; i++) {
-                let channel_ID = command_data.server_config.module_level_ignoredChannels[i];
-                let channel = await command_data.bot.channels.fetch(channelID).catch(e => { command_data.global_context.logger.api_error(e); });
+            for(let i = 0; i < command_data.server_config.module_level_ignored_channels.length; i++) {
+                let channel_ID = command_data.server_config.module_level_ignored_channels[i];
+                let channel = await command_data.bot.channels.fetch(channel_ID).catch(e => { command_data.global_context.logger.api_error(e); });
                 if(channel === undefined) {
                     ignored_channels_text += "`" + channel_ID + "`";
                 } else {
                     ignored_channels_text += channel;
                 }
 
-                if(command_data.server_config.module_level_ignoredChannels.length - 1 > i) {
+                if(command_data.server_config.module_level_ignored_channels.length - 1 > i) {
                     ignored_channels_text += ", ";
                 }
             }
-            if(command_data.server_config.module_level_ignoredChannels.length === 0) {
+            if(command_data.server_config.module_level_ignored_channels.length === 0) {
                 ignored_channels_text = "`None`";
             }
 
@@ -72,11 +72,11 @@ module.exports = {
                     },
                     {
                         name: "Level-up messages:",
-                        value: `\`${command_data.server_config.module_level_levelupMessages}\` (Channel: ${channel})`
+                        value: `\`${command_data.server_config.module_level_levelup_messages}\` (Channel: ${channel})`
                     },
                     {
                         name: "Level-up format:",
-                        value: `\`${command_data.server_config.module_level_levelupMessages_format}\` (Mention: \`${command_data.server_config.module_level_levelupMessages_ping}\`)`
+                        value: `\`${command_data.server_config.module_level_levelup_messages_format}\` (Mention: \`${command_data.server_config.module_level_levelup_messages_ping}\`)`
                     },
                     {
                         name: "Level-up settings:",
@@ -111,7 +111,7 @@ module.exports = {
 
                         for(let i = 0; i < ranks.length; i++) {
                             let rank = ranks[i];
-                            let role = await command_data.msg.guild.roles.fetch(rank.roleID).catch(e => { command_data.global_context.logger.api_error(e); });
+                            let role = await command_data.msg.guild.roles.fetch(rank.role_ID).catch(e => { command_data.global_context.logger.api_error(e); });
                             if(role === undefined) {
                                 command_data.msg.reply("There was an error in fetching Role-");
                                 return;
@@ -185,7 +185,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.server_config.module_level_ranks.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), serverID: command_data.msg.guild.id, name: rank_name, level: level_requirement, roleID: role.id });
+                        command_data.server_config.module_level_ranks.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), server_ID: command_data.msg.guild.id, name: rank_name, level: level_requirement, role_ID: role.id });
                         command_data.msg.channel.send("Added rank `" + rank_name + "` for level `" + level_requirement + "` with role `" + role_name + "`-").catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
@@ -206,7 +206,7 @@ module.exports = {
                         // TODO: this won't work (checks wrongly or maybe parses the list wrongly idk)
                         let i = 0;
                         let channel_index = -1;
-                        command_data.server_config.module_level_ignoredChannels.forEach((channel) => {
+                        command_data.server_config.module_level_ignored_channels.forEach((channel) => {
                             if(channel.id === channel) {
                                 channel_index = i;
                             }
@@ -217,7 +217,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.server_config.module_level_ignoredChannels.push(channel);
+                        command_data.server_config.module_level_ignored_channels.push(channel);
                         command_data.msg.channel.send(`Added ${channel} to ignored channels-`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
@@ -277,7 +277,7 @@ module.exports = {
 
                         let i = 0;
                         let channel_index = -1;
-                        command_data.server_config.module_level_ignoredChannels.forEach((channel) => {
+                        command_data.server_config.module_level_ignored_channels.forEach((channel) => {
                             if(channel.id === channel) {
                                 channel_index = i;
                             }
@@ -288,7 +288,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.server_config.module_level_ignoredChannels.splice(channel_index, 1);
+                        command_data.server_config.module_level_ignored_channels.splice(channel_index, 1);
                         command_data.msg.channel.send(`Removed ${channel} from ignored channels-`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
@@ -336,7 +336,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.server_config.module_level_levelupMessages = bool;
+                        command_data.server_config.module_level_levelup_messages = bool;
                         break;
                     }
 
@@ -347,7 +347,7 @@ module.exports = {
                         }
 
                         value = value_text;
-                        command_data.server_config.module_level_levelupMessages_format = value;
+                        command_data.server_config.module_level_levelup_messages_format = value;
                         break;
                     }
 
@@ -364,7 +364,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.server_config.module_level_levelupMessages_channel = value;
+                        command_data.server_config.module_level_levelup_messages_channel = value;
                         break;
                     }
 
@@ -375,7 +375,7 @@ module.exports = {
                             return;
                         }
 
-                        command_data.server_config.module_level_levelupMessages_ping = bool;
+                        command_data.server_config.module_level_levelup_messages_ping = bool;
                         break;
                     }
 

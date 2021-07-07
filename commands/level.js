@@ -26,7 +26,7 @@ module.exports = {
         let author_config = -1;
         for(let i = 0; i < items.length; i += 1) {
             let user = items[i];
-            if(user.userID === command_data.tagged_user.id) {
+            if(user.user_ID === command_data.tagged_user.id) {
                 author_config = user;
                 author_pos = i;
                 break;

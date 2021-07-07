@@ -19,12 +19,12 @@ module.exports = {
         let moderation_action = global_context.data.last_moderation_actions.get(member.guild.id);
         let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_remove", id: member.guild.id });
 
-        if(server_config.leaveMessages == true) {
-            let format = server_config.leaveMessages_format;
+        if(server_config.leave_messages == true) {
+            let format = server_config.leave_messages_format;
             let member_display_name = "**" + member.user.tag + "**";
             format = format.replace("<user>", member_display_name);
 
-            let channel = await global_context.bot.channels.fetch(server_config.leaveMessages_channel).catch(e => { global_context.logger.api_error(e); });
+            let channel = await global_context.bot.channels.fetch(server_config.leave_messages_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 channel.send(format).catch(e => { global_context.logger.api_error(e); });
             }
@@ -34,7 +34,7 @@ module.exports = {
         if(log_members) {
             //var serverLogs = await bot.ssm.server_fetch.fetchServerLogs(bot, member.guild.id);
             
-            //var log = { guildID: member.guild.id, type: "guildMemberRemove", userID: member.id, tag: member.user.tag, time: Date.now() }
+            //var log = { guildID: member.guild.id, type: "guildMemberRemove", user_ID: member.id, tag: member.user.tag, time: Date.now() }
             //serverLogs.logs.push(log);
             //bot.ssm.server_edit.edit_server_logs_in_structure(bot.ssm, member.guild, serverLogs);
         }

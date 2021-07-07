@@ -22,7 +22,7 @@ module.exports = {
         }
 
         let end = new Date();
-        let start = new Date(command_data.author_config.lastRepTime);
+        let start = new Date(command_data.author_config.last_rep_time);
         let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
         diff = Math.abs(Math.round(diff));
@@ -34,7 +34,7 @@ module.exports = {
             return;
         }
 
-        command_data.author_config.lastRepTime = end.toUTCString();
+        command_data.author_config.last_rep_time = end.toUTCString();
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
         command_data.tagged_user_config.rep += 1;
