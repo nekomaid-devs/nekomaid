@@ -70,19 +70,19 @@ let server = http.createServer((req, res) => {
             });
 
             req.on('end', function () {
-                var post = JSON.parse(body);
+                let post = JSON.parse(body);
                 switch(post.type) {
                     case "upvote":
-                        post.siteID = 4;
-                        var id = post.user;
-                        var isDouble = post.isWeekend;
+                        post.site_ID = 4;
+                        let id = post.user;
+                        let is_double = post.isWeekend;
 
-                        manager.broadcastEval("this.um.trySendingUpvoteMessage(this.um, '" + id + "', '" + post.siteID + "', " + isDouble + ")")
+                        manager.broadcastEval(`this.neko_data.send_upvote_message('${id}', '${post.site_ID}', ${is_double})`)
                         .catch(e => {
                             console.logger.error(e);
                         });
 
-                        manager.broadcastEval("this.um.updateUpvotedStatus(this.um, '" + id + "', '" + post.siteID + "', " + isDouble + ")")
+                        manager.broadcastEval(`this.neko_data.process_upvote('${id}', '${post.site_ID}', ${is_double})`)
                         .catch(e => {
                             console.logger.error(e);
                         });

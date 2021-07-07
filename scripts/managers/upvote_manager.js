@@ -1,98 +1,84 @@
 class UpvoteManager {
-    /*async trySendingUpvoteMessage(um, id, siteID, isDouble = false) {
-        var user = await um.bot.users.fetch(id).catch(e => { console.log(e); });
-        var username = user.username;
-
-        if(um.bot.channels.cache.has('819533619805814794') === true) {
-            var message = -1
-            switch(siteID) {
+    async send_upvote_message(global_context, id, site_ID, is_double = false) {
+        let user = await global_context.bot.users.fetch(id).catch(e => { global_context.logger.api_error(e); });
+        let channel = await global_context.bot.channels.fetch("819533619805814794").catch(e => { global_context.logger.api_error(e); });
+        if(channel !== undefined) {
+            let message = -1;
+            switch(site_ID) {
                 case "0":
-                    message = "**" + username + "** just voted for NekoMaid on `discordbotlist.com`-\nThank you! ❤️";
+                    message = `**${user.username}** just voted for NekoMaid on \`discordbotlist.com\`~\nThank you! ❤️`;
                     break;
 
                 case "1":
-                    message = "**" + username + "** just voted for NekoMaid on `botsfordiscord.com`-\nThank you! ❤️";
+                    message = `**${user.username}** just voted for NekoMaid on \`botsfordiscord.com\`~\nThank you! ❤️`;
                     break;
 
                 case "2":
-                    message = "**" + username + "** just voted for NekoMaid on `discord.boats`-\nThank you! ❤️";
+                    message = `**${user.username}** just voted for NekoMaid on \`discord.boats\`~\nThank you! ❤️`;
                     break;
 
                 case "3":
-                    message = "**" + username + "** just voted for NekoMaid on `botlist.space`-\nThank you! ❤️";
+                    message = `**${user.username}** just voted for NekoMaid on \`botlist.space\`~\nThank you! ❤️`;
                     break;
 
                 case "4":
-                    if(isDouble === true) {
-                        message = "**" + username + "** just voted for NekoMaid on `top.gg` and got 2x credits, because it's weekend-\nThank you! ❤️";
+                    if(is_double === true) {
+                        message = `**${user.username}** just voted for NekoMaid on \`top.gg\` and got 2x credits, because it's weekend~\nThank you! ❤️`;
                     } else {
-                        message = "**" + username + "** just voted for NekoMaid on `top.gg`-\nThank you! ❤️";
+                        message = `**${user.username}** just voted for NekoMaid on \`top.gg\`~\nThank you! ❤️`;
                     }
                     break;
             }
 
-            var channel = await um.bot.channels.fetch('819533619805814794').catch(e => { console.log(e); });
-            channel.send(message).catch(e => { console.log(e); });
+            channel.send(message).catch(e => { global_context.logger.api_error(e); });
         }
     }
 
-    async updateUpvotedStatus(um, id, siteID, isDouble = false) {
-        var user = await um.bot.users.fetch(id).catch(e => { console.log(e); });
-        var userConfig = await um.bot.ssm.server_fetch.fetch(um.bot, { type: "global_user", id });  
-        var botConfig = await um.bot.ssm.server_fetch.fetch(um.bot, { type: "config", id: "defaultConfig" });
-        var date = new Date();
-
-        switch(siteID) {
+    async process_upvote(global_context, id, site_ID, is_double = false) {
+        let user = await global_context.bot.users.fetch(id).catch(e => { global_context.logger.api_error(e); });
+        let user_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: id });  
+        
+        let date = new Date();
+        switch(site_ID) {
             case "0":
-                userConfig.credits += Math.round(botConfig.upvoteCredits * 0.75);
-                userConfig.netWorth += Math.round(botConfig.upvoteCredits * 0.75);
-                userConfig.lastUpvotedTime = date.toUTCString();
-                userConfig.lastUpvotedTime0 = date.toUTCString();
-                userConfig.votes += 1.5;
+                user_config.credits += Math.round(global_context.bot_config.upvote_credits * 0.75);
+                user_config.net_worth += Math.round(global_context.bot_config.upvote_credits * 0.75);
+                user_config.votes += 1.5;
                 break;
 
             case "1":
-                userConfig.credits += Math.round(botConfig.upvoteCredits * 0.75);
-                userConfig.netWorth += Math.round(botConfig.upvoteCredits * 0.75);
-                userConfig.lastUpvotedTime = date.toUTCString();
-                userConfig.lastUpvotedTime1 = date.toUTCString();
-                userConfig.votes += 1.5;
+                user_config.credits += Math.round(global_context.bot_config.upvote_credits * 0.75);
+                user_config.net_worth += Math.round(global_context.bot_config.upvote_credits * 0.75);
+                user_config.votes += 1.5;
                 break;
 
             case "2":
-                userConfig.credits += Math.round(botConfig.upvoteCredits / 2);
-                userConfig.netWorth += Math.round(botConfig.upvoteCredits / 2);
-                userConfig.lastUpvotedTime = date.toUTCString();
-                userConfig.lastUpvotedTime2 = date.toUTCString();
-                userConfig.votes += 1;
+                user_config.credits += Math.round(global_context.bot_config.upvote_credits / 2);
+                user_config.net_worth += Math.round(global_context.bot_config.upvote_credits / 2);
+                user_config.votes += 1;
                 break;
 
             case "3":
-                userConfig.credits += Math.round(botConfig.upvoteCredits / 4);
-                userConfig.netWorth += Math.round(botConfig.upvoteCredits / 4);
-                userConfig.lastUpvotedTime = date.toUTCString();
-                userConfig.lastUpvotedTime3 = date.toUTCString();
-                userConfig.votes += 0.5;
+                user_config.credits += Math.round(global_context.bot_config.upvote_credits / 4);
+                user_config.net_worth += Math.round(global_context.bot_config.upvote_credits / 4);
+                user_config.votes += 0.5;
                 break;
 
             case "4":
-                if(isDouble === true) {
-                    userConfig.credits += botConfig.upvoteCredits * 2;
-                    userConfig.netWorth += botConfig.upvoteCredits * 2;
-                    userConfig.votes += 4;
+                if(is_double === true) {
+                    user_config.credits += global_context.bot_config.upvote_credits * 2;
+                    user_config.net_worth += global_context.bot_config.upvote_credits * 2;
+                    user_config.votes += 4;
                 } else {
-                    userConfig.credits += botConfig.upvoteCredits;
-                    userConfig.netWorth += botConfig.upvoteCredits;
-                    userConfig.votes += 2;
+                    user_config.credits += global_context.bot_config.upvote_credits;
+                    user_config.net_worth += global_context.bot_config.upvote_credits;
+                    user_config.votes += 2;
                 }
-
-                userConfig.lastUpvotedTime = date.toUTCString();
-                userConfig.lastUpvotedTime4 = date.toUTCString();
                 break;
         }
 
-        um.bot.ssm.server_edit.edit(um.bot.ssm, { type: "global_user", id: user.id, user: userConfig });
-    }*/
+        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: user.id, user: user_config });
+    }
 }
 
 module.exports = UpvoteManager;

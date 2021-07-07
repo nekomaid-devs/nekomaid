@@ -55,6 +55,12 @@ const bot = new Discord.Client({
 });
 global_context.bot = bot;
 bot.neko_data = {};
+bot.neko_data.send_upvote_message = (id, site_ID, is_double) => {
+    global_context.neko_modules_clients.um.send_upvote_message(global_context, id, site_ID, is_double);
+}
+bot.neko_data.process_upvote = (id, site_ID, is_double) => {
+    global_context.neko_modules_clients.um.process_upvote(global_context, id, site_ID, is_double);
+}
 
 //Create log colors
 let log_colors = ["\x1b[32m", "\x1b[33m", "\x1b[34m", "\x1b[35m", "\x1b[36m", "\x1b[37m",
