@@ -1,8 +1,7 @@
 class GelbooruAPI {
     async gelbooru_result(global_context, args) {
-        // TODO: redirect errors into their own logger
         let site_url_main = `https://gelbooru.com/index.php?page=post&s=list${(args.length > 0 ? "&tags=" + args.join("+") : "")}`;
-        let result_main = await global_context.modules.axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+        let result_main = await global_context.modules.axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.neko_api_error(e); })
         if(result_main === undefined || result_main.data === undefined) { return { status: -1 }; }
         let $0 = await global_context.modules.cheerio.load(result_main.data);
 
@@ -44,7 +43,7 @@ class GelbooruAPI {
             let page = global_context.utils.pick_random(pages);
 
             let site_url_posts = `https://gelbooru.com/index.php${page}`;
-            let result_posts = await global_context.modules.axios.get(site_url_posts, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+            let result_posts = await global_context.modules.axios.get(site_url_posts, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.neko_api_error(e); })
             if(result_posts === undefined || result_posts.data === undefined) { return { status: -1 }; }
             let $1 = await global_context.modules.cheerio.load(result_posts.data);
 
@@ -68,7 +67,7 @@ class GelbooruAPI {
 
             if(post_links.length > 1) {
                 let site_url_post = global_context.utils.pick_random(post_links);
-                let result_post = await global_context.modules.axios.get(site_url_post, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+                let result_post = await global_context.modules.axios.get(site_url_post, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.neko_api_error(e); })
                 if(result_post === undefined || result_post.data === undefined) { return { status: -1 }; }
                 let $2 = await global_context.modules.cheerio.load(result_post.data);
 

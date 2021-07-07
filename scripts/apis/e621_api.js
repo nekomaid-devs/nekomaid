@@ -1,8 +1,7 @@
 class E621API {
     async e621_result(global_context, args) {
-        // TODO: redirect errors into their own logger
         let site_url_pages = `https://e621.net/posts?tags=${(args.length > 0 ? args.join("+") : "")}&limit=1`;
-        let result_pages = await global_context.modules.axios.get(site_url_pages, { headers: { "Cookie": "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); });
+        let result_pages = await global_context.modules.axios.get(site_url_pages, { headers: { "Cookie": "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.neko_api_error(e); });
         if(result_pages.data === undefined) { return { status: -1 }; }
 
         let pages_navigator = result_pages.data.lastIndexOf('a href="/posts?limit=1')
@@ -13,7 +12,7 @@ class E621API {
         }
 
         let site_url_main = `https://e621.net/posts?page=${page_index}&tags=${(args.length > 0 ? args.join("+") : "")}&limit=1`;
-        let result_main = await global_context.modules.axios.get(site_url_main, { headers: { "Cookie": "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+        let result_main = await global_context.modules.axios.get(site_url_main, { headers: { "Cookie": "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.neko_api_error(e); })
         if(result_main === undefined || result_main.data === undefined) { return { status: -1 }; }
 
         let posts = [];
@@ -28,7 +27,7 @@ class E621API {
 
         let post_ID = global_context.utils.pick_random(posts);
         let site_url_post = `https://e621.net/posts/${post_ID}.json`;
-        let result_post = await global_context.modules.axios.get(site_url_post, { headers: { "Cookie": "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.error(e); })
+        let result_post = await global_context.modules.axios.get(site_url_post, { headers: { "Cookie": "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.neko_api_error(e); })
         if(result_post === undefined || result_post.data === undefined) { return { status: -1 }; }
 
         let post_info = {

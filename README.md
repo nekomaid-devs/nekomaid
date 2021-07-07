@@ -16,6 +16,7 @@
 
 	"logger_log_log": true,
 	"logger_log_api_error": true,
+	"logger_log_neko_api_error": true,
 	"logger_log_error": true,
 
 	"sql_host": "xxx",

@@ -68,6 +68,7 @@ var log_color_time = "\x1b[91m";
 //Console setup
 global_context.logger.log = () => {};
 global_context.logger.api_error = () => {};
+global_context.logger.neko_api_error = () => {};
 global_context.logger.error = () => {};
 
 if(global_context.config.logger_log_log === true) {
@@ -79,6 +80,12 @@ if(global_context.config.logger_log_api_error === true) {
     global_context.logger.api_error = (error) => {
         let log_message = error.stack === undefined ? error : error.stack;
         process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] [API Error] " + log_color_shard + "[shard_" + bot.shard.ids[0] + "] " + log_color_api_error + log_message + "\x1b[0m\n");
+    };
+}
+if(global_context.config.logger_log_neko_api_error === true) {
+    global_context.logger.neko_api_error = (error) => {
+        let log_message = error.stack === undefined ? error : error.stack;
+        process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] [Nekomaid API Error] " + log_color_shard + "[shard_" + bot.shard.ids[0] + "] " + log_color_api_error + log_message + "\x1b[0m\n");
     };
 }
 if(global_context.config.logger_log_error === true) {

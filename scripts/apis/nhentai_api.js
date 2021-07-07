@@ -1,8 +1,7 @@
 class NHentaiAPI {
     async nhentai_result(global_context, args) {
-        // TODO: redirect errors into their own logger
         let site_url_main = `https://nhentai.net/g/${args}`;
-        let result_main = await global_context.modules.axios.get(site_url_main).catch(e => { global_context.logger.error(e); })
+        let result_main = await global_context.modules.axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch(e => { global_context.logger.neko_api_error(e); })
         let $0 = await global_context.modules.cheerio.load(result_main.data);
 
         let result_html = $0("#info").html();
