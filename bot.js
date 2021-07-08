@@ -120,26 +120,6 @@ global_context.commands.forEach(command => {
 //Log into Discord
 bot.login(global_context.config.token);
 
-/*bot.top = []
-setInterval(async function() {
-    if(bot.shard.ids[0] !== bot.Discord.ShardClientUtil.shardIDForGuildID("713467608363696128", bot.shard.count)) { return; }
-    let topList = await bot.sb.get_top(bot, ["credits", "bank"]);
-    bot.top = [];
-
-    for(let i = 0; i < (topList.items.length < 15 ? topList.items.length : 15); i++) {
-        var user = await bot.users.fetch(topList.items[i].userID).catch(e => { console.log(e); });
-        bot.top.push({ username: user.username, credits: (topList.items[i].credits + topList.items[i].bank) });
-    }
-}, 60000)
-
-async function postLoad() {
-    bot.isDatabaseReady = true;
-
-    bot.webupdates.refreshStatus(bot);
-    bot.rrm.createCollectors(bot.rrm);
-
-    bot.botConfig = await bot.ssm.server_fetch.fetch(bot, { type: "config", id: "defaultConfig" });
-}*/
 setInterval(() => {
     bot.neko_data.processed_events = global_context.data.processed_events;
     bot.neko_data.total_events = global_context.data.total_events;
@@ -157,19 +137,28 @@ setInterval(() => {
     global_context.data.processed_commands = 0;
 }, 1000);
 setInterval(() => {
-    if(bot.shard.ids[0] !== 0) { return; }
-    if(global_context.neko_modules.web_updates !== undefined) {
+    if(global_context.neko_modules.web_updates !== undefined && bot.shard.ids[0] === 0) {
         global_context.neko_modules.web_updates.refresh_website(global_context);
     }
 }, 2000);
 setInterval(() => {
-    global_context.neko_modules.web_updates.refresh_bot_list(global_context);
+    if(global_context.neko_modules_clients.moderator !== undefined) {
+        global_context.neko_modules_clients.moderator.timeout_all_bans(global_context);
+        global_context.neko_modules_clients.moderator.timeout_all_mutes(global_context);
+    }
+}, 10000);
+setInterval(() => {
+    if(global_context.neko_modules_clients.web_updates !== undefined && bot.shard.ids[0] === 0) {
+        global_context.neko_modules.web_updates.refresh_bot_list(global_context);
+    }
     if(global_context.neko_modules_clients.cm !== undefined) {
         global_context.neko_modules_clients.cm.update_all_counters(global_context);
     }
 }, 60000);
 setInterval(() => {
-    global_context.neko_modules.web_updates.refresh_status(global_context);
+    if(global_context.neko_modules_clients.web_updates !== undefined) {
+        global_context.neko_modules.web_updates.refresh_status(global_context);
+    }
 }, 60000 * 30);
 
 let bot_importer = require('./bot_importer');

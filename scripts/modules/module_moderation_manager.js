@@ -1,120 +1,52 @@
 class ModerationManager {
-    constructor() {
-        /*setInterval(this.timeoutAllBans, 10000, this);
-        setInterval(this.timeoutAllMutes, 10000, this);*/
-    }
-
-    /*async timeoutAllMutes(moderator) {
-        var allMutes = await moderator.bot.ssm.server_fetch.fetch(moderator.bot, { type: "all_server_mutes" });
-        moderator.bot.guilds.cache.forEach(server => {
-            let serverMutes = allMutes.filter(e => { return e.serverID === server.id; });
-            if(moderator.bot.isDatabaseReady === true && server.me !== undefined && server.me !== null && server.me.hasPermission("MANAGE_ROLES") === true) {
-                moderator.timeoutMutes(moderator, server, serverMutes);
-            }
+    async timeout_all_mutes(global_context) {
+        let all_mutes = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "all_server_mutes" });
+        global_context.bot.guilds.cache.forEach(server => {
+            let server_mutes = all_mutes.filter(e => { return e.server_ID === server.id; });
+            global_context.neko_modules_clients.moderator.timeout_mutes(global_context, server, server_mutes);
         })
     }
 
-    async timeoutMutes(moderator, server, serverMutes) {
-        var now = Date.now();
-        var mutesToRemove = []
-        var userIDsToUnmute = []
+    async timeout_all_bans(global_context) {
+        let all_bans = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "all_server_bans" });
+        global_context.bot.guilds.cache.forEach(server => {
+            let server_bans = all_bans.filter(e => { return e.server_ID === server.id; });
+            global_context.neko_modules_clients.moderator.timeout_bans(global_context, server, server_bans);
+        })
+    }
 
-        serverMutes.forEach(function(mute) {
-            if(mute.end != -1 && mute.end - now < 0) {
-                mutesToRemove.push(mute)
-                userIDsToUnmute.push(mute.userID)
-            }
-        });
-
-        var serverConfig = await moderator.bot.ssm.server_fetch.fetch(moderator.bot, { type: "server", id: server.id });
-        if(serverMutes.length < 0 || serverConfig.muteRoleID === "-1") { return; }
+    // TODO: add audit log for this
+    async timeout_mutes(global_context, server, server_mutes) {
+        let now = Date.now();
+        let mutes_to_remove = server_mutes.filter(e => { return e.end !== -1 && e.end - now < 0; });
+        if(mutes_to_remove.length < 0) { return; }
         
-        mutesToRemove.forEach(mute => {
-            moderator.bot.ssm.server_remove.remove_server_mute(moderator.bot.ssm, mute.id);
-        })
-        userIDsToUnmute.forEach(async(userID) => {
-            var mutedUser = await server.members.fetch(userID).catch(e => { console.log(e); });
-            
-            if(mutedUser !== undefined) {
-                console.log("[mod] Unmuted " + mutedUser.user.username + "#" + mutedUser.user.discriminator + " due to mute expiration-")
-                mutedUser.roles.remove(serverConfig.muteRoleID).catch(e => { console.log(e); });
-            }
-        })
-    }
+        await global_context.utils.verify_guild_members(server);
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: server.id });
+        mutes_to_remove.forEach(mute => {
+            global_context.neko_modules_clients.ssm.server_remove.remove_server_mute(global_context, mute.id);
 
-    async timeoutAllBans(moderator) {
-        let allBans = await moderator.bot.ssm.server_fetch.fetch(moderator.bot, { type: "all_server_bans" });
-        moderator.bot.guilds.cache.forEach(server => {
-            let serverBans = allBans.filter(e => { return e.serverID === server.id; });
-            if(moderator.bot.isDatabaseReady === true && server.me !== undefined && server.me !== null && server.me.hasPermission("MANAGE_ROLES") === true) {
-                moderator.timeoutBans(moderator, server, serverBans);
-            }
-        })
-    }
-
-    async timeoutBans(moderator, server, serverBans) {
-        var now = Date.now();
-        var bansToRemove = []
-        var userIDsToUnban = []
-
-        serverBans.forEach(function(ban) {
-            if(ban.end != -1 && ban.end - now < 0) {
-                bansToRemove.push(ban)
-                userIDsToUnban.push(ban.userID);
+            let member = Array.from(server.members.cache.values()).find(e => { return e.user.id === mute.user_ID; })
+            if(member !== undefined) {
+                member.roles.remove(server_config.mute_role_ID);
             }
         });
-        if(serverBans.length < 0) { return; }
-
-        bansToRemove.forEach(ban0 => {
-            server.fetchBans().then(serverBansResult => {
-                serverBansResult.forEach(ban => {
-                    if(userIDsToUnban.includes(ban.user.id)) {
-                        console.log("[mod] Unbanned " + ban.user.username + "#" + ban.user.discriminator + " due to ban expiration-")
-                        server.members.unban(ban.user).catch(e => { console.log(e); });
-                    }
-                });
-            })
-
-            moderator.bot.ssm.server_remove.remove_server_ban(moderator.bot.ssm, ban0.id);
-        })
     }
 
-    checkAllChannels(moderator) {
-        if(moderator.bot.isDatabaseReady === false) { return; }
+    // TODO: add audit log for this
+    async timeout_bans(global_context, server, server_bans) {
+        let now = Date.now();
+        let bans_to_remove = server_bans.filter(e => { return e.end !== -1 && e.end - now < 0; });
+        if(bans_to_remove.length < 0) { return; }
 
-        console.log("[mod] Regenerating permissions for channels (size: " + moderator.bot.channels.cache.size + ")-")
-        moderator.bot.guilds.cache.forEach(server => {
-            moderator.checkChannels(moderator, server);
+        await global_context.utils.verify_guild_members(server);
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: server.id });
+        bans_to_remove.forEach(ban => {
+            global_context.neko_modules_clients.ssm.server_remove.remove_server_ban(global_context, ban.id);
+
+            server.members.unban(ban.user_ID).catch(e => { console.log(e); });
         })
-
-        console.log("[mod] Regenerated permissions-")
     }
-
-    async checkChannels(moderator, server) {
-        if(moderator.bot.isDatabaseReady === true && server.me !== undefined && server.me !== null && server.me.hasPermission("MANAGE_ROLES") === true) {
-            var serverConfig = await moderator.bot.ssm.server_fetch.fetch(moderator.bot, { type: "server", id: server.id });
-            var muteRole = await server.roles.fetch(serverConfig.muteRoleID).catch(e => { console.log(e); });
-            if(muteRole !== undefined) {
-                server.channels.cache.forEach(channel => {
-                    if(channel.permissionOverwrites.has(muteRole.id) === false) {
-                        if(channel.type === "text") {
-                            channel.createOverwrite(muteRole, {
-                                SEND_MESSAGES: false,
-                                ADD_REACTIONS: false
-                            }).catch(e => { console.log(e); });
-                        } else if(channel.type === "voice") {
-                            channel.createOverwrite(muteRole, {
-                                CONNECT: false,
-                                SPEAK: false
-                            }).catch(e => { console.log(e); });
-                        }
-
-                        console.log("[mod] Regenerated permissions for channel(id: " + channel.id + ")-")
-                    }
-                })
-            }
-        }
-    }*/
 }
 
 module.exports = ModerationManager
