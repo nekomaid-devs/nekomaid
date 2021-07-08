@@ -82,6 +82,8 @@ module.exports = {
     item: require('./item'),
     buy: require('./buy'),
     inventory: require('./inventory'),
+    buildings: require('./buildings'),
+    globalbuildings: require('./globalbuildings'),
     
     ass: require('./ass'),
     maid: require('./maid'),
