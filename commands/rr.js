@@ -70,9 +70,8 @@ module.exports = {
                     let menu_description = "";
                     Array.from(roles.keys()).forEach(role_ID => {
                         let emoji = roles.get(role_ID);
-                        let emoji_2 = emoji.includes(":") ? emoji.substring(emoji.lastIndexOf(":") + 1, emoji.length - 1) : emoji
+                        msg.react(emoji);
 
-                        msg.react(emoji_2);
                         menu_description += `${emoji} - <@&${role_ID}>\n`
                     });
 
@@ -80,7 +79,7 @@ module.exports = {
                     msg.edit("", reactionRoleEmbed);
 
                     global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", id: msg.guild.id, server: server_config });
-                    global_context.neko_modules_clients.rrm.createCollector(global_context, msg.guild, reactionRoleMenuInfo);
+                    global_context.neko_modules_clients.rrm.create_collector(global_context, msg.guild, reactionRoleMenuInfo);
                     break;
                 
                 default:

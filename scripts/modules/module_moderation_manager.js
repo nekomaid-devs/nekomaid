@@ -28,7 +28,7 @@ class ModerationManager {
 
             let member = Array.from(server.members.cache.values()).find(e => { return e.user.id === mute.user_ID; })
             if(member !== undefined) {
-                member.roles.remove(server_config.mute_role_ID);
+                member.roles.remove(server_config.mute_role_ID).catch(e => { global_context.logger.api_error(e); });
             }
         });
     }
@@ -44,7 +44,7 @@ class ModerationManager {
         bans_to_remove.forEach(ban => {
             global_context.neko_modules_clients.ssm.server_remove.remove_server_ban(global_context, ban.id);
 
-            server.members.unban(ban.user_ID).catch(e => { console.log(e); });
+            server.members.unban(ban.user_ID).catch(e => { global_context.logger.api_error(e); });
         })
     }
 }

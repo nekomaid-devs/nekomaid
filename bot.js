@@ -179,6 +179,7 @@ bot.on('ready', async() => {
 
     global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "defaultConfig" });
     global_context.neko_modules.web_updates.refresh_status(global_context);
+    global_context.neko_modules_clients.rrm.create_all_collectors(global_context);
     
     let bot_callbacks = require('./callbacks');
     Object.keys(bot_callbacks).forEach(key => {

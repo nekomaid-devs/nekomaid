@@ -1,54 +1,58 @@
 class ReactionRolesManager {
-    constructor() {
-        /*this.collectors = new Map();*/
-    }
-
-    /*createCollectors(rrm) {
-        rrm.bot.guilds.cache.forEach(async(server) => {
-            if(rrm.bot.isDatabaseReady === true && server.me !== undefined && server.me !== null && server.me.hasPermission("MANAGE_ROLES") === true) {
-                var serverConfig = await rrm.bot.ssm.server_fetch.fetch(rrm.bot, { type: "server", id: server.id, containExtra: true });
-                serverConfig.reactionRoles.forEach(rr => {
-                    this.createCollector(rrm, server, rr);
-                });
-            }
+    create_all_collectors(global_context) {
+        global_context.bot.guilds.cache.forEach(async(server) => {
+            let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: server.id, containExtra: true });
+            server_config.reaction_roles.forEach(rr => {
+                global_context.neko_modules_clients.rrm.create_collector(global_context, server, rr);
+            });
         })
     }
 
-    async createCollector(rrm, server, rr) {
-        if(rrm.bot.channels.cache.has(rr.channelID) === true) {
-            var channel = rrm.bot.channels.cache.get(rr.channelID);
-            if(channel === undefined) { return; }
-            var message = channel.messages.cache.get(rr.messageID);
-            if(message === undefined) { return; }
+    async create_collector(global_context, server, rr) {
+        let channel = await global_context.bot.channels.fetch(rr.channel_ID).catch(e => { global_context.logger.api_error(e); });
+        if(channel !== undefined) {
+            let message = await channel.messages.fetch(rr.message_ID).catch(e => { global_context.logger.api_error(e); });
+            if(message !== undefined) {
+                let filter = (r, u) => u.bot === false
+                let collector = message.createReactionCollector(filter, { dispose: true })
+                collector.on('collect', (r, user) => {
+                    rr.reaction_roles.forEach(async(role_ID, i) => {
+                        let emoji = rr.reaction_role_emojis[i];
+                        if((emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === "<:" + r.emoji.name + ":" + r.emoji.id + ">"))) {
+                            await global_context.utils.verify_guild_members(server);
+                            await global_context.utils.verify_guild_roles(server);
 
-            var filter = (r, u) => u.bot === false
-
-            var collector = message.createReactionCollector(filter, { dispose: true })
-            collector.on('collect', (r, user) => {
-                rr.reactionRoles.forEach(async(roleID, i) => {
-                    var emoji = rr.reactionRoleEmojis[i];
-                    if((emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === "<:" + r.emoji.name + ":" + r.emoji.id + ">")) && server.members.cache.has(user.id) === true && server.roles.cache.has(roleID) === true) {
-                        var member = await server.members.fetch(user.id).catch(e => { console.log(e); });
-                        var role = await server.roles.fetch(roleID).catch(e => { console.log(e); });
-
-                        member.roles.add(role);
-                    }
+                            let member = Array.from(server.members.cache.values()).find(e => { return e.user.id === user.id; })
+                            if(member !== undefined) {
+                                let role = Array.from(server.roles.cache.values()).find(e => { return e.id === role_ID; });
+                                if(role !== undefined) {
+                                    member.roles.add(role).catch(e => { global_context.logger.api_error(e); });
+                                }
+                            }
+                        }
+                    });
                 });
-            });
 
-            collector.on('remove', (r, user) => {
-                rr.reactionRoles.forEach(async(roleID, i) => {
-                    var emoji = rr.reactionRoleEmojis[i];
-                    if((emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === "<:" + r.emoji.name + ":" + r.emoji.id + ">")) && server.members.cache.has(user.id) === true && server.roles.cache.has(roleID) === true) {
-                        var member = await server.members.fetch(user.id).catch(e => { console.log(e); });
-                        var role = await server.roles.fetch(roleID).catch(e => { console.log(e); });
+                collector.on('remove', (r, user) => {
+                    rr.reaction_roles.forEach(async(role_ID, i) => {
+                        let emoji = rr.reaction_role_emojis[i];
+                        if((emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === "<:" + r.emoji.name + ":" + r.emoji.id + ">"))) {
+                            await global_context.utils.verify_guild_members(server);
+                            await global_context.utils.verify_guild_roles(server);
 
-                        member.roles.remove(role);
-                    }
+                            let member = Array.from(server.members.cache.values()).find(e => { return e.user.id === user.id; })
+                            if(member !== undefined) {
+                                let role = Array.from(server.roles.cache.values()).find(e => { return e.id === role_ID; });
+                                if(role !== undefined) {
+                                    member.roles.remove(role).catch(e => { global_context.logger.api_error(e); });
+                                }
+                            }
+                        }
+                    });
                 });
-            });
+            }
         }
-    }*/
+    }
 }
 
 module.exports = ReactionRolesManager;
