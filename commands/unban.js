@@ -1,12 +1,12 @@
+const RecommendedArgument = require("../scripts/helpers/recommended_argument");
 const NeededArgument = require("../scripts/helpers/needed_argument");
 const NeededPermission = require("../scripts/helpers/needed_permission");
 
-// TODO: add unban reason
 module.exports = {
     name: "unban",
     category: "Moderation",
     description: "Unbans the tagged user.",
-    helpUsage: "[username]`",
+    helpUsage: "[username] [?reason]` *(optional argument)*",
     exampleUsage: "/username/",
     hidden: false,
     aliases: [],
@@ -14,17 +14,24 @@ module.exports = {
     argumentsNeeded: [
         new NeededArgument(1, "You need to type in an username (ex. `LamkasDev` or `LamkasDev#4235`).")
     ],
-    argumentsRecommended: [],
+    argumentsRecommended: [
+        new RecommendedArgument(2, "Argument needs to be a reason.", "none")
+    ],
     permissionsNeeded: [
         new NeededPermission("author", "BAN_MEMBERS"),
         new NeededPermission("me", "BAN_MEMBERS")
     ],
     nsfw: false,
     execute(command_data) {
-        let usernames = [];
-        let ban_info = -1;
+        // TODO: this needs a refactor
+        let unban_reason = "None";
+        if(command_data.args.length > 1) {
+            unban_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[0]) + command_data.args[0].length + 1)
+        }
 
-        let tagged_user_display_name = command_data.total_argument;
+        let ban_info = -1;
+        let usernames = [];
+        let tagged_user_display_name = command_data.args[0];
         command_data.msg.guild.fetchBans().then(serverBansResult => {
             serverBansResult.forEach(ban => {
                 let tagged_user_display_name_modded = tagged_user_display_name.endsWith("#" + ban.user.discriminator) ? tagged_user_display_name : tagged_user_display_name + "#" + ban.user.discriminator;
@@ -39,7 +46,7 @@ module.exports = {
             } else if(usernames.length < 1) {
                 command_data.msg.reply(`\`${tagged_user_display_name}\` isn't banned-`);
             } else {
-                command_data.msg.guild.members.unban(ban_info.user, "None").catch(e => {
+                command_data.msg.guild.members.unban(ban_info.user, unban_reason).catch(e => {
                     command_data.global_context.logger.api_error(e);
                     command_data.msg.reply(`Couldn't unban \`${ban_info.user.tag}\` (Try moving Nekomaid's permissions above the user you want to unban-`)
                 })
