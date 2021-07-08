@@ -4,48 +4,54 @@ module.exports = {
     name: "transfer",
     category: "Profile",
     description: "Transfers credits to another user.",
-    helpUsage: "[ammount/all] [mention]`",
+    helpUsage: "[ammount/all/half/%] [mention]`",
     exampleUsage: "100 /user_tag/",
     hidden: false,
     aliases: ["pay"],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to mention somebody.", "mention"),
         new NeededArgument(1, "You need to type in an ammount.", "none"),
+        new NeededArgument(2, "You need to mention somebody.", "mention")
     ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
         if(command_data.msg.author.id === command_data.tagged_user.id) {
-            command_data.msg.reply("You can't tranfer credits to yourself-");
+            command_data.msg.reply("You can't transfer credits to yourself.");
             return;
         }
 
-        // TODO: add support for %
-        // TODO: update helpUsage
         let credits_ammount = parseInt(command_data.args[0]);
         if(command_data.args[0] === "all") {
             if(command_data.author_config.credits <= 0) {
-                command_data.msg.reply("You don't have enough credits to do this-");
+                command_data.msg.reply(`You don't have enough credits to do this.`);
                 return;
             } else {
                 credits_ammount = command_data.author_config.credits;
             }
         } else if(command_data.args[0] === "half") {
             if(command_data.author_config.credits <= 1) {
-                command_data.msg.reply("You don't have enough credits to do this-");
+                command_data.msg.reply(`You don't have enough credits to do this.`);
                 return;
             } else {
                 credits_ammount = Math.round(command_data.author_config.credits / 2);
             }
-        } else if(isNaN(credits_ammount) || credits_ammount <= 0) {
-            command_data.msg.channel.send("Invalid credits ammount-").catch(e => { command_data.global_context.logger.api_error(e); });
-            return;
+        } else if(command_data.args[0].includes("%")) {
+            if(credits_ammount > 0 && credits_ammount <= 100) {
+                credits_ammount = Math.round(command_data.author_config.credits * (credits_ammount / 100));
+                if(credits_ammount < 1 || command_data.author_config.credits <= 0) {
+                    command_data.msg.reply(`You don't have enough credits to do this.`);
+                    return;
+                }
+            } else {
+                command_data.msg.reply(`Invalid percentage ammount.`);
+                return;
+            }
         }
 
         if(command_data.author_config.credits - credits_ammount < 0) {
-            command_data.msg.reply("You don't have enough credits to do this-");
+            command_data.msg.reply(`You don't have enough credits to do this.`);
             return;
         }
 

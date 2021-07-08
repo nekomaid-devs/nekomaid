@@ -4,7 +4,7 @@ module.exports = {
     name: "coinflip",
     category: "Fun",
     description: "Flips a coin- Also makes it possible to win credits by betting.",
-    helpUsage: "[ammount/all/half?] [heads/tails?]` *(both argument optional)*",
+    helpUsage: "[ammount/all/half/%?] [heads/tails?]` *(both argument optional)*",
     exampleUsage: "100 tails",
     hidden: false,
     aliases: [],
@@ -26,34 +26,43 @@ module.exports = {
 
         if(command_data.args.length > 0) {
             let bet_result = command_data.args.length > 1 ? command_data.args[1].toLowerCase() : "heads";
-            let bet_ammount = parseInt(command_data.args[0]);
 
-            // TODO: add support for %
-            let author_credits = command_data.author_config.credits;
+            let credits_ammount = parseInt(command_data.args[0]);
             if(command_data.args[0] === "all") {
-                if(author_credits <= 0) {
-                    command_data.msg.reply("You don't have enough credits to do this-");
+                if(command_data.author_config.credits <= 0) {
+                    command_data.msg.reply(`You don't have enough credits to do this.`);
                     return;
                 } else {
-                    bet_ammount = author_credits;
+                    credits_ammount = command_data.author_config.credits;
                 }
             } else if(command_data.args[0] === "half") {
-                if(author_credits <= 1) {
-                    command_data.msg.reply("You don't have enough credits to do this-");
+                if(command_data.author_config.credits <= 1) {
+                    command_data.msg.reply(`You don't have enough credits to do this.`);
                     return;
                 } else {
-                    bet_ammount = Math.round(author_credits / 2);
+                    credits_ammount = Math.round(command_data.author_config.credits / 2);
+                }
+            } else if(command_data.args[0].includes("%")) {
+                if(credits_ammount > 0 && credits_ammount <= 100) {
+                    credits_ammount = Math.round(command_data.author_config.credits * (credits_ammount / 100));
+                    if(credits_ammount < 1 || command_data.author_config.credits <= 0) {
+                        command_data.msg.reply(`You don't have enough credits to do this.`);
+                        return;
+                    }
+                } else {
+                    command_data.msg.reply(`Invalid percentage ammount.`);
+                    return;
                 }
             }
-
-            if(command_data.author_config.credits < bet_ammount) {
-                command_data.msg.reply("You don't have enough credits to do this-");
+    
+            if(command_data.author_config.credits - credits_ammount < 0) {
+                command_data.msg.reply(`You don't have enough credits to do this.`);
                 return;
             }
 
             if(result === bet_result) {
-                let won_ammount = Math.floor(bet_ammount * 0.75);
-                let won_ammount_text = bet_ammount + won_ammount;
+                let won_ammount = Math.floor(credits_ammount * 0.75);
+                let won_ammount_text = credits_ammount + won_ammount;
 
                 command_data.author_config.credits += won_ammount;
                 command_data.author_config.net_worth += won_ammount;
@@ -64,11 +73,11 @@ module.exports = {
                     text: "Win multiplier: 1.75x"
                 }
             } else {
-                command_data.author_config.credits -= bet_ammount;
-                command_data.author_config.net_worth -= bet_ammount;
+                command_data.author_config.credits -= credits_ammount;
+                command_data.author_config.net_worth -= credits_ammount;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
-                embedCoinflip.description = `You lost \`${bet_ammount}\` credits-`;
+                embedCoinflip.description = `You lost \`${credits_ammount}\` credits-`;
             }
 
             command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });

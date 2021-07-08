@@ -4,7 +4,7 @@ module.exports = {
     name: "deposit",
     category: "Profile",
     description: "Deposits credits from user to bank.",
-    helpUsage: "[ammount/all/half]`",
+    helpUsage: "[ammount/all/half/%]`",
     exampleUsage: "100",
     hidden: false,
     aliases: ["dep"],
@@ -16,27 +16,36 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: update helpUsage
-        // TODO: add support for %
         let credits_ammount = parseInt(command_data.args[0]);
         if(command_data.args[0] === "all") {
             if(command_data.author_config.credits <= 0) {
-                command_data.msg.reply(`You don't have enough credits to do this-`);
+                command_data.msg.reply(`You don't have enough credits to do this.`);
                 return;
             } else {
                 credits_ammount = command_data.author_config.credits;
             }
         } else if(command_data.args[0] === "half") {
             if(command_data.author_config.credits <= 1) {
-                command_data.msg.reply(`You don't have enough credits to do this-`);
+                command_data.msg.reply(`You don't have enough credits to do this.`);
                 return;
             } else {
                 credits_ammount = Math.round(command_data.author_config.credits / 2);
             }
+        } else if(command_data.args[0].includes("%")) {
+            if(credits_ammount > 0 && credits_ammount <= 100) {
+                credits_ammount = Math.round(command_data.author_config.credits * (credits_ammount / 100));
+                if(credits_ammount < 1 || command_data.author_config.credits <= 0) {
+                    command_data.msg.reply(`You don't have enough credits to do this.`);
+                    return;
+                }
+            } else {
+                command_data.msg.reply(`Invalid percentage ammount.`);
+                return;
+            }
         }
 
         if(command_data.author_config.credits - credits_ammount < 0) {
-            command_data.msg.reply(`You don't have enough credits to do this-`);
+            command_data.msg.reply(`You don't have enough credits to do this.`);
             return;
         }
 

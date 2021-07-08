@@ -4,7 +4,7 @@ module.exports = {
     name: "withdraw",
     category: "Profile",
     description: "Transfers credits from bank to user.",
-    helpUsage: "[ammount/all]`",
+    helpUsage: "[ammount/all/half/%]`",
     exampleUsage: "100",
     hidden: false,
     aliases: ["with"],
@@ -16,27 +16,36 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        // TODO: update helpUsage
-        // TODO: add support for "half" and %
         let credits_ammount = parseInt(command_data.args[0]);
         if(command_data.args[0] === "all") {
             if(command_data.author_config.bank <= 0) {
-                command_data.msg.reply(`Your bank account doesn't have enough credits to do this-`);
+                command_data.msg.reply(`Your bank account doesn't have enough credits to do this.`);
                 return;
             } else {
                 credits_ammount = command_data.author_config.bank;
             }
         } else if(command_data.args[0] === "half") {
             if(command_data.author_config.bank <= 1) {
-                command_data.msg.reply(`Your bank account doesn't have enough credits to do this-`);
+                command_data.msg.reply(`Your bank account doesn't have enough credits to do this.`);
                 return;
             } else {
                 credits_ammount = Math.round(command_data.author_config.bank / 2);
             }
+        } else if(command_data.args[0].includes("%")) {
+            if(credits_ammount > 0 && credits_ammount <= 100) {
+                credits_ammount = Math.round(command_data.author_config.bank * (credits_ammount / 100));
+                if(credits_ammount < 1 || command_data.author_config.bank <= 0) {
+                    command_data.msg.reply(`Your bank account doesn't have enough credits to do this.`);
+                    return;
+                }
+            } else {
+                command_data.msg.reply(`Invalid percentage ammount.`);
+                return;
+            }
         }
 
         if(command_data.author_config.bank - credits_ammount < 0) {
-            command_data.msg.reply(`You don't have enough credits in bank to do this-`);
+            command_data.msg.reply(`You don't have enough credits in bank to do this.`);
             return;
         }
 
