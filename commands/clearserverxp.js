@@ -29,7 +29,7 @@ module.exports = {
             if(command_data.msg.guild.members.cache.has(server_user_config.user_ID) === true) {
                 command_data.taggedServerUserConfig = server_user_config;
                 command_data.tagged_member = await command_data.msg.guild.members.fetch(server_user_config.user_ID).catch(e => { command_data.global_context.logger.api_error(e); });
-                command_data.bot.lvl.updateServerLevel(command_data, 0);
+                command_data.bot.lvl.update_server_level(command_data, 0);
             }
         });
 

@@ -15,8 +15,8 @@ module.exports = {
             command_data.msg.reply("Leveling isn't enabled on this server- (see `" + command_data.server_config.prefix + "leveling` for help)");
             return;
         }
-
-        let top_text = "⚡ Server Level"
+        
+        let top_text = "⚡ Server Level";
         let items = await command_data.global_context.neko_modules_clients.sb.get_top_server_level(command_data.global_context, command_data.server_config, command_data.msg.guild);
         let embedTop = new command_data.global_context.modules.Discord.MessageEmbed()
         .setColor(8388736)

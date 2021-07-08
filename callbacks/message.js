@@ -48,7 +48,7 @@ module.exports = {
             server_warns: [],
 
             author_user_config: {},
-            author_server_user_config: await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", server_ID: message.guild.id, user_ID: message.member.user.id }),
+            author_server_user_config: await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_user", server_ID: message.guild.id, user_ID: message.member.user.id }),
         
             tagged_user_config: {},
             tagged_server_user_config: {}
@@ -94,8 +94,9 @@ module.exports = {
 
         global_context.neko_modules_clients.mm.check_marriage_proposals(global_context, message);
 
-        //Update user's server level
-        //global_context.neko_modules.lvl.updateServerLevel(command_data, command_data.server_config.module_level_message_exp);
+        if(message.author.bot === false && command_data.server_config.module_level_enabled == true) {
+            global_context.neko_modules_clients.lvl.update_server_level(command_data, command_data.server_config.module_level_message_exp);
+        }
 
         let bot_id = global_context.bot.user.id;
         if(message.content === `<@!${bot_id}>`) {
@@ -136,7 +137,7 @@ module.exports = {
         command_data.server_mutes = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_mutes", id: message.guild.id });
         command_data.server_warns = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_warnings", id: message.guild.id });
         command_data.author_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: message.author.id });
-        command_data.tagged_server_user_config = message.mentions.users.array().length < 1 ? command_data.author_server_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "serverUser", server_ID: message.guild.id, user_ID: message.mentions.users.array()[0].id });
+        command_data.tagged_server_user_config = message.mentions.users.array().length < 1 ? command_data.author_server_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_user", server_ID: message.guild.id, user_ID: message.mentions.users.array()[0].id });
         command_data.tagged_user_config = message.mentions.users.array().length < 1 ? command_data.author_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: message.mentions.users.array()[0].id });    
         
         let command_name = command_data.args.shift().toLowerCase();
@@ -154,7 +155,7 @@ module.exports = {
         global_context.data.total_commands += 1;
         global_context.data.processed_commands += 1;
 
-        //global_context.neko_modules.lvl.updateGlobalLevel(command_data);
+        global_context.neko_modules_clients.lvl.update_global_level(command_data);
 
         global_context.logger.log(`[${message.guild.name}] Called command: ${command_name}`);
         let command = global_context.commands.get(command_name);
