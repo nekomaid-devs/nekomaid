@@ -12,6 +12,10 @@ module.exports = {
     guild_member_update: require('./guild_member_update'),
     guild_member_remove: require('./guild_member_remove'),
     
+    guild_member_mute: require('./guild_member_mute'),
+    guild_member_mute_ext: require('./guild_member_mute_ext'),
+    guild_member_mute_remove: require('./guild_member_mute_remove'),
+    
     guild_member_warn: require('./guild_member_warn'),
     guild_member_clear_warns: require('./guild_member_clear_warns'),
 

@@ -46,42 +46,7 @@ module.exports = {
             command_data.tagged_member.roles.remove(mute_role);
 
             command_data.msg.channel.send(`Unmuted \`${command_data.tagged_user.tag}\` (Reason: \`${unmute_reason}\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
-            command_data.global_context.neko_modules_clients.ssm.server_remove.remove_server_mute(command_data.global_context, previous_mute.id);
-
-            // TODO: drop this once a separate callback
-            if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
-                let channel = await command_data.global_context.bot.channels.fetch(command_data.server_config.audit_channel).catch(e => { command_data.global_context.logger.api_error(e); });
-                if(channel !== undefined) {
-                    let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-                    let embedMute = {
-                        author: {
-                            name: `Case ${command_data.server_config.case_ID}# | Unmute | ${command_data.tagged_user.tag}`,
-                            icon_url: url,
-                        },
-                        fields: [
-                            {
-                                name: "User:",
-                                value: command_data.tagged_user,
-                                inline: true
-                            },
-                            {
-                                name: "Moderator:",
-                                value: command_data.msg.author,
-                                inline: true
-                            },
-                            {
-                                name: "Reason:",
-                                value: unmute_reason
-                            }
-                        ]
-                    }
-
-                    command_data.server_config.case_ID += 1;
-                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
-
-                    channel.send("", { embed: embedMute }).catch(e => { command_data.global_context.logger.api_error(e); });
-                }
-            }
+            command_data.global_context.bot.emit("guildMemberMuteRemove", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: unmute_reason, previous_mute: previous_mute });
         }
     }
 };

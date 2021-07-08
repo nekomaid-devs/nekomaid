@@ -46,6 +46,15 @@ module.exports = {
                 return await this.edit_data(global_context, query, query_data);
             }
 
+            case "server_mute": {
+                let server = data.server;
+
+                let query_0 = "mute_role_ID=?"
+                let query_data = [ server.mute_role_ID ]
+                let query = "UPDATE servers SET " + query_0 + " WHERE server_ID='" + server.server_ID + "'";
+                return await this.edit_data(global_context, query, query_data);
+            }
+
             case "server_cb": {
                 let server = data.server;
 

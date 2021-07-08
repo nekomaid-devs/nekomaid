@@ -26,8 +26,8 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         // TODO: previous mutes don't get removed btw
-        let time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.args[1]));
-        if(time != -1 && time.status != 1) {
+        let time = command_data.args.length < 2 ? -1 : (command_data.args[1] === "-1" ? -1 : command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.args[1]));
+        if(time !== -1 && time.status !== 1) {
             command_data.msg.reply("You entered invalid time format (ex. `1d2h3m4s` or `-1`)-");
             return;
         }
@@ -47,6 +47,7 @@ module.exports = {
             }
         });
 
+        // TODO: custom durations are bugged
         let mute_start = Date.now();
         let mute_end = -1;
         let extended_time = (time.days * 86400000) + (time.hrs * 3600000) + (time.mins * 60000) + (time.secs * 1000);
@@ -55,97 +56,16 @@ module.exports = {
         if(previous_mute === -1) {
             mute_end = mute_start + extended_time;
             let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(mute_end - mute_start);
+
             command_data.msg.channel.send(`Muted \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { command_data.global_context.logger.api_error(e); });
-
-            // TODO: drop this once a separate callback
-            if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
-                let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { command_data.global_context.logger.api_error(e); });
-                if(channel !== undefined) {
-                    let embedMute = {
-                        author: {
-                            name: `Case ${command_data.server_config.case_ID}# | Mute | ${command_data.tagged_user.tag}`,
-                            icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
-                        },
-                        fields: [
-                            {
-                                name: "User:",
-                                value: command_data.tagged_user,
-                                inline: true
-                            },
-                            {
-                                name: "Moderator:",
-                                value: command_data.msg.author,
-                                inline: true
-                            },
-                            {
-                                name: "Reason:",
-                                value: mute_reason
-                            },
-                            {
-                                name: "Duration:",
-                                value: mute_end_text
-                            }
-                        ]
-                    }
-
-                    command_data.server_config.case_ID += 1;
-                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
-
-                    channel.send("", { embed: embedMute }).catch(e => { command_data.global_context.logger.api_error(e); });
-                }
-            }
+            command_data.global_context.bot.emit("guildMemberMute", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: mute_reason, duration: mute_end_text, mute_start: mute_start, mute_end: mute_end, time: time });
         } else {
             mute_end = previous_mute.end + extended_time;
-            let prev_mute_end_text = previous_mute.end === 1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(previous_mute.end - mute_start);
+            let prev_mute_end_text = previous_mute.end === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(previous_mute.end - mute_start);
             let mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(mute_end - mute_start);
+            
             command_data.msg.channel.send(`Extended mute of \`${command_data.tagged_user.tag}\` by \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch(e => { command_data.global_context.logger.api_error(e); });
-
-            // TODO: drop this once a separate callback
-            if(command_data.server_config.audit_mutes == true && command_data.server_config.audit_channel != "-1") {
-                let channel = await command_data.msg.guild.channels.fetch(command_data.server_config.audit_channel).catch(e => { command_data.global_context.logger.api_error(e); });
-                if(channel !== undefined) {
-                    let embedMute = {
-                        author: {
-                            name: `Case ${command_data.server_config.case_ID}# | Mute Extension | ${command_data.tagged_user.tag}`,
-                            icon_url: command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
-                        },
-                        fields: [
-                            {
-                                name: "User:",
-                                value: command_data.tagged_user,
-                                inline: true
-                            },
-                            {
-                                name: "Moderator:",
-                                value: command_data.msg.author,
-                                inline: true
-                            },
-                            {
-                                name: "Reason:",
-                                value: mute_reason
-                            },
-                            {
-                                name: "Duration:",
-                                value: prev_mute_end_text + " -> " + mute_end_text
-                            }
-                        ]
-                    }
-
-                    command_data.server_config.case_ID += 1;
-                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
-
-                    channel.send("", { embed: embedMute }).catch(e => { command_data.global_context.logger.api_error(e); });
-                }
-            }
-        }
-
-        let server_mute = {
-            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
-            server_ID: command_data.msg.guild.id,
-            user_ID: command_data.tagged_user.id,
-            start: mute_start,
-            reason: mute_reason,
-            end: time === -1 ? -1 : mute_end
+            command_data.global_context.bot.emit("guildMemberMuteExt", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: mute_reason, prev_duration: prev_mute_end_text, next_duration: mute_end_text, mute_start: mute_start, mute_end: mute_end, time: time });
         }
 
         if(command_data.server_config.mute_role_ID === "-1") {
@@ -158,8 +78,6 @@ module.exports = {
                 command_data.tagged_member.roles.add(mute_role);
             }
         }
-
-        command_data.global_context.neko_modules_clients.ssm.server_add.add_server_mute(command_data.global_context, server_mute);
     },
 
     create_mute_role_and_mute(command_data) {
@@ -191,7 +109,7 @@ module.exports = {
             command_data.tagged_member.roles.add(mute_role)
             .then(() => {
                 command_data.server_config.mute_role_ID = mute_role.id;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server_mute", id: command_data.msg.guild.id, server: command_data.server_config });
             })
             .catch(err => {
                 command_data.global_context.logger.error(err);
