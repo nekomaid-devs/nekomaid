@@ -14,8 +14,7 @@ module.exports = {
         let elapsed = new Date() - new Date(command_data.msg.guild.createdAt.toUTCString());
         let createdAgo = command_data.global_context.neko_modules_clients.tc.convert_time(elapsed);
 
-        // TODO: fix owner tag
-        let channels = await command_data.msg.guild.channels.fetch();
+        await command_data.global_context.utils.verify_guild_members(command_data.msg.guild);
         let url = command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
         let embedServer = {
             color: 8388736,
@@ -46,7 +45,7 @@ module.exports = {
                     },
                     {
                         name: '❯ Channels',
-                        value: `${channels.size}`,
+                        value: `${command_data.msg.guild.channels.cache.size}`,
                         inline: true
                     },
                     {
