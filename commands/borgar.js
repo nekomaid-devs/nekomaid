@@ -1,6 +1,6 @@
 module.exports = {
     name: "borgar",
-    category: "Actions",
+    category: "Emotes",
     description: "borgar.",
     helpUsage: "`",
     hidden: false,

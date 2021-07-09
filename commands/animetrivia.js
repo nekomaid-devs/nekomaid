@@ -6,7 +6,7 @@ module.exports = {
     description: "Starts an anime opening/ending trivia in current channel~",
     helpUsage: "`",
     exampleUsage: "",
-    hidden: true,
+    hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
