@@ -448,5 +448,84 @@ module.exports = {
         }
 
         return embedError;
+    },
+
+    get_building_price(level, building_name) {
+        let prices = {
+            b_city_hall:     [0, 25000, 50000, 100000, 150000, 300000, 500000, 1000000, 2500000, 5000000, 10000000],
+            b_bank:          [0, 10000, 25000, 40000, 75000, 100000, 125000, 250000, 500000, 1000000, 3000000],
+            b_lab:           [0, 20000, 75000, 100000, 125000, 150000, 250000, 275000, 600000, 1250000, 3500000],
+            b_sanctuary:     [0, 15000, 35000, 50000, 90000, 110000, 135000, 265000, 540000, 1100000, 3250000],
+            b_pancakes:      [0, 25000, 50000, 100000, 150000, 300000, 500000, 1000000, 1300000, 2000000, 3500000],
+            b_crime_den:     [0, 30000, 75000, 150000, 250000, 450000, 750000, 1400000, 1950000, 2600000, 40000000],
+            b_lewd_services: [0, 45000, 70000, 125000, 250000, 500000, 700000, 1300000, 2000000, 3000000, 4500000],
+            b_casino:        [0, 50000, 100000, 175000, 350000, 650000, 950000, 1800000, 2500000, 3750000, 50000000],
+            b_scrapyard:     [0, 100000, 150000, 250000, 500000, 750000, 1500000, 2500000, 4500000, 7500000, 10000000],
+            b_pawn_shop:     [0, 80000, 125000, 225000, 450000, 700000, 1250000, 2000000, 3800000, 5000000, 7500000],
+
+            b_mayor_house:      [0, 250000, 450000, 1250000, 3000000, 5000000, 25000000, 50000000, 100000000, 125000000, 300000000],
+            b_shrine:           [0, 100000, 210000, 700000, 1500000, 2250000, 10000000, 25000000, 60000000, 100000000, 250000000],
+            b_community_center: [0, 125000, 275000, 750000, 1750000, 2500000, 12500000, 27500000, 65000000, 105000000, 260000000],
+            b_quantum_pancakes: [0, 150000, 350000, 900000, 2500000, 4000000, 18000000, 35000000, 75000000, 115000000, 280000000],
+            b_crime_monopoly:   [0, 200000, 400000, 1100000, 3000000, 4500000, 20000000, 40000000, 90000000, 120000000, 295000000],
+            b_pet_shelter:      [0, 140000, 300000, 775000, 2000000, 3000000, 15000000, 30000000, 70000000, 110000000, 275000000]
+        }
+
+        return prices[building_name][level + 1];
+    },
+
+    get_building_description(building_field) {
+        let descriptions = {
+            b_city_hall: "No description yet.",
+            b_bank: "No description yet.",
+            b_lab: "No description yet.",
+            b_sanctuary: "No description yet.",
+            b_pancakes: "No description yet.",
+            b_crime_den: "No description yet.",
+            b_lewd_services: "No description yet.",
+            b_casino: "No description yet.",
+            b_scrapyard: "No description yet.",
+            b_pawn_shop: "No description yet.",
+
+            b_mayor_house: "No description yet.",
+            b_shrine: "No description yet.",
+            b_community_center: "No description yet.",
+            b_quantum_pancakes: "No description yet.",
+            b_crime_monopoly: "No description yet.",
+            b_pet_shelter: "No description yet."
+        }
+
+        return descriptions[building_field];
+    },
+
+    get_building_field(building_name) {
+        let buildings = {
+            "Neko's City Hall": "b_city_hall",
+            "Neko's Bank": "b_bank",
+            "Neko's Lab": "b_lab",
+            "Neko's Sanctuary": "b_sanctuary",
+            "Neko's Pancakes": "b_pancakes",
+            "Neko's Crime Den": "b_crime_den",
+            "Neko's Lewd Services": "b_lewd_services",
+            "Neko's Casino": "b_casino",
+            "Neko's Scrapyard": "b_scrapyard",
+            "Neko's Pawn Shop": "b_pawn_shop"
+        }
+
+        return buildings[building_name];
+    },
+
+    get_global_building_field(building_name) {
+        let buildings = {
+            "Neko's Mayor House": "b_mayor_house",
+            "Neko's Shrine": "b_shrine",
+            "Neko's Lab": "b_lab",
+            "Neko's Community Center": "b_community_center",
+            "Neko's Quantum Pancakes": "b_quantum_pancakes",
+            "Neko's Crime Monopoly": "b_crime_monopoly",
+            "Neko's Pet Shelter": "b_pet_shelter"
+        }
+
+        return buildings[building_name];
     }
 }

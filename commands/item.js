@@ -4,8 +4,8 @@ module.exports = {
     name: "item",
     category: "Profile",
     description: "Displays info about an item.",
-    helpUsage: "[item name]`",
-    exampleUsage: "Rare Box",
+    helpUsage: "[item_name]`",
+    exampleUsage: "\"Rare Box\"",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -17,8 +17,9 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         // TODO: maybe add some more cool information
-        let item_name = command_data.total_argument;
-        let target_item = Array.from(command_data.global_context.bot_config.items.values()).find(e => { return e.display_name.toLowerCase() === item_name.toLowerCase(); });
+        let item_name = command_data.total_argument.substring(command_data.total_argument.indexOf('"') + 1, command_data.total_argument.lastIndexOf('"'));
+
+        let target_item = Array.from(command_data.global_context.bot_config.items.values()).find(e => { return e.display_name === item_name; });
         if(target_item === undefined) {
             command_data.msg.reply(`Haven't found any item with name \`${item_name}\`.`);
             return;
@@ -26,9 +27,9 @@ module.exports = {
 
         let embedItem = {
             color: 8388736,
-            title: `Info about \`${target_item.display_name}\``,
+            title: `Item - ${target_item.display_name}`,
             description: target_item.description,
-            footer: `Requested by ${command_data.msg.author.tag}`
+            footer: { text: `Requested by ${command_data.msg.author.tag}` }
         }
         command_data.msg.channel.send("", { embed: embedItem }).catch(e => { command_data.global_context.logger.api_error(e); });
     },

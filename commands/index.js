@@ -53,6 +53,7 @@ module.exports = {
     bal: require('./bal'),
     beg: require('./beg'),
     build: require('./build'),
+    building: require('./building'),
     buildings: require('./buildings'),
     buy: require('./buy'),
     crime: require('./crime'),
