@@ -16,7 +16,7 @@ module.exports = {
     },
 
     async process(global_context, old_message, new_message) {
-        if(new_message.channel.type === "dm") {
+        if(old_message == null || new_message == null || new_message.channel.type === "dm") {
             return;
         }
         
