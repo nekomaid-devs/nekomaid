@@ -20,9 +20,9 @@ module.exports = {
             return;
         }
         
-        let serverConfig = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_message_delete", id: message.guild.id });
-        if(serverConfig.audit_deleted_messages == true && serverConfig.audit_channel != "-1") {
-            let channel = await global_context.bot.channels.fetch(serverConfig.audit_channel).catch(e => { global_context.logger.api_error(e); });
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_message_delete", id: message.guild.id });
+        if(server_config.audit_deleted_messages == true && server_config.audit_channel !== "-1") {
+            let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let url = message.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 let embedDeletedMessage = {
@@ -43,7 +43,7 @@ module.exports = {
                         },
                         {
                             name: "Message:",
-                            value: "~~" + message.content + "~~"
+                            value: `~~${message.content}~~`
                         }
                     ]
                 }

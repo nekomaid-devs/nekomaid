@@ -24,11 +24,11 @@ module.exports = {
             return;
         }
         if(command_data.msg.mentions.members.size > 0 || command_data.msg.mentions.roles.size > 0 || command_data.msg.mentions.everyone === true) {
-            command_data.msg.reply("Please remove all mentions before trying again-");
+            command_data.msg.reply("Please remove all mentions before trying again!");
             return;
         }
         if(command_data.msg.content.includes("@everyone") || command_data.msg.content.includes("@here")) {
-            command_data.msg.reply("Please remove all mentions before trying again-");
+            command_data.msg.reply("Please remove all mentions before trying again!");
             return;
         }
 

@@ -16,7 +16,7 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         if(command_data.server_config.module_level_enabled == false) {
-            command_data.msg.reply(`Leveling isn't enabled on this server- (see \`${command_data.server_config.prefix}leveling\` for help)`);
+            command_data.msg.reply(`Leveling isn't enabled on this server. (see \`${command_data.server_config.prefix}leveling\` for help)`);
             return;
         }
 
@@ -33,6 +33,6 @@ module.exports = {
             }
         });
 
-        command_data.msg.channel.send(`Cleared XP of \`${server_user_configs.length}\` users-`).catch(e => { command_data.global_context.logger.api_error(e); });
+        command_data.msg.channel.send(`Cleared XP of \`${server_user_configs.length}\` users.`).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

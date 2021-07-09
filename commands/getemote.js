@@ -26,7 +26,7 @@ module.exports = {
         // TODO: check for required 2-32 emote name
         let text = command_data.total_argument;
         if(command_data.args.length < 2 && text.includes("https://") === true) {
-            command_data.msg.reply("You need to type in an emote name for links-");
+            command_data.msg.reply("You need to type in an emote name for links.");
             return;
         }
 
@@ -37,7 +37,7 @@ module.exports = {
         let emote_ID = text.substring(a, text.indexOf(">", a));
 
         if(text.includes("https://") === false && emote_ID.length != 18) {
-            command_data.msg.reply(`Invalid emoteID length - (${emote_ID}, ${emote_ID.length}/18)`);
+            command_data.msg.reply(`Invalid emote_ID length! (${emote_ID}, ${emote_ID.length}/18)`);
             return;
         }
 

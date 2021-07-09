@@ -20,7 +20,7 @@ module.exports = {
         if(diff < 24) {
             let end_needed = new Date(start.getTime() + (3600000 * 24));
             let time_left = end_needed - end;
-            command_data.msg.reply(`You need to wait more \`${command_data.global_context.neko_modules_clients.tc.convert_time(time_left)}\` before doing this-`);
+            command_data.msg.reply(`You need to wait more \`${command_data.global_context.neko_modules_clients.tc.convert_time(time_left)}\` before doing this.`);
             return;
         }
 

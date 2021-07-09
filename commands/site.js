@@ -12,7 +12,7 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         let link = "https://nekomaid.xyz";
-        let link_2 = "https://nekomaid.xyz/account?guildID=" + command_data.msg.guild.id;
+        let link_2 = "https://nekomaid.xyz/dashboard?guild_ID=" + command_data.msg.guild.id;
         let embedSite = {
             title: "",
             color: 8388736,

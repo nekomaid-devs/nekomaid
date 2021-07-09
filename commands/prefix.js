@@ -34,7 +34,7 @@ module.exports = {
             command_data.msg.channel.send("", { embed: embedPrefix }).catch(e => { command_data.global_context.logger.api_error(e); });
         } else {
             if(command_data.total_argument.length > 10) {
-                command_data.msg.reply("Prefix can't be longer than 10 characters-");
+                command_data.msg.reply("Prefix can't be longer than 10 characters!");
                 return;
             }
 

@@ -11,6 +11,6 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        command_data.msg.channel.send("Help yourself-").catch(e => { command_data.global_context.logger.api_error(e); });
+        command_data.msg.channel.send("Help yourself...").catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

@@ -50,7 +50,7 @@ module.exports = {
         }
 
         if(command_data.author_config.bank + credits_ammount > command_data.tagged_user_config.bank_limit) {
-            command_data.msg.reply(`You can't transfer that much-`);
+            command_data.msg.reply(`You can't transfer that much.`);
             return;
         }
 
@@ -60,7 +60,7 @@ module.exports = {
 
         let embedDeposit = {
             color: 8388736,
-            description: `Deposited \`${credits_ammount} 💵\` to bank of \`${command_data.msg.author.tag}\` (Current Credits: \`${command_data.author_config.credits}$\`)`
+            description: `Deposited \`${credits_ammount} 💵\` to bank of \`${command_data.msg.author.tag}\`! (Current Credits: \`${command_data.author_config.credits}$\`)`
         }
         command_data.msg.channel.send("", { embed: embedDeposit }).catch(e => { command_data.global_context.logger.api_error(e); });
     },

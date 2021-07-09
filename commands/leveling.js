@@ -111,12 +111,7 @@ module.exports = {
                         for(let i = 0; i < ranks.length; i++) {
                             let rank = ranks[i];
                             let role = await command_data.msg.guild.roles.fetch(rank.role_ID).catch(e => { command_data.global_context.logger.api_error(e); });
-                            if(role === undefined) {
-                                command_data.msg.reply("There was an error in fetching Role-");
-                                return;
-                            }
-
-                            embedRanks.addField(`Rank#${rank.name} - ${rank.level}`, `Role - \`${role.name}\``);
+                            embedRanks.addField(`Rank#${rank.name} - ${rank.level}`, `Role - \`${role === undefined ? "Unknown" : role.name}\``);
                         }
 
                         command_data.msg.channel.send("", { embed: embedRanks }).catch(e => { command_data.global_context.logger.api_error(e); });
@@ -185,7 +180,7 @@ module.exports = {
                         }
 
                         command_data.server_config.module_level_ranks.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), server_ID: command_data.msg.guild.id, name: rank_name, level: level_requirement, role_ID: role.id });
-                        command_data.msg.channel.send("Added rank `" + rank_name + "` for level `" + level_requirement + "` with role `" + role_name + "`-").catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send("Added rank `" + rank_name + "` for level `" + level_requirement + "` with role `" + role_name + "`.").catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -212,12 +207,12 @@ module.exports = {
                             i += 1;
                         });
                         if(channel_index > 0) {
-                            command_data.msg.channel.send(`Channel ${command_data.args[2]} is already ignored-`).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send(`Channel ${command_data.args[2]} is already ignored.`).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         command_data.server_config.module_level_ignored_channels.push(channel);
-                        command_data.msg.channel.send(`Added ${channel} to ignored channels-`).catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send(`Added <#${channel}> to ignored channels.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -246,7 +241,7 @@ module.exports = {
                         }
                         let rank_name = command_data.args[2];
                         let rank_ID = -1;
-                        command_data.server_config.module_level_ranks.forEach(function(rank) {
+                        command_data.server_config.module_level_ranks.forEach((rank) => {
                             if(rank.name === rank_name) {
                                 rank_ID = rank.id;
                             }
@@ -257,7 +252,7 @@ module.exports = {
                         }
 
                         command_data.global_context.neko_modules_clients.ssm.server_remove.remove_rank(command_data.global_context, rankID);
-                        command_data.msg.channel.send(`Removed rank \`${rank_name}\`-`);
+                        command_data.msg.channel.send(`Removed rank \`${rank_name}\`.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -283,12 +278,12 @@ module.exports = {
                             i += 1;
                         });
                         if(channel_index < 0) {
-                            command_data.msg.channel.send(`Channel ${command_data.args[2]} is not ignored-`).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send(`Channel ${command_data.args[2]} is not ignored.`).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         command_data.server_config.module_level_ignored_channels.splice(channel_index, 1);
-                        command_data.msg.channel.send(`Removed ${channel} from ignored channels-`).catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send(`Removed <#${channel}> from ignored channels.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -320,33 +315,36 @@ module.exports = {
                     case "enabled": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         command_data.server_config.module_level_enabled = bool;
+                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} leveling.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     case "levelup_messages": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         command_data.server_config.module_level_levelup_messages = bool;
+                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} level-up messages.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     case "levelup_messages_format": {
                         if(typeof(value) !== "string" || value.length < 1) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (text)`, `set ${property} <user> just got level <level>!`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (text)`, `set ${property} <user> just got level <level>!`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         value = value_text;
                         command_data.server_config.module_level_levelup_messages_format = value;
+                        command_data.msg.channel.send(`Edited the level-up messages format.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -354,60 +352,65 @@ module.exports = {
                         value = value.includes("<#") ? value.replace("<#", "").replace(">", "") : value;
                         let channel = await command_data.msg.guild.channels.fetch(value).catch(e => { command_data.global_context.logger.api_error(e); });
                         if(channel === undefined) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         if(channel.permissionsFor(command_data.global_context.bot.user).has("VIEW_CHANNEL") === false || channel.permissionsFor(command_data.global_context.bot.user).has("SEND_MESSAGES") === false) {
-                            command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again-");
+                            command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again.");
                             return;
                         }
 
                         command_data.server_config.module_level_levelup_messages_channel = value;
+                        command_data.msg.channel.send(`Set level-up messages channel to <#${value}>.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     case "levelup_messages_ping": {
                         let bool = value === "true" ? true : (value === "false" ? false : value);
                         if(typeof(bool) !== "boolean") {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         command_data.server_config.module_level_levelup_messages_ping = bool;
+                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} pings in level-up messages.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     case "message_exp": {
                         if(isNaN(value) || parseFloat(value) <= 0) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (number)`, `set ${property} 2`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 2`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         value = parseFloat(value);
                         command_data.server_config.module_level_message_exp = value;
+                        command_data.msg.channel.send(`Set message exp to \`${value}\`.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     case "level_exp": {
                         if(isNaN(value) || parseFloat(value) <= 0) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (number)`, `set ${property} 200`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 200`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         value = parseFloat(value);
                         command_data.server_config.module_level_level_exp = value;
+                        command_data.msg.channel.send(`Set level exp to \`${value}\`.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
                     case "level_multiplier": {
                         if(isNaN(value) || parseFloat(value) <= 0) {
-                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (number)`, `set ${property} 1.3`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 1.3`) }).catch(e => { command_data.global_context.logger.api_error(e); });
                             return;
                         }
 
                         value = parseFloat(value);
                         command_data.server_config.module_level_level_multiplier = value;
+                        command_data.msg.channel.send(`Set level multiplier to \`${value.toFixed(2)}\`.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -418,7 +421,6 @@ module.exports = {
                 }
 
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
-                command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                 break;
             }
 

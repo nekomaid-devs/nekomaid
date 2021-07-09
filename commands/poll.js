@@ -18,7 +18,7 @@ module.exports = {
     async execute(command_data) {
         let a = (command_data.total_argument.match(/"/g) || []).length;
         if(a === 0 || a % 2 != 0) {
-            command_data.msg.channel.send("Check your syntax before trying to create a poll again-").catch(e => { command_data.global_context.logger.api_error(e); });
+            command_data.msg.channel.send("Check your syntax before trying to create a poll again!").catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
@@ -51,7 +51,7 @@ module.exports = {
         let message = await command_data.msg.channel.send("", { embed: embedPoll }).catch(e => { command_data.global_context.logger.api_error(e); });
         let reactions = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
         parts.forEach((part, i) => {
-            message.react(reactions[i]);
+            message.react(reactions[i]).catch(e => { command_data.global_context.logger.api_error(e); });
         });
     },
 };

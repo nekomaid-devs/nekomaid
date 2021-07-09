@@ -1,8 +1,8 @@
 module.exports = {
     hook(global_context) {
-        global_context.bot.on("messageUpdate", async(oldMessage, newMessage) => {
+        global_context.bot.on("messageUpdate", async(old_message, new_message) => {
             try {
-                await this.process(global_context, oldMessage, newMessage);
+                await this.process(global_context, old_message, new_message);
             } catch(e) {
                 if(global_context.config.sentry_enabled === true) {
                     global_context.modules.Sentry.captureException(e);
@@ -15,31 +15,29 @@ module.exports = {
         });
     },
 
-    async process(global_context, oldMessage, newMessage) {
-        if(newMessage.channel.type === "dm") {
+    async process(global_context, old_message, new_message) {
+        if(new_message.channel.type === "dm") {
             return;
         }
         
-        let serverConfig = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_message_update", id: newMessage.guild.id });
-        if(serverConfig.audit_edited_messages == true && serverConfig.audit_channel != "-1") {
-            let channel = await global_context.bot.channels.fetch(serverConfig.audit_channel).catch(e => { global_context.logger.api_error(e); });
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_message_update", id: new_message.guild.id });
+        if(server_config.audit_edited_messages == true && server_config.audit_channel !== "-1") {
+            let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let embedMessageEdit = {
                     author: {
-                        name: `Message edited | ${newMessage.member.user.tag}`,
-                        icon_url: newMessage.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
+                        name: `Message edited | ${new_message.member.user.tag}`,
+                        icon_url: new_message.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
                     },
                     fields: [
                         {
                             name: "User:",
-                            value: newMessage.member.user,
+                            value: new_message.member.user,
                             inline: false
                         },
                         {
                             name: "Change:",
-                            value:
-                            oldMessage.content + " -> " +
-                            newMessage.content
+                            value: `${old_message.content} -> ${new_message.content}`
                         }
                     ]
                 }

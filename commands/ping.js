@@ -11,13 +11,13 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        let m = await command_data.msg.channel.send("Ping?").catch(e => { command_data.global_context.logger.api_error(e); });
+        let message = await command_data.msg.channel.send("Ping?").catch(e => { command_data.global_context.logger.api_error(e); });
         let embedPing = {
             color: 8388736,
             fields: [
                 {
                     name: "🏓 Ping",
-                    value: `${(m.createdTimestamp - command_data.msg.createdTimestamp)}ms`
+                    value: `${(message.createdTimestamp - command_data.msg.createdTimestamp)}ms`
                 },
                 {
                     name: "🏠 API",
@@ -26,6 +26,6 @@ module.exports = {
             ]
         }
 
-        m.edit("", { embed: embedPing });
+        message.edit("", { embed: embedPing }).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

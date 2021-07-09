@@ -16,12 +16,10 @@ module.exports = {
     },
 
     async process(global_context, guild, user) {
-        // TODO: this should add Nekomaid's bans aswell 
-        // TODO: also we should check for uncaught bans somewhere else
         let moderation_action = global_context.data.last_moderation_actions.get(guild.id);
-        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_ban_add", id: guild.id });
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_ban_add", id: guild.id });
 
-        if(server_config.audit_bans == true && server_config.audit_channel != "-1") {
+        if(server_config.audit_bans == true && server_config.audit_channel !== "-1") {
             let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let audit = await guild.fetchAuditLogs();
@@ -31,7 +29,6 @@ module.exports = {
                     let executor = -1;
                     if(last_audit.executor.id === global_context.bot.user.id) {
                         executor = await global_context.bot.users.fetch(moderation_action.moderator).catch(e => { global_context.logger.api_error(e); });
-                        global_context.data.last_moderation_actions.delete(guild.id);
                     } else {
                         executor = await global_context.bot.users.fetch(last_audit.executor.id).catch(e => { global_context.logger.api_error(e); });
                     }
@@ -72,5 +69,16 @@ module.exports = {
                 }
             }
         }
+
+        let server_ban = {
+            id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+            server_ID: guild.id,
+            user_ID: user.id,
+            start: moderation_action !== undefined ? moderation_action.start : Date.now(),
+            reason: moderation_action !== undefined ? moderation_action.reason : "None",
+            end: moderation_action !== undefined ? moderation_action.end : -1
+        }
+        global_context.neko_modules_clients.ssm.server_add.add_server_ban(global_context, server_ban);
+        global_context.data.last_moderation_actions.delete(guild.id);
     }
 }

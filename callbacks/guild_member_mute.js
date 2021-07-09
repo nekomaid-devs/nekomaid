@@ -16,9 +16,9 @@ module.exports = {
     },
 
     async process(global_context, event) {
-        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: event.member.guild.id });
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_mute", id: event.member.guild.id });
 
-        if(server_config.audit_mutes == true && server_config.audit_channel != "-1") {
+        if(server_config.audit_mutes == true && server_config.audit_channel !== "-1") {
             let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let url = event.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 });

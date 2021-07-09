@@ -14,6 +14,14 @@ module.exports = {
             case "server_guild_ban_remove":
                 return await this.fetch_data(global_context, "SELECT server_ID, audit_channel, audit_bans, case_ID FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
+            case "server_guild_member_warn":
+            case "server_guild_member_clear_warns":
+                return await this.fetch_data(global_context, "SELECT server_ID, audit_channel, audit_warns, case_ID FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+
+            case "server_guild_member_mute":
+            case "server_guild_member_mute_ext":
+                return await this.fetch_data(global_context, "SELECT server_ID, audit_channel, audit_mutes, case_ID FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+
             case "server_guild_member_add":
                 return await this.fetch_data(global_context, "SELECT server_ID, auto_roles, mute_role_ID, welcome_messages, welcome_messages_format, welcome_messages_channel, welcome_messages_ping FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 

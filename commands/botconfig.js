@@ -74,7 +74,7 @@ module.exports = {
                 switch(property) {
                     case "bot_owner": {
                         command_data.global_context.bot_config.bot_owners.push(tagged_user.id);
-                        command_data.msg.channel.send(`Added \`${tagged_user.tag}\` to bot's property \`${property}\``).catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send(`Added \`${tagged_user.tag}\` as a bot owner.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -108,7 +108,7 @@ module.exports = {
                     // TODO: re-do this
                     case "bot_owner": {
                         if(command_data.global_context.bot_config.bot_owners.includes(tagged_user.id) === false) {
-                            command_data.msg.reply(`\`${tagged_user.tag}\` isn't a bot owner-`);
+                            command_data.msg.reply(`\`${tagged_user.tag}\` isn't a bot owner.`);
                             return;
                         }
                         if(tagged_user.id === command_data.global_context.owner_id) {
@@ -117,7 +117,7 @@ module.exports = {
                         }
 
                         command_data.global_context.bot_config.bot_owners.splice(command_data.global_context.bot_config.bot_owners.indexOf(tagged_user.id), 1);
-                        command_data.msg.channel.send("Removed `" + tagged_user.tag + "` from bot's property `" + property + "`").catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send(`Removed \`${tagged_user.tag}\` from bot owners.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 

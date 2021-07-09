@@ -84,7 +84,7 @@ module.exports = {
                 command_data.author_config.net_worth += won_ammount;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
-                embedRoll.description = `You won \`${won_ammount_text}\` credits-`;
+                embedRoll.description = `You won \`${won_ammount_text}\` credits!`;
                 embedRoll.footer = {
                     text: `Win multiplier: ${multiplier_text}x`
                 }
@@ -93,7 +93,7 @@ module.exports = {
                 command_data.author_config.net_worth -= credits_ammount;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
-                embedRoll.description = `You lost \`${credits_ammount}\` credits-`;
+                embedRoll.description = `You lost \`${credits_ammount}\` credits...`;
             }
 
             command_data.msg.channel.send("", { embed: embedRoll }).catch(e => { command_data.global_context.logger.api_error(e); });

@@ -23,7 +23,7 @@ module.exports = {
                 image.print(font, 325 - command_data.global_context.modules.jimp.measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
 
                 let embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
-                .setTitle(command_data.tagged_user.tag + " was " + (impostor ? "" : "not ") + "the impostor-")
+                .setTitle(command_data.tagged_user.tag + " was " + (impostor ? "" : "not ") + "the impostor!")
                 .setColor(8388736)
                 .attachFiles([{ attachment: await image.getBufferAsync("image/png"), name: "image.png" }])
                 .setImage('attachment://image.png')

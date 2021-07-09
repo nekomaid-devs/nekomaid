@@ -13,13 +13,13 @@ module.exports = {
     async execute(command_data) {
         if(command_data.global_context.config.osu_enabled === false) { command_data.msg.channel.send("The osu! module is disabled for this bot.").catch(e => { command_data.global_context.logger.api_error(e); }); return; }
         if(command_data.tagged_user_config.osu_username === "-1") {
-            command_data.msg.channel.send(`You haven't set an osu! profile yet~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)`)
+            command_data.msg.channel.send(`You haven't set an osu! profile yet! (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 
         let user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.tagged_user_config.osu_username }).catch(e => { command_data.global_context.logger.api_error(e); });
         if(user.id === undefined) {
-            command_data.msg.channel.send(`No osu! profile found~ (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)-`);
+            command_data.msg.channel.send(`No osu! profile found! (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
 

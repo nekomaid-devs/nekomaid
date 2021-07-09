@@ -26,7 +26,7 @@ module.exports = {
 
         let target_item = command_data.global_context.bot_config.items.has(item_ID) === true ? command_data.global_context.bot_config.items.get(item_ID) : -1;
         if(target_item === -1) {
-            command_data.msg.reply(`There isn't any item with id \`${item_ID}\`-`);
+            command_data.msg.reply(`There isn't any item with id \`${item_ID}\`.`);
             return;
         }
 
@@ -35,6 +35,6 @@ module.exports = {
         }
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
-        command_data.msg.channel.send(`Added \`${ammount}x ${target_item.display_name}\` to \`${command_data.tagged_user.tag}\`-`).catch(e => { command_data.global_context.logger.api_error(e); });
+        command_data.msg.channel.send(`Added \`${ammount}x ${target_item.display_name}\` to \`${command_data.tagged_user.tag}\`!`).catch(e => { command_data.global_context.logger.api_error(e); });
     },
 };

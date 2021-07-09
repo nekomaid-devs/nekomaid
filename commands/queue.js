@@ -12,7 +12,7 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false || command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).current === -1) {
-            command_data.msg.reply("There's nothing on the queue-");
+            command_data.msg.reply("There's nothing on the queue!");
             return;
         }
 

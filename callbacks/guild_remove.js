@@ -16,6 +16,6 @@ module.exports = {
     },
 
     async process(global_context, guild) {
-        global_context.logger.log("Removed from a Guild~ [Name: " + guild.name + "] - [ID: " + guild.id + "] - [Members: " + guild.memberCount + "]");
+        global_context.logger.log(`Removed from a Guild! [Name: ${guild.name}] - [ID: ${guild.id}] - [Members: ${guild.memberCount}]`);
     }
 }

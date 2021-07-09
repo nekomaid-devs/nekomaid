@@ -17,7 +17,7 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         let message = await command_data.msg.channel.send(`<@${command_data.msg.member.id}> is giving away letters.\n\nReact to get a letter.`).catch(e => { command_data.global_context.logger.api_error(e); });
-        await message.react('✅');
+        await message.react('✅').catch(e => { command_data.global_context.logger.api_error(e); });
 
         let filter = (reaction, user) => reaction.emoji.name === '✅' && user.id !== message.author.id;
         let collector = message.createReactionCollector(filter);

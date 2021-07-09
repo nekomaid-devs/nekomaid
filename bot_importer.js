@@ -73,19 +73,19 @@ module.exports = {
         }
         global_context.utils.verify_guild_channels = async(guild) => {
             if(global_context.cached_all_channels.includes(guild.id) === false) {
-                await guild.channels.fetch();
+                await guild.channels.fetch().catch(e => { global_context.logger.api_error(e); });
                 global_context.cached_all_channels.push(guild.id);
             }
         }
         global_context.utils.verify_guild_roles = async(guild) => {
             if(global_context.cached_all_roles.includes(guild.id) === false) {
-                await guild.roles.fetch();
+                await guild.roles.fetch().catch(e => { global_context.logger.api_error(e); });
                 global_context.cached_all_roles.push(guild.id);
             }
         }
         global_context.utils.verify_guild_members = async(guild) => {
             if(global_context.cached_all_members.includes(guild.id) === false) {
-                await guild.members.fetch();
+                await guild.members.fetch().catch(e => { global_context.logger.api_error(e); });
                 global_context.cached_all_members.push(guild.id);
             }
         }
@@ -181,25 +181,7 @@ module.exports = {
             global_context.modules_clients.osu = new global_context.modules.OsuAPI.Api(global_context.config.osu_API_key, { notFoundAsError: false, completeScores: true });
         }
 
-        /*global_context.modules.io = require('socket.io-client');
-        bot.socketClient = bot.io("https://nekomaid.xyz");
-        bot.socketClient.emit("login", { API_key: bot.globalPersistentConfig.nekoAPI_key })
-        bot.socketClient.on("saveConfig", (data) => {
-            console.log("Saving config of guild - " + command_data.msg.guild.id);
-            bot.ssm.server_edit.edit(bot.ssm, { type: "server", id: command_data.msg.guild.id, server: command_data.msg.guild.config });
-        });
-        bot.socketClient.on("getGuildDetailed", async(data, cb) => {
-            //console.log("Retrieving details of guild - " + command_data.msg.guild.id);
-            
-            let guild = await bot.guilds.fetch(command_data.msg.guild.id).catch(e => { console.log(e); })
-            if(guild === undefined) { cb({ status: -1 }); return; }
-            let guildData = {
-                channels: Array.from(guild.channels.cache.values()).reduce((acc, curr) => { acc.push({ id: curr.id, name: curr.name, type: curr.type }); return acc; }, []),
-                roles: Array.from(guild.roles.cache.values()).reduce((acc, curr) => { acc.push({ id: curr.id, name: curr.name, position: curr.position, color: curr.hexColor, permissions: curr.permissions.bitfield }); return acc; }, [])
-            }
-
-            cb(guildData);
-        });*/
+        global_context.modules.io = require('socket.io-client');
 
         global_context.neko_modules.web_updates = require('./scripts/web_updates/web_updates');
         global_context.neko_modules.vars = require('./scripts/utils/util_vars');
@@ -221,18 +203,6 @@ module.exports = {
             "Authorization": global_context.config.nekomaid_API_key,
             "Origin": global_context.config.nekomaid_API_endpoint
         }
-
-        /*let lastTimestamp = Date.now();
-        bot.timer_00 = setInterval(
-            () => {
-                let date = new Date();
-                if(date.getHours() % 2 === 0 && date.getMinutes() === 0 && Date.now() > (lastTimestamp + 1000*60)) {
-                    bot.em.spawnEvent(bot.em, '820689825345699880');
-                    lastTimestamp = Date.now();
-                }
-            },
-        5000);
-        console.log("Finished importing...");*/
 
         let t_modules_2_end = global_context.modules.performance.now();
         global_context.logger.log(`Finished setting up the modules (took ${(t_modules_2_end - t_sql_end).toFixed(1)}ms)...`);

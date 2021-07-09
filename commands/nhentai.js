@@ -19,12 +19,12 @@ module.exports = {
         let post_info = await command_data.global_context.neko_modules_clients.nhentai.nhentai_result(command_data.global_context, command_data.args[0]);
         switch(post_info.status) {
             case 0:
-                command_data.msg.reply("No results found-");
+                command_data.msg.reply("No results found...");
                 return;
         }
 
         if(post_info.tags.includes("lolicon") === true || post_info.tags.includes("shotacon") === true) {
-            command_data.msg.reply("Sorry, I cannot show this due to chance of violating the Discord TOS- (`loli`/`shota` content)");
+            command_data.msg.reply("Sorry, I cannot show this due to chance of violating the Discord TOS. (`loli`/`shota` content)");
             return;
         }
 

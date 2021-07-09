@@ -28,11 +28,11 @@ module.exports = {
         // TODO: previous mutes don't get removed btw
         let time = command_data.args.length < 2 ? -1 : (command_data.args[1] === "-1" ? -1 : command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.args[1]));
         if(time !== -1 && time.status !== 1) {
-            command_data.msg.reply("You entered invalid time format (ex. `1d2h3m4s` or `-1`)-");
+            command_data.msg.reply("You entered invalid time format! (ex. `1d2h3m4s` or `-1`)");
             return;
         }
         if(command_data.tagged_member.bannable === false) {
-            command_data.msg.reply(`Couldn't mute \`${command_data.tagged_user.tag}\` (Try moving Nekomaid's permissions above the user you want to mute)-`);
+            command_data.msg.reply(`Couldn't mute \`${command_data.tagged_user.tag}\`! (Try moving Nekomaid's permissions above the user you want to mute)`);
             return;
         }
 
@@ -90,8 +90,7 @@ module.exports = {
                 permissions: []
             }
         }).then(async(mute_role) => {
-            let channels = await command_data.msg.guild.channels.fetch();
-            channels.forEach(channel => {
+            command_data.msg.guild.channels.cache.forEach(channel => {
                 if(channel.type === "text") {
                     channel.createOverwrite(mute_role, {
                         SEND_MESSAGES: false,
@@ -113,7 +112,7 @@ module.exports = {
             })
             .catch(err => {
                 command_data.global_context.logger.error(err);
-                command_data.msg.reply(`Couldn't mute \`${command_data.tagged_member.user.tag}\` (Try moving Nekomaid's permissions above the user you want to mute)-`);
+                command_data.msg.reply(`Couldn't mute \`${command_data.tagged_member.user.tag}\`! (Try moving Nekomaid's permissions above the user you want to mute)`);
             });
         })
     }

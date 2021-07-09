@@ -83,10 +83,10 @@ class LevelingManager {
             }
 
             if(granted_roles_text !== "`None`") {
-                rank_message += `You've been granted role(s) \`${granted_roles_text}\`-\n`;
+                rank_message += `You've been granted role(s) \`${granted_roles_text}\`!\n`;
             }
             if(removed_roles_text !== "`None`") {
-                rank_message += `You've been removed role(s) \`${removed_roles_text}\`-\n`;
+                rank_message += `You've been removed role(s) \`${removed_roles_text}\`.\n`;
             }
 
             if(command_data.server_config.module_level_levelup_messages == true && send_levelup_message == true) {

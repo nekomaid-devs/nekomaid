@@ -28,11 +28,11 @@ module.exports = {
         // TODO: this should clear all messages from them aswell
         let time = command_data.args.length < 2 ? -1 : (command_data.args[1] === -1 ? -1 : command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.args[1]));
         if(time != -1 && time.status != 1) {
-            command_data.msg.reply("You entered invalid time format (ex. `1d2h3m4s` or `-1`)-");
+            command_data.msg.reply("You entered invalid time format! (ex. `1d2h3m4s` or `-1`)");
             return;
         }
         if(command_data.tagged_member.bannable === false) {
-            command_data.msg.reply(`Couldn't ban \`${command_data.tagged_user.tag}\` (Try moving Nekomaid's permissions above the user you want to ban)-`);
+            command_data.msg.reply(`Couldn't ban \`${command_data.tagged_user.tag}\`. (Try moving Nekomaid's permissions above the user you want to ban)`);
             return;
         }
 
@@ -50,23 +50,13 @@ module.exports = {
         if(previous_ban === undefined) {
             ban_end = ban_start + extended_time;
             let ban_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules_clients.tc.convert_time(ban_end - ban_start);
-            command_data.msg.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${ban_reason}\`, Time: \`${ban_end_text}\`)-`).catch(e => { command_data.global_context.logger.api_error(e); });
+            command_data.msg.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\`. (Time: \`${ban_end_text}\`)`).catch(e => { command_data.global_context.logger.api_error(e); });
         } else {
-            command_data.msg.reply(`\`${command_data.tagged_user.tag}\` is already banned-`);
+            command_data.msg.reply(`\`${command_data.tagged_user.tag}\` is already banned.`);
             return;
         }
 
-        let server_ban = {
-            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
-            server_ID: command_data.msg.guild.id,
-            user_ID: command_data.tagged_user.id,
-            start: ban_start,
-            reason: ban_reason,
-            end: time === -1 ? -1 : ban_end
-        }
-
-        command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id, duration: extended_time_text });
-        command_data.global_context.neko_modules_clients.ssm.server_add.add_server_ban(command_data.global_context, server_ban);
+        command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id, duration: extended_time_text, start: ban_start, end: (time === -1 ? -1 : ban_end), reason: ban_reason });
         command_data.tagged_member.ban({ reason: ban_reason });
     }
 };

@@ -17,11 +17,6 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         // TODO: this needs to be refactored fr
-        if(command_data.args.length < 1) {
-            command_data.msg.reply(`You need to type in an item name-`);
-            return;
-        }
-
         let item_name = command_data.total_argument;
         item_name = item_name.includes("<@") ? item_name.substring(0, item_name.indexOf("<@") - 1) : item_name;
 

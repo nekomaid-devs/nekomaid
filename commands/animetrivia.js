@@ -19,22 +19,22 @@ module.exports = {
     async execute(command_data) {
         if(command_data.args.length > 0) { return; }
         if(command_data.msg.guild.voice !== undefined) {
-            command_data.msg.channel.send("Please make sure there are no other running games or music playing and try again~ (or make Nekomaid leave voice)").catch(e => { command_data.global_context.logger.api_error(e); });
+            command_data.msg.channel.send("Please make sure there are no other running games or music playing and try again. (or make Nekomaid leave voice)").catch(e => { command_data.global_context.logger.api_error(e); });
             return;
         }
         if(command_data.msg.member.voice.channel == null) {
-            command_data.msg.reply("You need to join a voice channel-");
+            command_data.msg.reply("You need to join a voice channel.");
             return;
         }
         if(command_data.msg.member.voice.channel.joinable === false || command_data.msg.member.voice.channel.speakable === false) {
-            command_data.msg.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again-");
+            command_data.msg.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again.");
             return;
         }
 
         let embedSong = {
             title: "<:n_poll:771902338646278174> How to play?",
             description: 
-            "You will be given an anime opening/ending and you'll have to guess which one it is from~" +
+            "You will be given an anime opening/ending and you'll have to guess which one it is from." +
             "\n Once you decide, just type the number of the option in this channel~" +
             "\n\nCommands: " +
             `\n\`${command_data.server_config.prefix}animetrivia start\` - starts the game` +
@@ -48,8 +48,8 @@ module.exports = {
         let joined_IDs = [];
         let message = await command_data.msg.channel.send({ embed: embedSong }).catch(e => { command_data.global_context.logger.api_error(e); });
 
-        await message.react("✅");
-        await message.react("❌");
+        await message.react("✅").catch(e => { command_data.global_context.logger.api_error(e); });
+        await message.react("❌").catch(e => { command_data.global_context.logger.api_error(e); });
         let filter_r = (reaction, user) => (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id !== message.author.id;
         let collector_r = message.createReactionCollector(filter_r);
         collector_r.on('collect', async(r, u) => {
@@ -61,13 +61,13 @@ module.exports = {
             }
 
             embedSong.footer.text = `${joined_IDs.length} joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`;
-            await message.edit("", { embed: embedSong });
+            await message.edit("", { embed: embedSong }).catch(e => { command_data.global_context.logger.api_error(e); });
         });
 
         let collector = command_data.msg.channel.createMessageCollector(m => m.author.bot === false);
         collector.on('collect', async(m) => {
             if(joined_IDs.length < 1) {
-                command_data.msg.channel.send("Game couldn't start, because there aren't enough players~ Try again~").catch(e => { command_data.global_context.logger.api_error(e); });
+                command_data.msg.channel.send("Game couldn't start, because there aren't enough players. Try again.").catch(e => { command_data.global_context.logger.api_error(e); });
                 collector.stop();
             } else if(m.content === command_data.server_config.prefix + "animetrivia start") {
                 let connection = await command_data.msg.member.voice.channel.join();
@@ -80,7 +80,7 @@ module.exports = {
                 this.play_next(command_data, connection, { rounds: 0, rounds_correct: 0, joined_IDs: joined_IDs, leaderboard: leaderboard, moderator: command_data.msg.author.id });
                 collector.stop();
             } else {
-                command_data.msg.channel.send("Cancelled the game~ Try again once you change your mind~").catch(e => { command_data.global_context.logger.api_error(e); });
+                command_data.msg.channel.send("Cancelled the game. Try again once you change your mind.").catch(e => { command_data.global_context.logger.api_error(e); });
                 collector.stop();
             }
         });
@@ -128,7 +128,7 @@ module.exports = {
         }
 
         let embedSong = {
-            title: "❓ New song is playing~ Make a guess!~",
+            title: "❓ New song is playing. Make a guess!",
             description: "1) " + final_options[0].source + "\n2) " + final_options[1].source + "\n3) " + final_options[2].source + "\n4) " + final_options[3].source + "\n",
             footer: {
                 text: `You have 45 seconds to answer | or end the game with ${command_data.server_config.prefix}animetrivia end`
@@ -147,7 +147,7 @@ module.exports = {
                         dispatcher.end();
 
                         game_data.rounds += 1;
-                        command_data.msg.channel.send(`Skipped this opening~ The anime was: \`${opening.source}\``).catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send(`Skipped this opening. The anime was: \`${opening.source}\``).catch(e => { command_data.global_context.logger.api_error(e); });
 
                         this.play_next(command_data, connection, game_data);
                         clearTimeout(timeout);
@@ -218,7 +218,7 @@ module.exports = {
             dispatcher.end();
 
             game_data.rounds += 1;
-            command_data.msg.channel.send(`Nobody got it correct~ The anime was: \`${opening.source}\`~`).catch(e => { command_data.global_context.logger.api_error(e); });
+            command_data.msg.channel.send(`Nobody got it correct. The anime was: \`${opening.source}\`~`).catch(e => { command_data.global_context.logger.api_error(e); });
             this.play_next(command_data, connection, game_data);
         }, 45 * 1000);
     }

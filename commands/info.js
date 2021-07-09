@@ -51,7 +51,7 @@ module.exports = {
             results.reduce((prev, guildCount) =>
                 prev + guildCount, 0
             )
-        );
+        ).catch(e => { command_data.global_context.logger.error(e); });
 
         let shard_members = 0;
         command_data.global_context.bot.guilds.cache.forEach(guild => {
@@ -69,7 +69,7 @@ module.exports = {
             results.forEach(result => {
                 manager_commands += result;
             })
-        });
+        }).catch(e => { command_data.global_context.logger.error(e); });
 
         let shard_vc = command_data.global_context.bot.neko_data.vm_connections;
         let manager_vc = 0;
@@ -77,7 +77,7 @@ module.exports = {
             results.forEach(result => {
                 manager_vc += result;
             })
-        });
+        }).catch(e => { command_data.global_context.logger.error(e); });
         
         let sec_taken = ((Date.now() - t) / 1000).toFixed(3);
         let url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });

@@ -19,7 +19,7 @@ module.exports = {
         let voice_data = command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id);
         if(voice_data.connection.dispatcher.paused === true) {
             voice_data.connection.dispatcher.resume();
-            command_data.msg.channel.send("Resumed current song~").catch(e => { command_data.global_context.logger.api_error(e); });
+            command_data.msg.channel.send("Resumed current song.").catch(e => { command_data.global_context.logger.api_error(e); });
         } else {
             command_data.msg.channel.send("The song is already resumed.").catch(e => { command_data.global_context.logger.api_error(e); });
         }

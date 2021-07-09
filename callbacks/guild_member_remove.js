@@ -30,10 +30,10 @@ module.exports = {
             }
         }
         
-        if(server_config.audit_kicks == true && server_config.audit_channel != "-1") {
+        if(server_config.audit_kicks == true && server_config.audit_channel !== "-1") {
             let channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
-                let audit = await member.guild.fetchAuditLogs();
+                let audit = await member.guild.fetchAuditLogs().catch(e => { global_context.logger.api_error(e); });
                 let last_audit = audit.entries.first();
                 if(last_audit.action === "MEMBER_KICK" && last_audit.target.id === member.user.id) {
                     let executor = -1;

@@ -13,7 +13,7 @@ module.exports = {
     async execute(command_data) {
         var obj = await command_data.global_context.modules_clients.neko.sfw.woof();
         let embedDog = {
-            title: "Here's a dog, just for you-",
+            title: "Here's a dog, just for you~",
             color: 8388736,
             image: {
                 url: obj.url

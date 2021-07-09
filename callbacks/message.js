@@ -69,7 +69,7 @@ module.exports = {
                 let banned_word = command_data.server_config.banned_words[i];
                 if(message.content.toLowerCase().includes(banned_word.toLowerCase()) === true) {
                     message.reply("That word isn't allowed on here-");
-                    message.delete().catch(e => { global_context.logger.error(e); });
+                    message.delete().catch(e => { global_context.logger.api_error(e); });
                     return;
                 }
             }
@@ -77,7 +77,7 @@ module.exports = {
             if(command_data.server_config.invites == false) {
                 if(message.content.toLowerCase().includes("discord.gg") === true || message.content.toLowerCase().includes("discordapp.com/invite") === true || message.content.toLowerCase().includes("discord.com/invite") === true) {
                     message.reply("Sending invites isn't allowed on here-");
-                    message.delete().catch(e => { global_context.logger.error(e); });
+                    message.delete().catch(e => { global_context.logger.api_error(e); });
                     return;
                 }
             }
@@ -100,7 +100,7 @@ module.exports = {
 
         let bot_id = global_context.bot.user.id;
         if(message.content === `<@!${bot_id}>`) {
-            message.channel.send(`Prefix on this server is \`${command_data.server_config.prefix}\`-`).catch(e => { global_context.logger.error(e); });
+            message.channel.send(`Prefix on this server is \`${command_data.server_config.prefix}\`.`).catch(e => { global_context.logger.api_error(e); });
             return;
         }
 
@@ -113,7 +113,7 @@ module.exports = {
             ]
             let response = global_context.utils.pick_random(responses);
 
-            message.channel.send(response).catch(e => { global_context.logger.error(e); });
+            message.channel.send(response).catch(e => { global_context.logger.api_error(e); });
             return;
         }
 

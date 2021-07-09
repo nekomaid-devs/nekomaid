@@ -17,26 +17,26 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         if(command_data.msg.author.id === command_data.tagged_user.id) {
-            command_data.msg.reply("You can't marry yourself silly-");
+            command_data.msg.reply("You can't marry yourself silly~");
             return;
         }
 
         let force_marry = false;
         if(command_data.args.length > 1 && command_data.args[1] === "-fm") {
             if(command_data.global_context.bot_config.bot_owners.includes(command_data.msg.author.id) === false) {
-                command_data.msg.reply("You aren't the bot owner-");
+                command_data.msg.reply("You aren't the bot owner!");
                 return;
             }
 
             force_marry = true;
         }
 
-        if(command_data.author_config.married_ID != "-1") {
-            command_data.msg.reply("You need to divorce first-");
+        if(command_data.author_config.married_ID !== "-1") {
+            command_data.msg.reply("You need to divorce first!");
             return;
         }
-        if(command_data.tagged_user_config.married_ID != "-1") {
-            command_data.msg.reply("This user is already married-");
+        if(command_data.tagged_user_config.married_ID !== "-1") {
+            command_data.msg.reply("This user is already married...");
             return;
         }
 

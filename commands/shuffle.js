@@ -12,7 +12,7 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         if(command_data.global_context.neko_modules_clients.vm.connections.has(command_data.msg.guild.id) === false || command_data.global_context.neko_modules_clients.vm.connections.get(command_data.msg.guild.id).current === -1) {
-            command_data.msg.reply("There's nothing playing-");
+            command_data.msg.reply("There's nothing playing!");
             return;
         }
 
@@ -24,7 +24,7 @@ module.exports = {
                 voice_data.persistent_queue.push(voiceRequest);
             })
 
-            command_data.msg.channel.send(`Shuffled \`${voice_data.queue.length}\` songs-`).catch(e => { command_data.global_context.logger.api_error(e); });
+            command_data.msg.channel.send(`Shuffled \`${voice_data.queue.length}\` songs.`).catch(e => { command_data.global_context.logger.api_error(e); });
         } else {
             voice_data.persistent_queue = command_data.global_context.utils.shuffle_playlist(voice_data.persistent_queue);
 
@@ -42,7 +42,7 @@ module.exports = {
                 i += 1;
             });
 
-            command_data.msg.channel.send(`Shuffled \`${voice_data.persistent_queue.length}\` songs-`).catch(e => { command_data.global_context.logger.api_error(e); });
+            command_data.msg.channel.send(`Shuffled \`${voice_data.persistent_queue.length}\` songs.`).catch(e => { command_data.global_context.logger.api_error(e); });
         }
     },
 };

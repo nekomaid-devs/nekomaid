@@ -13,7 +13,7 @@ module.exports = {
     async execute(command_data) {
         let url = await command_data.global_context.modules.akaneko.foxgirl().catch(e => { command_data.global_context.logger.api_error(e); });
         let embedFoxgirl = {
-            title: "Here's a foxgirl, just for you-",
+            title: "Here's a foxgirl, just for you~",
             color: 8388736,
             image: {
                 url: url

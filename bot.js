@@ -120,6 +120,7 @@ global_context.commands.forEach(command => {
 //Log into Discord
 bot.login(global_context.config.token);
 
+let last_timestamp = Date.now();
 setInterval(() => {
     bot.neko_data.processed_events = global_context.data.processed_events;
     bot.neko_data.total_events = global_context.data.total_events;
@@ -141,6 +142,15 @@ setInterval(() => {
         global_context.neko_modules.web_updates.refresh_website(global_context);
     }
 }, 2000);
+setInterval(() => {
+    if(global_context.neko_modules_clients.em !== undefined && bot.shard.ids[0] === 0) {
+        let date = new Date();
+        if(date.getHours() % 2 === 0 && date.getMinutes() === 0 && Date.now() > (last_timestamp + 1000*60)) {
+            global_context.neko_modules_clients.em.spawn_event(global_context, global_context.config.neko_);
+            last_timestamp = Date.now();
+        }
+    }
+}, 5000);
 setInterval(() => {
     if(global_context.neko_modules_clients.moderator !== undefined) {
         global_context.neko_modules_clients.moderator.timeout_all_bans(global_context);

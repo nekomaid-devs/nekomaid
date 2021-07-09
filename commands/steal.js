@@ -17,7 +17,7 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         if(command_data.tagged_user.id === command_data.msg.author.id) {
-            command_data.msg.reply("You can't steal from yourself silly-");
+            command_data.msg.reply("You can't steal from yourself silly~");
             return;
         }
 
@@ -30,7 +30,7 @@ module.exports = {
         if(diff < 360) {
             let end_needed = new Date(start.getTime() + (3600000 * 6));
             let time_left = end_needed - end;
-            command_data.msg.reply(`You need to wait more \`${command_data.global_context.neko_modules_clients.tc.convert_time(time_left)}\` before doing this-`);
+            command_data.msg.reply(`You need to wait more \`${command_data.global_context.neko_modules_clients.tc.convert_time(time_left)}\` before doing this.`);
             return;
         }
 
@@ -51,7 +51,7 @@ module.exports = {
 
         let embedSteal = {
             color: 8388736,
-            description: `You stole \`${credits_ammount} 💵\` from \`${command_data.tagged_user.tag}\` (Current Credits: \`${command_data.author_config.credits}$\`)`
+            description: `You stole \`${credits_ammount} 💵\` from \`${command_data.tagged_user.tag}\`! (Current Credits: \`${command_data.author_config.credits}$\`)`
         }
         command_data.msg.channel.send("", { embed: embedSteal }).catch(e => { command_data.global_context.logger.api_error(e); });
     },

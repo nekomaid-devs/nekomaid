@@ -16,11 +16,12 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
+        let custom_embed = -1;
         try {
-            var custom_embed = JSON.parse(command_data.total_argument);
+            custom_embed = JSON.parse(command_data.total_argument);
         } catch(err) {
             let embedError = {
-                title: "<:n_error:771852301413384192> Error when creating embed!",
+                title: "<:n_error:771852301413384192> Error when parsing the JSON!",
                 description: "```" + err + "```"
             }
     
@@ -29,7 +30,7 @@ module.exports = {
         }
 
         command_data.msg.channel.send("", { embed: custom_embed }).catch(err => {
-            command_data.msg.channel.send(`Error when creating embed -\n\`${err}\``).catch(e => { command_data.global_context.logger.api_error(e); });
+            command_data.msg.channel.send(`Error when creating the embed!\n\`${err}\``).catch(e => { command_data.global_context.logger.api_error(e); });
         });
     },
 };

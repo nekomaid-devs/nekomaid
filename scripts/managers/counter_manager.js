@@ -22,7 +22,7 @@ class CounterManager {
             if(diff >= 5 || force_update === true) {
                 counter.last_update = end.getTime();
 
-                let channel = await global_context.bot.channels.fetch(counter.channel_ID);
+                let channel = await global_context.bot.channels.fetch(counter.channel_ID).catch(e => { command_data.global_context.logger.api_error(e); });
                 if(channel !== undefined) {
                     switch(counter.type) {
                         case "all_members": {

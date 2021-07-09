@@ -22,16 +22,12 @@ module.exports = {
         if(command_data.server_config.say_command == false) {
             return;
         }
-        if(command_data.args.length < 1) {
-            command_data.msg.reply("You need to type in what do you me to owoify-");
-            return;
-        }
         if(command_data.msg.mentions.members.size > 0 || command_data.msg.mentions.roles.size > 0 || command_data.msg.mentions.everyone === true) {
-            command_data.msg.reply("Please remove all mentions before trying again-");
+            command_data.msg.reply("Please remove all mentions before trying again!");
             return;
         }
         if(command_data.msg.content.includes("@everyone") || command_data.msg.content.includes("@here")) {
-            command_data.msg.reply("Please remove all mentions before trying again-");
+            command_data.msg.reply("Please remove all mentions before trying again!");
             return;
         }
 

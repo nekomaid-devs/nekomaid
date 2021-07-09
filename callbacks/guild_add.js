@@ -16,8 +16,6 @@ module.exports = {
     },
 
     async process(global_context, guild) {
-        global_context.logger.log("Added to new Guild~ [Name: " + guild.name + "] - [ID: " + guild.id + "] - [Members: " + guild.memberCount + "]");
-        
-        //bot.moderator.checkChannels(bot.moderator, guild);
+        global_context.logger.log(`Added to new Guild! [Name: ${guild.name}] - [ID: ${guild.id}] - [Members: ${guild.memberCount}]`);
     }
 }

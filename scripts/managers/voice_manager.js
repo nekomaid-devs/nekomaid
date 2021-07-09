@@ -69,7 +69,7 @@ class VoiceManager {
             let guild = await global_context.bot.guilds.fetch(id).catch(e => { global_context.logger.api_error(e); });
             let channel = await guild.channels.fetch(voice_data.init_message_channel_ID).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
-                channel.send(`I left \`${voice_data.connection.channel.name}\`, because I was left alone-`).catch(e => { global_context.logger.api_error(e); });
+                channel.send(`I left \`${voice_data.connection.channel.name}\`, because I was left alone.`).catch(e => { global_context.logger.api_error(e); });
             }
 
             global_context.neko_modules_clients.vm.remove_connection(global_context, id);
@@ -89,14 +89,14 @@ class VoiceManager {
         diff /= 60;
         diff = Math.abs(Math.round(diff));
         
+        // TODO: this part needs to be redone
         if(voice_data.current === -1) {
             switch(info) {
                 case 0:
-                    global_context.neko_modules_clients.vm.get_url_info_and_play(global_context, msg, url, log_added);
-                    break;
+                    return global_context.neko_modules_clients.vm.get_url_info_and_play(global_context, msg, url, log_added);
 
                 case -2:
-                    msg.channel.send(`Failed to get video info(url: \`${url}\`)-`).catch(e => { global_context.logger.api_error(e); });
+                    msg.channel.send(`Failed to get video info(url: \`${url}\`)...`).catch(e => { global_context.logger.api_error(e); });
                     break;
 
                 default: {
@@ -121,7 +121,7 @@ class VoiceManager {
                         global_context.neko_modules_clients.vm.try_playing_next(global_context, id);
                     });
                     stream.on("error", err => {
-                        msg.channel.send("There was an error while playing the video-").catch(e => { global_context.logger.api_error(e); });
+                        msg.channel.send("There was an error while playing the video...").catch(e => { global_context.logger.api_error(e); });
                         global_context.logger.error(err);
                         
                         global_context.neko_modules_clients.vm.remove_connection(global_context, id, err);
@@ -142,7 +142,7 @@ class VoiceManager {
                     global_context.neko_modules_clients.vm.connections.set(id, voice_data);
 
                     msg.channel.send(`Playing \`${info.title}\` *(${current_length_2})*-`).catch(e => { global_context.logger.api_error(e); });
-                    break;
+                    return voice_request;
                 }
             }
         } else {
@@ -152,7 +152,7 @@ class VoiceManager {
                     break;
 
                 case -2:
-                    msg.channel.send(`Failed to get video info(url: \`${url}\`)-`).catch(e => { global_context.logger.api_error(e); });
+                    msg.channel.send(`Failed to get video info (url: \`${url}\`)...`).catch(e => { global_context.logger.api_error(e); });
                     break;
 
                 default: {
@@ -173,15 +173,16 @@ class VoiceManager {
                     voice_request.uuid = global_context.modules.crypto.randomBytes(16).toString("hex");
                     voice_request.request_channel_ID = msg.channel.id;
                     voice_request.request_user_ID = msg.member.id;
+
                     voice_data.queue.push(voice_request);
                     voice_data.persistent_queue.push(voice_request);
                     global_context.neko_modules_clients.vm.connections.set(id, voice_data);
 
                     let length = voice_data.queue.length;
                     if(log_added === true) {
-                        msg.channel.send(`Added \`${info.title}\` *(${current_length_2})* to the queue (\`${length}\` in the queue)-`).catch(e => { global_context.logger.api_error(e); });
+                        msg.channel.send(`Added \`${info.title}\` *(${current_length_2})* to the queue (\`${length}\` in the queue)...`).catch(e => { global_context.logger.api_error(e); });
                     }
-                    break;
+                    return voice_request;
                 }
             }
         }
@@ -217,7 +218,7 @@ class VoiceManager {
         
                 stream.on("error", async(err) => {
                     let channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch(e => { global_context.logger.api_error(e); });
-                    channel.send("There was an error while playing the video-").catch(e => { global_context.logger.api_error(e); });
+                    channel.send("There was an error while playing the video...").catch(e => { global_context.logger.api_error(e); });
                     global_context.logger.error(err);
 
                     global_context.neko_modules_clients.vm.remove_connection(global_context, id, err);
@@ -229,7 +230,7 @@ class VoiceManager {
                 let channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch(e => { global_context.logger.api_error(e); });
                 let length = voice_data.queue.length - 1;
                 if(channel !== undefined) {
-                    channel.send(`Playing \`${voice_request.info.title}\` *(${current_length_2})* (\`${length}\` in the queue)-`).catch(e => { global_context.logger.api_error(e); });
+                    channel.send(`Playing \`${voice_request.info.title}\` *(${current_length_2})* (\`${length}\` in the queue)...`).catch(e => { global_context.logger.api_error(e); });
                 }
 
                 voice_data.queue.shift();
@@ -239,7 +240,8 @@ class VoiceManager {
         }
     }
 
-    get_url_info_and_play(global_context, msg, url, log_added) {
+    // TODO: this needs to be a promise
+    async get_url_info_and_play(global_context, msg, url, log_added) {
         let info = -1;
         let id = -1;
         if(url.includes("youtube.com/watch?v=")) {
@@ -267,7 +269,7 @@ class VoiceManager {
                 duration: global_context.neko_modules_clients.tc.convert_time_data_to_string(global_context.neko_modules_clients.tc.convert_string_to_time_data(global_context.neko_modules_clients.tc.convert_time(duration * 1000)))
             }
 
-            global_context.neko_modules_clients.vm.play_on_connection(global_context, msg, url, result_m, log_added);
+            return global_context.neko_modules_clients.vm.play_on_connection(global_context, msg, url, result_m, log_added);
         });
     }
 }

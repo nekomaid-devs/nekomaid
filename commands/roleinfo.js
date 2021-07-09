@@ -24,7 +24,7 @@ module.exports = {
                 roleTemp.name === command_data.total_argument || roleTemp.id === command_data.total_argument
             );
             if(role === undefined) {
-                command_data.msg.reply(`No role with name \`${command_data.total_argument}\` found-`);
+                command_data.msg.reply(`No role with name \`${command_data.total_argument}\` found!`);
                 return;
             }
         }

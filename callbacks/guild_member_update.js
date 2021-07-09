@@ -1,8 +1,8 @@
 module.exports = {
     hook(global_context) {
-        global_context.bot.on("guildMemberUpdate", async(oldMember, newMember) => {
+        global_context.bot.on("guildMemberUpdate", async(old_member, new_member) => {
             try {
-                await this.process(global_context, oldMember, newMember);
+                await this.process(global_context, old_member, new_member);
             } catch(e) {
                 if(global_context.config.sentry_enabled === true) {
                     global_context.modules.Sentry.captureException(e);
@@ -15,10 +15,10 @@ module.exports = {
         });
     },
 
-    async process(global_context, oldMember, newMember) {
-        if(oldMember == null) { return; }
-        if(oldMember.nickname !== newMember.nickname) {
-            global_context.bot.emit("guildMemberNicknameChange", oldMember, newMember);
+    async process(global_context, old_member, new_member) {
+        if(old_member == null) { return; }
+        if(old_member.nickname !== new_member.nickname) {
+            global_context.bot.emit("guildMemberNicknameChange", old_member, new_member);
         }
     }
 }

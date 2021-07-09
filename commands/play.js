@@ -21,11 +21,11 @@ module.exports = {
     nsfw: false,
     async execute(command_data) {
         if(command_data.msg.member.voice.channel == null) {
-            command_data.msg.reply("You need to join a voice channel-");
+            command_data.msg.reply("You need to join a voice channel.");
             return;
         }
         if(command_data.msg.member.voice.channel.joinable === false || command_data.msg.member.voice.channel.speakable === false) {
-            command_data.msg.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again-");
+            command_data.msg.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again.");
             return;
         }
 
@@ -69,7 +69,7 @@ module.exports = {
                 let result = await command_data.global_context.modules.ytlist(url)
                 .catch(err => {
                     command_data.global_context.logger.error(err);
-                    command_data.msg.channel.send("Failed to get video results-").catch(e => { command_data.global_context.logger.api_error(e); });
+                    command_data.msg.channel.send("Failed to get video results...").catch(e => { command_data.global_context.logger.api_error(e); });
                 });
                 if(result === undefined || result.items === undefined) { return; }
 
@@ -82,7 +82,7 @@ module.exports = {
                     await command_data.global_context.neko_modules_clients.vm.play_on_connection(command_data.global_context, command_data.msg, item.url, item, false);
                 }
 
-                embedPlay.author.name = `Added \`${result.items.length}\` songs to the queue-`;
+                embedPlay.author.name = `Added \`${result.items.length}\` songs to the queue!`;
                 embedPlay.description = "Done~ <:n_music:771823629570277396>";
                 message.edit("", { embed: embedPlay }).catch(e => { command_data.global_context.logger.api_error(e); });
             } else if(command_data.global_context.modules.ytdl.validateURL(url) === true) {
@@ -94,7 +94,7 @@ module.exports = {
                 let result = await command_data.global_context.modules.ytsr(command_data.total_argument, { limit: 5 })
                 .catch(err => {
                     command_data.global_context.logger.error(err);
-                    command_data.msg.channel.send("Failed to get video results-").catch(e => { command_data.global_context.logger.api_error(e); });
+                    command_data.msg.channel.send("Failed to get video results...").catch(e => { command_data.global_context.logger.api_error(e); });
                 });
                 if(result === undefined || result.items === undefined) { return; }
                 result.items = result.items.filter(l => { return l.type === "video"; })

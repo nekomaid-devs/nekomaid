@@ -32,8 +32,8 @@ module.exports = {
         let ban_info = -1;
         let usernames = [];
         let tagged_user_display_name = command_data.args[0];
-        command_data.msg.guild.fetchBans().then(serverBansResult => {
-            serverBansResult.forEach(ban => {
+        command_data.msg.guild.fetchBans().then(server_bans_result => {
+            server_bans_result.forEach(ban => {
                 let tagged_user_display_name_modded = tagged_user_display_name.endsWith("#" + ban.user.discriminator) ? tagged_user_display_name : tagged_user_display_name + "#" + ban.user.discriminator;
                 if(ban.user.username + "#" + ban.user.discriminator === tagged_user_display_name_modded) {
                     usernames.push(ban.user.username + "#" + ban.user.discriminator);
@@ -42,29 +42,18 @@ module.exports = {
             });
 
             if(usernames.length > 1) {
-                command_data.msg.reply(`There are more than 1 user with this discriminator, so you need to specify which one (${usernames})-`);
+                command_data.msg.reply(`There are more than 1 user with this discriminator, so you need to specify which one (${usernames}).`);
             } else if(usernames.length < 1) {
                 command_data.msg.reply(`\`${tagged_user_display_name}\` isn't banned-`);
             } else {
+                command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id });
                 command_data.msg.guild.members.unban(ban_info.user, unban_reason).catch(e => {
                     command_data.global_context.logger.api_error(e);
-                    command_data.msg.reply(`Couldn't unban \`${ban_info.user.tag}\` (Try moving Nekomaid's permissions above the user you want to unban-`)
-                })
-
-                let previous_ban = -1;
-                command_data.server_bans.forEach((ban) => {
-                    if(ban.user_ID === ban_info.user.id) {
-                        previous_ban = ban;
-                    }
+                    command_data.msg.reply(`Couldn't unban \`${ban_info.user.tag}\`! (Try moving Nekomaid's permissions above the user you want to unban)`);
                 });
 
-                command_data.msg.channel.send(`Unbanned \`${ban_info.user.tag}\`-`).catch(e => { command_data.global_context.logger.api_error(e); });
-                
-                if(previous_ban != -1) {
-                    command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id });
-                    command_data.global_context.neko_modules_clients.ssm.server_remove.remove_server_ban(command_data.global_context, previous_ban.id);
-                }
+                command_data.msg.channel.send(`Unbanned \`${ban_info.user.tag}\`.`).catch(e => { command_data.global_context.logger.api_error(e); });
             }
-        })
+        }).catch(e => { command_data.global_context.logger.api_error(e); });
     }
 };

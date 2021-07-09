@@ -13,7 +13,7 @@ module.exports = {
     execute(command_data) {
         let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get_borgar_gifs());
         let embedBorgar = {
-            title: `${command_data.msg.author.tag} eats a borgar-`,
+            title: `${command_data.msg.author.tag} eats a borgar!`,
             color: 8388736,
             image: {
                 url: url

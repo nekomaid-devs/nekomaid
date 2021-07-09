@@ -20,7 +20,7 @@ module.exports = {
         let show_hidden = false;
         if(command_data.args.includes("-h")) {
             if(command_data.global_context.bot_config.bot_owners.includes(command_data.msg.author.id) === false) {
-                command_data.msg.reply("You aren't the bot owner-");
+                command_data.msg.reply("You aren't the bot owner!");
                 return;
             }
 
@@ -44,7 +44,7 @@ module.exports = {
             if(command_data.args.length > 1) {
                 var target_subcommand_name = command_data.args[1];
                 if(command.subcommandHelp.has(target_subcommand_name) === false) {
-                    command_data.msg.channel.send(`Subcommand \`${target_subcommand_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch(e => { command_data.global_context.logger.api_error(e); });
+                    command_data.msg.channel.send(`Sub-command \`${target_subcommand_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch(e => { command_data.global_context.logger.api_error(e); });
                     return;
                 }
 
@@ -79,7 +79,7 @@ module.exports = {
                         commands_text_2 += `Check \`${command_data.server_config.prefix}help ${command.name} ${subcommand}\` for help\n`;
                     });
 
-                    embedHelp.addField("Subcommands:", commands_text_2);
+                    embedHelp.addField("Sub-commands:", commands_text_2);
                 }
 
                 command_data.msg.channel.send("", { embed: embedHelp }).catch(e => { command_data.global_context.logger.api_error(e); });

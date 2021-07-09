@@ -13,17 +13,17 @@ module.exports = {
     async execute(command_data) {
         if(command_data.msg.mentions.users.array().length > 0) {
             if(command_data.global_context.bot_config.bot_owners.includes(command_data.msg.author.id) === false) {
-                command_data.msg.reply(`You aren't the bot owner- (use \`${command_data.server_config.prefix}divorce\` if you want to divorce)`);
+                command_data.msg.reply(`You aren't the bot owner! (use \`${command_data.server_config.prefix}divorce\` if you want to divorce)`);
                 return;
             }
             if(command_data.tagged_user_config.married_ID === "-1") {
-                command_data.msg.reply("This user isn't married-");
+                command_data.msg.reply("This user isn't married!");
                 return;
             }
 
             let married_user = await command_data.global_context.bot.users.fetch(command_data.tagged_user_config.married_ID).catch(e => { command_data.global_context.logger.api_error(e); });
             if(married_user === undefined) {
-                command_data.msg.reply("There was an error in fetching User-");
+                command_data.msg.reply("There was an error in fetching User!");
             } else {
                 let tagged_user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id });    
                 let user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: married_user.id });    
@@ -43,7 +43,7 @@ module.exports = {
         }
 
         if(command_data.author_config.married_ID === "-1") {
-            command_data.msg.reply("You're not married-");
+            command_data.msg.reply("You're not married...");
             return;
         }
 
@@ -54,7 +54,7 @@ module.exports = {
             user_config = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "global_user", id: married_user.id });    
         }
         if(command_data.author_config.can_divorce == false) {
-            command_data.msg.reply(`You can't divorce \`${married_user.tag}\`, because you're going be with them forever...`);
+            command_data.msg.reply(`You can't divorce \`${married_user.tag}\`, because you're going be with them forever!`);
             return;
         }
 

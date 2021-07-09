@@ -42,7 +42,7 @@ module.exports = {
                     },
                     {
                         name: "Invites:",
-                        value: `${command_data.server_config.invites}`
+                        value: `${command_data.server_config.invites == true ? "Allowed" : "Banned"}`
                     }
                 ]
             }
@@ -69,8 +69,13 @@ module.exports = {
     
                 switch(property) {
                     case "banned_word": {
+                        if(command_data.server_config.banned_words.includes(value) === true) {
+                            command_data.msg.reply(`Word \`${value}\` is already banned.`);
+                            return;
+                        }
+
                         command_data.server_config.banned_words.push(value);
-                        command_data.msg.channel.send(`Added \`${value}\` to bot's property \`${property}\``).catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send(`Added \`${value}\` to banned words.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
     
@@ -101,12 +106,12 @@ module.exports = {
                 switch(property) {
                     case "banned_word": {
                         if(command_data.server_config.banned_words.includes(value) === false) {
-                            command_data.msg.reply(`Word \`${value}\` isn't a banned-`);
+                            command_data.msg.reply(`Word \`${value}\` isn't a banned.`);
                             return;
                         }
 
                         command_data.server_config.banned_words.splice(command_data.server_config.banned_words.indexOf(command_data.args[2]), 1);
-                        command_data.msg.channel.send(`Removed \`${value}\` from bot's property \`${property}\``).catch(e => { command_data.global_context.logger.api_error(e); });
+                        command_data.msg.channel.send(`Removed \`${value}\` from banned words.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -144,6 +149,7 @@ module.exports = {
                         }
 
                         command_data.server_config.invites = bool;
+                        command_data.msg.channel.send(`${bool ? "Allowed" : "Banned"} invites in messages.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
 
@@ -154,7 +160,6 @@ module.exports = {
                 }
 
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
-                command_data.msg.channel.send(`Set bot's property \`${property}\` to \`${value}\``).catch(e => { command_data.global_context.logger.api_error(e); });
                 break;
             }
     

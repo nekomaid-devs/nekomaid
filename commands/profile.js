@@ -36,7 +36,11 @@ module.exports = {
         diff = Math.abs(Math.round(diff));
         let premium_text = diff < 1440 ? " (Premium ⭐)" : "";
 
-        // TODO: update level_XP to the actual ammount needed for next level
+        let level_XP = command_data.server_config.module_level_level_exp;
+        for(let i = 1; i < command_data.tagged_server_user_config.level; i += 1) {
+            level_XP *= command_data.server_config.module_level_level_multiplier;
+        }
+
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedProfile = {
             color: 8388736,
@@ -57,7 +61,7 @@ module.exports = {
                 },
                 {
                     name: '⚡    Level:',
-                    value: `${command_data.tagged_user_config.level} (XP: ${command_data.tagged_user_config.xp}/${command_data.global_context.bot_config.level_XP})`,
+                    value: `${command_data.tagged_user_config.level} (XP: ${command_data.tagged_user_config.xp}/${level_XP})`,
                     inline: true
                 },
                 {

@@ -20,7 +20,7 @@ module.exports = {
         let item_name = command_data.total_argument;
         let target_item = Array.from(command_data.global_context.bot_config.items.values()).find(e => { return e.display_name.toLowerCase() === item_name.toLowerCase(); });
         if(target_item === undefined) {
-            command_data.msg.reply(`Haven't found any item with name \`${item_name}\`-`);
+            command_data.msg.reply(`Haven't found any item with name \`${item_name}\`.`);
             return;
         }
 

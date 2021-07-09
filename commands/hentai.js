@@ -13,7 +13,7 @@ module.exports = {
     async execute(command_data) {
         let url = await command_data.global_context.modules.akaneko.nsfw.hentai().catch(e => { command_data.global_context.logger.api_error(e); });
         let embedHentai = {
-            title: "Here are your lewds-",
+            title: "Here are your lewds~",
             color: 8388736,
             image: {
                 url: url

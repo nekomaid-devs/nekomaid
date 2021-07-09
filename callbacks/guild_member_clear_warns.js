@@ -16,9 +16,9 @@ module.exports = {
     },
 
     async process(global_context, event) {
-        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_warn", id: event.member.guild.id });
+        let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_guild_member_clear_warns", id: event.member.guild.id });
 
-        if(server_config.audit_warns == true && server_config.audit_channel != "-1") {
+        if(server_config.audit_warns == true && server_config.audit_channel !== "-1") {
             let channel = await event.member.guild.channels.fetch(server_config.audit_channel).catch(e => { global_context.logger.api_error(e); });
             if(channel !== undefined) {
                 let url = event.member.user.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
@@ -50,7 +50,7 @@ module.exports = {
                 }
 
                 server_config.case_ID += 1;
-                global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", id: event.member.guild.id, server: server_config });
+                global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server_cb", id: event.member.guild.id, server: server_config });
 
                 channel.send("", { embed: embedClearWarns }).catch(e => { global_context.logger.api_error(e); });
             }

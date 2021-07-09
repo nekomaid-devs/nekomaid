@@ -19,7 +19,7 @@ module.exports = {
         let post_info = await command_data.global_context.neko_modules_clients.danbooru.danbooru_result(command_data.global_context, command_data.args);
         switch(post_info.status) {
             case -1:
-                command_data.msg.reply("No results found-");
+                command_data.msg.reply("No results found...");
                 return;
         }
 
