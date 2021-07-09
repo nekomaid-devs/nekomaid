@@ -11,7 +11,7 @@ class InventoryManager {
     
                 let embedBox = {
                     color: 8388736,
-                    description: `\`${command_data.msg.author.tag}\` opened \`${target_indexes.length}x ${item_prefab.display_name}\` and got \`${payout_ammount}💵\`! (Current Credits: \`${command_data.author_config.credits}$\`)`
+                    description: `\`${command_data.msg.author.tag}\` opened \`${target_indexes.length}x ${item_prefab.display_name}\` and got \`${command_data.global_context.utils.format_number(payout_ammount)}💵\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_config.credits)}$\`)`
                 }
                 command_data.msg.channel.send("", { embed: embedBox }).catch(e => { global_context.logger.api_error(e); });
                 break;
@@ -24,7 +24,7 @@ class InventoryManager {
     
                 let embedCash = {
                     color: 8388736,
-                    description: `\`${command_data.msg.author.tag}\` opened \`${target_indexes.length}x ${item_prefab.display_name}\` and got \`${payout_ammount}💵\`! (Current Credits: \`${command_data.author_config.credits}$\`)`
+                    description: `\`${command_data.msg.author.tag}\` opened \`${target_indexes.length}x ${item_prefab.display_name}\` and got \`${command_data.global_context.utils.format_number(payout_ammount)}💵\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_config.credits)}$\`)`
                 }
                 command_data.msg.channel.send("", { embed: embedCash }).catch(e => { global_context.logger.api_error(e); });
                 break;
@@ -43,7 +43,7 @@ class InventoryManager {
     
                 let embedCashOthers = {
                     color: 8388736,
-                    description: `\`${command_data.msg.author.tag}\` gave \`${target_indexes.length}x ${item_prefab.display_name}\` to \`${command_data.tagged_user.tag}\` and they got \`${payout_ammount}💵\`! (Current Credits: \`${command_data.tagged_user_config.credits}$\`)`
+                    description: `\`${command_data.msg.author.tag}\` gave \`${target_indexes.length}x ${item_prefab.display_name}\` to \`${command_data.tagged_user.tag}\` and they got \`${command_data.global_context.utils.format_number(payout_ammount)}💵\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.tagged_user_config.credits)}$\`)`
                 }
                 command_data.msg.channel.send("", { embed: embedCashOthers }).catch(e => { global_context.logger.api_error(e); });
                 

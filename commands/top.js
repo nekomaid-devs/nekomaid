@@ -100,7 +100,7 @@ module.exports = {
 
             let net = props.reduce((acc, curr) => { acc += user_config[curr]; return acc; }, 0);
             let target_user = await command_data.global_context.bot.users.fetch(user_config.user_ID).catch(e => { command_data.global_context.logger.api_error(e); });
-            embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `${net} ${top_user_text}`);
+            embedTop.addField(`${(i + 1)}) ${target_user.tag}`, `${command_data.global_context.utils.format_number(net)} ${top_user_text}`);
         }
         
         command_data.msg.channel.send("", { embed: embedTop }).catch(e => { command_data.global_context.logger.api_error(e); });

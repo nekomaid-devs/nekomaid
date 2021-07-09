@@ -26,20 +26,19 @@ module.exports = {
         // Neko's Lewd Services - hourly income
         // Neko's Casino - hourly income
         // Neko's Scarpyard - a neko finds items at random intervals
-        // Neko's Pawn Shop - can sell junk for cash
+        // Neko's Pawn Shop - can sell junk for cash´
 
-        let data = { city_hall: 1, bank: 1, lab: 1, sanctuary: 1, pancakes: 1, crime_den: 1, lewd_services: 1, casino: 1, scrapyard: 1, pawn_shop: 1 }
         let buildings_description = "";
-        buildings_description += `\`[Neko's City Hall]     [${"=".repeat(data.city_hall - 1)}>${" ".repeat(10 - data.city_hall)}] Level ${data.city_hall}\`\n`;
-        buildings_description += `\`[Neko's Bank]          [${"=".repeat(data.bank - 1)}>${" ".repeat(10 - data.bank)}] Level ${data.bank}\`\n`;
-        buildings_description += `\`[Neko's Lab]           [${"=".repeat(data.lab - 1)}>${" ".repeat(10 - data.lab)}] Level ${data.lab}\`\n`;
-        buildings_description += `\`[Neko's Sanctuary]     [${"=".repeat(data.sanctuary - 1)}>${" ".repeat(10 - data.sanctuary)}] Level ${data.sanctuary}\`\n`;
-        buildings_description += `\`[Neko's Pancakes]      [${"=".repeat(data.pancakes - 1)}>${" ".repeat(10 - data.pancakes)}] Level ${data.pancakes}\`\n`;
-        buildings_description += `\`[Neko's Crime Den]     [${"=".repeat(data.crime_den - 1)}>${" ".repeat(10 - data.crime_den)}] Level ${data.crime_den}\`\n`;
-        buildings_description += `\`[Neko's Lewd Services] [${"=".repeat(data.lewd_services - 1)}>${" ".repeat(10 - data.lewd_services)}] Level ${data.lewd_services}\`\n`;
-        buildings_description += `\`[Neko's Casino]        [${"=".repeat(data.casino - 1)}>${" ".repeat(10 - data.casino)}] Level ${data.casino}\`\n`;
-        buildings_description += `\`[Neko's Scarpyard]     [${"=".repeat(data.scrapyard - 1)}>${" ".repeat(10 - data.scrapyard)}] Level ${data.scrapyard}\`\n`;
-        buildings_description += `\`[Neko's Pawn Shop]     [${"=".repeat(data.pawn_shop - 1)}>${" ".repeat(10 - data.pawn_shop)}] Level ${data.pawn_shop}\``;
+        buildings_description += `\`[Neko's City Hall]     [${"=".repeat(command_data.tagged_user_config.b_city_hall - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_city_hall)}] Level ${command_data.tagged_user_config.b_city_hall} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_city_hall, "b_city_hall"))} $)\`\n`;
+        buildings_description += `\`[Neko's Bank]          [${"=".repeat(command_data.tagged_user_config.b_bank - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_bank)}] Level ${command_data.tagged_user_config.b_bank} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_bank, "b_bank"))} $)\`\n`;
+        buildings_description += `\`[Neko's Lab]           [${"=".repeat(command_data.tagged_user_config.b_lab - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_lab)}] Level ${command_data.tagged_user_config.b_lab} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_lab, "b_lab"))} $)\`\n`;
+        buildings_description += `\`[Neko's Sanctuary]     [${"=".repeat(command_data.tagged_user_config.b_sanctuary - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_sanctuary)}] Level ${command_data.tagged_user_config.b_sanctuary} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_sanctuary, "b_sanctuary"))} $)\`\n`;
+        buildings_description += `\`[Neko's Pancakes]      [${"=".repeat(command_data.tagged_user_config.b_pancakes - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_pancakes)}] Level ${command_data.tagged_user_config.b_pancakes} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_pancakes, "b_pancakes"))} $)\`\n`;
+        buildings_description += `\`[Neko's Crime Den]     [${"=".repeat(command_data.tagged_user_config.b_crime_den - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_crime_den)}] Level ${command_data.tagged_user_config.b_crime_den} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_crime_den, "b_crime_den"))} $)\`\n`;
+        buildings_description += `\`[Neko's Lewd Services] [${"=".repeat(command_data.tagged_user_config.b_lewd_services - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_lewd_services)}] Level ${command_data.tagged_user_config.b_lewd_services} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_lewd_services, "b_lewd_services"))} $)\`\n`;
+        buildings_description += `\`[Neko's Casino]        [${"=".repeat(command_data.tagged_user_config.b_casino - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_casino)}] Level ${command_data.tagged_user_config.b_casino} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_casino, "b_casino"))} $)\`\n`;
+        buildings_description += `\`[Neko's Scrapyard]     [${"=".repeat(command_data.tagged_user_config.b_scrapyard - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_scrapyard)}] Level ${command_data.tagged_user_config.b_scrapyard} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_scrapyard, "b_scrapyard"))} $)\`\n`;
+        buildings_description += `\`[Neko's Pawn Shop]     [${"=".repeat(command_data.tagged_user_config.b_pawn_shop - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_pawn_shop)}] Level ${command_data.tagged_user_config.b_pawn_shop} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.tagged_user_config.b_pawn_shop, "b_pawn_shop"))} $)\``;
 
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedBuildings = {

@@ -36,11 +36,6 @@ module.exports = {
         diff = Math.abs(Math.round(diff));
         let premium_text = diff < 1440 ? " (Premium ⭐)" : "";
 
-        let level_XP = command_data.server_config.module_level_level_exp;
-        for(let i = 1; i < command_data.tagged_server_user_config.level; i += 1) {
-            level_XP *= command_data.server_config.module_level_level_multiplier;
-        }
-
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedProfile = {
             color: 8388736,
@@ -51,17 +46,17 @@ module.exports = {
             fields: [ 
                 {
                     name: '💵    Credits:',
-                    value: `$ ${command_data.tagged_user_config.credits}`,
+                    value: `$ ${command_data.global_context.utils.format_number(command_data.tagged_user_config.credits)}`,
                     inline: true
                 },
                 {
                     name: '🏦    Bank:',
-                    value: `$ ${command_data.tagged_user_config.bank}/${command_data.tagged_user_config.bank_limit}`,
+                    value: `$ ${command_data.global_context.utils.format_number(command_data.tagged_user_config.bank)}/${command_data.global_context.utils.format_number(command_data.tagged_user_config.bank_limit)}`,
                     inline: true
                 },
                 {
                     name: '⚡    Level:',
-                    value: `${command_data.tagged_user_config.level} (XP: ${command_data.tagged_user_config.xp}/${level_XP})`,
+                    value: `${command_data.tagged_user_config.level} (XP: ${Math.round(command_data.tagged_user_config.xp)}/${Math.round(command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.tagged_user_config))})`,
                     inline: true
                 },
                 {

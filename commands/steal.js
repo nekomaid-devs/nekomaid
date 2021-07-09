@@ -51,7 +51,7 @@ module.exports = {
 
         let embedSteal = {
             color: 8388736,
-            description: `You stole \`${credits_ammount} 💵\` from \`${command_data.tagged_user.tag}\`! (Current Credits: \`${command_data.author_config.credits}$\`)`
+            description: `You stole \`${command_data.global_context.utils.format_number(credits_ammount)} 💵\` from \`${command_data.tagged_user.tag}\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_config.credits)}$\`)`
         }
         command_data.msg.channel.send("", { embed: embedSteal }).catch(e => { command_data.global_context.logger.api_error(e); });
     },

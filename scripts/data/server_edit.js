@@ -6,8 +6,13 @@ module.exports = {
             case "config": {
                 let config = data.config;
 
-                let query_0 = "bot_owners=?"
-                let query_data = [ config.bot_owners.join(",") ]
+                let query_0 = "bot_owners=?" + 
+                ", b_mayor_house=?, b_shrine=?, b_community_center=?, b_quantum_pancakes=?, b_crime_monopoly=?, b_pet_shelter=?" + 
+                ", b_mayor_house_credits=?, b_shrine_credits=?, b_community_center_credits=?, b_quantum_pancake_creditss=?, b_crime_monopoly_credits=?, b_pet_shelter_credits=?"
+                let query_data = [ config.bot_owners.join(","),
+                config.b_mayor_house, config.b_shrine, config.b_community_center, config.b_quantum_pancakes, config.b_crime_monopoly, config.b_pet_shelter,
+                config.b_mayor_house_credits, config.b_shrine_credits, config.b_community_center_credits, config.b_quantum_pancakes_credits, config.b_crime_monopoly_credits, config.b_pet_shelter_credits ]
+                
                 let query = "UPDATE configs SET " + query_0 + " WHERE id='" + data.id + "'";
                 return await this.edit_data(global_context, query, query_data);
             }
@@ -67,8 +72,13 @@ module.exports = {
             case "global_user": {
                 let user = data.user;
 
-                let query_0 = "credits=?, bank=?, level=?, xp=?, rep=?, net_worth=?, votes=?, last_daily_time=?, last_upvoted_time=?, last_beg_time=?, last_rep_time=?, married_ID=?, osu_username=?, can_divorce=?, last_work_time=?, last_steal_time=?, last_crime_time=?, inventory=?"
-                let query_data = [ user.credits, user.bank, user.level, user.xp, user.rep, user.net_worth, user.votes, user.last_daily_time, user.last_upvoted_time, user.last_beg_time, user.last_rep_time, user.married_ID, user.osu_username, user.can_divorce, user.last_work_time, user.last_steal_time, user.last_crime_time, user.inventory.join(",") ]
+                let query_0 = "credits=?, bank=?, level=?, xp=?, rep=?, net_worth=?, votes=?, last_daily_time=?, last_upvoted_time=?, last_beg_time=?, last_rep_time=?, married_ID=?, osu_username=?, can_divorce=?, last_work_time=?, last_steal_time=?, last_crime_time=?, inventory=?" + 
+                ", b_city_hall=?, b_bank=?, b_lab=?, b_sanctuary=?, b_pancakes=?, b_crime_den=?, b_lewd_services=?, b_casino=?, b_scrapyard=?, b_pawn_shop=?" + 
+                ", b_city_hall_credits=?, b_bank_credits=?, b_lab_credits=?, b_sanctuary_credits=?, b_pancakes_credits=?, b_crime_den_credits=?, b_lewd_services_credits=?, b_casino_credits=?, b_scrapyard_credits=?, b_pawn_shop_credits=?"
+                let query_data = [ user.credits, user.bank, user.level, user.xp, user.rep, user.net_worth, user.votes, user.last_daily_time, user.last_upvoted_time, user.last_beg_time, user.last_rep_time, user.married_ID, user.osu_username, user.can_divorce, user.last_work_time, user.last_steal_time, user.last_crime_time, user.inventory.join(","),
+                user.b_city_hall, user.b_bank, user.b_lab, user.b_sanctuary, user.b_pancakes, user.b_crime_den, user.b_lewd_services, user.b_casino, user.b_scrapyard, user.b_pawn_shop,
+                user.b_city_hall_credits, user.b_bank_credits, user.b_lab_credits, user.b_sanctuary_credits, user.b_pancakes_credits, user.b_crime_den_credits, user.b_lewd_services_credits, user.b_casino_credits, user.b_scrapyard_credits, user.b_pawn_shop_credits ]
+                
                 let query = "UPDATE global_users SET " + query_0 + " WHERE user_ID='" + user.user_ID + "'";
                 return await this.edit_data(global_context, query, query_data);
             }

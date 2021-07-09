@@ -32,7 +32,7 @@ module.exports = {
 
         let embedDaily = {
             color: 6732650,
-            description: `Picked up daily reward of \`${command_data.global_context.bot_config.daily_credits} 💵\`! (Current Credits: \`${command_data.author_config.credits}$\`)`,
+            description: `Picked up daily reward of \`${command_data.global_context.utils.format_number(command_data.global_context.bot_config.daily_credits)} 💵\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_config.credits)}$\`)`,
             footer: {
                 text: "Make sure to vote with " + command_data.server_config.prefix + "vote for free credits"
             }

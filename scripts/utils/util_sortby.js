@@ -12,15 +12,13 @@ class SortBy {
         }
     }
 
-    create_comparator_server_level(server_config) {
+    create_comparator_server_level(global_context, server_config) {
         return (a, b) => {
-            let level_XP = server_config.module_level_level_exp;
-            for(let i = 1; i < a.level; i++) {
-                level_XP *= server_config.module_level_level_multiplier;
-            }
+            let level_XP_a = global_context.utils.get_level_XP(server_config, a);
+            let level_XP_b = global_context.utils.get_level_XP(server_config, b);
 
-            let a_net = a.level + (a.xp / level_XP);
-            let b_net = b.level + (b.xp / level_XP);
+            let a_net = a.level + (a.xp / level_XP_a);
+            let b_net = b.level + (b.xp / level_XP_b);
             
             return b_net - a_net;
         }
@@ -44,7 +42,7 @@ class SortBy {
 
     async get_top_server_level(global_context, server_config, server) {
         let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_users", id: server.id });
-        items.sort(this.create_comparator_server_level(server_config));
+        items.sort(this.create_comparator_server_level(global_context, server_config));
 
         return items;
     }

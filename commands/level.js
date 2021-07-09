@@ -32,14 +32,7 @@ module.exports = {
                 break;
             }
         }
-
         author_pos += 1;
-        let xp = author_config.xp;
-        let level = author_config.level;
-        let level_XP = command_data.server_config.module_level_level_exp;
-        for(let i = 1; i < author_config.level; i += 1) {
-            level_XP *= command_data.server_config.module_level_level_multiplier;
-        }
 
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedLevel = {
@@ -51,7 +44,7 @@ module.exports = {
             fields: [ 
                 {
                     name: '⚡    Server Level:',
-                    value: `${level} (XP: ${Math.round(xp)}/${Math.round(level_XP)})`
+                    value: `${author_config.level} (XP: ${Math.round(author_config.xp)}/${Math.round(command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.author_config))})`
                 }
             ],
             thumbnail: {

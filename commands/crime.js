@@ -42,7 +42,7 @@ module.exports = {
         }
         
         let answer = command_data.global_context.utils.pick_random(answers);
-        answer = answer.replace("<creditsAmmount>", "`" + credits_ammount + "💵`");
+        answer = answer.replace("<creditsAmmount>", "`" + command_data.global_context.utils.format_number(credits_ammount) + "💵`");
 
         command_data.author_config.credits += credits_ammount;
         command_data.author_config.net_worth += credits_ammount;
@@ -50,7 +50,7 @@ module.exports = {
 
         let embedCrime = {
             color: answer_color,
-            description: `${answer} (Current Credits: \`${command_data.author_config.credits}$\`)`,
+            description: `${answer} (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_config.credits)}$\`)`,
             footer: {
                 text: `Make sure to vote with ${command_data.server_config.prefix}vote for free credits`
             }

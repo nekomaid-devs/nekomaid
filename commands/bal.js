@@ -18,9 +18,6 @@ module.exports = {
     execute(command_data) {
         // TODO: add position in top
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        let credits = command_data.tagged_user_config.credits;
-        let bank = command_data.tagged_user_config.bank;
-
         let embedBalance = {
             color: 8388736,
             author: {
@@ -30,12 +27,12 @@ module.exports = {
             fields: [ 
                 {
                     name: '💵    Credits:',
-                    value: `$ ${credits}`,
+                    value: `$ ${command_data.global_context.utils.format_number(command_data.tagged_user_config.credits)}`,
                     inline: true
                 },
                 {
                     name: '🏦    Bank:',
-                    value: `$ ${bank}/${command_data.tagged_user_config.bank_limit}`,
+                    value: `$ ${command_data.global_context.utils.format_number(command_data.tagged_user_config.bank)}/${command_data.global_context.utils.format_number(command_data.tagged_user_config.bank_limit)}`,
                     inline: true
                 }
             ],

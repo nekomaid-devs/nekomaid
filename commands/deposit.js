@@ -60,7 +60,7 @@ module.exports = {
 
         let embedDeposit = {
             color: 8388736,
-            description: `Deposited \`${credits_ammount} 💵\` to bank of \`${command_data.msg.author.tag}\`! (Current Credits: \`${command_data.author_config.credits}$\`)`
+            description: `Deposited \`${command_data.global_context.utils.format_number(credits_ammount)} 💵\` to bank of \`${command_data.msg.author.tag}\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_config.credits)}$\`)`
         }
         command_data.msg.channel.send("", { embed: embedDeposit }).catch(e => { command_data.global_context.logger.api_error(e); });
     },

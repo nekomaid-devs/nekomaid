@@ -25,7 +25,7 @@ module.exports = {
         items.forEach(function (item) {
             command_data.global_context.bot_config.items.forEach(item2 => {
                 if(item.id === item2.id) {
-                    embedShop.addField(`#${item.id} - ${item2.display_name}`, `${item.price} credits`);
+                    embedShop.addField(`#${item.id} - ${item2.display_name}`, `${command_data.global_context.utils.format_number(item.price)} credits`);
                 }
             })
         });

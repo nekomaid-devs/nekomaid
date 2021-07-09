@@ -6,16 +6,12 @@ class LevelingManager {
             return;
         }
 
-        let level_XP = command_data.server_config.module_level_level_exp;
-        for(let i = 1; i < command_data.tagged_server_user_config.level; i += 1) {
-            level_XP *= command_data.server_config.module_level_level_multiplier;
-        }
-
         command_data.tagged_server_user_config.xp += xp_to_add;
         if(Number.isSafeInteger(command_data.tagged_server_user_config.xp) === false) {
             command_data.tagged_server_user_config.xp = Number.MAX_SAFE_INTEGER;
         }
 
+        let level_XP = command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.tagged_server_user_config);
         let start_level = command_data.tagged_server_user_config.level;
         let rank_message = "\n";
 
@@ -60,10 +56,7 @@ class LevelingManager {
                 command_data.tagged_server_user_config.xp -= level_XP;
                 command_data.tagged_server_user_config.level += 1;
                 
-                level_XP = command_data.server_config.module_level_level_exp;
-                for(let i = 1; i < command_data.tagged_server_user_config.level; i += 1) {
-                    level_XP *= command_data.server_config.module_level_level_multiplier;
-                }
+                level_XP = command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.tagged_server_user_config);
             }
 
             await process_ranks();

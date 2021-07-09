@@ -78,7 +78,7 @@ module.exports = {
                 let multiplier = 0.55 + ((options.length - 1) / 5);
                 let multiplier_text = (1 + multiplier).toFixed(2);
                 let won_ammount = Math.floor(credits_ammount * multiplier);
-                let won_ammount_text = credits_ammount + won_ammount;
+                let won_ammount_text = command_data.global_context.utils.format_number(credits_ammount + won_ammount);
                 
                 command_data.author_config.credits += won_ammount;
                 command_data.author_config.net_worth += won_ammount;
@@ -89,11 +89,13 @@ module.exports = {
                     text: `Win multiplier: ${multiplier_text}x`
                 }
             } else {
+                let lost_ammount_text = command_data.global_context.utils.format_number(credits_ammount);
+
                 command_data.author_config.credits -= credits_ammount;
                 command_data.author_config.net_worth -= credits_ammount;
                 command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
-                embedRoll.description = `You lost \`${credits_ammount}\` credits...`;
+                embedRoll.description = `You lost \`${lost_ammount_text}\` credits...`;
             }
 
             command_data.msg.channel.send("", { embed: embedRoll }).catch(e => { command_data.global_context.logger.api_error(e); });

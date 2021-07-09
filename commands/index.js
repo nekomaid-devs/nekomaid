@@ -52,6 +52,7 @@ module.exports = {
 
     bal: require('./bal'),
     beg: require('./beg'),
+    build: require('./build'),
     buildings: require('./buildings'),
     buy: require('./buy'),
     crime: require('./crime'),
@@ -70,6 +71,7 @@ module.exports = {
     transfer: require('./transfer'),
     use: require('./use'),
     useall: require('./useall'),
+    upgrade: require('./upgrade'),
     withdraw: require('./withdraw'),
     work: require('./work'),
     

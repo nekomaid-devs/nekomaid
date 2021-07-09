@@ -1,5 +1,3 @@
-const RecommendedArgument = require("../scripts/helpers/recommended_argument");
-
 module.exports = {
     name: "globalbuildings",
     category: "Profile",
@@ -21,15 +19,14 @@ module.exports = {
         // Neko's Quantum Pancakes - better payout from work for all players (and something else?)
         // Neko's Crime Monopoly - better payout from crime for all players (and something else?)
         // Neko's Pet Shelter - unlocks better pets and sells them
-
-        let data = { mayor_house: 1, shrine: 1, community_center: 1, quantum_pancakes: 1, crime_monopoly: 1, pet_shelter: 1 }
+        
         let buildings_description = "";
-        buildings_description += `\`[Neko's Mayor House]      [${"=".repeat(data.mayor_house - 1)}>${" ".repeat(10 - data.mayor_house)}] Level ${data.mayor_house}\`\n`;
-        buildings_description += `\`[Neko's Shrine]           [${"=".repeat(data.shrine - 1)}>${" ".repeat(10 - data.shrine)}] Level ${data.shrine}\`\n`;
-        buildings_description += `\`[Neko's Community Center] [${"=".repeat(data.community_center - 1)}>${" ".repeat(10 - data.community_center)}] Level ${data.community_center}\`\n`;
-        buildings_description += `\`[Neko's Quantum Pancakes] [${"=".repeat(data.quantum_pancakes - 1)}>${" ".repeat(10 - data.quantum_pancakes)}] Level ${data.quantum_pancakes}\`\n`;
-        buildings_description += `\`[Neko's Crime Monopoly]   [${"=".repeat(data.crime_monopoly - 1)}>${" ".repeat(10 - data.crime_monopoly)}] Level ${data.crime_monopoly}\`\n`;
-        buildings_description += `\`[Neko's Pet Shelter]      [${"=".repeat(data.pet_shelter - 1)}>${" ".repeat(10 - data.pet_shelter)}] Level ${data.pet_shelter}\``;
+        buildings_description += `\`[Neko's Mayor House]      [${"=".repeat(command_data.global_context.bot_config.b_mayor_house - 1)}>${" ".repeat(10 - command_data.global_context.bot_config.b_mayor_house)}] Level ${command_data.global_context.bot_config.b_mayor_house} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.global_context.bot_config.b_mayor_house, "b_mayor_house"))} $)\`\n`;
+        buildings_description += `\`[Neko's Shrine]           [${"=".repeat(command_data.global_context.bot_config.b_shrine - 1)}>${" ".repeat(10 - command_data.global_context.bot_config.b_shrine)}] Level ${command_data.global_context.bot_config.b_shrine} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.global_context.bot_config.b_shrine, "b_shrine"))} $)\`\n`;
+        buildings_description += `\`[Neko's Community Center] [${"=".repeat(command_data.global_context.bot_config.b_community_center - 1)}>${" ".repeat(10 - command_data.global_context.bot_config.b_community_center)}] Level ${command_data.global_context.bot_config.b_community_center} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.global_context.bot_config.b_community_center, "b_community_center"))} $)\`\n`;
+        buildings_description += `\`[Neko's Quantum Pancakes] [${"=".repeat(command_data.global_context.bot_config.b_quantum_pancakes - 1)}>${" ".repeat(10 - command_data.global_context.bot_config.b_quantum_pancakes)}] Level ${command_data.global_context.bot_config.b_quantum_pancakes} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.global_context.bot_config.b_quantum_pancakes, "b_quantum_pancakes"))} $)\`\n`;
+        buildings_description += `\`[Neko's Crime Monopoly]   [${"=".repeat(command_data.global_context.bot_config.b_crime_monopoly - 1)}>${" ".repeat(10 - command_data.global_context.bot_config.b_crime_monopoly)}] Level ${command_data.global_context.bot_config.b_crime_monopoly} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.global_context.bot_config.b_crime_monopoly, "b_crime_monopoly"))} $)\`\n`;
+        buildings_description += `\`[Neko's Pet Shelter]      [${"=".repeat(command_data.global_context.bot_config.b_pet_shelter - 1)}>${" ".repeat(10 - command_data.global_context.bot_config.b_pet_shelter)}] Level ${command_data.global_context.bot_config.b_pet_shelter} (${command_data.global_context.utils.format_number(command_data.global_context.utils.get_building_price(command_data.global_context.bot_config.b_pet_shelter, "b_pet_shelter"))} $)\``;
 
         let url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedBuildings = {

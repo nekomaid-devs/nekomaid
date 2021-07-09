@@ -40,7 +40,7 @@ module.exports = {
 
         let embedBuy = {
             color: 8388736,
-            description: `Bought \`1x ${target_item.display_name}\` for \`${target_shop_item.price} 💵\`.`
+            description: `Bought \`1x ${target_item.display_name}\` for \`${command_data.global_context.utils.format_number(target_shop_item.price)} 💵\`.`
         }
         command_data.msg.channel.send("", { embed: embedBuy }).catch(e => { command_data.global_context.logger.api_error(e); });
     },

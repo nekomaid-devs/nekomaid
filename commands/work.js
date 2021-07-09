@@ -40,7 +40,7 @@ module.exports = {
 
         let embedWork = {
             color: 6732650,
-            description: `${answer} (Current Credits: \`${command_data.author_config.credits}$\`)`,
+            description: `${answer} (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_config.credits)}$\`)`,
             footer: {
                 text: `Make sure to vote with ${command_data.server_config.prefix}vote for free credits`
             }
