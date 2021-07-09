@@ -26,6 +26,6 @@ module.exports = {
             voice_data.persistent_queue.shift();
         }
 
-        command_data.global_context.neko_modules_clients.vm.try_playing_next(command_data.global_context, command_data.msg.guild.id);
+        command_data.global_context.neko_modules_clients.vm.play_next_on_connection(command_data.global_context, command_data.msg.guild.id);
     },
 };
