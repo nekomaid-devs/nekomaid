@@ -519,7 +519,6 @@ module.exports = {
         let buildings = {
             "Neko's Mayor House": "b_mayor_house",
             "Neko's Shrine": "b_shrine",
-            "Neko's Lab": "b_lab",
             "Neko's Community Center": "b_community_center",
             "Neko's Quantum Pancakes": "b_quantum_pancakes",
             "Neko's Crime Monopoly": "b_crime_monopoly",

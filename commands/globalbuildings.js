@@ -12,14 +12,6 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        // Global Buildings:
-        // Neko's Mayor House - unlocks bonuses for mayor and more upgrades (and something else?)
-        // Neko's Shrine - unlock bonuses for all players
-        // Neko's Community Center - improves event payouts, etc.
-        // Neko's Quantum Pancakes - better payout from work for all players (and something else?)
-        // Neko's Crime Monopoly - better payout from crime for all players (and something else?)
-        // Neko's Pet Shelter - unlocks better pets and sells them
-
         let mayor = await command_data.global_context.bot.users.fetch(command_data.global_context.bot_config.mayor_ID);
         
         let buildings_description = "";

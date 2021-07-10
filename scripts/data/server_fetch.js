@@ -121,35 +121,6 @@ module.exports = {
         config.beg_failed_answers = config.beg_failed_answers.split(",").filter(a => a.length > 0)
         config.work_answers = config.work_answers.split(",").filter(a => a.length > 0)
 
-        // box - Instant lootbox with cash payout
-        // cash - Instant cash payout
-        // cash_others - Instant cash payout for somebody else
-        // bankLimit - Increases own bank limit
-        // partyPopper - When used gives cash payout to first n people who reacted or expires in 30 seconds
-        // confettiBall - When used gives cash payout to random n people in the server
-        // shield - Protects user from getting robbed and uses the item
-        // book - idk yet lol
-        // bomb - idk yet lol
-        // crystalBall - idk yet lol
-        // balloon - idk yet lol
-        // magicWand - idk yet lol
-        // teddyBear - idk yet lol
-        // pinata - idk yet lol
-        // yarn - idk yet lol
-        // floppy - idk yet lol
-        // flashlight - idk yet lol
-        // scroll - idk yet lol
-        // creditCard - idk yet lol
-        // key - idk yet lol
-        // bread - idk yet lol
-        // pizza - idk yet lol
-        // fish - idk yet lol
-        // cookie - idk yet lol
-        // medal - idk yet lol
-        // trophy - idk yet lol
-        // lewdObject - idk yet lol
-        // lollipop - idk yet lol
-
         let items = new Map();
         items.set("0", { id: "0", type: "box", display_name: "Rare Box", box_payouts: [300,500,750], description: "A rare lootbox with a cash prize inside~" })
         items.set("1", { id: "1", type: "box", display_name: "Common Box", box_payouts: [50,100,150], description: "A common lootbox with a cash prize inside~" })

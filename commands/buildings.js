@@ -16,18 +16,6 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     async execute(command_data) {
-        // User Buildings:
-        // Neko's City Hall - unlocks more upgrades
-        // Neko's Bank - more bank cap
-        // Neko's Lab - upgrades give bonuses (maybe?)
-        // Neko's Sanctuary - better bonuses from pets
-        // Neko's Pancakes - better payout from work
-        // Neko's Crime Den - better payout from crime
-        // Neko's Lewd Services - hourly income
-        // Neko's Casino - hourly income
-        // Neko's Scarpyard - a neko finds items at random intervals
-        // Neko's Pawn Shop - can sell junk for cash´
-
         let buildings_description = "";
         buildings_description += `\`[Neko's City Hall]     [${"=".repeat(command_data.tagged_user_config.b_city_hall - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_city_hall)}] Level ${command_data.tagged_user_config.b_city_hall} (${command_data.global_context.utils.format_number(command_data.global_context.neko_modules.vars.get_building_price(command_data.tagged_user_config.b_city_hall, "b_city_hall"))} $)\`\n`;
         buildings_description += `\`[Neko's Bank]          [${"=".repeat(command_data.tagged_user_config.b_bank - 1)}>${" ".repeat(10 - command_data.tagged_user_config.b_bank)}] Level ${command_data.tagged_user_config.b_bank} (${command_data.global_context.utils.format_number(command_data.global_context.neko_modules.vars.get_building_price(command_data.tagged_user_config.b_bank, "b_bank"))} $)\`\n`;
