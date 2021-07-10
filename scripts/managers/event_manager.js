@@ -178,7 +178,7 @@ class EventManager {
                     if(data.claimed_users.includes(u.id) === false && emoji === "🎁") {
                         data.claimed_users.push(u.id);
 
-                        reacted_config.inventory.push("0")
+                        reacted_config.inventory.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: u.id, item_ID: "0" })
                         global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
 
                         channel.send("<@" + u.id + "> claimed the gift~ (Gifted so far: " + data.claimed_users.length + ")").catch(e => { global_context.logger.api_error(e); });
@@ -303,7 +303,7 @@ class EventManager {
                             let item = global_context.bot_config.items.get(itemID);
 
                             reacted_config.credits -= 200;
-                            reacted_config.inventory.push(itemID);
+                            reacted_config.inventory.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: u.id, item_ID: item_ID });
                             global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
 
                             channel.send("<@" + u.id + "> bought " + item.displayName + "!~").catch(e => { global_context.logger.api_error(e); });
@@ -314,8 +314,8 @@ class EventManager {
                 case 10:
                     if(emoji === "❤️") {
                         let targetIndex = -1;
-                        reacted_config.inventory.forEach(function(id, index) {
-                            if(id === "39" || id === "41" || id === "42") {
+                        reacted_config.inventory.forEach((item, index) => {
+                            if(item.item_ID === "39" || item.item_ID === "41" || item.item_ID === "42") {
                                 targetIndex = index;
                             }
                         });

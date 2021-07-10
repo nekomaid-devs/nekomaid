@@ -43,5 +43,10 @@ module.exports = {
     async add_reaction_role(global_context, rr) {
         var query = "INSERT IGNORE INTO server_reaction_roles (id, server_ID, channel_ID, message_ID, reaction_roles, reaction_role_emojis) VALUES('" + rr.id + "', '" + rr.server_ID + "', '" + rr.channel_ID + "', '" + rr.message_ID + "', '" + rr.reaction_roles.join(",") + "', '" + rr.reaction_role_emojis.join(",") + "')";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
+    },
+
+    async add_inventory_item(global_context, i) {
+        var query = "INSERT IGNORE INTO inventory_items (id, user_ID, item_ID) VALUES('" + i.id + "', '" + i.user_ID + "', '" + i.item_ID + "')";
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     }
 }

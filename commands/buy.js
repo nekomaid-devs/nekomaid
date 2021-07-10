@@ -35,7 +35,7 @@ module.exports = {
         }
 
         command_data.author_config.credits -= target_shop_item.price;
-        command_data.author_config.inventory.push(target_shop_item.id);
+        command_data.author_config.inventory.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, item_ID: target_shop_item.id });
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
         let embedBuy = {

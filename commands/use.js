@@ -32,8 +32,8 @@ module.exports = {
             }
         });
 
-        command_data.author_config.inventory.forEach((id, index) => {
-            if(id === item_ID) {
+        command_data.author_config.inventory.forEach((item, index) => {
+            if(item.item_ID === item_ID) {
                 target_index = index;
             }
         });

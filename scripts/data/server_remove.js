@@ -32,5 +32,10 @@ module.exports = {
     async remove_reaction_roles_from_server(global_context, id) {
         var query = "DELETE FROM server_reaction_roles WHERE server_ID='" + id + "'";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
+    },
+
+    async remove_inventory_items_from_user(global_context, id) {
+        var query = "DELETE FROM inventory_items WHERE user_ID='" + id + "'";
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     }
 }

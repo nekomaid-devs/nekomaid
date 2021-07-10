@@ -80,6 +80,9 @@ module.exports = {
             case "server_warnings":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_warnings WHERE server_ID='" + data.id + "'", defaultFormat);
 
+            case "inventory_items":
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM inventory_items WHERE user_ID='" + data.id + "'", defaultFormat);
+
             case "server_logs":
                 /*return await this.fetch_data(bot, "SELECT * FROM serverLogs WHERE server_ID='" + data.id + "'", defaultFormat);*/
                 return global_context.neko_modules_clients.ssm.server_prefabs.getServerLogsPrefab({ id: data.id });
@@ -190,8 +193,8 @@ module.exports = {
         return server;
     },
 
-    format_global_user(global_context, user) {
-        user.inventory = user.inventory.split(",").filter(a => a.length > 0);
+    async format_global_user(global_context, user) {
+        user.inventory = await this.fetch(global_context, { type: "inventory_items", id: user.user_ID });
         user.bank_limit = [0, 10000, 15000, 20000, 30000, 45000, 60000, 75000, 10000, 200000, 350000][user.b_bank];
 
         return user;

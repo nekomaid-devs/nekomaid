@@ -22,8 +22,8 @@ module.exports = {
             inventory_text = "Empty";
         } else {
             let inventory_map = new Map();
-            inventory.forEach(id => {
-                inventory_map.set(id, inventory_map.has(id) === true ? inventory_map.get(id) + 1 : 1);
+            inventory.forEach(item => {
+                inventory_map.set(item.item_ID, inventory_map.has(item.item_ID) === true ? inventory_map.get(item.item_ID) + 1 : 1);
             });
 
             Array.from(inventory_map.keys()).forEach(id => {

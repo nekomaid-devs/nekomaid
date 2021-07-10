@@ -31,7 +31,7 @@ module.exports = {
         }
 
         for(var i = 0; i < ammount; i += 1) {
-            command_data.tagged_user_config.inventory.push(item_ID);
+            command_data.tagged_user_config.inventory.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.tagged_user.id, item_ID: item_ID });
         }
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
