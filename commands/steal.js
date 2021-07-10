@@ -25,11 +25,11 @@ module.exports = {
         let start = new Date(command_data.author_config.last_steal_time);
         let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
-        diff = Math.abs(Math.round(diff));
+        diff = Math.abs(Math.round(diff * command_data.global_context.bot_config.speed));
 
         if(diff < 360) {
             let end_needed = new Date(start.getTime() + (3600000 * 6));
-            let time_left = end_needed - end;
+            let time_left = (end_needed - end) / command_data.global_context.bot_config.speed;
             command_data.msg.reply(`You need to wait more \`${command_data.global_context.neko_modules_clients.tc.convert_time(time_left)}\` before doing this.`);
             return;
         }

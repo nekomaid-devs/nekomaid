@@ -11,6 +11,8 @@ module.exports = {
     subcommandHelp: new Map()
     .set("add",
     "`<subcommand_prefix> bot_owner [mention]` - Add a bot owner")
+    .set("set",
+    "`<subcommand_prefix> speed [number]` - Changes the speed at which the differences are calculated")
     .set("remove",
     "`<subcommand_prefix> bot_owner [mention]` - Removes a bot owner"),
     argumentsNeeded: [],
@@ -45,6 +47,10 @@ module.exports = {
                     {
                         name: "Bot Owners:",
                         value: bot_owners_text
+                    },
+                    {
+                        name: "Speed:",
+                        value: `\`${command_data.global_context.bot_config.speed}\``
                     }
                 ]
             }
@@ -80,6 +86,43 @@ module.exports = {
 
                     default: {
                         command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help botconfig add\` for help)`, "add bot_owner @LamkasDev") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                        return;
+                    }
+                }
+
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
+                break;
+            }
+
+            case "set": {
+                if(command_data.args.length < 2) {
+                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                    return;
+                }
+                let property = command_data.args[1];
+
+                if(command_data.args.length < 3) {
+                    command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                    return;
+                }
+                let value = command_data.args[2];
+                let value_text = command_data.msg.content.substring(command_data.msg.content.indexOf(value));
+
+                switch(property) {
+                    case "speed": {
+                        if(isNaN(value) || parseFloat(value) <= 0) {
+                            command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 2`) }).catch(e => { command_data.global_context.logger.api_error(e); });
+                            return;
+                        }
+
+                        value = parseFloat(value);
+                        command_data.global_context.bot_config.speed = value;
+                        command_data.msg.channel.send(`Set speed to \`${value.toFixed(2)}\`.`).catch(e => { command_data.global_context.logger.api_error(e); });
+                        break;
+                    }
+
+                    default: {
+                        command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help botconfig set\` for help)`, "set speed 2") }).catch(e => { command_data.global_context.logger.api_error(e); });
                         return;
                     }
                 }
@@ -132,7 +175,7 @@ module.exports = {
             }
 
             default: {
-                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `remove`)", "add bot_owner @LamkasDev") }).catch(e => { command_data.global_context.logger.api_error(e); });
+                command_data.msg.channel.send("", { embed: command_data.global_context.neko_modules.vars.get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "add bot_owner @LamkasDev") }).catch(e => { command_data.global_context.logger.api_error(e); });
                 break;
             }
         }

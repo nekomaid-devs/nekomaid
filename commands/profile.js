@@ -33,7 +33,7 @@ module.exports = {
         let start = new Date(command_data.author_config.last_upvoted_time);
         let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
-        diff = Math.abs(Math.round(diff));
+        diff = Math.abs(Math.round(diff * command_data.global_context.bot_config.speed));
         let premium_text = diff < 1440 ? " (Premium ⭐)" : "";
 
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
