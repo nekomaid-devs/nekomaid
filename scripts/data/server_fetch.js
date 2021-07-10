@@ -114,12 +114,12 @@ module.exports = {
     },
 
     format_config(config) {
-        config.bot_owners = config.bot_owners.split(",").filter(a => a.length > 0)
-        config.crime_success_answers = config.crime_success_answers.split(",").filter(a => a.length > 0)
-        config.crime_failed_answers = config.crime_failed_answers.split(",").filter(a => a.length > 0)
-        config.beg_success_answers = config.beg_success_answers.split(",").filter(a => a.length > 0)
-        config.beg_failed_answers = config.beg_failed_answers.split(",").filter(a => a.length > 0)
-        config.work_answers = config.work_answers.split(",").filter(a => a.length > 0)
+        config.bot_owners = config.bot_owners.split(",").filter(a => a.length > 0);
+        config.beg_success_answers = config.beg_success_answers.split(",").filter(a => a.length > 0);
+        config.beg_failed_answers = config.beg_failed_answers.split(",").filter(a => a.length > 0);
+        config.work_answers = config.work_answers.split("\r\n").filter(a => a.length > 0);
+        config.crime_success_answers = config.crime_success_answers.split("\r\n").filter(a => a.length > 0);
+        config.crime_failed_answers = config.crime_failed_answers.split("\r\n").filter(a => a.length > 0);
 
         let items = new Map();
         items.set("0", { id: "0", type: "box", display_name: "Rare Box", box_payouts: [300,500,750], description: "A rare lootbox with a cash prize inside~" })
@@ -192,14 +192,7 @@ module.exports = {
 
     format_global_user(global_context, user) {
         user.inventory = user.inventory.split(",").filter(a => a.length > 0);
-        
-        user.bank_limit = global_context.bot_config.bank_limit;
-        user.bank_limit += user.inventory
-        .filter(e => { return global_context.bot_config.items.get(e).type === "bankLimit"; })
-        .reduce((acc, curr) => {
-            let curr_item = global_context.bot_config.items.get(curr);
-            acc += curr_item.limit; return acc;
-        }, 0);
+        user.bank_limit = [0, 10000, 15000, 20000, 30000, 45000, 60000, 75000, 10000, 200000, 350000][user.b_bank];
 
         return user;
     },

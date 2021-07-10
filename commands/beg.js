@@ -26,14 +26,14 @@ module.exports = {
 
         command_data.author_config.last_beg_time = end.getTime();
 
-        let min_credits = command_data.global_context.bot_config.min_beg_credits;
-        let max_credits = command_data.global_context.bot_config.max_beg_credits;
+        let min_credits = [50][0];
+        let max_credits = [80][0];
         let credits_ammount = Math.floor((Math.random() * (max_credits - min_credits + 1)) + min_credits);
 
         let chance = Math.floor(Math.random() * 100) + 1;
         let answers = [];
         let answer_color = 6732650;
-        if(chance <= command_data.global_context.bot_config.beg_success_chance) {
+        if(chance <= [40][0]) {
             answers = command_data.global_context.bot_config.beg_success_answers;
         } else {
             answers = command_data.global_context.bot_config.beg_failed_answers;

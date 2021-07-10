@@ -37,9 +37,9 @@ module.exports = {
         command_data.author_config.last_steal_time = end.getTime();
 
         var min_credits = 0;
-        var max_credits = Math.round((command_data.tagged_user_config.credits / 100) * command_data.global_context.bot_config.steal_percentage);
+        var max_credits = Math.round((command_data.tagged_user_config.credits / 100) * [7][0]);
         var credits_ammount = Math.floor((Math.random() * (max_credits - min_credits + 1)) + min_credits);
-        credits_ammount = credits_ammount > command_data.global_context.bot_config.max_steal_credits ? command_data.global_context.bot_config.max_steal_credits : credits_ammount;
+        credits_ammount = credits_ammount > [500][0] ? [500][0] : credits_ammount;
 
         command_data.author_config.credits += credits_ammount;
         command_data.author_config.net_worth += credits_ammount;
