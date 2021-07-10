@@ -48,5 +48,12 @@ module.exports = {
     async add_inventory_item(global_context, i) {
         var query = "INSERT IGNORE INTO inventory_items (id, user_ID, item_ID) VALUES('" + i.id + "', '" + i.user_ID + "', '" + i.item_ID + "')";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
+    },
+
+    async add_user_notification(global_context, n) {
+        let query_0 = "id, user_ID, timestamp, description"
+        let query_data = [ n.id, n.user_ID, n.timestamp, n.description ]
+        let query = "INSERT IGNORE INTO user_notifications (" + query_0 + ") VALUES(?, ?, ?, ?)";
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query, query_data);
     }
 }

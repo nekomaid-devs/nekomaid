@@ -161,10 +161,13 @@ setInterval(() => {
     if(global_context.neko_modules_clients.web_updates !== undefined && bot.shard.ids[0] === 0) {
         global_context.neko_modules.web_updates.refresh_bot_list(global_context);
     }
+    if(global_context.neko_modules_clients.bm !== undefined && bot.shard.ids[0] === 0) {
+        global_context.neko_modules_clients.bm.update_all_buildings(global_context);
+    }
     if(global_context.neko_modules_clients.cm !== undefined) {
         global_context.neko_modules_clients.cm.update_all_counters(global_context);
     }
-}, 60000);
+}, 5000);
 setInterval(() => {
     if(global_context.neko_modules_clients.web_updates !== undefined) {
         global_context.neko_modules.web_updates.refresh_status(global_context);

@@ -37,5 +37,10 @@ module.exports = {
     async remove_inventory_items_from_user(global_context, id) {
         var query = "DELETE FROM inventory_items WHERE user_ID='" + id + "'";
         return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
+    },
+
+    async remove_user_notification_from_user(global_context, id) {
+        var query = "DELETE FROM user_notifications WHERE user_ID='" + id + "'";
+        return await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
     }
 }

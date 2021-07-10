@@ -60,10 +60,10 @@ module.exports = {
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_reaction_roles WHERE server_ID='" + data.id + "'", this.format_reaction_role);
 
             case "global_user":
-                return await this.fetch_data(global_context, "SELECT * FROM global_users WHERE user_ID='" + data.id + "'", (e) => { return this.format_global_user(global_context, e); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_global_user(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT * FROM global_users WHERE user_ID='" + data.id + "'", async(e) => { return await this.format_global_user(global_context, e); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_global_user(global_context, { id: data.id }); });
 
             case "global_users":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM global_users", (e) => { return this.format_global_user(global_context, e); });
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM global_users", async(e) => { return await this.format_global_user(global_context, e); });
 
             case "server_bans":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_bans WHERE server_ID='" + data.id + "'", defaultFormat);
@@ -82,6 +82,9 @@ module.exports = {
 
             case "inventory_items":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM inventory_items WHERE user_ID='" + data.id + "'", defaultFormat);
+
+            case "user_notifications":
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM user_notifications WHERE user_ID='" + data.id + "'", defaultFormat);
 
             case "server_logs":
                 /*return await this.fetch_data(bot, "SELECT * FROM serverLogs WHERE server_ID='" + data.id + "'", defaultFormat);*/
@@ -113,6 +116,10 @@ module.exports = {
         }
 
         result = result[0].reduce((acc, curr) => { acc.push(formattingFunc(curr)); return acc; }, []);
+        for(let i = 0; i < result.length; i++) {
+            result[i] = await result[i];
+        }
+
         return result;
     },
 
@@ -195,6 +202,7 @@ module.exports = {
 
     async format_global_user(global_context, user) {
         user.inventory = await this.fetch(global_context, { type: "inventory_items", id: user.user_ID });
+        user.notifications = await this.fetch(global_context, { type: "user_notifications", id: user.user_ID });
         user.bank_limit = [0, 10000, 15000, 20000, 30000, 45000, 60000, 75000, 10000, 200000, 350000][user.b_bank];
 
         return user;

@@ -74,16 +74,24 @@ module.exports = {
 
                 let query_0 = "credits=?, bank=?, level=?, xp=?, rep=?, net_worth=?, votes=?, last_daily_time=?, last_upvoted_time=?, last_beg_time=?, last_rep_time=?, married_ID=?, osu_username=?, can_divorce=?, last_work_time=?, last_steal_time=?, last_crime_time=?" + 
                 ", b_city_hall=?, b_bank=?, b_lab=?, b_sanctuary=?, b_pancakes=?, b_crime_den=?, b_lewd_services=?, b_casino=?, b_scrapyard=?, b_pawn_shop=?" + 
-                ", b_city_hall_credits=?, b_bank_credits=?, b_lab_credits=?, b_sanctuary_credits=?, b_pancakes_credits=?, b_crime_den_credits=?, b_lewd_services_credits=?, b_casino_credits=?, b_scrapyard_credits=?, b_pawn_shop_credits=?"
+                ", b_city_hall_credits=?, b_bank_credits=?, b_lab_credits=?, b_sanctuary_credits=?, b_pancakes_credits=?, b_crime_den_credits=?, b_lewd_services_credits=?, b_casino_credits=?, b_scrapyard_credits=?, b_pawn_shop_credits=?" + 
+                ", b_lewd_services_last_update=?, b_casino_last_update=?, b_scrapyard_last_update=?"
                 let query_data = [ user.credits, user.bank, user.level, user.xp, user.rep, user.net_worth, user.votes, user.last_daily_time, user.last_upvoted_time, user.last_beg_time, user.last_rep_time, user.married_ID, user.osu_username, user.can_divorce, user.last_work_time, user.last_steal_time, user.last_crime_time,
                 user.b_city_hall, user.b_bank, user.b_lab, user.b_sanctuary, user.b_pancakes, user.b_crime_den, user.b_lewd_services, user.b_casino, user.b_scrapyard, user.b_pawn_shop,
-                user.b_city_hall_credits, user.b_bank_credits, user.b_lab_credits, user.b_sanctuary_credits, user.b_pancakes_credits, user.b_crime_den_credits, user.b_lewd_services_credits, user.b_casino_credits, user.b_scrapyard_credits, user.b_pawn_shop_credits ]
+                user.b_city_hall_credits, user.b_bank_credits, user.b_lab_credits, user.b_sanctuary_credits, user.b_pancakes_credits, user.b_crime_den_credits, user.b_lewd_services_credits, user.b_casino_credits, user.b_scrapyard_credits, user.b_pawn_shop_credits,
+                user.b_lewd_services_last_update, user.b_casino_last_update, user.b_scrapyard_last_update ]
                 
                 let query = "UPDATE global_users SET " + query_0 + " WHERE user_ID='" + user.user_ID + "'";
                 if(user.inventory !== undefined) {
                     global_context.neko_modules_clients.ssm.server_remove.remove_inventory_items_from_user(global_context, user.user_ID);
                     user.inventory.forEach(i => {
                         global_context.neko_modules_clients.ssm.server_add.add_inventory_item(global_context, i);
+                    })
+                }
+                if(user.notifications !== undefined) {
+                    global_context.neko_modules_clients.ssm.server_remove.remove_user_notification_from_user(global_context, user.user_ID);
+                    user.notifications.forEach(i => {
+                        global_context.neko_modules_clients.ssm.server_add.add_user_notification(global_context, i);
                     })
                 }
 

@@ -64,6 +64,7 @@ module.exports = {
     inventory: require('./inventory'),
     item: require('./item'),
     marry: require('./marry'),
+    notifications: require('./notifications'),
     profile: require('./profile'),
     rep: require('./rep'),
     shop: require('./shop'),
