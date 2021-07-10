@@ -30,6 +30,7 @@ module.exports = {
             description: "Waiting...",
             footer: { text: "🕒 Took X ms..." }
         }
+        let embedFiles = [];
         let message = await command_data.msg.channel.send("", { embed: embedEval }).catch(e => { command_data.global_context.logger.api_error(e); });
         
         try {
@@ -37,9 +38,10 @@ module.exports = {
             let result = await eval(eval_query);
             let t_end = command_data.global_context.modules.performance.now();
 
-            embedEval.description = result === undefined ? "Undefined" : result;
+            embedEval.description = result === undefined ? "Undefined" : JSON.stringify(result);
+            if(embedEval.description.length > 2048) { embedFiles = [ embedEval.description ]; embedEval.description = undefined; }
             embedEval.footer = { text: `🕒 Took ${(t_end - t_start).toFixed(1)}ms...` }
-            message.edit("", { embed: embedEval }).catch(e => { command_data.global_context.logger.api_error(e); });
+            message.edit("", { embed: embedEval, files: embedFiles }).catch(e => { command_data.global_context.logger.api_error(e); });
         } catch(err) {
             embedEval.description = err;
             message.edit("", { embed: embedEval }).catch(e => { command_data.global_context.logger.api_error(e); });
