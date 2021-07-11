@@ -111,7 +111,7 @@ module.exports = {
             let embedHelp = new command_data.global_context.modules.Discord.MessageEmbed()
             .setColor(8388736)
             .setTitle(`❯     Prefix: \`${command_data.server_config.prefix}\` - Help ${unhidden_text}`)
-            .setDescription(`For help with a command, use \`${command_data.server_config.prefix}help [command] [subcommand?]\`.\nMake sure to join the server as there'll be cool stuff in the future!~ Have fun!~ \nAvailable commands, by category:`)
+            .setDescription(`For help with a command, use \`${command_data.server_config.prefix}help [command] [subcommand?]\`.\nV2 now live! Have fun!~ \nAvailable commands, by category:`)
             .setFooter(`NekoMaid ${command_data.global_context.config.version}`, `${url}`);
             
             let categories_keys = Array.from(categories.keys());

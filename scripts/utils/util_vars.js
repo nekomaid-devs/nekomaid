@@ -476,26 +476,80 @@ module.exports = {
 
     get_building_description(building_field) {
         let descriptions = {
-            b_city_hall: "No description yet.",
-            b_bank: "No description yet.",
-            b_lab: "No description yet.",
-            b_sanctuary: "No description yet.",
-            b_pancakes: "No description yet.",
-            b_crime_den: "No description yet.",
-            b_lewd_services: "No description yet.",
-            b_casino: "No description yet.",
-            b_scrapyard: "No description yet.",
-            b_pawn_shop: "No description yet.",
+            b_city_hall: "`[🧱]` Unlocks more upgrades, special roles and lottery.",
+            b_bank: "`[⭐]` Unlocks bank and bigger capacity for it.",
+            b_lab: "`[🧱]` Unlocks special perks/bonuses for certain actions.",
+            b_sanctuary: "`[🧱]` Unlocks pets and improves bonuses from them.",
+            b_pancakes: "`[⭐]` This is the main building for work, improves payouts from work and chance for double/triple payouts.",
+            b_crime_den: "`[⭐]` This is the main building for crime, improves payouts from crime and lowers the chance of getting caught.",
+            b_lewd_services: "`[⭐]` Unlocks idle hourly payouts, even if you're not active.",
+            b_casino: "`[⭐]` Unlocks bigger idle hourly payouts, even if you're not active.",
+            b_scrapyard: "`[⭐]` Unlocks a neko that finds items at specific intervals, upgrading makes it faster and able to find better rarity items.",
+            b_pawn_shop: "`[⭐]` Unlocks a neko that sells items, each sell takes a specific ammount of time, upgrading makes it faster and improves the payouts for all items sold.",
 
-            b_mayor_house: "No description yet.",
-            b_shrine: "No description yet.",
-            b_community_center: "No description yet.",
-            b_quantum_pancakes: "No description yet.",
-            b_crime_monopoly: "No description yet.",
-            b_pet_shelter: "No description yet."
+            b_mayor_house: "`[🧱]` Unlocks bonuses for mayor and more upgrades for global buildings.",
+            b_shrine: "`[⭐]` Unlocks bonuses for all players.",
+            b_community_center: "`[🧱]` Unlocks events and improves payouts from them.",
+            b_quantum_pancakes: "`[⭐]` Improves payouts from work for all players.",
+            b_crime_monopoly: "`[⭐]` Improves payouts from crime for all players.",
+            b_pet_shelter: "`[🧱]` Unlocks pets and improves the rate at which they're available for sale and rarity of them. All players will be able to buy pets from this."
         }
 
         return descriptions[building_field];
+    },
+
+    get_buildings_guide_embed(command_data) {
+        let embed = {
+            title: "Buildings - General Guide",
+            description: "`🧱 Neko's City Hall` - Unlocks more upgrades, special roles and lottery.\n" +
+            "`⭐ Neko's Bank` - Unlocks bank and bigger capacity for it.\n" +
+            "`🧱 Neko's Lab` - Unlocks special perks/bonuses for certain actions.\n" +
+            "`🧱 Neko's Sanctuary` - Unlocks pets and improves bonuses from them.\n" +
+            "`⭐ Neko's Pancakes` - This is the main building for work, improves payouts from work and chance for double/triple payouts.\n" +
+            "`⭐ Neko's Crime Den` - This is the main building for crime, improves payouts from crime and lowers the chance of getting caught.\n" +
+            "`⭐ Neko's Lewd Services` - Unlocks idle hourly payouts, even if you're not active.\n" +
+            "`⭐ Neko's Casino` - Unlocks bigger idle hourly payouts, even if you're not active.\n" +
+            "`⭐ Neko's Scrapyard` - Unlocks a neko that finds items at specific intervals, upgrading makes it faster and able to find better rarity items.\n" +
+            "`⭐ Neko's Pawn Shop` - Unlocks a neko that sells items, each sell takes a specific ammount of time, upgrading makes it faster and improves the payouts for all items sold.\n\n" +
+            "`🧱 Neko's Mayor House` - Unlocks bonuses for mayor and more upgrades for global buildings.\n" +
+            "`⭐ Neko's Shrine` - Unlocks bonuses for all players.\n" +
+            "`🧱 Neko's Community Center` - Unlocks events and improves payouts from them.\n" +
+            "`⭐ Neko's Quantum Pancakes` - Improves payouts from work for all players.\n" +
+            "`⭐ Neko's Crime Monopoly` - Improves payouts from crime for all players.\n" +
+            "`🧱 Neko's Pet Shelter` - Unlocks pets and improves the rate at which they're available for sale and rarity of them. All players will be able to buy pets from this.",
+            footer: { text: `You can view more detailed information about a building with - ${command_data.server_config.prefix}building "building_name"` }
+        }
+
+        return embed;
+    },
+
+    get_economy_guide_embed(command_data) {
+        let embed = {
+            title: "Economy - General Guide",
+            description: `\`[❤️]\` Hey there ${command_data.msg.author}. You want to know more about the economy? Okay, let's get started!\n` + 
+            `\`[🔎]\` First of all here are some basics. You can see all your profile information with \`${command_data.server_config.prefix}profile\` and your balance with \`${command_data.server_config.prefix}bal\`.\n` + 
+            `If you want to see your items, you can do \`${command_data.server_config.prefix}inventory\` or use items with \`${command_data.server_config.prefix}use\`.\n` + 
+            `You can also send money to other people with \`${command_data.server_config.prefix}transfer\` or give them reputation with \`${command_data.server_config.prefix}rep\`.\n` + 
+            `Also you can marry them with \`${command_data.server_config.prefix}marry\` or divorce them \`${command_data.server_config.prefix}divorce\`, if they get really annoying.\n` + 
+            `If you want to know who is the richest, you might want to check out \`${command_data.server_config.prefix}top\` or \`${command_data.server_config.prefix}top -server\`.\n\n` + 
+            `\`[🪙]\` Now then, how to make money? That's a good question! There are a few ways...\n` + 
+            `You can work at your city's pancake shop with \`${command_data.server_config.prefix}work\` or help the nekos with their shady plans with \`${command_data.server_config.prefix}crime\`.\n` +
+            `If you're really down bad, you can also beg people for money with \`${command_data.server_config.prefix}beg\` or steal from somebody with \`${command_data.server_config.prefix}steal\`.\n` +
+            `Also vote with \`${command_data.server_config.prefix}vote\`, it gives you goodies aswell (>w<).\n` +
+            `Also, if you're feeling really lucky, you can gamble with \`${command_data.server_config.prefix}coinflip\`, \`${command_data.server_config.prefix}slots\` or \`${command_data.server_config.prefix}roll\`.\n\n` +
+            `\`[💵]\` Now that you're rich and all, you might want to know how to get even richer! That's where you can get into expanding your own city.\n` +
+            `All the time you are making pancakes or crimes, that's where your city comes to play. And improving your city also improves how much you make and unlocks cool perks and bonuses.\n` + 
+            `You can see how big your city is with \`${command_data.server_config.prefix}buildings\` or look at individual building's progress with \`${command_data.server_config.prefix}build "building_name"\`.\n\n` + 
+            `\`[🏗️]\` There is probably a lot of buildings and you don't know what to do first, but that's fine. You can see general description of all buildings with \`${command_data.server_config.prefix}buildingsguide\`.\n` + 
+            `Once you decide what building you want to work on, progress with the construction with \`${command_data.server_config.prefix}build "building_name" ammount_of_credits\`.\n` + 
+            `If you have progressed enough (you can check with \`${command_data.server_config.prefix}build "building_name"\`, if you forgot), you can do \`${command_data.server_config.prefix}upgrade "building_name"\` to upgrade a building.\n` + 
+            `Now you're on your way to become the best pancake seller, criminal overlord or casino owner in the city!\n\n` + 
+            `\`[👾]\` If you would want to go even further, you can help everyone work on global buildings aswell. The concept is the very same, except that everyone can build and benefit from these!\n` + 
+            `You could also aim to be the mayor and decide on important decisions in the city. But that's for some other time...`,
+            footer: { text: `If you have any questions, ask in the support server - ${command_data.server_config.prefix}support` }
+        }
+
+        return embed;
     },
 
     get_building_field(building_name) {

@@ -43,7 +43,7 @@ module.exports = {
         } else {
             answers = command_data.global_context.bot_config.crime_failed_answers;
             answer_color = 15483730;
-            creditsAmmount = -creditsAmmount;
+            credits_ammount = -credits_ammount;
         }
         credits_ammount = credits_ammount * command_data.global_context.bot_config.crime_multiplier;
         credits_ammount = credits_ammount * (command_data.global_context.bot_config.shrine_bonus === "crime" ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.10, 1.10, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
@@ -60,7 +60,7 @@ module.exports = {
             color: answer_color,
             description: `${answer} (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_config.credits)}$\`)`,
             footer: {
-                text: `Make sure to vote with ${command_data.server_config.prefix}vote for free credits`
+                text: `Check out new ${command_data.server_config.prefix}economyguide`
             }
         }
         command_data.msg.channel.send("", { embed: embedCrime }).catch(e => { command_data.global_context.logger.api_error(e); });

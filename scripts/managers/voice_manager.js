@@ -110,7 +110,7 @@ class VoiceManager {
         let current_length = global_context.neko_modules_clients.tc.convert_youtube_string_to_time_data(info.duration);
         if(current_length.status !== -1 && (current_length.hrs >= 3 || info.duration === "P0D") && diff > 3600) {
             embedPlay.author.name = "🔊 Long videos";
-            embedPlay.description = "To play videos longer than \`3h\`, please upvote the bot on [here](https://top.gg/bot/${global_context.bot.user.id}/vote)."
+            embedPlay.description = `To play videos longer than \`3h\`, please upvote the bot on [here](https://top.gg/bot/${global_context.bot.user.id}/vote).`
 
             await loading_message.delete().catch(e => { global_context.logger.api_error(e); });
             await source_message.channel.send("", { embed: embedPlay }).catch(e => { global_context.logger.api_error(e); });

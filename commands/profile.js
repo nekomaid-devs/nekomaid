@@ -73,7 +73,7 @@ module.exports = {
                 url: url
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag} | Cool stuff on the support server releasing soon!`
+                text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`
             },
         }
         command_data.msg.channel.send("", { embed: embedProfile }).catch(e => { command_data.global_context.logger.api_error(e); });

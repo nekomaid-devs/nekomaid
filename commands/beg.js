@@ -55,7 +55,7 @@ module.exports = {
             color: answer_color,
             description: `${answer} (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_config.credits)}$\`)`,
             footer: {
-                text: `Make sure to vote with ${command_data.server_config.prefix}vote for free credits`
+                text: `Check out new ${command_data.server_config.prefix}economyguide`
             }
         }
         command_data.msg.channel.send("", { embed: embedBeg }).catch(e => { command_data.global_context.logger.api_error(e); });

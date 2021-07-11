@@ -3,7 +3,7 @@ const NeededArgument = require("../scripts/helpers/needed_argument");
 module.exports = {
     name: "building",
     category: "Profile",
-    description: "Displays info about a building.",
+    description: "Displays detailed information about a building.",
     helpUsage: "[building_name]`",
     exampleUsage: "\"Neko's Bank\"",
     hidden: false,
