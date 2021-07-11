@@ -142,13 +142,21 @@ setInterval(() => {
         global_context.neko_modules.web_updates.refresh_website(global_context);
     }
 }, 2000);
-setInterval(() => {
+setInterval(async() => {
     if(global_context.neko_modules_clients.em !== undefined && bot.shard.ids[0] === 0) {
         let date = new Date();
         if(date.getHours() % 2 === 0 && date.getMinutes() === 0 && Date.now() > (last_timestamp + 1000*60)) {
             global_context.neko_modules_clients.em.spawn_event(global_context, global_context.config.neko_);
             last_timestamp = Date.now();
         }
+    }
+    if(global_context.neko_modules_clients.bm !== undefined && bot.shard.ids[0] === 0) {
+        global_context.neko_modules_clients.bm.update_all_buildings(global_context);
+    }
+
+    // TODO: this will need to get updated somewhere else
+    if(global_context.neko_modules_clients.ssm !== undefined) {
+        global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "defaultConfig" });
     }
 }, 5000);
 setInterval(() => {
@@ -161,13 +169,10 @@ setInterval(() => {
     if(global_context.neko_modules_clients.web_updates !== undefined && bot.shard.ids[0] === 0) {
         global_context.neko_modules.web_updates.refresh_bot_list(global_context);
     }
-    if(global_context.neko_modules_clients.bm !== undefined && bot.shard.ids[0] === 0) {
-        global_context.neko_modules_clients.bm.update_all_buildings(global_context);
-    }
     if(global_context.neko_modules_clients.cm !== undefined) {
         global_context.neko_modules_clients.cm.update_all_counters(global_context);
     }
-}, 5000);
+}, 60000);
 setInterval(() => {
     if(global_context.neko_modules_clients.web_updates !== undefined) {
         global_context.neko_modules.web_updates.refresh_status(global_context);

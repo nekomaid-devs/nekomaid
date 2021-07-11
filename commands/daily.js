@@ -27,6 +27,9 @@ module.exports = {
         command_data.author_config.last_daily_time = end.getTime();
 
         let credits_ammount = [1000][0];
+        credits_ammount = credits_ammount * command_data.global_context.bot_config.daily_multiplier;
+        credits_ammount = credits_ammount * (command_data.global_context.bot_config.shrine_bonus === "daily" ? [1, 1.10, 1.15, 1.15, 1.15, 1.20, 1.25, 1.30, 1.50, 1.50, 1.50][command_data.global_context.bot_config.b_shrine] : 1);
+        credits_ammount = Math.round(credits_ammount);
 
         command_data.author_config.credits += credits_ammount;
         command_data.author_config.net_worth += credits_ammount;

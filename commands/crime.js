@@ -45,6 +45,8 @@ module.exports = {
             answer_color = 15483730;
             creditsAmmount = -creditsAmmount;
         }
+        credits_ammount = credits_ammount * command_data.global_context.bot_config.crime_multiplier;
+        credits_ammount = credits_ammount * (command_data.global_context.bot_config.shrine_bonus === "crime" ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.10, 1.10, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
         credits_ammount = Math.round(credits_ammount * [1, 1.01, 1.03, 1.05, 1.10, 1.15, 1.20, 1.22, 1.25, 1.25, 1.25][command_data.global_context.bot_config.b_crime_monopoly]);
         
         let answer = command_data.global_context.utils.pick_random(answers);

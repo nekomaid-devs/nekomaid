@@ -46,13 +46,46 @@ module.exports = {
                 fields: [
                     {
                         name: "Bot Owners:",
-                        value: bot_owners_text
+                        value: bot_owners_text,
+                        inline: true
                     },
                     {
                         name: "Speed:",
-                        value: `\`${command_data.global_context.bot_config.speed}\``
+                        value: `\`${command_data.global_context.bot_config.speed.toFixed(2)}x\``,
+                        inline: true
+                    },
+                    {
+                        name: "Padding",
+                        value: "owo",
+                        inline: true
+                    },
+                    {
+                        name: "Work (x):",
+                        value: `\`${command_data.global_context.bot_config.work_multiplier.toFixed(2)}x\``,
+                        inline: true
+                    },
+                    {
+                        name: "Crime (x):",
+                        value: `\`${command_data.global_context.bot_config.crime_multiplier.toFixed(2)}x\``,
+                        inline: true
+                    },
+                    {
+                        name: "Daily (x):",
+                        value: `\`${command_data.global_context.bot_config.daily_multiplier.toFixed(2)}x\``,
+                        inline: true
+                    },
+                    {
+                        name: "Hourly (x):",
+                        value: `\`${command_data.global_context.bot_config.hourly_multiplier.toFixed(2)}x\``,
+                        inline: true
+                    },
+                    {
+                        name: "Sells (x):",
+                        value: `\`${command_data.global_context.bot_config.sells_multiplier.toFixed(2)}x\``,
+                        inline: true
                     }
-                ]
+                ],
+                footer: { text: "What are you looking at, owo?" }
             }
 
             command_data.msg.channel.send("", { embed: embedConfig }).catch(e => { command_data.global_context.logger.api_error(e); });

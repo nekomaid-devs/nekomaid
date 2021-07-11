@@ -131,6 +131,7 @@ module.exports = {
             transaction_prepare = transaction.startChild({ op: "prepare_command" });
         }
 
+        // TODO: make this into an array of promises and Promise.all()
         command_data.args = message.content.slice(command_data.server_config.prefix.length).split(' ');
         command_data.server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: message.guild.id });
         command_data.server_bans = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_bans", id: message.guild.id });

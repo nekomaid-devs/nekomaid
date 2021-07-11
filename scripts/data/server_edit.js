@@ -6,7 +6,7 @@ module.exports = {
             case "config": {
                 let config = data.config;
 
-                let query_0 = "bot_owners=?, mayor_ID=?" + 
+                let query_0 = "bot_owners=?, mayor_ID=?, shrine_bonus=?, work_multiplier=?, crime_multiplier=?, daily_multiplier=?" + 
                 ", b_mayor_house=?, b_shrine=?, b_community_center=?, b_quantum_pancakes=?, b_crime_monopoly=?, b_pet_shelter=?" + 
                 ", b_mayor_house_credits=?, b_shrine_credits=?, b_community_center_credits=?, b_quantum_pancakes_credits=?, b_crime_monopoly_credits=?, b_pet_shelter_credits=?"
                 let query_data = [ config.bot_owners.join(","), config.mayor_ID,
