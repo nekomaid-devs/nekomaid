@@ -5,19 +5,17 @@ module.exports = {
             guild_count = results.reduce((prev, guild_count) =>
                 prev + guild_count, 0
             );
-        }).catch(e => {
-            global_context.logger.error(e);
-        })
+        }).catch(e => { global_context.logger.error(e); }); 
 
         let statuses = [
-            "getting bullied by lamkas"
+            "V2 live now!"
         ]
         global_context.bot.user.setStatus('available');
         global_context.bot.user.setActivity(`${global_context.utils.pick_random(statuses)} | ${guild_count} servers`, { type: 'PLAYING' });
     },
 
     async refresh_website(global_context) {
-        if(global_context.bot.shard.ids[0] !== 0 || global_context.config.nekomaid_API_update_stats === false) { return; }
+        if(global_context.bot.neko_data.shards_ready === false || global_context.config.nekomaid_API_update_stats === false) { return; }
 
         let shard_list = [];
         for(let i = 0; i < global_context.bot.shard.count; i++) {
@@ -29,46 +27,46 @@ module.exports = {
             results.forEach((start, i) => {
                 shard_list[i].start = start;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
 
         await global_context.bot.shard.broadcastEval('this.guilds.cache.size')
         .then(results => {
             results.forEach((guilds, i) => {
                 shard_list[i].guilds = guilds;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
         await global_context.bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)')
         .then(results => {
             results.forEach((users, i) => {
                 shard_list[i].users = users;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
         // TODO: maybe change this, since we don't cache channels?
         await global_context.bot.shard.broadcastEval('this.channels.cache.size')
         .then(results => {
             results.forEach((channels, i) => {
                 shard_list[i].channels = channels;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
 
         await global_context.bot.shard.broadcastEval('this.neko_data.processed_events')
         .then(results => {
             results.forEach((processed_events, i) => {
                 shard_list[i].processed_events = processed_events;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
         await global_context.bot.shard.broadcastEval('this.neko_data.total_events')
         .then(results => {
             results.forEach((total_events, i) => {
                 shard_list[i].total_events = total_events;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
         await global_context.bot.shard.broadcastEval('this.neko_data.processed_messages')
         .then(results => {
             results.forEach((processed_messages, i) => {
                 shard_list[i].processed_messages = processed_messages;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
         await global_context.bot.shard.broadcastEval('this.neko_data.total_messages')
         .then(results => {
             results.forEach((total_messages, i) => {
@@ -80,22 +78,22 @@ module.exports = {
             results.forEach((processed_commands, i) => {
                 shard_list[i].processed_commands = processed_commands;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
         await global_context.bot.shard.broadcastEval('this.neko_data.total_commands')
         .then(results => {
             results.forEach((total_commands, i) => {
                 shard_list[i].total_commands = total_commands;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
         
         await global_context.bot.shard.broadcastEval('this.neko_data.vm_connections')
         .then(results => {
             results.forEach((voice_connections, i) => {
                 shard_list[i].voice_connections = voice_connections;
             });
-        });
+        }).catch(e => { global_context.logger.error(e); });
 
-        let command_list = global_context.commands.filter(e => { return command.hidden === false; }).reduce((acc, curr) => { acc.push({ name: curr.name, description: curr.description, category: curr.category, aliases: curr.aliases }); return acc; });
+        let command_list = Array.from(global_context.commands.values()).filter(e => { return e.hidden === false; }).reduce((acc, curr) => { acc.push({ name: curr.name, description: curr.description, category: curr.category, aliases: curr.aliases }); return acc; }, []);
         let stats = {
             start: global_context.data.uptime_start,
 			hosts: 1,
@@ -127,13 +125,13 @@ module.exports = {
             guild_count = results.reduce((prev, guild_count) =>
                 prev + guild_count, 0
             );
-        }).catch(e => { global_context.logger.error(e); })
+        }).catch(e => { })
         await global_context.bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)')
         .then(results => {
             user_count = results.reduce((prev, user_count) =>
                 prev + user_count, 0
             );
-        }).catch(e => { global_context.logger.error(e); })
+        }).catch(e => { })
     
         let data_1 = {
             guilds: guild_count,

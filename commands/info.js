@@ -26,7 +26,7 @@ module.exports = {
         let i2 = Math.floor(Math.log(bytes2) / Math.log(k));
         let memory_string_2 = parseFloat((bytes2 / (k ** i2)).toFixed(1)) + ' ' + sizes[i2];
         
-        let allShards_memory_usage = await command_data.global_context.bot.shard.broadcastEval('process.memoryUsage()');
+        let allShards_memory_usage = await command_data.global_context.bot.shard.broadcastEval('process.memoryUsage()').catch(e => { command_data.global_context.logger.error(e); });
         let manager_bytes0 = 0;
         let manager_bytes1 = 0;
         let manager_bytes2 = 0;
@@ -61,7 +61,7 @@ module.exports = {
             results.reduce((prev, memberCount) =>
                 prev + memberCount, 0
             )
-        );
+        ).catch(e => { command_data.global_context.logger.error(e); });
 
         let shard_commands = command_data.global_context.bot.neko_data.total_commands;
         let manager_commands = 0;

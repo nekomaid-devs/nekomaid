@@ -53,6 +53,10 @@ class Argument {
                 if(isNaN(parseInt(argument)) && argument !== "all" && argument !== "half") {
                     command_data.msg.channel.send("", { embed: embedError }).catch(e => { command_data.global_context.logger.api_error(e); });
                     return false;
+                } else if(isNaN(parseInt(argument)) === false && parseInt(argument) < 0) {
+                    embedError.fields[0].value = "Value must be a number above 0.";
+                    command_data.msg.channel.send("", { embed: embedError }).catch(e => { command_data.global_context.logger.api_error(e); });
+                    return false;
                 }
                 break;
 

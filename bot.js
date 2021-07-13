@@ -55,6 +55,7 @@ const bot = new Discord.Client({
 });
 global_context.bot = bot;
 bot.neko_data = {};
+bot.neko_data.shards_ready = false;
 bot.neko_data.send_upvote_message = (id, site_ID, is_double) => {
     global_context.neko_modules_clients.um.send_upvote_message(global_context, id, site_ID, is_double);
 }
@@ -156,7 +157,7 @@ setInterval(async() => {
 
     // TODO: this will need to get updated somewhere else
     if(global_context.neko_modules_clients.ssm !== undefined) {
-        global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "defaultConfig" });
+        global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "default_config" });
     }
 }, 5000);
 setInterval(() => {
@@ -174,7 +175,7 @@ setInterval(() => {
     }
 }, 60000);
 setInterval(() => {
-    if(global_context.neko_modules_clients.web_updates !== undefined) {
+    if(global_context.neko_modules.web_updates !== undefined) {
         global_context.neko_modules.web_updates.refresh_status(global_context);
     }
 }, 60000 * 30);
@@ -195,7 +196,7 @@ bot.on('ready', async() => {
     global_context.logger.log("-".repeat(30));
     global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Channels: ${bot.channels.cache.size}] - [Users: ${bot.users.cache.size}]`);
 
-    global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "defaultConfig" });
+    global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "default_config" });
     global_context.neko_modules.web_updates.refresh_status(global_context);
     global_context.neko_modules_clients.rrm.create_all_collectors(global_context);
     

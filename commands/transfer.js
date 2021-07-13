@@ -10,7 +10,7 @@ module.exports = {
     aliases: ["pay"],
     subcommandHelp: new Map(),
     argumentsNeeded: [
-        new NeededArgument(1, "You need to type in an ammount.", "none"),
+        new NeededArgument(1, "You need to type in an ammount.", "int>0/all/half"),
         new NeededArgument(2, "You need to mention somebody.", "mention")
     ],
     argumentsRecommended: [],

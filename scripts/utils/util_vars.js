@@ -539,10 +539,10 @@ module.exports = {
             `Also, if you're feeling really lucky, you can gamble with \`${command_data.server_config.prefix}coinflip\`, \`${command_data.server_config.prefix}slots\` or \`${command_data.server_config.prefix}roll\`.\n\n` +
             `\`[💵]\` Now that you're rich and all, you might want to know how to get even richer! That's where you can get into expanding your own city.\n` +
             `All the time you are making pancakes or crimes, that's where your city comes to play. And improving your city also improves how much you make and unlocks cool perks and bonuses.\n` + 
-            `You can see how big your city is with \`${command_data.server_config.prefix}buildings\` or look at individual building's progress with \`${command_data.server_config.prefix}build "building_name"\`.\n\n` + 
+            `You can see how big your city is with \`${command_data.server_config.prefix}buildings\` or look at individual building's progress with \`${command_data.server_config.prefix}build building_name\`.\n\n` + 
             `\`[🏗️]\` There is probably a lot of buildings and you don't know what to do first, but that's fine. You can see general description of all buildings with \`${command_data.server_config.prefix}buildingsguide\`.\n` + 
-            `Once you decide what building you want to work on, progress with the construction with \`${command_data.server_config.prefix}build "building_name" ammount_of_credits\`.\n` + 
-            `If you have progressed enough (you can check with \`${command_data.server_config.prefix}build "building_name"\`, if you forgot), you can do \`${command_data.server_config.prefix}upgrade "building_name"\` to upgrade a building.\n` + 
+            `Once you decide what building you want to work on, progress with the construction with \`${command_data.server_config.prefix}build building_name ammount_of_credits\`.\n` + 
+            `If you have progressed enough (you can check with \`${command_data.server_config.prefix}build building_name\`, if you forgot), you can do \`${command_data.server_config.prefix}upgrade building_name\` to upgrade a building.\n` + 
             `Now you're on your way to become the best pancake seller, criminal overlord or casino owner in the city!\n\n` + 
             `\`[👾]\` If you would want to go even further, you can help everyone work on global buildings aswell. The concept is the very same, except that everyone can build and benefit from these!\n` + 
             `You could also aim to be the mayor and decide on important decisions in the city. But that's for some other time...`,

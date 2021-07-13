@@ -43,10 +43,12 @@ module.exports = {
 
         command_data.author_config.credits += credits_ammount;
         command_data.author_config.net_worth += credits_ammount;
+        command_data.author_config.notifications.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, timestamp: Date.now(), description: `<time_ago> You stole \`${command_data.global_context.utils.format_number(credits_ammount)} 💵\` from \`${command_data.tagged_user.tag}\`.` });
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
 
         command_data.tagged_user_config.credits -= credits_ammount;
         command_data.tagged_user_config.net_worth -= credits_ammount;
+        command_data.tagged_user_config.notifications.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.tagged_user.id, timestamp: Date.now(), description: `<time_ago> You were stolen \`${command_data.global_context.utils.format_number(credits_ammount)} 💵\` by \`${command_data.msg.author.tag}\`.` });
         command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
 
         let embedSteal = {

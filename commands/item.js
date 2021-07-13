@@ -5,7 +5,7 @@ module.exports = {
     category: "Profile",
     description: "Displays info about an item.",
     helpUsage: "[item_name]`",
-    exampleUsage: "\"Rare Box\"",
+    exampleUsage: "Rare Box",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -17,7 +17,7 @@ module.exports = {
     nsfw: false,
     execute(command_data) {
         // TODO: maybe add some more cool information
-        let item_name = command_data.total_argument.substring(command_data.total_argument.indexOf('"') + 1, command_data.total_argument.lastIndexOf('"'));
+        let item_name = command_data.total_argument;
 
         let target_item = Array.from(command_data.global_context.bot_config.items.values()).find(e => { return e.display_name === item_name; });
         if(target_item === undefined) {

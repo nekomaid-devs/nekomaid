@@ -37,7 +37,7 @@ module.exports = {
         for(let i = 0; i < limit; i += 1) {
             let user_config = items[i];
             let net = user_config.level;
-            if(i === 8 && authorPos > 10) {
+            if(i === 8 && author_pos > 10) {
                 embedTop.addField("...", "...");
                 continue;
             } else if(i === 9 && author_pos > 10) {

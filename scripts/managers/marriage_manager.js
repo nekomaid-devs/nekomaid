@@ -108,7 +108,7 @@ class MarriageManager {
     }
 
     remove_marriage_proposal_backwards(global_context, channel, marriage_proposal) {
-        global_context.neko_modules_clients.mm.marriage_proposals
+        Array.from(global_context.neko_modules_clients.mm.marriage_proposals.values())
         .filter(e => { return e.source_ID === marriage_proposal.source_ID; })
         .forEach(e => {
             global_context.neko_modules_clients.mm.remove_marriage_proposal(global_context, channel, e, 2);
