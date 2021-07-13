@@ -178,7 +178,7 @@ setInterval(() => {
     if(global_context.neko_modules.web_updates !== undefined) {
         global_context.neko_modules.web_updates.refresh_status(global_context);
     }
-}, 10000);
+}, 60000);
 
 let bot_importer = require('./bot_importer');
 bot.on('ready', async() => {
