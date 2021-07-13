@@ -1,5 +1,7 @@
 module.exports = {
     async refresh_status(global_context) {
+        if(global_context.bot.neko_data.shards_ready === false) { return; }
+        
         let guild_count = 0;
         await global_context.bot.shard.broadcastEval('this.guilds.cache.size').then(results => {
             guild_count = results.reduce((prev, guild_count) =>
@@ -125,13 +127,13 @@ module.exports = {
             guild_count = results.reduce((prev, guild_count) =>
                 prev + guild_count, 0
             );
-        }).catch(e => { })
+        }).catch(e => { global_context.logger.error(e); });
         await global_context.bot.shard.broadcastEval('this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)')
         .then(results => {
             user_count = results.reduce((prev, user_count) =>
                 prev + user_count, 0
             );
-        }).catch(e => { })
+        }).catch(e => { global_context.logger.error(e); });
     
         let data_1 = {
             guilds: guild_count,
