@@ -21,7 +21,7 @@ class Argument {
         let argument = command_data.args[this.position - 1];
         switch(this.type) {
             case "mention":
-                if(argument.startsWith("<@!") === false || argument.endsWith(">") === false || argument.length !== 22) {
+                if((argument.startsWith("<@!") === false && argument.startsWith("<@") === false) || argument.endsWith(">") === false || (argument.length !== 21 && argument.length !== 22)) {
                     command_data.msg.channel.send("", { embed: embedError }).catch(e => { command_data.global_context.logger.api_error(e); });
                     return false;
                 }
