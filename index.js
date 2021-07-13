@@ -35,12 +35,16 @@ let cmd_args = process.argv.slice(2);
 
 //Setup sharding
 let manager = new Discord.ShardingManager('./bot.js', { token: config.token, shardArgs: [ cmd_args ] });
+let spawned_shards = 0;
 manager.on('shardCreate', shard => {
     console.log("-".repeat(30));
     console.log(`Creating new shard (shard_${shard.id})...`);
     console.log("-".repeat(30));
+
+    spawned_shards += 1;
+    manager.broadcastEval(`this.neko_data.shards_ready = ${spawned_shards >= config.shard_count ? "true" : "false"}`).catch(e => { console.error(e); });
 });
-manager.spawn(config.shard_count, 20000, 900000);
+manager.spawn(config.shard_count, 15000, 900000);
 
 //Launch server for processing upvotes (only if non-developer version)
 if(config.dev_mode === true) { return; }
@@ -77,15 +81,8 @@ let server = http.createServer((req, res) => {
                         let id = post.user;
                         let is_double = post.isWeekend;
 
-                        manager.broadcastEval(`this.neko_data.send_upvote_message('${id}', '${post.site_ID}', ${is_double})`)
-                        .catch(e => {
-                            console.logger.error(e);
-                        });
-
-                        manager.broadcastEval(`this.neko_data.process_upvote('${id}', '${post.site_ID}', ${is_double})`)
-                        .catch(e => {
-                            console.logger.error(e);
-                        });
+                        manager.broadcastEval(`this.neko_data.send_upvote_message('${id}', '${post.site_ID}', ${is_double})`).catch(e => { console.error(e); });
+                        manager.broadcastEval(`this.neko_data.process_upvote('${id}', '${post.site_ID}', ${is_double})`).catch(e => { console.error(e); });
                         break;
 
                     default:

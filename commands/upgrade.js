@@ -5,7 +5,7 @@ module.exports = {
     category: "Profile",
     description: "Upgrades a certain building.",
     helpUsage: "[building_name]`",
-    exampleUsage: "\"Neko's Bank\"",
+    exampleUsage: "Neko's Bank",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
@@ -16,7 +16,7 @@ module.exports = {
     permissionsNeeded: [],
     nsfw: false,
     execute(command_data) {
-        let building_name = command_data.total_argument.substring(command_data.total_argument.indexOf('"') + 1, command_data.total_argument.lastIndexOf('"'));
+        let building_name = command_data.total_argument;
 
         let building_field = command_data.global_context.neko_modules.vars.get_building_field(building_name);
         let global_building_field = command_data.global_context.neko_modules.vars.get_global_building_field(building_name);
@@ -70,7 +70,7 @@ module.exports = {
             command_data.global_context.bot_config[global_building_field] += 1;
             command_data.global_context.bot_config[global_building_field + "_credits"] -= next_building_cost;
 
-            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", id: "defaultConfig", config: command_data.global_context.bot_config });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", id: "default_config", config: command_data.global_context.bot_config });
         
             let url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
             embedUpgrade.author.icon_url = url;

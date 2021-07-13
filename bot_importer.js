@@ -85,7 +85,7 @@ module.exports = {
         }
         global_context.utils.verify_guild_members = async(guild) => {
             if(global_context.cached_all_members.includes(guild.id) === false) {
-                await guild.members.fetch().catch(e => { global_context.logger.api_error(e); });
+                //await guild.members.fetch().catch(e => { global_context.logger.api_error(e); });
                 global_context.cached_all_members.push(guild.id);
             }
         }

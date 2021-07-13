@@ -67,12 +67,12 @@ class CounterManager {
                                 guild_count = results.reduce((prev, guild_count) =>
                                     prev + guild_count, 0
                                 );
-                            });
+                            }).catch(e => { global_context.logger.error(e); });
 
                             channel.setName(`Current Servers: ${guild_count}`).catch(e => { global_context.logger.api_error(e) });
                             break;
                         }
-
+ 
                         case "bot_users": {
                             let member_count = 0;
                             await cm.bot.shard.broadcastEval("this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)")
@@ -80,7 +80,7 @@ class CounterManager {
                                 member_count = results.reduce((prev, member_count) =>
                                     prev + member_count, 0
                                 );
-                            });
+                            }).catch(e => { global_context.logger.error(e); });
 
                             channel.setName(`Current Users: ${member_count}`).catch(e => { global_context.logger.api_error(e) });
                             break;

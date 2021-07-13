@@ -40,10 +40,12 @@ module.exports = {
         let answer_color = 6732650;
         if(chance <= [0, 50, 55, 60, 66, 70, 70, 70, 75, 75, 80][command_data.author_config.b_crime_den]) {
             answers = command_data.global_context.bot_config.crime_success_answers;
+            command_data.author_config.notifications.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, timestamp: Date.now(), description: `<time_ago> You did some crime and got \`${command_data.global_context.utils.format_number(credits_ammount)} 💵\`.` });
         } else {
             answers = command_data.global_context.bot_config.crime_failed_answers;
             answer_color = 15483730;
-            credits_ammount = -credits_ammount;
+            credits_ammount = 0;
+            command_data.author_config.notifications.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, timestamp: Date.now(), description: `<time_ago> You did some crime, but failed.` });
         }
         credits_ammount = credits_ammount * command_data.global_context.bot_config.crime_multiplier;
         credits_ammount = credits_ammount * (command_data.global_context.bot_config.shrine_bonus === "crime" ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.10, 1.10, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);

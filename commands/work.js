@@ -50,6 +50,7 @@ module.exports = {
         credits_ammount = credits_ammount * command_data.global_context.bot_config.work_multiplier;
         credits_ammount = credits_ammount * (command_data.global_context.bot_config.shrine_bonus === "work" ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.10, 1.10, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
         credits_ammount = Math.round(credits_ammount * [1, 1.01, 1.03, 1.05, 1.10, 1.15, 1.20, 1.22, 1.25, 1.25, 1.25][command_data.global_context.bot_config.b_quantum_pancakes]);
+        command_data.author_config.notifications.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, timestamp: Date.now(), description: `<time_ago> You cooked some pancakes and got \`${command_data.global_context.utils.format_number(credits_ammount)} 💵\`.` });
         
         let answer = command_data.global_context.utils.pick_random(answers);
         answer = answer.replace("<credits_ammount>", "`" + credits_ammount + "💵`");

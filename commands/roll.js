@@ -73,6 +73,10 @@ module.exports = {
                 command_data.msg.reply(`You don't have enough credits to do this.`);
                 return;
             }
+            if(roll_type !== 6) {
+                command_data.msg.reply(`You can only bet on a 6-sided dice.`);
+                return;
+            }
 
             if(result === bet_result) {
                 let multiplier = 0.55 + ((options.length - 1) / 5);

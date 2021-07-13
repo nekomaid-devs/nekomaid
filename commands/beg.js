@@ -35,10 +35,12 @@ module.exports = {
         let answer_color = 6732650;
         if(chance <= [40][0]) {
             answers = command_data.global_context.bot_config.beg_success_answers;
+            command_data.author_config.notifications.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, timestamp: Date.now(), description: `<time_ago> You begged and got \`${command_data.global_context.utils.format_number(credits_ammount)} 💵\`.` });
         } else {
             answers = command_data.global_context.bot_config.beg_failed_answers;
             answer_color = 15483730;
-            creditsAmmount = -credits_ammount;
+            creditsAmmount = 0;
+            command_data.author_config.notifications.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, timestamp: Date.now(), description: `<time_ago> You begged, but failed.` });
         }
         
         let answer = command_data.global_context.utils.pick_random(answers);

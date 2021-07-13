@@ -90,7 +90,7 @@ module.exports = {
         let limit = items.length < 10 ? items.length : 10;
         for(let i = 0; i < limit; i += 1) {
             let user_config = items[i];
-            if(i === 8 && authorPos > 10) {
+            if(i === 8 && author_pos > 10) {
                 embedTop.addField("...", "...");
                 continue;
             } else if(i === 9 && author_pos > 10) {
