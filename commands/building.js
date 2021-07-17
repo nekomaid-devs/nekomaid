@@ -5,7 +5,7 @@ module.exports = {
     category: "Profile",
     description: "Displays detailed information about a building.",
     helpUsage: "[building_name]`",
-    exampleUsage: "\"Neko's Bank\"",
+    exampleUsage: "Neko's Bank",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -17,7 +17,7 @@ module.exports = {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data) {
-        let building_name = command_data.total_argument.substring(command_data.total_argument.indexOf('"') + 1, command_data.total_argument.lastIndexOf('"'));
+        let building_name = command_data.total_argument;
 
         let building_field = command_data.global_context.neko_modules.vars.get_building_field(building_name);
         let global_building_field = command_data.global_context.neko_modules.vars.get_global_building_field(building_name);
