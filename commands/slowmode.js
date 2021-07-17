@@ -19,6 +19,7 @@ module.exports = {
         new NeededPermission("me", "MANAGE_CHANNELS"),
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: add an option for "off/on" (and remember last slowmode)
         let time = parseInt(command_data.args[0]);

@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let elapsed = new Date() - new Date(command_data.msg.guild.createdAt.toUTCString());
         let createdAgo = command_data.global_context.neko_modules_clients.tc.convert_time(elapsed);

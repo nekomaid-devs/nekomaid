@@ -15,6 +15,7 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         let embedAvatar = {

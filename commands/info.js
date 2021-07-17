@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let t = Date.now();
 

@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let end = new Date();
         let start = new Date(command_data.author_config.last_daily_time);

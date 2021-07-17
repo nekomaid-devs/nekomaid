@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let url = await command_data.global_context.modules.akaneko.foxgirl().catch(e => { command_data.global_context.logger.api_error(e); });
         let embedFoxgirl = {

@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let role = -1;
         if(command_data.msg.mentions.roles.size > 0) {

@@ -18,6 +18,7 @@ module.exports = {
         new NeededPermission("author", "BAN_MEMBERS")
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: add pagination
         let warns = command_data.server_warns.filter(warn => { return warn.user_ID === command_data.tagged_user.id });

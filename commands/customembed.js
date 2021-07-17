@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let custom_embed = -1;
         try {

@@ -29,6 +29,7 @@ module.exports = {
         new NeededPermission("author", "MANAGE_GUILD")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds

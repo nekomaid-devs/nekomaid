@@ -14,6 +14,7 @@ module.exports = {
         new NeededPermission("author", "BAN_MEMBERS")
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: support piping into file
         // TODO: add pagination

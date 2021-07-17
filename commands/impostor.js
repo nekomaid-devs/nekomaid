@@ -15,6 +15,7 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: make impostors change colors
         let impostor = command_data.global_context.utils.pick_random([true, false]);

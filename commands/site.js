@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let link = "https://nekomaid.xyz";
         let link_2 = "https://nekomaid.xyz/dashboard?guild_ID=" + command_data.msg.guild.id;

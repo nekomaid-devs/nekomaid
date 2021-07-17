@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let end = new Date();
         let start = new Date(command_data.author_config.last_beg_time);
@@ -39,12 +40,12 @@ module.exports = {
         } else {
             answers = command_data.global_context.bot_config.beg_failed_answers;
             answer_color = 15483730;
-            creditsAmmount = 0;
+            credits_ammount = 0;
             command_data.author_config.notifications.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, timestamp: Date.now(), description: `<time_ago> You begged, but failed.` });
         }
         
         let answer = command_data.global_context.utils.pick_random(answers);
-        answer = answer.replace("<creditsAmmount>", "`" + command_data.global_context.utils.format_number(credits_ammount) + "💵`");
+        answer = answer.replace("<credits_ammount>", "`" + command_data.global_context.utils.format_number(credits_ammount) + "💵`");
 
         let member = command_data.global_context.utils.pick_random(Array.from(command_data.msg.guild.members.cache.values()));
         answer = answer.replace("<user>", "`" + member.user.tag + "`");

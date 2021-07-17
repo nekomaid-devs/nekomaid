@@ -11,6 +11,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) { 
         let mayor = await command_data.global_context.bot.users.fetch(command_data.global_context.bot_config.mayor_ID);
         

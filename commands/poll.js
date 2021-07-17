@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let a = (command_data.total_argument.match(/"/g) || []).length;
         if(a === 0 || a % 2 != 0) {

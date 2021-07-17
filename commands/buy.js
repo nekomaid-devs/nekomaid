@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let item_name = command_data.total_argument;
         let target_item = Array.from(command_data.global_context.bot_config.items.values()).find(e => { return e.display_name.toLowerCase() === item_name.toLowerCase(); });

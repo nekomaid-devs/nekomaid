@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: this needs to be refactored fr
         let item_name = command_data.total_argument;

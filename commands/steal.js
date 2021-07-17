@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         if(command_data.tagged_user.id === command_data.msg.author.id) {
             command_data.msg.reply("You can't steal from yourself silly~");

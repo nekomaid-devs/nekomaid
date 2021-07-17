@@ -15,6 +15,7 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let buildings_description = "";
         buildings_description += `\`[Neko's City Hall]     [${false ? "---LOCKED---" : "=".repeat(command_data.tagged_user_config.b_city_hall) + ">" + " ".repeat(10 - command_data.tagged_user_config.b_city_hall)}] Level ${command_data.tagged_user_config.b_city_hall} (${command_data.global_context.utils.format_number(command_data.global_context.neko_modules.vars.get_building_price(command_data.tagged_user_config.b_city_hall, "b_city_hall"))} $)\`\n`;

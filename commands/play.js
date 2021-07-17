@@ -19,6 +19,7 @@ module.exports = {
         new NeededPermission("me", "SPEAK")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         if(command_data.msg.member.voice.channel == null) {
             command_data.msg.reply("You need to join a voice channel.");

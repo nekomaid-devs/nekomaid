@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         if(command_data.msg.mentions.users.array().length > 0) {
             if(command_data.global_context.bot_config.bot_owners.includes(command_data.msg.author.id) === false) {

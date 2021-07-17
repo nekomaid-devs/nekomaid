@@ -18,6 +18,7 @@ module.exports = {
         new NeededPermission("author", "BOT_OWNER")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let ammount = parseInt(command_data.args[0]);
         let item_ID = command_data.args[1];

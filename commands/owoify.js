@@ -18,6 +18,7 @@ module.exports = {
         new NeededPermission("me", "MANAGE_MESSAGES")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         if(command_data.server_config.say_command == false) {
             return;

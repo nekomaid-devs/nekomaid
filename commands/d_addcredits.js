@@ -19,6 +19,7 @@ module.exports = {
         new NeededPermission("author", "BOT_OWNER")
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let credits_ammount = parseInt(command_data.args[1]);
         command_data.tagged_user_config.credits += credits_ammount;

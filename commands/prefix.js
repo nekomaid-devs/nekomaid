@@ -18,6 +18,7 @@ module.exports = {
         new NeededPermission("author", "MANAGE_GUILD")
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         if(command_data.args.length < 1) {
             let embedPrefix = {

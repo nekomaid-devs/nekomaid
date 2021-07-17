@@ -214,6 +214,7 @@ module.exports = {
         global_context.data.processed_messages = 0;
         global_context.data.total_commands = 0;
         global_context.data.processed_commands = 0;
+        global_context.data.user_cooldowns = new Map();
         
         global_context.data.last_moderation_actions = new Map();
         global_context.data.openings = global_context.utils.read_JSON("/data/openings.json");

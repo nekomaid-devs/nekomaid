@@ -21,6 +21,7 @@ module.exports = {
         new NeededPermission("author", "BAN_MEMBERS")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let warn_reason = "None";
         if(command_data.args.length > 1) {

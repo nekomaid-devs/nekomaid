@@ -2,8 +2,8 @@ const RecommendedArgument = require("../scripts/helpers/recommended_argument");
 
 module.exports = {
     name: "coinflip",
-    category: "Fun",
-    description: "Flips a coin- Also makes it possible to win credits by betting.",
+    category: "Profile",
+    description: "Flips a coin. Also makes it possible to win credits by betting.",
     helpUsage: "[ammount/all/half/%?] [heads/tails?]` *(both argument optional)*",
     exampleUsage: "100 tails",
     hidden: false,
@@ -16,17 +16,16 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
-    execute(command_data) {
+    cooldown: 1500,
+    async execute(command_data) {
         let options = ["heads", "tails"];
-        let result = command_data.global_context.utils.pick_random(options);
         let embedCoinflip = {
-            title: `${command_data.msg.author.tag} flipped ${result}!`,
+            title: `${command_data.msg.author.tag} is flipping...`,
             color: 8388736
         }
 
         if(command_data.args.length > 0) {
             let bet_result = command_data.args.length > 1 ? command_data.args[1].toLowerCase() : "heads";
-
             let credits_ammount = parseInt(command_data.args[0]);
             if(command_data.args[0] === "all") {
                 if(command_data.author_config.credits <= 0) {
@@ -59,31 +58,39 @@ module.exports = {
                 command_data.msg.reply(`You don't have enough credits to do this.`);
                 return;
             }
-
-            if(result === bet_result) {
-                let won_ammount = Math.floor(credits_ammount * 0.75);
-                let won_ammount_text = command_data.global_context.utils.format_number(credits_ammount + won_ammount);
-
-                command_data.author_config.credits += won_ammount;
-                command_data.author_config.net_worth += won_ammount;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
-
-                embedCoinflip.description = `You won \`${won_ammount_text}\` credits!`;
-                embedCoinflip.footer = {
-                    text: "Win multiplier: 1.75x"
+            
+            let message = await command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });   
+            setTimeout(async() => {
+                let result = command_data.global_context.utils.pick_random(options);
+                embedCoinflip.title = `${command_data.msg.author.tag} flipped ${result}!`;
+    
+                if(result === bet_result) {
+                    let won_ammount = Math.floor(credits_ammount * 0.75);
+                    let won_ammount_text = command_data.global_context.utils.format_number(credits_ammount + won_ammount);
+    
+                    command_data.author_config.credits += won_ammount;
+                    command_data.author_config.net_worth += won_ammount;
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
+    
+                    embedCoinflip.description = `You won \`${won_ammount_text}\` credits!`;
+                    embedCoinflip.footer = {
+                        text: "Win multiplier: 1.75x"
+                    }
+                } else {
+                    let lost_ammount_text = command_data.global_context.utils.format_number(credits_ammount);
+                    command_data.author_config.credits -= credits_ammount;
+                    command_data.author_config.net_worth -= credits_ammount;
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
+    
+                    embedCoinflip.description = `You lost \`${lost_ammount_text}\` credits...`;
                 }
-            } else {
-                let lost_ammount_text = command_data.global_context.utils.format_number(credits_ammount);
-                command_data.author_config.credits -= credits_ammount;
-                command_data.author_config.net_worth -= credits_ammount;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
-
-                embedCoinflip.description = `You lost \`${lost_ammount_text}\` credits...`;
-            }
-
-            command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });
+    
+                message.edit("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });
+            }, 750);
         } else {
-            command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });
+            let result = command_data.global_context.utils.pick_random(options);
+            embedCoinflip.title = `${command_data.msg.author.tag} flipped ${result}!`;
+            command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });  
         }
     },
 };

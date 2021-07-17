@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: true,
+    cooldown: 1500,
     async execute(command_data) {
         let url = await command_data.global_context.modules.akaneko.nsfw.blowjob().catch(e => { command_data.global_context.logger.api_error(e); });
         let embedBJ = {

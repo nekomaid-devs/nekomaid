@@ -14,6 +14,7 @@ module.exports = {
         new NeededPermission("author", "BOT_OWNER")
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let embedUpdate = {
             color: 8388736,

@@ -19,6 +19,7 @@ module.exports = {
         new NeededPermission("author", "MANAGE_GUILD")
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: add limit to this (+ check type)
         if(command_data.server_config.module_level_enabled == false) {

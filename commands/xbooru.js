@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: true,
+    cooldown: 1500,
     async execute(command_data) {
         let post_info = await command_data.global_context.neko_modules_clients.xbooru.xbooru_result(command_data.global_context, command_data.args);
         switch(post_info.status) {
