@@ -18,6 +18,7 @@ module.exports = {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data) {
+        let options = ["heads", "tails"];
         let embedCoinflip = {
             title: `${command_data.msg.author.tag} is flipping...`,
             color: 8388736
@@ -60,7 +61,6 @@ module.exports = {
             
             let message = await command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });   
             setTimeout(async() => {
-                let options = ["heads", "tails"];
                 let result = command_data.global_context.utils.pick_random(options);
                 embedCoinflip.title = `${command_data.msg.author.tag} flipped ${result}!`;
     
@@ -88,7 +88,6 @@ module.exports = {
                 message.edit("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });
             }, 750);
         } else {
-            let options = ["heads", "tails"];
             let result = command_data.global_context.utils.pick_random(options);
             embedCoinflip.title = `${command_data.msg.author.tag} flipped ${result}!`;
             command_data.msg.channel.send("", { embed: embedCoinflip }).catch(e => { command_data.global_context.logger.api_error(e); });  
