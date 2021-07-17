@@ -23,6 +23,7 @@ module.exports = {
         new NeededPermission("me", "VIEW_AUDIT_LOG")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds

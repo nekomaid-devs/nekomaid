@@ -22,6 +22,7 @@ module.exports = {
         new NeededPermission("me", "MANAGE_EMOJIS")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         // TODO: check for required 2-32 emote name
         let text = command_data.total_argument;

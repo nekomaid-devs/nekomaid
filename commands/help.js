@@ -16,6 +16,7 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let show_hidden = false;
         if(command_data.args.includes("-h")) {

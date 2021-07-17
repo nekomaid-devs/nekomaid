@@ -14,6 +14,7 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: add pagination
         let embedShop = new command_data.global_context.modules.Discord.MessageEmbed()

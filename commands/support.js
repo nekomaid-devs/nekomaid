@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let link = `https://discord.com/invite/${command_data.global_context.config.invite_code}`;
         let embedSupport = {

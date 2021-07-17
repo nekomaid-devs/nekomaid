@@ -16,6 +16,7 @@ module.exports = {
         new NeededPermission("me", "MANAGE_ROLES")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let msg = await command_data.msg.channel.send("Type in a role name or `stop` to finish the menu!").catch(e => { command_data.global_context.logger.api_error(e); });
         let roles = new Map();

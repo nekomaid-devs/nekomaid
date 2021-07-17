@@ -16,6 +16,7 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let options = ["heads", "tails"];
         let result = command_data.global_context.utils.pick_random(options);

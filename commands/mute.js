@@ -24,6 +24,7 @@ module.exports = {
         new NeededPermission("me", "MANAGE_CHANNELS")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         // TODO: previous mutes don't get removed btw
         let time = command_data.args.length < 2 ? -1 : (command_data.args[1] === "-1" ? -1 : command_data.global_context.neko_modules_clients.tc.convert_string_to_time_data(command_data.args[1]));

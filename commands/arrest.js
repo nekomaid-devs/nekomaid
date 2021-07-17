@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let url = command_data.global_context.utils.pick_random(command_data.global_context.neko_modules.vars.get_arrest_gifs());
         let suffix = command_data.tagged_users.length === 1 ? "is" : "are";

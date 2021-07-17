@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let ammount = parseInt(command_data.args[command_data.args.length - 1]);
         let building_name = isNaN(ammount) ? command_data.total_argument : command_data.args.slice(0, command_data.args.length - 1).join(" ");

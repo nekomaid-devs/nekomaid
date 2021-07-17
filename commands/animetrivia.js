@@ -16,6 +16,7 @@ module.exports = {
         new NeededPermission("me", "SPEAK")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         if(command_data.args.length > 0) { return; }
         if(command_data.msg.guild.voice !== undefined) {

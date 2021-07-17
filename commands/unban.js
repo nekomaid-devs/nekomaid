@@ -22,6 +22,7 @@ module.exports = {
         new NeededPermission("me", "BAN_MEMBERS")
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: this needs a refactor
         let unban_reason = "None";

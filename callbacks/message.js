@@ -149,17 +149,33 @@ module.exports = {
         if(!global_context.commands.has(command_name)) {
             return;
         }
+        let command = global_context.commands.get(command_name);
+
+        if(global_context.data.user_cooldowns.has(message.author.id) === false) {
+            global_context.data.user_cooldowns.set(message.author.id, new Map());
+        }
+        let command_cooldowns = global_context.data.user_cooldowns.get(message.author.id);
+        if(command_cooldowns.has(command.name) === false) {
+            command_cooldowns.set(command.name, 0);
+        }
+        let command_cooldown = command_cooldowns.get(command.name);
+        if(command_cooldown + command.cooldown > Date.now()) {
+            let time_left = (command_cooldown + command.cooldown) - Date.now();
+            message.channel.send(`You have to wait another \`${command_data.global_context.neko_modules_clients.tc.convert_time(time_left)}\`...`);
+            return;
+        }
+        command_cooldowns.set(command.name, Date.now());
+        global_context.data.user_cooldowns.set(message.author.id, command_cooldowns);
 
         if(global_context.config.sentry_enabled === true) {
-            transaction.setName(`[Command] ${command_name}`);
+            transaction.setName(`[Command] ${command.name}`);
         }
         global_context.data.total_commands += 1;
         global_context.data.processed_commands += 1;
 
         global_context.neko_modules_clients.lvl.update_global_level(command_data);
 
-        global_context.logger.log(`[${message.guild.name}] Called command: ${command_name}`);
-        let command = global_context.commands.get(command_name);
+        global_context.logger.log(`[${message.guild.name}] Called command: ${command.name}`);
         await global_context.utils.verify_guild_roles(message.guild);
         await global_context.utils.verify_guild_channels(message.guild);
         for(let i = 0; i < command.permissionsNeeded.length; i++) {

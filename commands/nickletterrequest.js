@@ -15,6 +15,7 @@ module.exports = {
         new NeededPermission("me", "MANAGE_NICKNAMES")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let message = await command_data.msg.channel.send(`<@${command_data.msg.member.id}> is requesting letters.\n\nReact to donate a letter.`).catch(e => { command_data.global_context.logger.api_error(e); });
         await message.react('✅').catch(e => { command_data.global_context.logger.api_error(e); });

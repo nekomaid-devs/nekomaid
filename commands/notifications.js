@@ -11,6 +11,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let notifications_description = command_data.author_config.notifications
         .sort((a, b) => { return b.timestamp - a.timestamp; })

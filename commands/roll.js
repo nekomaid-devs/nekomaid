@@ -17,6 +17,7 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let roll_type = 6;
         if(command_data.args.length > 0) {

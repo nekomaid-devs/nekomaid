@@ -15,6 +15,7 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: add position in top
         let url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });

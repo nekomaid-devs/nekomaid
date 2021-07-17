@@ -22,6 +22,7 @@ module.exports = {
         new NeededPermission("me", "MANAGE_MESSAGES"),
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         // TODO: support swapping arguments (or improve the format)
         let num_messages = parseInt(command_data.args[0]);

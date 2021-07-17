@@ -21,6 +21,7 @@ module.exports = {
         new NeededPermission("author", "BOT_OWNER")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds

@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let is_self = command_data.tagged_users.some(e => { return e.id === command_data.msg.author.id; });
         if(is_self === true) {

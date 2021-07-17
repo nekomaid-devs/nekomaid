@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         let link = `https://top.gg/bot/${command_data.global_context.bot.user.id}/vote`;
         let link_2 = "https://discordbotlist.com/bots/nekomaid/upvote";

@@ -15,6 +15,7 @@ module.exports = {
     ],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let married_text = command_data.tagged_user_config.married_ID;
         if(married_text === "-1") {

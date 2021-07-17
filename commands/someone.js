@@ -14,6 +14,7 @@ module.exports = {
         new NeededPermission("author", "MENTION_EVERYONE")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         await command_data.global_context.utils.verify_guild_members(command_data.msg.guild);
         let user = command_data.global_context.utils.pick_random(Array.from(command_data.msg.guild.members.cache.values()));

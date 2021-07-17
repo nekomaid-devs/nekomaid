@@ -23,6 +23,7 @@ module.exports = {
         new NeededPermission("me", "BAN_MEMBERS")
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         // TODO: support swapping arguments (or improve the format)
         // TODO: this should clear all messages from them aswell

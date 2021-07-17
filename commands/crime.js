@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         if(command_data.author_config.b_crime_den < 1) {
             command_data.msg.channel.send("You need to build \`Neko's Crime Den\` to do crimes.").catch(e => { command_data.global_context.logger.api_error(e); });

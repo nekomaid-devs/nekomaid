@@ -21,6 +21,7 @@ module.exports = {
         new NeededPermission("author", "BAN_MEMBERS")
     ],
     nsfw: false,
+    cooldown: 1500,
     execute(command_data) {
         if(command_data.tagged_member.kickable === false) {
             command_data.msg.reply(`Couldn't kick \`${command_data.tagged_user.tag}\`! (Try moving Nekomaid's permissions above the user you want to kick)`);

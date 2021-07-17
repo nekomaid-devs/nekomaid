@@ -10,6 +10,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         var obj = await command_data.global_context.modules_clients.neko.sfw.woof();
         let embedDog = {

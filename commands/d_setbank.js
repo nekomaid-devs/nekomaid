@@ -19,6 +19,7 @@ module.exports = {
         new NeededPermission("author", "BOT_OWNER")
     ],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         if(command_data.msg.mentions.users.size < 1) {
             command_data.tagged_user = await command_data.global_context.bot.users.fetch(command_data.args[0]).catch(e => { command_data.global_context.logger.api_error(e); });

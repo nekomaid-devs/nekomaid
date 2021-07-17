@@ -15,6 +15,7 @@ module.exports = {
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
+    cooldown: 1500,
     async execute(command_data) {
         let credits_ammount = parseInt(command_data.args[0]);
         if(command_data.args[0] === "all") {
