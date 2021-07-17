@@ -58,12 +58,14 @@ module.exports = {
         global_context.data.total_events += 1;
         global_context.data.processed_events += 1;
 
+        // Check if user manages the guild
         let manages_guild = false;
         if(command_data.server_config.banned_words.length > 0 || command_data.server_config.invites == false) {
             await global_context.utils.verify_guild_roles(message.guild);
             manages_guild = message.member.hasPermission("MANAGE_GUILD");
         }
 
+        // Process moderation settings
         if(manages_guild === false) {
             for(let i = 0; i < command_data.server_config.banned_words.length; i++) {
                 let banned_word = command_data.server_config.banned_words[i];
@@ -83,28 +85,22 @@ module.exports = {
             }
         }
 
-        /*let log_messages = true;
-        if(log_messages === true) {
-            var serverLogs = await bot.ssm.server_fetch.fetchServerLogs(bot, message.guild.id);
-
-            var log = { guildID: message.guild.id, type: "message", messageID: message.id, user_ID: message.author.id, tag: message.author.tag, content: message.content.split("\n").join("<br>"), time: Date.now() }
-            serverLogs.logs.push(log);
-            bot.ssm.server_edit.edit_server_logs_in_structure(bot.ssm, message.guild, serverLogs);
-        }*/
-
+        // Check marriage proposals
         global_context.neko_modules_clients.mm.check_marriage_proposals(global_context, message);
 
-        if(message.author.bot === false && command_data.server_config.module_level_enabled == true) {
+        // Process server levels
+        if(command_data.server_config.module_level_enabled == true) {
             global_context.neko_modules_clients.lvl.update_server_level(command_data, command_data.server_config.module_level_message_exp);
         }
 
-        let bot_id = global_context.bot.user.id;
-        if(message.content === `<@!${bot_id}>`) {
+        // Check for @Nekomaid
+        if(message.content === `<@!${global_context.bot.user.id}>`) {
             message.channel.send(`Prefix on this server is \`${command_data.server_config.prefix}\`.`).catch(e => { global_context.logger.api_error(e); });
             return;
         }
 
-        if(message.content.toLowerCase() === `thanks <@!${bot_id}>` || message.content.toLowerCase() === "thanks nekomaid"  || message.content.toLowerCase() === "thanks neko") {
+        // Check for auto-response
+        if(message.content.toLowerCase() === `thanks <@!${global_context.bot.user.id}>` || message.content.toLowerCase() === "thanks nekomaid"  || message.content.toLowerCase() === "thanks neko") {
             let responses = [
                 "You're welcome~ I guess- >~<",
                 "W-What did I do?~",
@@ -117,10 +113,12 @@ module.exports = {
             return;
         }
 
+        // Check if prefix matches
         if(!message.content.toLowerCase().startsWith(command_data.server_config.prefix.toLowerCase())) {
             return;
         }
 
+        // Prepare sentry transaction
         let transaction = -1;
         let transaction_prepare = -1;
         let transaction_process = -1;
@@ -131,6 +129,7 @@ module.exports = {
             transaction_prepare = transaction.startChild({ op: "prepare_command" });
         }
 
+        // Populate server data
         // TODO: make this into an array of promises and Promise.all()
         command_data.args = message.content.slice(command_data.server_config.prefix.length).split(' ');
         command_data.server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: message.guild.id });
@@ -141,6 +140,7 @@ module.exports = {
         command_data.tagged_server_user_config = message.mentions.users.array().length < 1 ? command_data.author_server_user_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_user", server_ID: message.guild.id, user_ID: message.mentions.users.array()[0].id });
         command_data.tagged_user_config = message.mentions.users.array().length < 1 ? command_data.author_config : await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: message.mentions.users.array()[0].id });    
         
+        // Get command either by it's name or alias
         let command_name = command_data.args.shift().toLowerCase();
         command_data.total_argument = command_data.args.join(" ");
         if(global_context.command_aliases.has(command_name) === true) {
@@ -151,6 +151,7 @@ module.exports = {
         }
         let command = global_context.commands.get(command_name);
 
+        // Check for command cooldowns
         if(global_context.data.user_cooldowns.has(message.author.id) === false) {
             global_context.data.user_cooldowns.set(message.author.id, new Map());
         }
@@ -167,14 +168,17 @@ module.exports = {
         command_cooldowns.set(command.name, Date.now());
         global_context.data.user_cooldowns.set(message.author.id, command_cooldowns);
 
+        // Increase processed commands
         if(global_context.config.sentry_enabled === true) {
             transaction.setName(`[Command] ${command.name}`);
         }
         global_context.data.total_commands += 1;
         global_context.data.processed_commands += 1;
 
+        // Process global levels
         global_context.neko_modules_clients.lvl.update_global_level(command_data);
 
+        // Permission, argument and NSFW checks
         global_context.logger.log(`[${message.guild.name}] Called command: ${command.name}`);
         await global_context.utils.verify_guild_roles(message.guild);
         await global_context.utils.verify_guild_channels(message.guild);
@@ -201,16 +205,19 @@ module.exports = {
             return;
         }
 
+        // Populate tagged_user_tags
         let tagged_user_tags = message.mentions.users.array().reduce((acc, curr) => { acc += curr.tag + ", "; return acc; }, "");
         tagged_user_tags = tagged_user_tags.slice(0, tagged_user_tags.length - 2);
         command_data.tagged_user_tags = tagged_user_tags;
 
+        // Execute command
         if(global_context.config.sentry_enabled === true) {
             transaction_prepare.finish();
             transaction_process = transaction.startChild({ op: "process_command" });
         }
         await command.execute(command_data);
 
+        // Finish sentry transaction
         if(global_context.config.sentry_enabled === true) {
             transaction_process.finish();
             transaction.finish();
