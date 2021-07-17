@@ -2,8 +2,8 @@ const RecommendedArgument = require("../scripts/helpers/recommended_argument");
 
 module.exports = {
     name: "coinflip",
-    category: "Fun",
-    description: "Flips a coin- Also makes it possible to win credits by betting.",
+    category: "Profile",
+    description: "Flips a coin. Also makes it possible to win credits by betting.",
     helpUsage: "[ammount/all/half/%?] [heads/tails?]` *(both argument optional)*",
     exampleUsage: "100 tails",
     hidden: false,
