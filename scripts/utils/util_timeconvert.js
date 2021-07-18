@@ -57,6 +57,7 @@ class TimeConvert {
         time_string += mins > 0 ? `${mins}m ` : "";
         time_string += secs > 0 ? `${secs}s ` : "";
         time_string = time_string.substring(0, time_string.length - 1);
+        if(time_string.length < 1) { time_string = "0s" }
 
         return time_string;
     }
