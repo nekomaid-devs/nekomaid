@@ -179,6 +179,34 @@ setInterval(() => {
         global_context.neko_modules.web_updates.refresh_status(global_context);
     }
 }, 60000);
+setInterval(async() => {
+    let top_items = await global_context.neko_modules_clients.sb.get_top(global_context, ["credits", "bank"]);
+    let economy_list = [];
+    for(let i = 0; i < 10; i++) {
+        let neko_user = top_items[i];
+        let user = await global_context.neko_modules.users.fetch(neko_user.user_ID);
+        economy_list.push({
+            id: user.id,
+            user: { id: user.id, avatar: user.avatarURL({ format: "png", dynamic: true, size: 1024 }) },
+            neko_user: {
+                credits: neko_user.credits + neko_user.bank,
+                level: neko_user.level,
+                b_city_hall: neko_user.b_city_hall,
+                b_bank: neko_user.b_bank,
+                b_lab: neko_user.b_lab,
+                b_sanctuary: neko_user.b_sanctuary,
+                b_pancakes: neko_user.b_pancakes,
+                b_crime_den: neko_user.b_crime_den,
+                b_lewd_services: neko_user.b_lewd_services,
+                b_casino: neko_user.b_casino,
+                b_scrapyard: neko_user.b_scrapyard,
+                b_pawn_shop: neko_user.b_pawn_shop
+            }
+        });
+    }
+
+    global_context.data.economy_list = economy_list;
+});
 
 let bot_importer = require('./bot_importer');
 bot.on('ready', async() => {
