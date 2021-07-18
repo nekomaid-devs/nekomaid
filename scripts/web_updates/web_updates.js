@@ -95,6 +95,7 @@ module.exports = {
             });
         }).catch(e => { global_context.logger.error(e); });
 
+        let economy_list = global_context.data.economy_list;
         let command_list = Array.from(global_context.commands.values()).filter(e => { return e.hidden === false; }).reduce((acc, curr) => { acc.push({ name: curr.name, description: curr.description, category: curr.category, aliases: curr.aliases }); return acc; }, []);
         let stats = {
             start: global_context.data.uptime_start,
@@ -106,8 +107,8 @@ module.exports = {
 			uptime_pings: [Array(24).fill({ up: true })],
 
 			shard_list: shard_list,
-			command_list: command_list,
-			top_list: []
+            economy_list: economy_list,
+			command_list: command_list
         }
 
         global_context.modules.axios.post(`${global_context.config.nekomaid_API_endpoint}/v1/stats/post`, { stats: stats }, {
