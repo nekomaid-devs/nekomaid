@@ -22,6 +22,7 @@ class VoiceManager {
     }
 
     async remove_connection(global_context, id, error_message = -1) {
+        return;
         if(global_context.neko_modules_clients.vm.connections.has(id) === false) {
             return;
         }
@@ -48,6 +49,7 @@ class VoiceManager {
     }
 
     check_for_timeouts(global_context) {
+        return;
         global_context.neko_modules_clients.vm.connections.forEach(voice_data => {
             if(voice_data.connection.dispatcher == null) {
                 global_context.neko_modules_clients.vm.timeout_connection(global_context, voice_data.id);
@@ -67,6 +69,7 @@ class VoiceManager {
     }
 
     async timeout_connection(global_context, id) {
+        return;
         if(global_context.neko_modules_clients.vm.connections.has(id) === false) {
             return;
         }
