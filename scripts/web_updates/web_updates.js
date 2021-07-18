@@ -110,7 +110,7 @@ module.exports = {
 			top_list: []
         }
 
-        global_context.modules.axios.post(`${global_context.config.nekomaid_API_endpoint}/postStats`, { stats: stats }, {
+        global_context.modules.axios.post(`${global_context.config.nekomaid_API_endpoint}/v1/stats/post`, { stats: stats }, {
             headers: global_context.data.default_headers
         }).catch(e => {
             global_context.logger.error("[Nekomaid API] " + e)
