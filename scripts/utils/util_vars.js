@@ -29,402 +29,398 @@ module.exports = {
 
     get_angry_gifs() {
         return [
-            "https://media.discordapp.net/attachments/670322638274560010/688170288143138826/ghz5ksh.gif" 
+            "https://i.imgur.com/S9GQ9tC.gif" 
         ];
     },
 
     get_arrest_gifs() {
         return [
-            "https://i.imgur.com/bvTdOGI.gif",
-            "https://i.imgur.com/QPi0AzY.gif",
-            "https://i.imgur.com/LTHLcPL.gif",
-            "https://thumbs.gfycat.com/GiddyBrokenHog-size_restricted.gif"
+            "https://i.imgur.com/zpyh599.gif",
+            "https://i.imgur.com/erqEvRm.gif",
+            "https://i.imgur.com/WVYmbTf.gif",
+            "https://i.imgur.com/hqCkyKy.gif"
         ];
     },
 
     get_bite_gifs() {
         return [
-            "https://cdn.weeb.sh/images/H1hige7sZ.gif",
-            "https://cdn.weeb.sh/images/ry3pQGraW.gif",
-            "https://cdn.weeb.sh/images/ByWuR1q1M.gif",
-            "https://cdn.weeb.sh/images/H1gYelQjZ.gif",
-            "https://cdn.weeb.sh/images/Hk1sxlQjZ.gif",
-            "https://cdn.weeb.sh/images/S1o6egmjZ.gif",
-            "https://cdn.weeb.sh/images/HkutgeXob.gif",
-            "https://cdn.weeb.sh/images/ry00lxmob.gif",
-            "https://cdn.weeb.sh/images/H1_Jbemjb.gif",
-            "https://cdn.weeb.sh/images/rk8illmiW.gif",
-            "https://cdn.weeb.sh/images/rJjd1nDLz.gif",
-            "https://cdn.weeb.sh/images/rJAlbgXsb.gif",
-            "https://cdn.weeb.sh/images/rkakblmiZ.gif"
+            "https://i.imgur.com/bpFX4QQ.gif",
+            "https://i.imgur.com/2kJraQN.gif",
+            "https://i.imgur.com/yRpRk55.gif",
+            "https://i.imgur.com/kXdfZqv.gif",
+            "https://i.imgur.com/ECZ1siG.gif",
+            "https://i.imgur.com/VQUGcMM.gif",
+            "https://i.imgur.com/ii0PzdA.gif",
+            "https://i.imgur.com/YKtpj8U.gif",
+            "https://i.imgur.com/bBDO6X1.gif",
+            "https://i.imgur.com/fGPAulI.gif",
+            "https://i.imgur.com/Jp8mOWA.gif",
+            "https://i.imgur.com/v5ntzUV.gif",
+            "https://i.imgur.com/EPMkKhU.gif"
         ];
     },
 
     get_blush_gifs() {
         return [
-            "https://cdn.weeb.sh/images/S1exMIQDb.gif",
-            "https://cdn.weeb.sh/images/Hky7MImwW.gif",
-            "https://cdn.weeb.sh/images/HklJGIXPW.gif",
-            "https://cdn.weeb.sh/images/BkalMI7Db.gif",
-            "https://cdn.weeb.sh/images/ByvffI7PZ.gif",
-            "https://cdn.weeb.sh/images/B1NWGUmvb.gif",
-            "https://cdn.weeb.sh/images/B14JM8Qw-.gif",
-            "https://cdn.weeb.sh/images/ByD4GLXPZ.gif",
-            "https://cdn.weeb.sh/images/r1n7M87wW.gif",
-            "https://cdn.weeb.sh/images/B1jfzIXDZ.gif",
-            "https://cdn.weeb.sh/images/SkX1zLmw-.gif",
-            "https://cdn.weeb.sh/images/r1U7G87vZ.gif",
-            "https://cdn.weeb.sh/images/ryxZf87vZ.gif",
-            "https://cdn.weeb.sh/images/SkckMIXP-.gif"
+            "https://i.imgur.com/tXGt8Re.gif",
+            "https://i.imgur.com/H5WtLJ3.gif",
+            "https://i.imgur.com/0WifSJ8.gif",
+            "https://i.imgur.com/JBlkT36.gif",
+            "https://i.imgur.com/atlrSUE.gif",
+            "https://i.imgur.com/K3hjezm.gif",
+            "https://i.imgur.com/7NXzUon.gif",
+            "https://i.imgur.com/otQG40K.gif",
+            "https://i.imgur.com/6BWJSbW.gif",
+            "https://i.imgur.com/q9SaK6K.gif",
+            "https://i.imgur.com/KZZEHtP.gif",
+            "https://i.imgur.com/9FXF0Yw.gif",
+            "https://i.imgur.com/qXMmjI3.gif",
+            "https://i.imgur.com/49kAafw.gif"
         ];
     },
 
     get_borgar_gifs() {
         return [
-            "https://i.kym-cdn.com/photos/images/original/001/609/349/cea.gif",
-            "https://i.pinimg.com/originals/31/1b/84/311b84141684c71bede893c0d92d7671.gif",
-            "https://66.media.tumblr.com/543f2e8a120dcab7155563a6a53b0844/tumblr_p5r3klKxzZ1wbfl3po1_500.gif",
-            "https://steamuserimages-a.akamaihd.net/ugc/981107421967191531/1E639C508651C21287CDE52575D329FF93ED8CC4/"
+            "https://i.imgur.com/ABEPwfx.gif",
+            "https://i.imgur.com/D2h6sWy.gif",
+            "https://i.imgur.com/qsLCxVT.gif",
+            "https://i.imgur.com/OkVM7h9.gif"
         ];
     },
 
     get_cry_gifs() {
         return [
-            "https://cdn.weeb.sh/images/ByPGQIQwb.gif",
-            "https://cdn.weeb.sh/images/rJUbkgqyf.gif",
-            "https://cdn.weeb.sh/images/rJCG7IXPb.gif",
-            "https://cdn.weeb.sh/images/rkoNQ8mP-.gif",
-            "https://cdn.weeb.sh/images/HymMXUQPW.gif",
-            "https://cdn.weeb.sh/images/ryxKX7L7P-.gif",
-            "https://cdn.weeb.sh/images/Hk6EmLmDZ.gif",
-            "https://cdn.weeb.sh/images/rJ5IX8XPZ.gif",
-            "https://cdn.weeb.sh/images/r1UGQLXvb.gif",
-            "https://cdn.weeb.sh/images/rJfB787PW.gif",
-            "https://cdn.weeb.sh/images/ByF7REgdf.gif",
-            "https://cdn.weeb.sh/images/rknUmIXD-.gif",
-            "https://cdn.weeb.sh/images/r1itBRFTZ.gif"
+            "https://i.imgur.com/40cB83v.gif",
+            "https://i.imgur.com/JG9ZwWB.gif",
+            "https://i.imgur.com/7WIpcIH.gif",
+            "https://i.imgur.com/lLterh2.gif",
+            "https://i.imgur.com/vgYqrMd.gif",
+            "https://i.imgur.com/f2269jf.gif",
+            "https://i.imgur.com/jxswV38.gif",
+            "https://i.imgur.com/XFOBDjc.gif",
+            "https://i.imgur.com/kuhFca7.gif",
+            "https://i.imgur.com/wYWgggM.gif",
+            "https://i.imgur.com/S0ZIL9x.gif",
+            "https://i.imgur.com/FrvmmIW.gif",
+            "https://i.imgur.com/cchBAUv.gif"
         ];
     },
 
     get_cuddle_gifs() {
         return [
-            "https://api.suya.moe/cdn.gif/cuddle/U0piR0xVUXdaMg.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/U3laazhVN3ZiYw.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/QkpzZVVJN3diaQ.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/ckpsTVU4N3ZiYQ.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/U3lrekw4N0QtMQ.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/SGt6QXJVbXZaNw.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/U3lVWU9KN2laMg.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/QmtOMHJJUURadg.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/U0pZeElVbUQtNg.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/QjFTemVzaENXcQ.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/cko2ekFrYzFmNA.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/SDFTZkk4WHdXcw.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/QnlYczFBWUtXaQ.gif",
-            "https://api.suya.moe/cdn.gif/cuddle/Qkp3cHdfWExNeg.gif"
+            "https://i.imgur.com/QJx9VvV.gif",
+            "https://i.imgur.com/TMw0mBz.gif",
+            "https://i.imgur.com/un3UUAV.gif",
+            "https://i.imgur.com/xp8AUko.gif",
+            "https://i.imgur.com/podFk4Y.gif",
+            "https://i.imgur.com/p12Llh0.gif",
+            "https://i.imgur.com/d0oOLd3.gif",
+            "https://i.imgur.com/PhULVhR.gif",
+            "https://i.imgur.com/zqfsgFl.gif",
+            "https://i.imgur.com/lniDHSB.gif",
+            "https://i.imgur.com/KwKMJx4.gif",
+            "https://i.imgur.com/0kOwoWZ.gif",
+            "https://i.imgur.com/gXhEGyj.gif",
+            "https://i.imgur.com/WJoVNyR.gif"
         ];
     },
 
     get_dance_gifs() {
         return [
-            "https://cdn.weeb.sh/images/HJ12OUXwZ.gif",
-            "https://cdn.weeb.sh/images/rkxOLd8Xv-.gif",
-            "https://cdn.weeb.sh/images/r1WpdUmDZ.gif",
-            "https://cdn.weeb.sh/images/SJI6dU7Db.gif",
-            "https://cdn.weeb.sh/images/SyxZ0O87vZ.gif",
-            "https://cdn.weeb.sh/images/B1Rtd8XvZ.gif",
-            "https://cdn.weeb.sh/images/H1yFOUmv-.gif",
-            "https://cdn.weeb.sh/images/ByhduIQP-.gif",
-            "https://cdn.weeb.sh/images/H14xFU7PZ.gif",
-            "https://cdn.weeb.sh/images/BJoRuLXPW.gif",
-            "https://cdn.weeb.sh/images/BJYVd8QPb.gif",
-            "https://cdn.weeb.sh/images/SkG7OIQDZ.gif",
-            "https://cdn.weeb.sh/images/B1LUuImvZ.gif",
-            "https://cdn.weeb.sh/images/SJo040wTW.gif",
-            "https://cdn.weeb.sh/images/rJXpOLmD-.gif",
-            "https://66.media.tumblr.com/24ca9c7729d17a8978c39d93f309a2ed/tumblr_pibf59D7Kt1u2ixmo_1280.gif",
-            "https://media.discordapp.net/attachments/689505451515183123/692728009358180422/83e.gif",
-            "https://cdn.discordapp.com/attachments/689505451515183123/692728946277613608/tenor.gif"
+            "https://i.imgur.com/OVNuLon.gif",
+            "https://i.imgur.com/ft7Pyna.gif",
+            "https://i.imgur.com/jICKolG.gif",
+            "https://i.imgur.com/iAtoSNU.gif",
+            "https://i.imgur.com/nZUkQzT.gif",
+            "https://i.imgur.com/s73jset.gif",
+            "https://i.imgur.com/hC41vSu.gif",
+            "https://i.imgur.com/u6tGH3p.gif",
+            "https://i.imgur.com/hU2hGYe.gif",
+            "https://i.imgur.com/iKUXg7G.gif",
+            "https://i.imgur.com/IBxwAQ2.gif",
+            "https://i.imgur.com/NRDoRbV.gif",
+            "https://i.imgur.com/YlviseJ.gif",
+            "https://i.imgur.com/AltqYRY.gif",
+            "https://i.imgur.com/NIBOhwP.gif",
+            "https://i.imgur.com/p3039Mg.gif",
+            "https://i.imgur.com/qvORXs1.gif",
+            "https://i.imgur.com/BCanBC2.gif"
         ];
     },
 
     get_hug_gifs() {
         return [
-            "https://api.suya.moe/cdn.gif/hug/cmt4MWRKMjV6bQ.gif",
-            "https://api.suya.moe/cdn.gif/hug/cms2UHN2T1VNdQ.gif",
-            "https://api.suya.moe/cdn.gif/hug/ckpsM0JjVHVHZQ.gif",
-            "https://api.suya.moe/cdn.gif/hug/Qms1aGFBb2NHdQ.gif",
-            "https://api.suya.moe/cdn.gif/hug/QjF3UmRfWFAtZQ.gif",
-            "https://api.suya.moe/cdn.gif/hug/cnlNcWRPWHZabg.gif",
-            "https://api.suya.moe/cdn.gif/hug/cmtZZXRPWHdXeg.gif",
-            "https://api.suya.moe/cdn.gif/hug/cnlDRy1PYXRNNg.gif",
-            "https://api.suya.moe/cdn.gif/hug/UzFnVXN1X1F3LXA.gif",
-            "https://api.suya.moe/cdn.gif/hug/U2steHhzM0MtOA.gif",
-            "https://api.suya.moe/cdn.gif/hug/QmtvdGRkWEQtag.gif",
-            "https://api.suya.moe/cdn.gif/hug/QkpDQ2RfN1BieA.gif",
-            "https://api.suya.moe/cdn.gif/hug/cjFSM19kN3YtdQ.gif",
-            "https://api.suya.moe/cdn.gif/hug/QmtIQV9PN3YtNg.gif",
-            "https://api.suya.moe/cdn.gif/hug/cjF2Ml91WFAteA.gif"
+            "https://i.imgur.com/qjTg0fr.gif",
+            "https://i.imgur.com/2b4rvXF.gif",
+            "https://i.imgur.com/vM3J81o.gif",
+            "https://i.imgur.com/gDVpCCu.gif",
+            "https://i.imgur.com/9qxRzZq.gif",
+            "https://i.imgur.com/HPrswRt.gif",
+            "https://i.imgur.com/GpYVnkl.gif",
+            "https://i.imgur.com/Fb1HSy7.gif",
+            "https://i.imgur.com/HqDqfp5.gif",
+            "https://i.imgur.com/E8GbgJc.gif",
+            "https://i.imgur.com/ZMnkgCk.gif",
+            "https://i.imgur.com/ld4ll8Z.gif",
+            "https://i.imgur.com/mkN1fUD.gif",
+            "https://i.imgur.com/cS4KVcw.gif",
+            "https://i.imgur.com/TwwzYbz.gif"
         ];
     },
 
     get_kill_gifs() {
         return [
-            "https://cdn.weeb.sh/images/r11as1tvZ.gif",
-            "https://cdn.weeb.sh/images/HyXTiyKw-.gif",
-            "https://cdn.weeb.sh/images/B1qosktwb.gif",
-            "https://cdn.weeb.sh/images/BJO2j1Fv-.gif"
+            "https://i.imgur.com/Ln8uBGd.gif",
+            "https://i.imgur.com/l4ghSPV.gif",
+            "https://i.imgur.com/wUCtWqP.gif",
+            "https://i.imgur.com/jcsUpO1.gif"
         ];
     },
 
     get_kiss_gifs() {
         return [
-            "https://api.suya.moe/cdn.gif/kiss/SEo1a2hUT1AtbQ.gif",
-            "https://api.suya.moe/cdn.gif/kiss/UzEtS1hzaDBibQ.gif",
-            "https://api.suya.moe/cdn.gif/kiss/cnlGZFFSdEYtMg.gif",
-            "https://api.suya.moe/cdn.gif/kiss/cjFINDJhZHZicg.gif",
-            "https://api.suya.moe/cdn.gif/kiss/SGtaeVhzM0EtMg.gif",
-            "https://api.suya.moe/cdn.gif/kiss/U2tzazRsNTF6Zg.gif",
-            "https://api.suya.moe/cdn.gif/kiss/UzFxWmtzU1hHMg.gif",
-            "https://api.suya.moe/cdn.gif/kiss/U2tRSW42T3ZiYg.gif",
-            "https://api.suya.moe/cdn.gif/kiss/cmtkZTJhT0Rieg.gif",
-            "https://api.suya.moe/cdn.gif/kiss/cmtNNG5UT1BiMQ.gif",
-            "https://api.suya.moe/cdn.gif/kiss/U0ozZFhDS3RXOQ.gif",
-            "https://api.suya.moe/cdn.gif/kiss/Qnl1cm5wT0RXZA.gif",
-            "https://api.suya.moe/cdn.gif/kiss/U2tLTDNhZFBiYQ.gif",
-            "https://api.suya.moe/cdn.gif/kiss/QmtVSk5lYzFNaA.gif",
-            "https://api.suya.moe/cdn.gif/kiss/U0pRUm9UZERaOA.gif",
-            "https://api.suya.moe/cdn.gif/kiss/U0o4STJUdXYtbg.gif",
-            "https://api.suya.moe/cdn.gif/kiss/ckpvTDJwZHZiZQ.gif",
-            "https://api.suya.moe/cdn.gif/kiss/SEo4ZFFSWUstaQ.gif"
+            "https://i.imgur.com/S1CfaqK.gif",
+            "https://i.imgur.com/vPXhMoQ.gif",
+            "https://i.imgur.com/ayci9tb.gif",
+            "https://i.imgur.com/oqlnRgn.gif",
+            "https://i.imgur.com/hVe30wE.gif",
+            "https://i.imgur.com/Ucgwgg5.gif",
+            "https://i.imgur.com/io8IEoZ.gif",
+            "https://i.imgur.com/wxqT93o.gif",
+            "https://i.imgur.com/34uoGOH.gif",
+            "https://i.imgur.com/oOdwxbi.gif",
+            "https://i.imgur.com/P9pxS3z.gif",
+            "https://i.imgur.com/256J9Nt.gif",
+            "https://i.imgur.com/iagndyp.gif",
+            "https://i.imgur.com/Nm95DOq.gif",
+            "https://i.imgur.com/ziYf2om.gif",
+            "https://i.imgur.com/nPnVx0h.gif",
+            "https://i.imgur.com/Oz0VioF.gif",
+            "https://i.imgur.com/lvgXFFU.gif"
         ];
     },
 
     get_lewd_gifs() {
         return [
-            "https://cdn.weeb.sh/images/ByDu6pOv-.gif",
-            "https://cdn.weeb.sh/images/Sk7XL6ECb.gif",
-            "https://cdn.weeb.sh/images/Sy5Q6a_w-.gif",
-            "https://cdn.weeb.sh/images/B1bUppuwW.gif",
-            "https://cdn.weeb.sh/images/HyiNaaOw-.gif",
-            "https://cdn.weeb.sh/images/r1X_ppOP-.gif",
-            "https://cdn.weeb.sh/images/B1n8TpuvW.gif",
-            "https://cdn.weeb.sh/images/r1IDTadwW.gif",
-            "https://cdn.weeb.sh/images/HJSmpauwW.gif",
-            "https://cdn.weeb.sh/images/B1VvT6uPb.gif",
-            "https://cdn.weeb.sh/images/rJxVpp_wb.gif",
-            "https://cdn.weeb.sh/images/HJxH66ODb.gif",
-            "https://cdn.weeb.sh/images/H1JrfnPLM.gif",
-            "https://cdn.weeb.sh/images/B1_I6pOD-.gif"
+            "https://i.imgur.com/sp39EQG.gif",
+            "https://i.imgur.com/h5TvR6W.gif",
+            "https://i.imgur.com/9Bp9Ey7.gif",
+            "https://i.imgur.com/urSavq4.gif",
+            "https://i.imgur.com/q1z1CMp.gif",
+            "https://i.imgur.com/Aivfzmv.gif",
+            "https://i.imgur.com/OWrnLsb.gif",
+            "https://i.imgur.com/Q2VH62P.gif",
+            "https://i.imgur.com/8sPpbA1.gif",
+            "https://i.imgur.com/OYEuMgp.gif",
+            "https://i.imgur.com/uWoLN3w.gif",
+            "https://i.imgur.com/z8QdApD.gif",
+            "https://i.imgur.com/70B6ZqI.gif",
+            "https://i.imgur.com/wZzy49c.gif"
         ];
     },
 
     get_lick_gifs() {
         return [
-            "https://api.suya.moe/cdn.gif/lick/UzFJbGwwX3ZXag.gif",
-            "https://api.suya.moe/cdn.gif/lick/cko2aHJRcjYtbA.gif",
-            "https://api.suya.moe/cdn.gif/lick/QmthZ2wwdXZiaA.gif",
-            "https://api.suya.moe/cdn.gif/lick/cmtCYkJRUzZXMg.gif",
-            "https://api.suya.moe/cdn.gif/lick/cmt0eWdDT0Qteg.gif",
-            "https://api.suya.moe/cdn.gif/lick/U2sxNWlWbE9mZg.gif",
-            "https://api.suya.moe/cdn.gif/lick/SGtFcWlFeGRmbA.gif",
-            "https://api.suya.moe/cdn.gif/lick/SEpSUnlBdVAtaA.gif",
-            "https://api.suya.moe/cdn.gif/lick/cnlHcEdzbkFaMg.gif",
-            "https://api.suya.moe/cdn.gif/lick/Qmt2VEJRSGFaZQ.gif",
-            "https://api.suya.moe/cdn.gif/lick/Qmt4Z2UwdVBXdw.gif"
+            "https://i.imgur.com/KSSYrUS.gif",
+            "https://i.imgur.com/vvUW0Io.gif",
+            "https://i.imgur.com/YtnjxPM.gif",
+            "https://i.imgur.com/XDDz6Cr.gif",
+            "https://i.imgur.com/wZ8g4h0.gif",
+            "https://i.imgur.com/VSdqFJv.gif",
+            "https://i.imgur.com/s9KweAi.gif",
+            "https://i.imgur.com/hmxYQJW.gif",
+            "https://i.imgur.com/cOlhigJ.gif",
+            "https://i.imgur.com/zw8a0tU.gif",
+            "https://i.imgur.com/N7MibL0.gif"
         ];
     },
 
     get_nom_gifs() {
         return [
-            "https://cdn.weeb.sh/images/H1hige7sZ.gif",
-            "https://cdn.weeb.sh/images/rJAlbgXsb.gif",
-            "https://cdn.weeb.sh/images/rkNgZlXi-.gif",
-            "https://cdn.weeb.sh/images/S1FOllQj-.gif",
-            "https://cdn.weeb.sh/images/rkakblmiZ.gif",
-            "https://media.tenor.com/images/15f3beb2b31a9cba0b15f35e3c3eb5b8/tenor.gif"
+            "https://i.imgur.com/LyDB1JX.gif",
+            "https://i.imgur.com/iIVYgGn.gif",
+            "https://i.imgur.com/gCTrFZa.gif",
+            "https://i.imgur.com/gpxUcs9.gif",
+            "https://i.imgur.com/zgHo7X2.gif",
+            "https://i.imgur.com/dr3Lln0.gif"
         ];
     },
 
     get_pat_gifs() {
         return [
-            "https://api.suya.moe/cdn.gif/pat/cmtiYmxrWXZicg.gif",
-            "https://api.suya.moe/cdn.gif/pat/QnlkM2trdHctdA.gif",
-            "https://api.suya.moe/cdn.gif/pat/QjFGcWtKS1BXZg.gif",
-            "https://api.suya.moe/cdn.gif/pat/U0p2YTFrRnYtaw.gif",
-            "https://api.suya.moe/cdn.gif/pat/U2trc2dzbkNXMg.gif",
-            "https://api.suya.moe/cdn.gif/pat/cnliczF5RkRicQ.gif",
-            "https://api.suya.moe/cdn.gif/pat/cnlMS3FUVkNXdg.gif",
-            "https://api.suya.moe/cdn.gif/pat/U3lGa2VrWXdXMw.gif",
-            "https://api.suya.moe/cdn.gif/pat/cmtaYkpBWUtXcA.gif",
-            "https://api.suya.moe/cdn.gif/pat/QjFEOUoxdHZaYw.gif",
-            "https://api.suya.moe/cdn.gif/pat/QnlPYzFrdHYtcw.gif",
-            "https://api.suya.moe/cdn.gif/pat/SGtjY3FwNEEtMA.gif",
-            "https://api.suya.moe/cdn.gif/pat/U2txYkowS1laag.gif",
-            "https://api.suya.moe/cdn.gif/pat/cnloNngwNFJicg.gif",
-            "https://api.suya.moe/cdn.gif/pat/UzFqYTExS0QtZA.gif",
-            "https://api.suya.moe/cdn.gif/pat/cjFCbGVrdHdXMQ.gif",
-            "https://api.suya.moe/cdn.gif/pat/cmtUQzg5Nl9mdA.gif",
-            "https://api.suya.moe/cdn.gif/pat/SEpSSWxpaENaNw.gif",
-            "https://api.suya.moe/cdn.gif/pat/cmtBRGgwc3FNaw.gif",
-            "https://api.suya.moe/cdn.gif/pat/cmtsMXhKWURaZA.gif",
-            "https://api.suya.moe/cdn.gif/pat/U3lGa2VrWXdXNA.gif",
-            "https://api.suya.moe/cdn.gif/pat/U3k2R2VrdHctMQ.gif",
-            "https://api.suya.moe/cdn.gif/pat/U2tWTlhhYy1HOA.gif"
+            "https://i.imgur.com/J5WhZb7.gif",
+            "https://i.imgur.com/Avh1WVR.gif",
+            "https://i.imgur.com/uljHTR0.gif",
+            "https://i.imgur.com/Z9Vqivt.gif",
+            "https://i.imgur.com/GLWoiCx.gif",
+            "https://i.imgur.com/BnOgqQC.gif",
+            "https://i.imgur.com/vxLRi25.gif",
+            "https://i.imgur.com/fRvhzwf.gif",
+            "https://i.imgur.com/LMA7NKb.gif",
+            "https://i.imgur.com/vajWoK0.gif",
+            "https://i.imgur.com/Z4aTh1v.gif",
+            "https://i.imgur.com/qWTbefD.gif",
+            "https://i.imgur.com/ZbYvc4I.gif",
+            "https://i.imgur.com/NiyXAMn.gif",
+            "https://i.imgur.com/cNNjYhL.gif",
+            "https://i.imgur.com/nrBrSDg.gif",
+            "https://i.imgur.com/EzkG5xg.gif",
+            "https://i.imgur.com/EGIGytI.gif",
+            "https://i.imgur.com/JONnIw1.gif",
+            "https://i.imgur.com/T1vupxt.gif",
+            "https://i.imgur.com/JDC5xSq.gif",
+            "https://i.imgur.com/UaKSw9Y.gif"
         ];
     },
 
     get_poke_gifs() {
         return [
-            "https://api.suya.moe/cdn.gif/poke/ckowaGxzblItdA.gif",
-            "https://api.suya.moe/cdn.gif/poke/U3lRelJhRkZibg.gif",
-            "https://api.suya.moe/cdn.gif/poke/cjF2NnhvaDBaNg.gif",
-            "https://api.suya.moe/cdn.gif/poke/SGtqakxiMHJNOA.gif",
-            "https://api.suya.moe/cdn.gif/poke/cmt0U2xrS3Zieg.gif",
-            "https://api.suya.moe/cdn.gif/poke/ckp6VWUxRndaag.gif",
-            "https://api.suya.moe/cdn.gif/poke/cjFBTHhKS3dXMg.gif",
-            "https://api.suya.moe/cdn.gif/poke/cmtlYVVlSktELXk.gif",
-            "https://api.suya.moe/cdn.gif/poke/QjE0U0psVFFHYg.gif",
-            "https://api.suya.moe/cdn.gif/poke/QmtjU2VrS3diYg.gif",
-            "https://api.suya.moe/cdn.gif/poke/QjFvU2d5dHdXdA.gif",
+            "https://i.imgur.com/zdGdpBt.gif",
+            "https://i.imgur.com/dpWKqpz.gif",
+            "https://i.imgur.com/QVmagT5.gif",
+            "https://i.imgur.com/Y0JygFl.gif",
+            "https://i.imgur.com/maWWyft.gif",
+            "https://i.imgur.com/QhJW0Sq.gif",
+            "https://i.imgur.com/Kz6kpuX.gif",
+            "https://i.imgur.com/vAA5ehy.gif",
+            "https://i.imgur.com/ZsNCtY1.gif",
+            "https://i.imgur.com/DMGwIW6.gif",
+            "https://i.imgur.com/F3TS1il.gif"
           ];
     },
 
     get_pout_gifs() {
         return [
-            "https://cdn.weeb.sh/images/BJphgJYvW.gif",
-            "https://cdn.weeb.sh/images/SJrolJYv-.gif",
-            "https://cdn.weeb.sh/images/SJmcekKvW.gif",
-            "https://cdn.weeb.sh/images/B1k9ekYDb.gif",
-            "https://cdn.weeb.sh/images/ByEXqvOUM.gif",
-            "https://cdn.weeb.sh/images/Sk7CeJtwZ.gif",
-            "https://cdn.weeb.sh/images/B1iWcv_LG.gif",
-            "https://cdn.weeb.sh/images/BkYieJYD-.gif",
-            "https://cdn.weeb.sh/images/SylseyKvZ.gif",
-            "https://cdn.weeb.sh/images/BJphgJYvW.gif",
-            "https://cdn.weeb.sh/images/B10og1FPb.gif",
-            "https://cdn.weeb.sh/images/H1H3eJKvZ.gif"
+            "https://i.imgur.com/upWvtSK.gif",
+            "https://i.imgur.com/t5QrtaQ.gif",
+            "https://i.imgur.com/6ReI2dd.gif",
+            "https://i.imgur.com/zbNmjOt.gif",
+            "https://i.imgur.com/EI1flOg.gif",
+            "https://i.imgur.com/okpWqAZ.gif",
+            "https://i.imgur.com/qncZEGm.gif",
+            "https://i.imgur.com/MnTffj8.gif",
+            "https://i.imgur.com/sGXJZEz.gif",
+            "https://i.imgur.com/dqyuyvh.gif",
+            "https://i.imgur.com/j3CJUnr.gif"
         ];
     },
 
     get_shrug_gifs() {
         return [
-            "https://cdn.weeb.sh/images/HkpQ7JYDW.gif",
-            "https://cdn.weeb.sh/images/HyHk2WSrz.gif",
-            "https://cdn.weeb.sh/images/B1hai-HBG.gif",
-            "https://cdn.weeb.sh/images/r1g4mkKvW.gif",
-            "https://thumbs.gfycat.com/MedicalDazzlingAzurewingedmagpie-small.gif",
-            "https://thumbs.gfycat.com/DarkSkinnyIndianpalmsquirrel-size_restricted.gif"
+            "https://i.imgur.com/az36ZoI.gif",
+            "https://i.imgur.com/P8DowRQ.gif",
+            "https://i.imgur.com/AGA5A0v.gif",
+            "https://i.imgur.com/9VKlRNh.gif",
+            "https://i.imgur.com/L3mqxwD.gif",
+            "https://i.imgur.com/NZcl6TE.gif"
         ];
     },
 
     get_slap_gifs() {
         return [
-            "https://api.suya.moe/cdn.gif/slap/cmtwQVhhNWJHZg.gif",
-            "https://api.suya.moe/cdn.gif/slap/U0pMM1ExRnZidg.gif",
-            "https://api.suya.moe/cdn.gif/slap/U2swUm15WXZiNg.gif",
-            "https://api.suya.moe/cdn.gif/slap/cnl2M215RkRacA.gif",
-            "https://api.suya.moe/cdn.gif/slap/QnkyaVh5RnctNg.gif",
-            "https://api.suya.moe/cdn.gif/slap/U0pkWG9WZ3VmeA.gif",
-            "https://api.suya.moe/cdn.gif/slap/QjFmblF5S0RXbg.gif",
-            "https://api.suya.moe/cdn.gif/slap/QjEtblF5RkRiNQ.gif",
-            "https://api.suya.moe/cdn.gif/slap/SGtIQ20xdHdaaA.gif",
-            "https://api.suya.moe/cdn.gif/slap/U2taVFFrS1BaZQ.gif",
-            "https://api.suya.moe/cdn.gif/slap/ckpyblhKWVBiNQ.gif",
-            "https://api.suya.moe/cdn.gif/slap/cjFseE9fUUlmdw.gif",
-            "https://api.suya.moe/cdn.gif/slap/U2t4R2NtSktQYmU.gif",
-            "https://api.suya.moe/cdn.gif/slap/cjFQWHpSWXRaMQ.gif",
-            "https://api.suya.moe/cdn.gif/slap/U0p6VDdKS1AtMw.gif"
+            "https://i.imgur.com/PiB2eZQ.gif",
+            "https://i.imgur.com/E8siRIC.gif",
+            "https://i.imgur.com/WFS7viK.gif",
+            "https://i.imgur.com/yORkfD7.gif",
+            "https://i.imgur.com/WjixYgX.gif",
+            "https://i.imgur.com/aU88XL5.gif",
+            "https://i.imgur.com/MvwUHBw.gif",
+            "https://i.imgur.com/DIoz2TT.gif",
+            "https://i.imgur.com/rGIXUdi.gif",
+            "https://i.imgur.com/2V7CD4U.gif",
+            "https://i.imgur.com/o2hhRn8.gif",
+            "https://i.imgur.com/xP6LNdp.gif",
+            "https://i.imgur.com/CGsPAUT.gif",
+            "https://i.imgur.com/JMYtV3p.gif",
+            "https://i.imgur.com/NXOo7Yz.gif"
         ];
     },
 
     get_sleepy_gifs() {
         return [
-            "https://cdn.weeb.sh/images/rk3-NkKDb.gif",
-            "https://cdn.weeb.sh/images/rJ7ZNyKDW.gif",
-            "https://cdn.weeb.sh/images/HJAx4ktD-.gif",
-            "https://cdn.weeb.sh/images/SJlMNkFPb.gif",
-            "https://cdn.weeb.sh/images/HkGZVkKDW.gif",
-            "https://media1.tenor.com/images/6b1d8cf7b9880bcfea290eea918b16fc/tenor.gif",
-            "https://i.pinimg.com/originals/71/0f/aa/710faac62e146f9974c78f1ccc94918e.gif",
-            "https://media2.giphy.com/media/138XNW8ciGZvFu/source.gif",
-            "https://media1.giphy.com/media/TJNYHjqrgTGPm/giphy.gif",
-            "https://gifimage.net/wp-content/uploads/2017/09/anime-sleepy-gif-2.gif",
-            "https://image.myanimelist.net/ui/_3fYL8i6Q-n-155t3dn_4oa8joxN4d65hmFMp22bNTIUW3ufQExKZv-GKL4AdqgU",
-            "https://gifimage.net/wp-content/uploads/2017/09/anime-sleepy-gif-7.gif",
-            "https://media1.tenor.com/images/09404ce907d19d5ba90d80af3e3369b6/tenor.gif",
-            "https://media0.giphy.com/media/QcT4JVFDn4WEU/giphy.gif"
+            "https://i.imgur.com/Bd00gm0.gif",
+            "https://i.imgur.com/eq97h3b.gif",
+            "https://i.imgur.com/iyfxlda.gif",
+            "https://i.imgur.com/Rg5xQyE.gif",
+            "https://i.imgur.com/T318QbO.gif",
+            "https://i.imgur.com/lZn4mR7.gif",
+            "https://i.imgur.com/qJf9Z6Y.gif",
+            "https://i.imgur.com/32bXHzq.gif",
+            "https://i.imgur.com/9ASSlKB.gif",
+            "https://i.imgur.com/R9TEgrb.gif",
+            "https://i.imgur.com/1uC3C6w.gif",
+            "https://i.imgur.com/Nui6iCP.gif",
+            "https://i.imgur.com/SVeev3V.gif"
         ];
     },
 
     get_smile_gifs() {
         return [
-            "https://cdn.weeb.sh/images/SkR3TJFNM.gif",
-            "https://cdn.weeb.sh/images/rJZYEytPb.gif",
-            "https://cdn.weeb.sh/images/HypVV1Kwb.gif",
-            "https://cdn.weeb.sh/images/rkTdVJFw-.gif",
-            "https://cdn.weeb.sh/images/rkB4NJtD-.gif",
-            "https://cdn.weeb.sh/images/SJq9EJKwZ.gif",
-            "https://cdn.weeb.sh/images/ByPqNkYwb.gif",
-            "https://cdn.weeb.sh/images/Hy9dVkFDW.gif",
-            "https://cdn.weeb.sh/images/BkVH4kKPb.gif",
-            "https://cdn.weeb.sh/images/Hk6cNJKPb.gif",
-            "https://cdn.weeb.sh/images/HyC_4ytD-.gif",
-            "https://cdn.weeb.sh/images/SywN41KvW.gif",
-            "https://cdn.weeb.sh/images/rkTDVJYwW.gif"
+            "https://i.imgur.com/DHvgRdB.gif",
+            "https://i.imgur.com/pBxsOA4.gif",
+            "https://i.imgur.com/poc4LzN.gif",
+            "https://i.imgur.com/i9goxrh.gif",
+            "https://i.imgur.com/nXooOSa.gif",
+            "https://i.imgur.com/dgtwM7o.gif",
+            "https://i.imgur.com/KLHyCE4.gif",
+            "https://i.imgur.com/DOS4h8Y.gif",
+            "https://i.imgur.com/ep6D4uP.gif",
+            "https://i.imgur.com/qnstrl0.gif",
+            "https://i.imgur.com/OBH9J3v.gif",
+            "https://i.imgur.com/eOwq3IK.gif",
+            "https://i.imgur.com/5wKf2zl.gif"
         ];
     },
 
     get_smug_gifs() {
         return [
-            "https://cdn.weeb.sh/images/r1HveSEtz.gif",
-            "https://cdn.weeb.sh/images/S1slUkFvZ.gif",
-            "https://cdn.weeb.sh/images/Hk0b8JFPZ.gif",
-            "https://cdn.weeb.sh/images/HkaQI1YvZ.gif",
-            "https://cdn.weeb.sh/images/HyeIU1YPb.gif",
-            "https://cdn.weeb.sh/images/ByB-UytPW.gif",
-            "https://cdn.weeb.sh/images/BkpeUJYw-.gif",
-            "https://cdn.weeb.sh/images/H1xgWUktPW.gif",
-            "https://cdn.weeb.sh/images/HJD-IJtw-.gif",
-            "https://cdn.weeb.sh/images/B1kXI1KvZ.gif",
-            "https://cdn.weeb.sh/images/BkSVLyKwb.gif",
-            "https://cdn.weeb.sh/images/SkV88yKvZ.gif",
-            "https://cdn.weeb.sh/images/S16z8kFv-.gif"
+            "https://i.imgur.com/LlVW9qF.gif",
+            "https://i.imgur.com/UrULhAk.gif",
+            "https://i.imgur.com/K8qZwrk.gif",
+            "https://i.imgur.com/drbVS0d.gif",
+            "https://i.imgur.com/k8Nkftn.gif",
+            "https://i.imgur.com/ysJSIRx.gif",
+            "https://i.imgur.com/lwM3sBJ.gif",
+            "https://i.imgur.com/UMUjlGU.gif",
+            "https://i.imgur.com/cEFp0fU.gif",
+            "https://i.imgur.com/HAx6ntE.gif",
+            "https://i.imgur.com/WUpOS7w.gif",
+            "https://i.imgur.com/49w3zKB.gif",
+            "https://i.imgur.com/XlsPTtW.gif"
         ];
     },
 
     get_think_gifs() {
         return [
-            "https://media.giphy.com/media/13Z5kstwARnPna/giphy.gif",
-            "https://gifimage.net/wp-content/uploads/2017/09/anime-thinking-gif-8.gif",
-            "https://i.gifer.com/HZLG.gif",
-            "https://memestatic.fjcdn.com/gifs/Reaction_625955_6556863.gif",
-            "https://i.imgur.com/plnAKgy.gif",
-            "https://media1.tenor.com/images/c86474bac2991a3e8029787955cced23/tenor.gif?itemid=6013432",
-            "https://i.gifer.com/SqCi.gif"
+            "https://i.imgur.com/6FGx1NM.gif",
+            "https://i.imgur.com/JoByx01.gif",
+            "https://i.imgur.com/BKh3Xry.gif",
+            "https://i.imgur.com/vM6sH8D.gif",
+            "https://i.imgur.com/MD9pT3Y.gif",
+            "https://i.imgur.com/iLd8uVA.gif"
         ];
     },
 
     get_tickle_gifs() {
         return [
-            "https://cdn.weeb.sh/images/Byj7LJmiW.gif",
-            "https://cdn.weeb.sh/images/HyjNLkXiZ.gif",
-            "https://cdn.weeb.sh/images/rkPzIyQi-.gif",
-            "https://cdn.weeb.sh/images/H1p0ByQo-.gif",
-            "https://cdn.weeb.sh/images/SkmEI1mjb.gif",
-            "https://cdn.weeb.sh/images/SyGQIk7i-.gif",
-            "https://i.pinimg.com/originals/fe/a7/9f/fea79fed0168efcaf1ddfb14d8af1a6d.gif",
-            "https://funnyanimepics.files.wordpress.com/2017/01/urara-ep2-tickling.gif",
-            "https://66.media.tumblr.com/8004fcccbbc6a2b39377cbac2936b57d/tumblr_inline_ow4u7p8rmq1u544cj_540.gif"
+            "https://i.imgur.com/eXbI4Ac.gif",
+            "https://i.imgur.com/jee3bsx.gif",
+            "https://i.imgur.com/i4gj4Iv.gif",
+            "https://i.imgur.com/2FVzQ9D.gif",
+            "https://i.imgur.com/Yx8wTvM.gif",
+            "https://i.imgur.com/qoCSS2a.gif",
+            "https://i.imgur.com/T9fbzG1.gif",
+            "https://i.imgur.com/vfl0cvX.gif",
+            "https://i.imgur.com/HGoPzsq.gif"
         ];
     },
 
     get_tieup_gifs() {
         return [
-            "https://media.discordapp.net/attachments/670328197677711372/690709486641610752/tenor.gif",
-            "https://media.discordapp.net/attachments/670322638274560010/690911266591735859/source.gif",
-            "https://i.kym-cdn.com/photos/images/newsfeed/001/072/307/f42.gif",
-            "https://safebooru.org//images/1897/773e6d1081e4bc2ab30aa097bcfde7e746735b40.gif"
+            "https://i.imgur.com/QaIfZSl.gif",
+            "https://i.imgur.com/PdlUOqE.gif",
+            "https://i.imgur.com/x0SnvSZ.gif",
+            "https://i.imgur.com/zs5FliT.gif"
         ];
     },
 
