@@ -180,7 +180,7 @@ setInterval(() => {
     }
 }, 60000);
 setInterval(async() => {
-    if(global_context.neko_modules_clients.sb !== undefined) {
+    if(global_context.neko_modules_clients.sb !== undefined && bot.shard.ids[0] === 0) {
         let top_items = await global_context.neko_modules_clients.sb.get_top(global_context, ["credits", "bank"]);
         let economy_list = [];
         for(let i = 0; i < 10; i++) {
@@ -188,7 +188,7 @@ setInterval(async() => {
             let user = await global_context.bot.users.fetch(neko_user.user_ID);
             economy_list.push({
                 id: user.id,
-                user: { id: user.id, avatar: user.avatarURL({ format: "png", dynamic: true, size: 1024 }) },
+                user: { id: user.id, username: user.username, avatar: user.avatarURL({ format: "png", dynamic: true, size: 1024 }) },
                 neko_user: {
                     credits: neko_user.credits + neko_user.bank,
                     level: neko_user.level,
