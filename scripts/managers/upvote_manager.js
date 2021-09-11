@@ -77,7 +77,7 @@ class UpvoteManager {
                 break;
         }
 
-        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: user.id, user: user_config });
+        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: user_config });
     }
 }
 

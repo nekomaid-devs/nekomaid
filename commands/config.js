@@ -184,8 +184,9 @@ module.exports = {
                             }
                         }
 
-                        setTimeout(() => { command_data.global_context.neko_modules_clients.cm.update_counters(command_data.global_context, command_data.msg.guild, true); }, 5000);
-                        command_data.server_config.counters.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), type: counter_type, server_ID: command_data.msg.guild.id, channel_ID: channel.id, last_update: new Date().getTime() });
+                        let counter = { id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), type: counter_type, server_ID: command_data.msg.guild.id, channel_ID: channel.id, last_update: new Date().getTime() };
+                        command_data.server_config.counters.push(counter);
+                        setTimeout(() => { command_data.global_context.neko_modules_clients.cm.update_counter(command_data.global_context, command_data.msg.guild, counter, true); }, 5000);
                         command_data.msg.channel.send(`Added new counter, wait for it to load.`).catch(e => { command_data.global_context.logger.api_error(e); });
                         break;
                     }
@@ -196,7 +197,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", server: command_data.server_config });
                 break;
             }
 
@@ -251,7 +252,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", server: command_data.server_config });
                 break;
             }
 
@@ -384,7 +385,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", server: command_data.server_config });
                 break;
             }
 

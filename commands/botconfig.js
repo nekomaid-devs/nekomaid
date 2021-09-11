@@ -161,7 +161,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", id: "default_config", config: command_data.global_context.bot_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", config: command_data.global_context.bot_config });
                 break;
             }
 
@@ -204,7 +204,7 @@ module.exports = {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", id: "default_config", config: command_data.global_context.bot_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", config: command_data.global_context.bot_config });
                 break;
             }
 

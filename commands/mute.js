@@ -109,7 +109,7 @@ module.exports = {
             command_data.tagged_member.roles.add(mute_role)
             .then(() => {
                 command_data.server_config.mute_role_ID = mute_role.id;
-                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server_mute", id: command_data.msg.guild.id, server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server_mute", server: command_data.server_config });
             })
             .catch(err => {
                 command_data.global_context.logger.error(err);
