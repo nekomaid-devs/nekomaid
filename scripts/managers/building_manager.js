@@ -1,6 +1,6 @@
 class BuildingManager {
     async update_all_buildings(global_context) {
-        let all_users = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
+        let all_users = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "buildings_global_users" });
         all_users.forEach(user => {
             global_context.neko_modules_clients.bm.update_buildings(global_context, user);
         })

@@ -21,7 +21,7 @@ module.exports = {
             return;
         }
 
-        let server_user_configs = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "server_users", id: command_data.msg.guild.id })
+        let server_user_configs = await command_data.global_context.neko_modules_clients.ssm.server_fetch.fetch(command_data.global_context, { type: "all_server_users", id: command_data.msg.guild.id })
         server_user_configs.forEach(async(server_user_config) => {
             server_user_config.level = 1;
             server_user_config.xp = 0;

@@ -47,7 +47,7 @@ module.exports = {
                 let fast_find_ID = data.server_ID + "-" + data.user_ID;
                 return await this.fetch_data(global_context, "SELECT * FROM server_users WHERE fast_find_ID='" + fast_find_ID + "'", defaultFormat, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server_user(global_context, { id: data.server_ID }, { id: data.user_ID }); });
 
-            case "server_users":
+            case "all_server_users":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_users WHERE server_ID='" + data.id + "'", defaultFormat);
 
             case "counters":
@@ -60,10 +60,13 @@ module.exports = {
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_reaction_roles WHERE server_ID='" + data.id + "'", this.format_reaction_role);
 
             case "global_user":
-                return await this.fetch_data(global_context, "SELECT * FROM global_users WHERE user_ID='" + data.id + "'", async(e) => { return await this.format_global_user(global_context, e); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_global_user(global_context, { id: data.id }); });
+                return await this.fetch_data(global_context, "SELECT * FROM global_users WHERE user_ID='" + data.id + "'", async(e) => { return await this.format_global_user(global_context, e, true, true); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_global_user(global_context, { id: data.id }); });
 
-            case "global_users":
+            case "all_global_users":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM global_users", async(e) => { return await this.format_global_user(global_context, e); });
+
+            case "buildings_global_users":
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM global_users WHERE b_lewd_services > 0 AND b_casino > 0 AND b_scrapyard > 0 AND b_pawn_shop > 0", async(e) => { return await this.format_global_user(global_context, e, true, true); });
 
             case "server_bans":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_bans WHERE server_ID='" + data.id + "'", defaultFormat);
@@ -74,8 +77,14 @@ module.exports = {
             case "all_server_bans":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_bans", defaultFormat);
 
+            case "expired_server_bans":
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_bans WHERE end <> -1 AND end < " + data.time, defaultFormat);
+
             case "all_server_mutes":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_mutes", defaultFormat);
+
+            case "expired_server_mutes":
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_mutes WHERE end <> -1 AND end < " + data.time, defaultFormat);
 
             case "server_warnings":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_warnings WHERE server_ID='" + data.id + "'", defaultFormat);
@@ -196,9 +205,13 @@ module.exports = {
         return server;
     },
 
-    async format_global_user(global_context, user) {
-        user.inventory = await this.fetch(global_context, { type: "inventory_items", id: user.user_ID });
-        user.notifications = await this.fetch(global_context, { type: "user_notifications", id: user.user_ID });
+    async format_global_user(global_context, user, containInventory = false, containNotifications = false) {
+        if(containInventory === true) {
+            user.inventory = await this.fetch(global_context, { type: "inventory_items", id: user.user_ID });
+        }
+        if(containNotifications === true) {
+            user.notifications = await this.fetch(global_context, { type: "user_notifications", id: user.user_ID });
+        }
         user.bank_limit = [0, 10000, 15000, 20000, 30000, 45000, 60000, 75000, 10000, 200000, 350000][user.b_bank];
 
         return user;
