@@ -50,7 +50,7 @@ module.exports = {
                 }
 
                 server_config.case_ID += 1;
-                global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", id: event.member.guild.id, server: server_config });
+                global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", server: server_config });
 
                 channel.send("", { embed: embedWarn }).catch(e => { global_context.logger.api_error(e); });
             }

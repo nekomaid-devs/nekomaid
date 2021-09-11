@@ -1,7 +1,6 @@
 module.exports = {
     async fetch(global_context, data) {
         const defaultFormat = (e) => { return e; }
-        //console.log("SQL - Fetching data of type " + data.type + "..."); 
 
         switch(data.type) {
             case "config":
@@ -43,6 +42,9 @@ module.exports = {
             case "server":
                 return await this.fetch_data(global_context, "SELECT * FROM servers WHERE server_ID='" + data.id + "'", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
 
+            case "all_servers":
+                return await this.fetch_data(global_context, "SELECT * FROM servers", async(e) => { return await this.format_server(global_context, e, data.containExtra, data.containRanks); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server(global_context, { id: data.id }); });
+
             case "server_user":
                 let fast_find_ID = data.server_ID + "-" + data.user_ID;
                 return await this.fetch_data(global_context, "SELECT * FROM server_users WHERE fast_find_ID='" + fast_find_ID + "'", defaultFormat, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_server_user(global_context, { id: data.server_ID }, { id: data.user_ID }); });
@@ -53,11 +55,17 @@ module.exports = {
             case "counters":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_counters WHERE server_ID='" + data.id + "'", defaultFormat);
 
+            case "all_counters":
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_counters", defaultFormat);
+
             case "ranks":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_ranks WHERE server_ID='" + data.id + "'", defaultFormat);
 
             case "reaction_roles":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_reaction_roles WHERE server_ID='" + data.id + "'", this.format_reaction_role);
+
+            case "all_reaction_roles":
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_reaction_roles", this.format_reaction_role);
 
             case "global_user":
                 return await this.fetch_data(global_context, "SELECT * FROM global_users WHERE user_ID='" + data.id + "'", async(e) => { return await this.format_global_user(global_context, e, true, true); }, async() => { return await global_context.neko_modules_clients.ssm.server_add.add_global_user(global_context, { id: data.id }); });
@@ -71,14 +79,14 @@ module.exports = {
             case "server_bans":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_bans WHERE server_ID='" + data.id + "'", defaultFormat);
 
-            case "server_mutes":
-                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_mutes WHERE server_ID='" + data.id + "'", defaultFormat);
-
             case "all_server_bans":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_bans", defaultFormat);
 
             case "expired_server_bans":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_bans WHERE end <> -1 AND end < " + data.time, defaultFormat);
+
+            case "server_mutes":
+                return await this.fetch_multiple_data(global_context, "SELECT * FROM server_mutes WHERE server_ID='" + data.id + "'", defaultFormat);
 
             case "all_server_mutes":
                 return await this.fetch_multiple_data(global_context, "SELECT * FROM server_mutes", defaultFormat);
@@ -104,7 +112,7 @@ module.exports = {
     },
 
     async fetch_data(global_context, query, formattingFunc, creatingFunc) {
-        var result = await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
+        let result = await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
         if(result.length < 1 || result[0].length < 1) {
             await creatingFunc();
             result = await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
@@ -119,7 +127,7 @@ module.exports = {
     },
 
     async fetch_multiple_data(global_context, query, formattingFunc) {
-        var result = await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
+        let result = await global_context.neko_modules_clients.ssm.sql_connection.promise().query(query);
         if(result.length < 1 || result[0].length < 1) {
             return [];
         }

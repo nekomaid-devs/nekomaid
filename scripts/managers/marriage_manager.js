@@ -24,14 +24,14 @@ class MarriageManager {
     async accept_marriage_proposal(global_context, channel, marriage_proposal, log = 1) {
         let source_user_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: marriage_proposal.source_ID });  
         source_user_config.married_ID = marriage_proposal.target_ID;
-        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: marriage_proposal.source_ID, user: source_user_config });
+        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: source_user_config });
       
         let target_user_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: marriage_proposal.target_ID });  
         if(log === 2) {
             target_user_config.can_divorce = false;
         }
         target_user_config.married_ID = marriage_proposal.source_ID;
-        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: marriage_proposal.target_ID, user: target_user_config });
+        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: target_user_config });
 
         switch(log) {
             case 1:
