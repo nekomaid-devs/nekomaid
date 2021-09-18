@@ -40,7 +40,7 @@ module.exports = {
             }
 
             command_data.server_config.prefix = command_data.total_argument;
-            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", id: command_data.msg.guild.id, server: command_data.server_config });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server", server: command_data.server_config });
 
             let embedPrefix = {
                 title: "",

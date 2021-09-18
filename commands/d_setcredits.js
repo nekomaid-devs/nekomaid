@@ -28,7 +28,7 @@ module.exports = {
 
         let credits_ammount = parseInt(command_data.args[1]);
         command_data.tagged_user_config.credits = credits_ammount;
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id, user: command_data.tagged_user_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", user: command_data.tagged_user_config });
     
         command_data.msg.channel.send(`Set credits to \`${command_data.global_context.utils.format_number(credits_ammount)}\` for \`${command_data.tagged_user.tag}\`!`).catch(e => { command_data.global_context.logger.api_error(e); });
     },

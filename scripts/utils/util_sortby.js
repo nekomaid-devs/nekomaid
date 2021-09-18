@@ -25,7 +25,7 @@ class SortBy {
     }
 
     async get_top(global_context, props) {
-        let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
+        let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "all_global_users" });
         items.sort(this.create_comparator(props));
 
         return items;
@@ -33,7 +33,7 @@ class SortBy {
 
     async get_top_server(global_context, server, props) {
         await global_context.utils.verify_guild_members(server);
-        let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_users" });
+        let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "all_global_users" });
         items = items.filter(val => { return server.members.cache.has(val.user_ID); });
         items.sort(this.create_comparator(props));
 
@@ -41,7 +41,7 @@ class SortBy {
     }
 
     async get_top_server_level(global_context, server_config, server) {
-        let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server_users", id: server.id });
+        let items = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "all_server_users", id: server.id });
         items.sort(this.create_comparator_server_level(global_context, server_config));
 
         return items;

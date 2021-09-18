@@ -46,7 +46,7 @@ module.exports = {
             command_data.author_config[building_field] += 1;
             command_data.author_config[building_field + "_credits"] -= next_building_cost;
 
-            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", user: command_data.author_config });
             
             let url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
             embedUpgrade.author.icon_url = url;
@@ -71,7 +71,7 @@ module.exports = {
             command_data.global_context.bot_config[global_building_field] += 1;
             command_data.global_context.bot_config[global_building_field + "_credits"] -= next_building_cost;
 
-            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", id: "default_config", config: command_data.global_context.bot_config });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "config", config: command_data.global_context.bot_config });
         
             let url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
             embedUpgrade.author.icon_url = url;

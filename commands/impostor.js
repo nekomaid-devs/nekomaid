@@ -7,7 +7,7 @@ module.exports = {
     helpUsage: "[mention?]`",
     exampleUsage: "/user_tag/",
     hidden: false,
-    aliases: [],
+    aliases: ['imposter'],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [

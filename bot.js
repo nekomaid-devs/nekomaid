@@ -159,7 +159,7 @@ setInterval(async() => {
     if(global_context.neko_modules_clients.ssm !== undefined) {
         global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "default_config" });
     }
-}, 5000);
+}, 10000);
 setInterval(() => {
     if(global_context.neko_modules_clients.moderator !== undefined) {
         global_context.neko_modules_clients.moderator.timeout_all_bans(global_context);

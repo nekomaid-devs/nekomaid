@@ -79,7 +79,7 @@ module.exports = {
                     reactionRoleEmbed.setDescription(menu_description);
                     msg.edit("", reactionRoleEmbed).catch(e => { command_data.global_context.logger.api_error(e); });
 
-                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", id: msg.guild.id, server: server_config });
+                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "server", server: server_config });
                     global_context.neko_modules_clients.rrm.create_collector(global_context, msg.guild, reactionRoleMenuInfo);
                     break;
                 

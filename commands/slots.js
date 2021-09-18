@@ -111,12 +111,12 @@ module.exports = {
                         }[res_0];
                         
                         command_data.author_config.credits += won_ammount;
-                        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
+                        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", user: command_data.author_config });
 
                         embedSlots.footer.text = `Won ${command_data.global_context.utils.format_number(won_ammount)}$!`;
                     } else {
                         command_data.author_config.credits -= credits_ammount;
-                        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
+                        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", user: command_data.author_config });
 
                         embedSlots.footer.text = `Lost ${command_data.global_context.utils.format_number(credits_ammount)}$...`;
                     }
