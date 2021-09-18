@@ -171,8 +171,7 @@ setInterval(() => {
         global_context.neko_modules.web_updates.refresh_bot_list(global_context);
     }
     if(global_context.neko_modules_clients.cm !== undefined) {
-        /* TODO: unoptimized, should filter and send 1 query */
-        //global_context.neko_modules_clients.cm.update_all_counters(global_context);
+        global_context.neko_modules_clients.cm.update_all_counters(global_context);
     }
 }, 60000);
 setInterval(() => {
@@ -229,8 +228,7 @@ bot.on('ready', async() => {
 
     global_context.bot_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "config", id: "default_config" });
     global_context.neko_modules.web_updates.refresh_status(global_context);
-    /* TODO: unoptimized, should filter and send 1 query */
-    //global_context.neko_modules_clients.rrm.create_all_collectors(global_context);
+    global_context.neko_modules_clients.rrm.create_all_collectors(global_context);
     
     let bot_callbacks = require('./callbacks');
     Object.keys(bot_callbacks).forEach(key => {

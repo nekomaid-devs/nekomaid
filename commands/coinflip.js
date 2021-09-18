@@ -70,7 +70,7 @@ module.exports = {
     
                     command_data.author_config.credits += won_ammount;
                     command_data.author_config.net_worth += won_ammount;
-                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user",  user: command_data.author_config });
     
                     embedCoinflip.description = `You won \`${won_ammount_text}\` credits!`;
                     embedCoinflip.footer = {
@@ -80,7 +80,7 @@ module.exports = {
                     let lost_ammount_text = command_data.global_context.utils.format_number(credits_ammount);
                     command_data.author_config.credits -= credits_ammount;
                     command_data.author_config.net_worth -= credits_ammount;
-                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
+                    command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", user: command_data.author_config });
     
                     embedCoinflip.description = `You lost \`${lost_ammount_text}\` credits...`;
                 }

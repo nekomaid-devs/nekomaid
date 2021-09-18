@@ -25,7 +25,7 @@ class BuildingManager {
             user.credits += credits_ammount;
             user.notifications.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: user.user_ID, timestamp: Date.now(), description: `<time_ago> \`❤️ Neko's Lewd Services\` generated \`${global_context.utils.format_number(credits_ammount)} 💵\`.` });
 
-            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: user.user_ID, user: user });
+            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: user });
         }
 
         start = new Date(user.b_casino_last_update);
@@ -41,7 +41,7 @@ class BuildingManager {
             user.credits += credits_ammount;
             user.notifications.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: user.user_ID, timestamp: Date.now(), description: `<time_ago> \`🎰 Neko's Casino\` generated \`${global_context.utils.format_number(credits_ammount)} 💵\`.` });
 
-            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: user.user_ID, user: user });
+            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: user });
         }
 
         start = new Date(user.b_scrapyard_last_update);
@@ -67,7 +67,7 @@ class BuildingManager {
             user.inventory.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: user.user_ID, item_ID: item.id });
             user.notifications.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: user.user_ID, timestamp: Date.now(), description: `<time_ago> Neko at \`⛏️ Neko's Scrapyard\` found \`1x ${rarity_names[item.rarity]} ${item.display_name}\`.` });
             
-            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: user.user_ID, user: user });
+            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: user });
         }
 
         start = new Date(user.b_pawn_shop_last_update);
@@ -92,7 +92,7 @@ class BuildingManager {
                     user.credits += credits_ammount;
                     user.notifications.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: user.user_ID, timestamp: Date.now(), description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_ammount)} 💵\`.` });
 
-                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: user.user_ID, user: user });
+                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: user });
                 }
             } else if(user.b_pawn_shop >= 4 && r_items.length > 0) {
                 if(diff >= [0, 0, 0, 0, 60*6, 60*6, 60*4, 60*4, 60*3, 60*3, 60*3][user.b_pawn_shop]) {
@@ -106,7 +106,7 @@ class BuildingManager {
                     user.credits += credits_ammount;
                     user.notifications.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: user.user_ID, timestamp: Date.now(), description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_ammount)} 💵\`.` });
 
-                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: user.user_ID, user: user });
+                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: user });
                 }
             } else if(user.b_pawn_shop >= 2 && u_items.length > 0) {
                 if(diff >= [0, 0, 60*6, 60*6, 60*4, 60*4, 60*3, 60*3, 60*2, 60*2, 60*2][user.b_pawn_shop]) {
@@ -120,7 +120,7 @@ class BuildingManager {
                     user.credits += credits_ammount;
                     user.notifications.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: user.user_ID, timestamp: Date.now(), description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_ammount)} 💵\`.` });
 
-                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: user.user_ID, user: user });
+                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: user });
                 }
             } else if(c_items.length > 0) {
                 if(diff >= [0, 60*6, 60*4, 60*4, 60*3, 60*3, 60*2, 60*2, 60*1, 60*1, 60*1][user.b_pawn_shop]) {
@@ -134,7 +134,7 @@ class BuildingManager {
                     user.credits += credits_ammount;
                     user.notifications.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: user.user_ID, timestamp: Date.now(), description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_ammount)} 💵\`.` });
 
-                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: user.user_ID, user: user });
+                    global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: user });
                 }
             }
         }
