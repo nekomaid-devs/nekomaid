@@ -9,7 +9,7 @@ module.exports = {
         global_context.modules.cheerio = require("cheerio");
         global_context.modules.axios = require("axios");
         global_context.modules.xmlconvert = require("xml-js");
-        global_context.modules.fetch = require("node-fetch");
+        global_context.modules.fetch = await import("node-fetch");
 
         //Import SQL modules
         global_context.modules.sql = require("mysql2");
