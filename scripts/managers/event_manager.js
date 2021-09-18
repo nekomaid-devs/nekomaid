@@ -105,7 +105,7 @@ class EventManager {
                             let reacted_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: id });   
 
                             reacted_config.credits += ammount;
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
                         })
 
                         channel.send("The robbery was a success and everyone took away " + ammount + "$~").catch(e => { global_context.logger.api_error(e); });
@@ -114,7 +114,7 @@ class EventManager {
                             let reacted_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: id });   
 
                             reacted_config.rep -= 5;
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
                         })
 
                         channel.send("The robbery was a failure and everyone except the neko was caught~ Everyone's reputation lowered~").catch(e => { global_context.logger.api_error(e); });
@@ -154,7 +154,7 @@ class EventManager {
                         let winner_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "global_user", id: winner_ID });  
 
                         winner_config.credits += 2000;
-                        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: winner_ID, user: winner_config }).catch(e => { global_context.logger.api_error(e); });
+                        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: winner_config }).catch(e => { global_context.logger.api_error(e); });
 
                         channel.send("<@" + winner_ID + "> won the prize of 2000$ from total of " + data.tickets.length + " tickets!~").catch(e => { command_data.global_context.logger.api_error(e); });
                     } else {
@@ -179,7 +179,7 @@ class EventManager {
                         data.claimed_users.push(u.id);
 
                         reacted_config.inventory.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: u.id, item_ID: "0" })
-                        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
 
                         channel.send("<@" + u.id + "> claimed the gift~ (Gifted so far: " + data.claimed_users.length + ")").catch(e => { global_context.logger.api_error(e); });
                     }
@@ -190,7 +190,7 @@ class EventManager {
                         data.claimed_users.push(u.id);
 
                         reacted_config.credits += 300;
-                        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                        global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
 
                         channel.send("<@" + u.id + "> claimed the gift~ (Gifted so far: " + data.claimed_users.length + ")").catch(e => { global_context.logger.api_error(e); });
                     }
@@ -203,7 +203,7 @@ class EventManager {
                         let won = data.winnings.has(u.id) === false ? 0 : data.winnings.get(u.id);
                         if(c > 50) {
                             reacted_config.credits += ammount;
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
 
                             data.bets.set(u.id, ammount*1.5);
                             data.winnings.set(u.id, won+ammount);
@@ -221,7 +221,7 @@ class EventManager {
                     if(emoji === "💸") {
                         if(reacted_config.credits >= 50) {
                             reacted_config.credits -= 50;
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
 
                             data.donated += 50;
 
@@ -249,7 +249,7 @@ class EventManager {
 
                             reacted_config.rep -= 10;
                             reacted_config.credits += 1000;
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
 
                             channel.send("<@" + u.id + "> passed the interview~ (Passed so far: " + data.claimed_users.length + ")").catch(e => { global_context.logger.api_error(e); });
                         }
@@ -261,7 +261,7 @@ class EventManager {
                         let c = Math.floor(Math.random() * (100 - 0 + 1) + 0);
                         if(c > 80) {
                             reacted_config.rep += 10;
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
 
                             remaining_time = 0;
 
@@ -285,7 +285,7 @@ class EventManager {
                         let c = Math.floor(Math.random() * (100 - 0 + 1) + 0);
                         if(c > 70) {
                             reacted_config.credits += 700;
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
 
                             data.joined_users.push(u.id);
                             channel.send("The neko scientist was satisfied with the results and rewarded <@" + u.id + ">~").catch(e => { global_context.logger.api_error(e); });
@@ -304,7 +304,7 @@ class EventManager {
 
                             reacted_config.credits -= 200;
                             reacted_config.inventory.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: u.id, item_ID: item_ID });
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
 
                             channel.send("<@" + u.id + "> bought " + item.displayName + "!~").catch(e => { global_context.logger.api_error(e); });
                         }
@@ -326,7 +326,7 @@ class EventManager {
 
                             reacted_config.credits += 75;
                             reacted_config.inventory.splice(targetIndex, 1);
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
                             
                             channel.send("<@" + u.id + "> sold " + item.displayName + " for 75$!~").catch(e => { global_context.logger.api_error(e); });
                         }
@@ -338,7 +338,7 @@ class EventManager {
                         let ammount = data.user_tickets.has(u.id) === false ? 0 : data.user_tickets.get(u.id);
                         if(reacted_config.credits >= 100) {
                             reacted_config.credits -= 100;
-                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", id: u.id, user: reacted_config });
+                            global_context.neko_modules_clients.ssm.server_edit.edit(global_context, { type: "global_user", user: reacted_config });
 
                             data.user_tickets.set(u.id, ammount+1)
                             data.tickets.push(u.id);

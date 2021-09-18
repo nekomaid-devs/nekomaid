@@ -95,7 +95,7 @@ class LevelingManager {
         }
 
         command_data.tagged_server_user_config.xp = Number(command_data.tagged_server_user_config.xp.toFixed(2));
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server_user", server_ID: command_data.msg.guild.id, user_ID: command_data.tagged_member.user.id, user: command_data.tagged_server_user_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "server_user", user: command_data.tagged_server_user_config });
     }
 
     async update_global_level(command_data) {
@@ -109,7 +109,7 @@ class LevelingManager {
         }
 
         command_data.author_config.xp = Number(command_data.author_config.xp.toFixed(2));
-        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: command_data.msg.author.id, user: command_data.author_config });
+        command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", user: command_data.author_config });
     }
 }
 
