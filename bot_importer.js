@@ -9,7 +9,7 @@ module.exports = {
         global_context.modules.cheerio = require("cheerio");
         global_context.modules.axios = require("axios");
         global_context.modules.xmlconvert = require("xml-js");
-        global_context.modules.fetch = require("node-fetch");
+        global_context.modules.fetch = await import("node-fetch");
 
         //Import SQL modules
         global_context.modules.sql = require("mysql2");
@@ -74,19 +74,19 @@ module.exports = {
         global_context.utils.verify_guild_channels = async(guild) => {
             if(global_context.cached_all_channels.includes(guild.id) === false) {
                 await guild.channels.fetch().catch(e => { global_context.logger.api_error(e); });
-                global_context.cached_all_channels.push(guild.id);
+                //global_context.cached_all_channels.push(guild.id);
             }
         }
         global_context.utils.verify_guild_roles = async(guild) => {
             if(global_context.cached_all_roles.includes(guild.id) === false) {
                 await guild.roles.fetch().catch(e => { global_context.logger.api_error(e); });
-                global_context.cached_all_roles.push(guild.id);
+                //global_context.cached_all_roles.push(guild.id);
             }
         }
         global_context.utils.verify_guild_members = async(guild) => {
             if(global_context.cached_all_members.includes(guild.id) === false) {
                 //await guild.members.fetch().catch(e => { global_context.logger.api_error(e); });
-                global_context.cached_all_members.push(guild.id);
+                //global_context.cached_all_members.push(guild.id);
             }
         }
         global_context.utils.get_level_XP = (server_config, author_config) => {

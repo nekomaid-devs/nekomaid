@@ -1,11 +1,12 @@
 class ReactionRolesManager {
     create_all_collectors(global_context) {
-        global_context.bot.guilds.cache.forEach(async(server) => {
-            let server_config = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "server", id: server.id, containExtra: true });
-            server_config.reaction_roles.forEach(rr => {
+        let reaction_roles = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "all_reaction_roles" });
+        global_context.bot.guilds.cache.forEach(server => {
+            let server_reaction_roles = reaction_roles.filter(e => { return e.server_ID === server.id; });
+            server_reaction_roles.forEach(rr => {
                 global_context.neko_modules_clients.rrm.create_collector(global_context, server, rr);
             });
-        })
+        });
     }
 
     async create_collector(global_context, server, rr) {

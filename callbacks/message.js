@@ -55,9 +55,6 @@ module.exports = {
         }
         command_data.tagged_server_user_config = command_data.author_server_user_config;
 
-        global_context.data.total_events += 1;
-        global_context.data.processed_events += 1;
-
         // Check if user manages the guild
         let manages_guild = false;
         if(command_data.server_config.banned_words.length > 0 || command_data.server_config.invites == false) {

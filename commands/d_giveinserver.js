@@ -35,7 +35,7 @@ module.exports = {
             for(var i = 0; i < ammount; i += 1) {
                 config.inventory.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: member.user.id, item_ID: item_ID });
             }
-            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", id: member.user.id, user: config });
+            command_data.global_context.neko_modules_clients.ssm.server_edit.edit(command_data.global_context, { type: "global_user", user: config });
         });
 
         command_data.msg.channel.send(`Added \`${ammount}x ${target_item.display_name}\` to \`${command_data.msg.guild.members.cache.size}\` members!`).catch(e => { command_data.global_context.logger.api_error(e); });
