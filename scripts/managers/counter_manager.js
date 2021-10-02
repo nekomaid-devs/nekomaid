@@ -1,5 +1,5 @@
 class CounterManager {
-    update_all_counters(global_context) {
+    async update_all_counters(global_context) {
         let counters = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "all_counters" });
         global_context.bot.guilds.cache.forEach(server => {
             let server_counters = counters.filter(e => { return e.server_ID === server.id; });

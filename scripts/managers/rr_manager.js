@@ -1,5 +1,5 @@
 class ReactionRolesManager {
-    create_all_collectors(global_context) {
+    async create_all_collectors(global_context) {
         let reaction_roles = await global_context.neko_modules_clients.ssm.server_fetch.fetch(global_context, { type: "all_reaction_roles" });
         global_context.bot.guilds.cache.forEach(server => {
             let server_reaction_roles = reaction_roles.filter(e => { return e.server_ID === server.id; });
