@@ -2,7 +2,7 @@
  
 **how to self-host 101:**  
 1) run `yarn` to install all the packages (if you run `npm`, you're a masochist)  
-2) check notes in `bot_importer.js` for changes needed
+2) check notes in `shard_importer.js` for changes needed
 3) create a config file and put it in `configs/default.json`
 4) run `node index.js` or `pm start index.js`
 

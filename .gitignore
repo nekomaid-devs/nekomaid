@@ -1,12 +1,9 @@
+# Configurations
+configs/**/*
+
 # Node non-sense
-node_modules
-yarn-error.log
+node_modules/**/*
+*.log
 
-# Windows's FFmpeg (if not on path)
+# FFmpeg
 ffmpeg.exe
-
-# Configs
-configs/default.json
-
-# Funny VSCode extensions
-.VSCodeCounter
