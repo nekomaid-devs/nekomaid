@@ -1,0 +1,34 @@
+import { get_dance_gifs } from "../scripts/utils/util_vars";
+import { CommandData } from "../ts/types";
+
+export default {
+    name: "dance",
+    category: "Emotes",
+    description: "Posts a dancing gif.",
+    helpUsage: "`",
+    hidden: false,
+    aliases: [],
+    subcommandHelp: new Map(),
+    argumentsNeeded: [],
+    argumentsRecommended: [],
+    permissionsNeeded: [],
+    nsfw: false,
+    cooldown: 1500,
+    execute(command_data: CommandData) {
+        if (command_data.msg.guild === null) {
+            return;
+        }
+        const url = command_data.global_context.utils.pick_random(get_dance_gifs());
+        const embedDance = {
+            title: `${command_data.msg.author.tag} is dancing!`,
+            color: 8388736,
+            image: {
+                url: url,
+            },
+        };
+
+        command_data.msg.channel.send({ embeds: [embedDance] }).catch((e: Error) => {
+            command_data.global_context.logger.api_error(e);
+        });
+    },
+};

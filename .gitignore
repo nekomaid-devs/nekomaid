@@ -1,6 +1,9 @@
 # Configurations
 configs/**/*
 
+# Build
+build/**/*
+
 # Node non-sense
 node_modules/**/*
 *.log

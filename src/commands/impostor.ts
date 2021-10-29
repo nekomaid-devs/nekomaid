@@ -1,0 +1,41 @@
+import { CommandData } from "../ts/types";
+
+import RecommendedArgument from "../scripts/helpers/recommended_argument";
+
+export default {
+    name: "impostor",
+    category: "Fun",
+    description: "I wasn't the impostor...",
+    helpUsage: "[mention?]`",
+    exampleUsage: "/user_tag/",
+    hidden: false,
+    aliases: ["imposter"],
+    subcommandHelp: new Map(),
+    argumentsNeeded: [],
+    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
+    permissionsNeeded: [],
+    nsfw: false,
+    cooldown: 1500,
+    execute(command_data: CommandData) {
+        if (command_data.msg.guild === null || command_data.tagged_user === undefined) {
+            return;
+        }
+        // TODO: make impostors change colors
+        const impostor = command_data.global_context.utils.pick_random([true, false]);
+        command_data.global_context.modules.jimp.read(impostor ? "./configs/data/among_us_impostor.png" : "./configs/data/among_us_impostor_not.png").then((image: any) => {
+            command_data.global_context.modules.jimp.loadFont("./configs/data/among_us_font.fnt").then(async (font: any) => {
+                image.print(font, 325 - command_data.global_context.modules.jimp.measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
+
+                const embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
+                    .setTitle(command_data.tagged_user.tag + " was " + (impostor ? "" : "not ") + "the impostor!")
+                    .setColor(8388736)
+                    .setImage("attachment://image.png")
+                    .setFooter(`Requested by ${command_data.msg.author.tag}`);
+
+                command_data.msg.channel.send({ embeds: [embedImage], files: [{ attachment: await image.getBufferAsync("image/png"), name: "image.png" }] }).catch((e: Error) => {
+                    command_data.global_context.logger.api_error(e);
+                });
+            });
+        });
+    },
+};
