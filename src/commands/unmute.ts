@@ -41,7 +41,7 @@ export default {
         if (previous_mute === undefined) {
             command_data.msg.reply(`\`${command_data.tagged_user.tag}\` isn't muted-`);
         } else {
-            if (command_data.msg.guild.roles.cache.has(command_data.server_config.mute_role_ID) === false) {
+            if (command_data.server_config.mute_role_ID === null) {
                 command_data.msg.reply("Couldn't find the Muted role! (Did somebody delete it?)");
                 return;
             }
@@ -51,6 +51,7 @@ export default {
                 return null;
             });
             if (mute_role === null) {
+                command_data.msg.reply("Couldn't find the Muted role! (Did somebody delete it?)");
                 return;
             }
             command_data.tagged_member.roles.remove(mute_role);

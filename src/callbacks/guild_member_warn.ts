@@ -27,7 +27,7 @@ export default function hook(global_context: GlobalContext) {
 async function process(global_context: GlobalContext, event: any) {
     const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_member_warn", id: event.member.guild.id });
 
-    if (server_config.audit_warns == true && server_config.audit_channel !== "-1") {
+    if (server_config.audit_warns == true && server_config.audit_channel !== null) {
         const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;

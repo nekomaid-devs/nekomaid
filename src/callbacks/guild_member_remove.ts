@@ -48,7 +48,7 @@ async function process(global_context: GlobalContext, member: GuildMember | Part
         });
     }
 
-    if (server_config.audit_kicks == true && server_config.audit_channel !== "-1") {
+    if (server_config.audit_kicks == true && server_config.audit_channel !== null) {
         const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
             global_context.logger.api_error(e);
         });

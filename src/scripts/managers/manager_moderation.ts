@@ -9,7 +9,7 @@ class ModerationManager {
         global_context.bot.guilds.cache.forEach((server) => {
             const server_mutes = all_mutes.filter((e: any) => {
                 return e.server_ID === server.id;
-            })[0];
+            });
             if (server_mutes !== undefined) {
                 global_context.neko_modules_clients.moderationManager.timeout_mutes(global_context, server, server_mutes);
             }
@@ -22,7 +22,7 @@ class ModerationManager {
         global_context.bot.guilds.cache.forEach((server) => {
             const server_bans = all_bans.filter((e: any) => {
                 return e.server_ID === server.id;
-            })[0];
+            });
             if (server_bans !== undefined) {
                 global_context.neko_modules_clients.moderationManager.timeout_bans(global_context, server, server_bans);
             }

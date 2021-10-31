@@ -24,7 +24,7 @@ export default {
             });
             return;
         }
-        if (command_data.tagged_user_config.osu_username === "-1") {
+        if (command_data.tagged_user_config.osu_username === null) {
             command_data.msg.channel.send(`You haven't set an osu! profile yet! (You can set one with \`${command_data.server_config.prefix}osuset <username>\`)`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });

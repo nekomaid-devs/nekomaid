@@ -29,7 +29,7 @@ async function process(global_context: GlobalContext, old_message: Message | Par
     }
 
     const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_message_update", id: new_message.guild.id });
-    if (server_config.audit_edited_messages == true && server_config.audit_channel !== "-1") {
+    if (server_config.audit_edited_messages == true && server_config.audit_channel !== null) {
         const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;

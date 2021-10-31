@@ -44,15 +44,8 @@ export default {
         // TODO: check for wrong error embeds
         command_data.server_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         if (command_data.args.length < 1) {
-            let channel_1 = `<#${command_data.server_config.welcome_messages_channel}>`;
-            if (command_data.server_config.welcome_messages_channel === "-1") {
-                channel_1 = command_data.server_config.welcome_messages == true ? "`None❗`" : "`None`";
-            }
-
-            let channel_2 = `<#${command_data.server_config.leave_messages_channel}>`;
-            if (command_data.server_config.leave_messages_channel === "-1") {
-                channel_2 = command_data.server_config.leave_messages == true ? "`None❗`" : "`None`";
-            }
+            let channel_1 = command_data.server_config.welcome_messages_channel === null ? (command_data.server_config.welcome_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.welcome_messages_channel}>`;
+            let channel_2 = command_data.server_config.leave_messages_channel === null ? (command_data.server_config.leave_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.leave_messages_channel}>`;
 
             let auto_roles_text = "";
             for (let i = 0; i < command_data.server_config.auto_roles.length; i++) {
@@ -629,13 +622,13 @@ export default {
             }
         }
 
-        if (command_data.server_config.welcome_messages == true && command_data.server_config.welcome_messages_channel === "-1") {
+        if (command_data.server_config.welcome_messages == true && command_data.server_config.welcome_messages_channel === null) {
             command_data.msg.channel.send("Make sure to set `welcome_messages_channel`, otherwise welcome messages won't work.").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
 
-        if (command_data.server_config.leave_messages == true && command_data.server_config.leave_messages_channel === "-1") {
+        if (command_data.server_config.leave_messages == true && command_data.server_config.leave_messages_channel === null) {
             command_data.msg.channel.send("Make sure to set `leave_messages_channel`, otherwise leave messages won't work.").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });

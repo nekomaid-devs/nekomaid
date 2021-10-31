@@ -23,7 +23,7 @@ export default {
                 command_data.msg.reply(`You aren't the bot owner! (use \`${command_data.server_config.prefix}divorce\` if you want to divorce)`);
                 return;
             }
-            if (command_data.tagged_user_config.married_ID === "-1") {
+            if (command_data.tagged_user_config.married_ID === null) {
                 command_data.msg.reply("This user isn't married!");
                 return;
             }
@@ -37,11 +37,11 @@ export default {
                 const tagged_user_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "global_user", id: command_data.tagged_user.id });
                 const user_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "global_user", id: married_user.id });
 
-                tagged_user_config.married_ID = "-1";
+                tagged_user_config.married_ID = null;
                 tagged_user_config.can_divorce = true;
                 command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: tagged_user_config });
 
-                user_config.married_ID = "-1";
+                user_config.married_ID = null;
                 user_config.can_divorce = true;
                 command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: user_config });
 
@@ -53,7 +53,7 @@ export default {
             return;
         }
 
-        if (command_data.author_user_config.married_ID === "-1") {
+        if (command_data.author_user_config.married_ID === null) {
             command_data.msg.reply("You're not married...");
             return;
         }
@@ -72,11 +72,11 @@ export default {
             return;
         }
 
-        command_data.author_user_config.married_ID = "-1";
+        command_data.author_user_config.married_ID = null;
         command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
 
         if (user_config != -1) {
-            user_config.married_ID = "-1";
+            user_config.married_ID = null;
             user_config.can_divorce = true;
             command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: user_config });
         }

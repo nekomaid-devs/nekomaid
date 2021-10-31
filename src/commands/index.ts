@@ -73,6 +73,7 @@ export { default as top } from "./top";
 export { default as transfer } from "./transfer";
 export { default as use } from "./use";
 export { default as useall } from "./useall";
+export { default as upgrade } from "./upgrade";
 export { default as withdraw } from "./withdraw";
 export { default as work } from "./work";
 

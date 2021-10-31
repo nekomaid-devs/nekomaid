@@ -90,18 +90,19 @@ export default {
             });
         }
 
-        if (command_data.server_config.mute_role_ID === "-1") {
+        if (command_data.server_config.mute_role_ID === null) {
+            this.create_mute_role_and_mute(command_data);
+            return;
+        }
+
+        const mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.mute_role_ID).catch((e: Error) => {
+            command_data.global_context.logger.api_error(e);
+            return null;
+        });
+        if (mute_role === null) {
             this.create_mute_role_and_mute(command_data);
         } else {
-            const mute_role = await command_data.msg.guild.roles.fetch(command_data.server_config.mute_role_ID).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
-                return null;
-            });
-            if (mute_role === null) {
-                this.create_mute_role_and_mute(command_data);
-            } else {
-                command_data.tagged_member.roles.add(mute_role);
-            }
+            command_data.tagged_member.roles.add(mute_role);
         }
     },
 

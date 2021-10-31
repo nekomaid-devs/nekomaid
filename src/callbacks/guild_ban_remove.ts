@@ -32,7 +32,7 @@ async function process(global_context: GlobalContext, ban: GuildBan) {
     const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_ban_remove", id: ban.guild.id });
     const server_bans = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_bans", id: ban.guild.id });
 
-    if (server_config.audit_bans == true && server_config.audit_channel !== "-1") {
+    if (server_config.audit_bans == true && server_config.audit_channel !== null) {
         const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;

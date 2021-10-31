@@ -26,7 +26,7 @@ export default function hook(global_context: GlobalContext) {
 async function process(global_context: GlobalContext, old_member: GuildMember, new_member: GuildMember) {
     // TODO: this doesn't work
     const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_member_nickname_update", id: new_member.guild.id });
-    if (server_config.audit_nicknames == true && server_config.audit_channel !== "-1") {
+    if (server_config.audit_nicknames == true && server_config.audit_channel !== null) {
         const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;

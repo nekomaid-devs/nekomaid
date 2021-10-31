@@ -23,7 +23,7 @@ export default {
             return;
         }
         let married_text = command_data.tagged_user_config.married_ID;
-        if (married_text === "-1") {
+        if (married_text === null) {
             married_text = "Nobody";
         } else {
             const married_user = await command_data.global_context.bot.users.fetch(married_text).catch((e: Error) => {

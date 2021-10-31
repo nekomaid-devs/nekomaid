@@ -37,11 +37,11 @@ export default {
             force_marry = true;
         }
 
-        if (command_data.author_user_config.married_ID !== "-1") {
+        if (command_data.author_user_config.married_ID !== null) {
             command_data.msg.reply("You need to divorce first!");
             return;
         }
-        if (command_data.tagged_user_config.married_ID !== "-1") {
+        if (command_data.tagged_user_config.married_ID !== null) {
             command_data.msg.reply("This user is already married...");
             return;
         }

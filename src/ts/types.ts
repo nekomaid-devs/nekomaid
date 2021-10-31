@@ -107,19 +107,20 @@ export type ServerConfig = {
 
     prefix: string;
     say_command: boolean;
-    mute_role_ID: string;
+    case_ID: number;
+    mute_role_ID: string | null;
     invites: boolean;
     banned_words: string[];
 
     auto_roles: string[];
 
     welcome_messages: boolean;
-    welcome_messages_channel: string;
+    welcome_messages_channel: string | null;
     welcome_messages_ping: boolean;
     welcome_messages_format: string;
 
     leave_messages: boolean;
-    leave_messages_channel: string;
+    leave_messages_channel: string | null;
     leave_messages_format: string;
 
     counters: any[];
@@ -137,7 +138,7 @@ export type ServerConfig = {
     module_level_ignored_channels: string[];
     module_level_ranks: any[];
 
-    audit_channel: string;
+    audit_channel: string | null;
     audit_bans: boolean;
     audit_mutes: boolean;
     audit_kicks: boolean;
@@ -159,7 +160,7 @@ export type GlobalUserConfig = {
     net_worth: number;
     inventory: any[];
     notifications: any[];
-    married_ID: string;
+    married_ID: string | null;
     can_divorce: boolean;
 
     last_work_time: number;
@@ -170,7 +171,7 @@ export type GlobalUserConfig = {
     last_upvoted_time: number;
     last_beg_time: number;
 
-    osu_username: string;
+    osu_username: string | null;
 
     b_city_hall: number;
     b_city_hall_credits: number;

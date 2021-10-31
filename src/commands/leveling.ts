@@ -45,11 +45,8 @@ export default {
         // TODO: check for wrong error embeds
         command_data.server_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         if (command_data.args.length < 1) {
-            let channel = `<#${command_data.server_config.module_level_levelup_messages_channel}>`;
-            if (command_data.server_config.module_level_levelup_messages_channel === "-1") {
-                channel = command_data.server_config.module_level_enabled == true && command_data.server_config.module_level_levelup_messages == true ? "`None❗`" : "`None`";
-            }
-
+            let channel = command_data.server_config.module_level_levelup_messages_channel === null ? (command_data.server_config.module_level_enabled == true && command_data.server_config.module_level_levelup_messages == true ? "`None❗`" : "`None`") : `<#${command_data.server_config.module_level_levelup_messages_channel}>`;
+            
             let ignored_channels_text = "";
             for (let i = 0; i < command_data.server_config.module_level_ignored_channels.length; i++) {
                 const channel_ID = command_data.server_config.module_level_ignored_channels[i];

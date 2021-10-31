@@ -36,11 +36,7 @@ export default {
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
         if (command_data.args.length < 1) {
-            let channel = `<#${command_data.server_config.audit_channel}>`;
-            if (command_data.server_config.audit_channel === "-1") {
-                channel = "`None`";
-            }
-
+            let channel = command_data.server_config.audit_channel === null ? "`None`" : `<#${command_data.server_config.audit_channel}>`;
             const embedConfig = {
                 title: "Audit Logs",
                 description: `To set values see - \`${command_data.server_config.prefix}help auditlog set\``,
