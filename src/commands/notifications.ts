@@ -1,3 +1,4 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
 export default {
@@ -19,11 +20,11 @@ export default {
             return;
         }
         let notifications_description = command_data.author_user_config.notifications
-            .sort((a: any, b: any) => {
+            .sort((a, b) => {
                 return b.timestamp - a.timestamp;
             })
             .slice(0, 10)
-            .reduce((acc: any, curr: any) => {
+            .reduce((acc, curr) => {
                 const time_ago = Date.now() - curr.timestamp;
                 acc += curr.description.replace("<time_ago>", "**[" + command_data.global_context.neko_modules.timeConvert.convert_time(time_ago) + "]** - ") + "\n";
 

@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 
 export default {
@@ -17,7 +19,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
         let married_text = command_data.tagged_user_config.married_ID;
@@ -43,7 +45,9 @@ export default {
         const premium_text = diff < 1440 ? " (Premium ⭐)" : "";
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if(url === null) { return; }
+        if (url === null) {
+            return;
+        }
         const embedProfile = {
             color: 8388736,
             author: {

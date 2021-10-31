@@ -1,5 +1,8 @@
-import { get_building_price } from "../scripts/utils/util_vars";
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
+import { get_building_price } from "../scripts/utils/util_vars";
 
 export default {
     name: "buildingsglobal",
@@ -16,7 +19,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot.user === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot.user === null || command_data.global_context.bot_config === null) {
             return;
         }
         const mayor = await command_data.global_context.bot.users.fetch(command_data.global_context.bot_config.mayor_ID);
@@ -43,7 +46,9 @@ export default {
         } (${command_data.global_context.utils.format_number(get_building_price(command_data.global_context.bot_config.b_pet_shelter, "b_pet_shelter"))} $)\``;
 
         const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if(url === null) { return; }
+        if (url === null) {
+            return;
+        }
         const embedBuildings = {
             color: 8388736,
             author: {

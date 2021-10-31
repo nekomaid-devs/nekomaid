@@ -1,3 +1,4 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
 export default {
@@ -21,8 +22,10 @@ export default {
             command_data.global_context.logger.api_error(e);
             return null;
         });
-        if(message === null) { return; }
-        
+        if (message === null) {
+            return;
+        }
+
         const embedPing = {
             color: 8388736,
             fields: [

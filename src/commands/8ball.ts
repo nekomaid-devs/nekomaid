@@ -1,4 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 import { get_8ball_answers } from "../scripts/utils/util_vars";
 

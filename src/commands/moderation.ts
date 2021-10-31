@@ -1,7 +1,9 @@
+/* Types */
 import { CommandData } from "../ts/types";
-
-import NeededPermission from "../scripts/helpers/needed_permission";
 import { Permissions } from "discord.js";
+
+/* Local Imports */
+import NeededPermission from "../scripts/helpers/needed_permission";
 import { get_error_embed } from "../scripts/utils/util_vars";
 
 export default {
@@ -28,7 +30,7 @@ export default {
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
         if (command_data.args.length < 1) {
-            let banned_words = command_data.server_config.banned_words.reduce((acc: any, curr: any) => {
+            let banned_words = command_data.server_config.banned_words.reduce((acc, curr) => {
                 acc += "`" + curr + "`, ";
                 return acc;
             }, "");
@@ -157,15 +159,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            "Invalid value to set for `" + property + "`- (true/false)",
-                                            "set " + property + " true"
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid value to set for `" + property + "`- (true/false)", "set " + property + " true")],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -205,11 +199,9 @@ export default {
             }
 
             default: {
-                command_data.msg.channel
-                    .send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set invites true")] })
-                    .catch((e: Error) => {
-                        command_data.global_context.logger.api_error(e);
-                    });
+                command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set invites true")] }).catch((e: Error) => {
+                    command_data.global_context.logger.api_error(e);
+                });
                 break;
             }
         }

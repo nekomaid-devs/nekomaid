@@ -1,7 +1,9 @@
+/* Types */
 import { CommandData } from "../ts/types";
-
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import { TextChannel } from "discord.js";
+
+/* Local Imports */
+import RecommendedArgument from "../scripts/helpers/recommended_argument";
 
 export default {
     name: "help",
@@ -18,7 +20,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot.user === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot.user === null || command_data.global_context.bot_config === null) {
             return;
         }
         let show_hidden = false;
@@ -35,18 +37,20 @@ export default {
         if (command_data.args.length > 0) {
             const command_keys = Array.from(command_data.global_context.commands.keys());
             let target_command_name = command_data.args[0];
-            if (command_data.global_context.command_aliases.has(target_command_name) === true) {
-                target_command_name = command_data.global_context.command_aliases.get(target_command_name);
+
+            const aliased_name = command_data.global_context.command_aliases.get(target_command_name);
+            if (aliased_name !== undefined) {
+                target_command_name = aliased_name;
             }
 
-            if (command_keys.includes(target_command_name) === false || (command_data.global_context.commands.get(target_command_name).hidden === true && show_hidden === false)) {
+            const command = command_data.global_context.commands.get(target_command_name);
+            if (command === undefined || (command.hidden === true && show_hidden === false)) {
                 command_data.msg.channel.send(`Command \`${target_command_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 return;
             }
 
-            const command = command_data.global_context.commands.get(target_command_name);
             if (command_data.args.length > 1) {
                 const target_subcommand_name = command_data.args[1];
                 if (command.subcommandHelp.has(target_subcommand_name) === false) {
@@ -59,7 +63,9 @@ export default {
                 const unhidden_text = show_hidden === true && command.hidden === true ? "❓" : "";
                 const commands_text = command.name + " " + target_subcommand_name;
                 let usage = command.subcommandHelp.get(target_subcommand_name);
-                usage = usage.split("<subcommand_prefix>").join(command_data.server_config.prefix + commands_text);
+                if (usage !== undefined) {
+                    usage = usage.split("<subcommand_prefix>").join(command_data.server_config.prefix + commands_text);
+                }
 
                 const embedHelp = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`Help for - \`${unhidden_text + commands_text}\``);
                 embedHelp.addField("Usage:", usage);
@@ -71,7 +77,7 @@ export default {
                 const unhidden_text = show_hidden === true && command.hidden === true ? "❓" : "";
                 let commands_text = command.name;
                 const usage = command.helpUsage;
-                command.aliases.forEach((alias: any) => {
+                command.aliases.forEach((alias) => {
                     commands_text += "/" + alias;
                 });
 
@@ -83,7 +89,7 @@ export default {
 
                 if (command.subcommandHelp.size > 0) {
                     let commands_text_2 = "";
-                    command.subcommandHelp.forEach((usage: any, subcommand: any) => {
+                    command.subcommandHelp.forEach((usage, subcommand) => {
                         commands_text_2 += `Check \`${command_data.server_config.prefix}help ${command.name} ${subcommand}\` for help\n`;
                     });
 
@@ -111,10 +117,10 @@ export default {
                 ["Testing", { prefix: "", items: [], nsfw: false }],
             ]);
             commands
-                .filter((e: any) => {
+                .filter((e) => {
                     return (show_hidden === true || e.hidden === false) && categories.has(e.category);
                 })
-                .forEach((command: any) => {
+                .forEach((command) => {
                     categories.get(command.category).items.push(command);
                 });
 
@@ -128,8 +134,10 @@ export default {
 
             const categories_keys = Array.from(categories.keys());
             categories_keys.forEach((category_key) => {
-                if(!(command_data.msg.channel instanceof TextChannel)) { return; }
-                
+                if (!(command_data.msg.channel instanceof TextChannel)) {
+                    return;
+                }
+
                 const category = categories.get(category_key);
                 let commands_string = "";
                 const commands_keys = category.items;

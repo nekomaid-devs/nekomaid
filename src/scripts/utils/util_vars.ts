@@ -1,5 +1,6 @@
+/* Types */
+import { Command, CommandData } from "../../ts/types";
 import { Message } from "discord.js";
-import { CommandData } from "../../ts/types";
 
 export function get_8ball_answers() {
     return [
@@ -383,7 +384,7 @@ export function get_tieup_gifs() {
     return ["https://i.imgur.com/QaIfZSl.gif", "https://i.imgur.com/PdlUOqE.gif", "https://i.imgur.com/x0SnvSZ.gif", "https://i.imgur.com/zs5FliT.gif"];
 }
 
-export function get_error_embed(msg: Message, prefix: string, command: any, problem: string, usage_detailed: string) {
+export function get_error_embed(msg: Message, prefix: string, command: Command, problem: string, usage_detailed: string) {
     let usage = `\`${prefix}${command.name} ${command.helpUsage}\n\`${prefix}${command.name} ${usage_detailed}\``;
     usage = usage.split("/user_tag/").join(`@${msg.author.tag}`);
     usage = usage.split("/username/").join(msg.author.username);

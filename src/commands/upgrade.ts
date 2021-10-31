@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 import { get_building_field, get_building_price, get_global_building_field } from "../scripts/utils/util_vars";
 
@@ -18,7 +20,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot.user === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot.user === null || command_data.global_context.bot_config === null) {
             return;
         }
         const building_name = command_data.total_argument;
@@ -36,31 +38,52 @@ export default {
             },
         };
 
+        const author_user_config_map = new Map(Object.entries(command_data.author_user_config));
         if (building_field !== undefined) {
-            const next_building_cost = get_building_price(command_data.author_user_config[building_field], building_field);
+            const building_field_level = author_user_config_map.get(building_field);
+            if (!(typeof building_field_level === "number")) {
+                return;
+            }
+            const building_field_credits = author_user_config_map.get(building_field + "_credits");
+            if (!(typeof building_field_credits === "number")) {
+                return;
+            }
+
+            const next_building_cost = get_building_price(building_field_level, building_field);
             if (next_building_cost === undefined) {
                 command_data.msg.reply(`This building is already at it's max level.`);
                 return;
             }
-            if (command_data.author_user_config[building_field + "_credits"] < next_building_cost) {
+            if (building_field_credits < next_building_cost) {
                 command_data.msg.reply(`The building haven't been built enough for an upgrade.`);
                 return;
             }
 
-            command_data.author_user_config[building_field] += 1;
-            command_data.author_user_config[building_field + "_credits"] -= next_building_cost;
+            author_user_config_map.set(building_field, building_field_level + 1);
+            author_user_config_map.set(building_field + "_credits", building_field_credits - next_building_cost);
 
-            command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+            const a: any = Object.fromEntries(author_user_config_map);
+            command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: a });
 
             const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
             embedUpgrade.author.icon_url = url;
-            embedUpgrade.description = `Upgraded the building onto level ${command_data.author_user_config[building_field]}.`;
+            embedUpgrade.description = `Upgraded the building onto level ${building_field_level + 1}.`;
             command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
+        const bot_config_map = new Map(Object.entries(command_data.global_context.bot_config));
         if (global_building_field !== undefined) {
-            const next_building_cost = get_building_price(command_data.global_context.bot_config[global_building_field], global_building_field);
+            const global_building_field_level = bot_config_map.get(global_building_field);
+            if (!(typeof global_building_field_level === "number")) {
+                return;
+            }
+            const global_building_field_credits = bot_config_map.get(global_building_field + "_credits");
+            if (!(typeof global_building_field_credits === "number")) {
+                return;
+            }
+
+            const next_building_cost = get_building_price(global_building_field_level, global_building_field);
             if (command_data.msg.author.id !== command_data.global_context.bot_config.mayor_ID) {
                 command_data.msg.reply(`Only the mayor can upgrade global buildings.`);
                 return;
@@ -69,19 +92,20 @@ export default {
                 command_data.msg.reply(`This building is already at it's max level.`);
                 return;
             }
-            if (command_data.global_context.bot_config[global_building_field + "_credits"] < next_building_cost) {
+            if (global_building_field_credits < next_building_cost) {
                 command_data.msg.reply(`The building haven't been built enough for an upgrade.`);
                 return;
             }
 
-            command_data.global_context.bot_config[global_building_field] += 1;
-            command_data.global_context.bot_config[global_building_field + "_credits"] -= next_building_cost;
+            bot_config_map.set(global_building_field, global_building_field_level + 1);
+            bot_config_map.set(global_building_field + "_credits", global_building_field_credits - next_building_cost);
 
-            command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: command_data.global_context.bot_config });
+            const a: any = Object.fromEntries(bot_config_map);
+            command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: a });
 
             const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
             embedUpgrade.author.icon_url = url;
-            embedUpgrade.description = `Upgraded the building onto level ${command_data.global_context.bot_config[global_building_field]}.`;
+            embedUpgrade.description = `Upgraded the building onto level ${global_building_field_level + 1}.`;
             command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });

@@ -1,4 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
 import { Message, Permissions, VoiceChannel } from "discord.js";
 
@@ -53,11 +56,13 @@ export default {
             },
         };
         const joined_IDs: any[] = [];
-        const message = await command_data.msg.channel.send({ embeds: [ embedSong ] }).catch((e: Error) => {
+        const message = await command_data.msg.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });
-        if(message === null) { return; }
+        if (message === null) {
+            return;
+        }
 
         await message.react("✅").catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
@@ -65,7 +70,11 @@ export default {
         await message.react("❌").catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-        const collector_r = message.createReactionCollector({ filter: (r: any, u: any) => { return (r.emoji.name === "✅" || r.emoji.name === "❌") && u.id !== message.author.id; } });
+        const collector_r = message.createReactionCollector({
+            filter: (r, u) => {
+                return (r.emoji.name === "✅" || r.emoji.name === "❌") && u.id !== message.author.id;
+            },
+        });
         collector_r.on("collect", async (r, u) => {
             if (r.emoji.name === "✅" && joined_IDs.includes(u.id) === false) {
                 joined_IDs.push(u.id);
@@ -80,9 +89,15 @@ export default {
             });
         });
 
-        const collector = command_data.msg.channel.createMessageCollector({ filter: (m: any) => { return !m.author.bot; } });
+        const collector = command_data.msg.channel.createMessageCollector({
+            filter: (m) => {
+                return !m.author.bot;
+            },
+        });
         collector.on("collect", async (m) => {
-            if(command_data.msg.member === null || command_data.msg.member.voice.channel === null) { return; }
+            if (command_data.msg.member === null || command_data.msg.member.voice.channel === null) {
+                return;
+            }
 
             if (joined_IDs.length < 1) {
                 command_data.msg.channel.send("Game couldn't start, because there aren't enough players. Try again.").catch((e: Error) => {
@@ -164,13 +179,19 @@ export default {
                 text: `You have 45 seconds to answer | or end the game with ${command_data.server_config.prefix}animetrivia end`,
             },
         };
-        command_data.msg.channel.send({ embeds: [ embedSong ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
 
-        let timeout: any = setTimeout(() => { /* */ }, 0);
+        let timeout: any = setTimeout(() => {
+            /* */
+        }, 0);
         let answered = false;
-        const collector = command_data.msg.channel.createMessageCollector({ filter: (m: Message) => { return m.author.bot === false && game_data.joined_IDs.includes(m.author.id); } });
+        const collector = command_data.msg.channel.createMessageCollector({
+            filter: (m: Message) => {
+                return m.author.bot === false && game_data.joined_IDs.includes(m.author.id);
+            },
+        });
         collector.on("collect", (m) => {
             if (answered === false) {
                 if (m.content.startsWith(command_data.server_config.prefix + "animetrivia skip")) {

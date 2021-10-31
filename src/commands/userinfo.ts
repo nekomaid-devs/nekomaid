@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 
 export default {
@@ -36,7 +38,6 @@ export default {
             roles = "`None`";
         }
 
-        await command_data.global_context.utils.verify_guild_members(command_data.msg.guild);
         const join_score_array = Array.from(command_data.msg.guild.members.cache.values()).sort((a, b) => {
             return (a.joinedTimestamp === null ? 0 : a.joinedTimestamp) - (b.joinedTimestamp === null ? 0 : b.joinedTimestamp);
         });
@@ -47,7 +48,9 @@ export default {
         const join_score_max = command_data.msg.guild.members.cache.size;
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if(url === null) { return; }
+        if (url === null) {
+            return;
+        }
         const embedMember = {
             color: 8388736,
             author: {

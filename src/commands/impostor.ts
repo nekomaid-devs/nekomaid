@@ -1,5 +1,10 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Node Imports */
+import { loadFont, measureText, read } from "jimp";
+
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 
 export default {
@@ -22,9 +27,9 @@ export default {
         }
         // TODO: make impostors change colors
         const impostor = command_data.global_context.utils.pick_random([true, false]);
-        command_data.global_context.modules.jimp.read(impostor ? "./configs/data/among_us_impostor.png" : "./configs/data/among_us_impostor_not.png").then((image: any) => {
-            command_data.global_context.modules.jimp.loadFont("./configs/data/among_us_font.fnt").then(async (font: any) => {
-                image.print(font, 325 - command_data.global_context.modules.jimp.measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
+        read(impostor ? "./configs/data/among_us_impostor.png" : "./configs/data/among_us_impostor_not.png").then((image: any) => {
+            loadFont("./configs/data/among_us_font.fnt").then(async (font: any) => {
+                image.print(font, 325 - measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
 
                 const embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
                     .setTitle(command_data.tagged_user.tag + " was " + (impostor ? "" : "not ") + "the impostor!")

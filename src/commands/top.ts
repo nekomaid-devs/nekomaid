@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import { get_top, get_top_server } from "../scripts/utils/util_sort_by";
 
@@ -109,7 +111,9 @@ export default {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
-            if(target_user === null) { return; } 
+            if (target_user === null) {
+                return;
+            }
             embedTop.addField(`${i + 1}) ${target_user.tag}`, `${command_data.global_context.utils.format_number(net)} ${top_user_text}`);
         }
 

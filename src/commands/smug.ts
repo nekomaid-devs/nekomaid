@@ -1,5 +1,8 @@
-import { get_smug_gifs } from "../scripts/utils/util_vars";
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
+import { get_smug_gifs } from "../scripts/utils/util_vars";
 
 export default {
     name: "smug",

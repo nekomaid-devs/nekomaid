@@ -1,8 +1,15 @@
+/* Types */
 import { CommandData } from "../ts/types";
+import { Message, Permissions, VoiceChannel } from "discord.js";
 
+/* Node Imports */
+import ytpl, { validateID } from "ytpl";
+import ytsr from "ytsr";
+import { validateURL } from "ytdl-core-discord";
+
+/* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
 import NeededArgument from "../scripts/helpers/needed_argument";
-import { Message, Permissions, VoiceChannel } from "discord.js";
 import { create_comparator } from "../scripts/utils/util_sort_by";
 import VoiceData from "../scripts/helpers/voice_data";
 
@@ -70,10 +77,12 @@ export default {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
-            if(loading_message === null) { return; }
+            if (loading_message === null) {
+                return;
+            }
 
-            if (command_data.global_context.modules.ytlist.validateID(url) === true) {
-                const result = await command_data.global_context.modules.ytlist(url).catch((err: Error) => {
+            if (validateID(url) === true) {
+                const result = await ytpl(url).catch((err: Error) => {
                     command_data.global_context.logger.error(err);
                     command_data.msg.channel.send("Failed to get video results...").catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
@@ -106,45 +115,49 @@ export default {
                 await command_data.msg.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
-            } else if (command_data.global_context.modules.ytdl.validateURL(url) === true) {
+            } else if (validateURL(url) === true) {
                 url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
                 command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, command_data.msg, loading_message, url, 2);
             } else {
                 const max = 5;
                 const infosByID = new Map();
-                const result = await command_data.global_context.modules.ytsr(command_data.total_argument, { limit: 5 }).catch((e: Error) => {
+                const result = await ytsr(command_data.total_argument, { limit: 5 }).catch((e: Error) => {
                     command_data.global_context.logger.error(e);
                     command_data.msg.channel.send("Failed to get video results...").catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
+                    return null;
                 });
-                if (result === undefined || result.items === undefined) {
+                if (result === null) {
                     return;
                 }
-                result.items = result.items.filter((l: any) => {
-                    return l.type === "video";
-                });
                 result.items.sort(create_comparator(["views"]));
 
                 let description_text = "";
                 for (let i = 1; i <= result.items.length; i++) {
-                    if (result.items[i] === undefined) {
-                        description_text += `**${i})** Private video\n`;
-                    } else {
-                        const item = {
-                            title: result.items[i].title,
-                            url: result.items[i].url,
-                            duration: result.items[i].duration,
-                        };
-                        infosByID.set(i, item);
-
-                        const current_length = command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(item.duration);
-                        const current_length_1 = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(current_length);
-                        description_text += `**${i})** ${item.title} *(${current_length_1})*\n`;
+                    const videoItem = result.items[i];
+                    if (videoItem.type !== "video") {
+                        continue;
                     }
+                    const item = {
+                        title: videoItem.title,
+                        url: videoItem.url,
+                        duration: videoItem.duration,
+                    };
+                    infosByID.set(i, item);
+
+                    const current_length = command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(item.duration);
+                    const current_length_1 = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(current_length);
+                    description_text += `**${i})** ${item.title} *(${current_length_1})*\n`;
                 }
 
-                const collector = command_data.msg.channel.createMessageCollector({ filter: (m: Message) => { return (parseInt(m.content) <= 5 && parseInt(m.content) >= 1 && infosByID.has(parseInt(m.content))) || m.content.startsWith(command_data.server_config.prefix + "play"); }, time: 15000, max: 1 });
+                const collector = command_data.msg.channel.createMessageCollector({
+                    filter: (m: Message) => {
+                        return (parseInt(m.content) <= 5 && parseInt(m.content) >= 1 && infosByID.has(parseInt(m.content))) || m.content.startsWith(command_data.server_config.prefix + "play");
+                    },
+                    time: 15000,
+                    max: 1,
+                });
                 collector.on("collect", (m) => {
                     if (m.content.startsWith(`${command_data.server_config.prefix}play`) === true) {
                         collector.stop();

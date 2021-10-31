@@ -1,21 +1,14 @@
 /* Types */
-import { GlobalContext } from "../ts/types";
+import { GlobalContext, ServerConfig, ServerUserConfig } from "../ts/types";
 
 /* Node Imports */
-import * as crypto from "crypto";
-import * as cheerio from "cheerio";
 import * as axios from "axios";
-import * as xmlconvert from "xml-js";
-import * as io from "socket.io-client";
 import * as sql from "mysql2";
-import * as ytpl from "ytpl";
-import * as ytsr from "ytsr";
-import * as ytdl from "ytdl-core-discord";
-import * as jimp from "jimp";
 import * as NekoClient from "nekos.life";
 import * as akaneko from "akaneko";
 import * as osu from "node-osu";
 import * as Sentry from "@sentry/node";
+import { readFileSync } from "fs";
 
 /* Local Imports */
 import VoiceManager from "../scripts/managers/manager_voice";
@@ -44,29 +37,17 @@ export default async function import_into_context(global_context: GlobalContext)
     const t_start = global_context.modules.performance.now();
 
     //Import modules
-    global_context.modules.crypto = crypto;
 
     //Import fetch modules
-    global_context.modules.cheerio = cheerio;
     global_context.modules.axios = axios;
-    global_context.modules.xmlconvert = xmlconvert;
-    global_context.modules.fetch = require("node-fetch");
-    global_context.modules.io = io;
 
     //Import Youtube modules
-    global_context.modules.ytlist = ytpl;
-    global_context.modules.ytsr = ytsr;
-
     global_context.modules.ytinfo = require("youtube.get-video-info");
     // ^^ THIS ONE HAS ADDED FOLLOWING CODE (otherwise doesn't work)
     // '&eurl=https%3A%2F%2Fyoutube.googleapis.com%2Fv%2Fonz2k4zoLjQ&html5=1&c=TVHTML5&cver=7.20190319' on line 17
 
-    global_context.modules.ytdl = ytdl;
     // ^^ THIS ONE NEEDS TO HAVE 'node-ytdl-core' UPDATED TO 4.8.3 MANUALLY
     // INSTALL 'node-ytdl-core@latest', UPDATE 'package.json' FOR 'ytdl-core-discord' AND DROP 'node-ytdl-core' INTO 'node_modules' IN 'ytdl-core-discord'
-
-    //Import image modules
-    global_context.modules.jimp = jimp;
 
     //Import API modules
     global_context.modules.neko = NekoClient;
@@ -110,7 +91,7 @@ export default async function import_into_context(global_context: GlobalContext)
             });
         return playlist;
     };
-    global_context.utils.get_level_XP = (server_config: any, author_config: any) => {
+    global_context.utils.get_level_XP = (server_config: ServerConfig, author_config: ServerUserConfig) => {
         let level_XP = server_config.module_level_level_exp;
         for (let i = 1; i < author_config.level; i++) {
             level_XP *= server_config.module_level_level_multiplier;
@@ -188,7 +169,7 @@ export default async function import_into_context(global_context: GlobalContext)
     global_context.data.user_cooldowns = new Map();
     global_context.data.economy_list = [];
     global_context.data.last_moderation_actions = new Map();
-    global_context.data.openings = global_context.utils.read_JSON("/configs/data/openings.json");
+    global_context.data.openings = JSON.parse(readFileSync(process.cwd() + "/configs/data/openings.json").toString());
 
     global_context.data.default_headers = {
         "Content-Type": "application/json",

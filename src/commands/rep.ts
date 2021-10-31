@@ -1,5 +1,10 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Node Imports */
+import { randomBytes } from "crypto";
+
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 
 export default {
@@ -17,7 +22,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
         if (command_data.tagged_user.id === command_data.msg.author.id) {
@@ -40,7 +45,7 @@ export default {
 
         command_data.author_user_config.last_rep_time = end.getTime();
         command_data.author_user_config.notifications.push({
-            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+            id: randomBytes(16).toString("hex"),
             user_ID: command_data.msg.author.id,
             timestamp: Date.now(),
             description: `<time_ago> You gave reputation to \`${command_data.tagged_user.tag}\`.`,
@@ -49,7 +54,7 @@ export default {
 
         command_data.tagged_user_config.rep += 1;
         command_data.tagged_user_config.notifications.push({
-            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+            id: randomBytes(16).toString("hex"),
             user_ID: command_data.tagged_user.id,
             timestamp: Date.now(),
             description: `<time_ago> You were given reputation by \`${command_data.msg.author.tag}\`.`,

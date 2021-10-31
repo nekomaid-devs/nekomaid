@@ -1,5 +1,8 @@
-import { get_top_server_level } from "../scripts/utils/util_sort_by";
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
+import { get_top_server_level } from "../scripts/utils/util_sort_by";
 
 export default {
     name: "leveltop",
@@ -55,7 +58,9 @@ export default {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
-            if(target_user === null) { return; }
+            if (target_user === null) {
+                return;
+            }
             embedTop.addField(`${i + 1}) ${target_user.tag}`, `Level ${net} (${Math.round(net_2)} %)`);
         }
 

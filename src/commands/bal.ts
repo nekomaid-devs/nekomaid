@@ -1,4 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 
 export default {
@@ -21,8 +24,10 @@ export default {
         }
         // TODO: add position in top
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if(url === null) { return; }
-        
+        if (url === null) {
+            return;
+        }
+
         const embedBalance = {
             color: 8388736,
             author: {

@@ -1,9 +1,11 @@
+/* Types */
 import { CommandData } from "../ts/types";
+import { Permissions } from "discord.js";
 
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
-import { Permissions } from "discord.js";
 
 export default {
     name: "unban",
@@ -35,7 +37,9 @@ export default {
         command_data.msg.guild.bans
             .fetch()
             .then((server_bans_result) => {
-                if (command_data.msg.guild === null) { return; }
+                if (command_data.msg.guild === null) {
+                    return;
+                }
                 server_bans_result.forEach((ban) => {
                     const tagged_user_display_name_modded = tagged_user_display_name.endsWith("#" + ban.user.discriminator) ? tagged_user_display_name : tagged_user_display_name + "#" + ban.user.discriminator;
                     if (ban.user.username + "#" + ban.user.discriminator === tagged_user_display_name_modded) {

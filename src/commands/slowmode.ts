@@ -1,8 +1,10 @@
+/* Types */
 import { CommandData } from "../ts/types";
+import { Permissions, TextChannel } from "discord.js";
 
+/* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
 import NeededArgument from "../scripts/helpers/needed_argument";
-import { Permissions, TextChannel } from "discord.js";
 
 export default {
     name: "slowmode",

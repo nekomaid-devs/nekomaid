@@ -1,3 +1,4 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
 export default {
@@ -14,7 +15,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
         if (command_data.msg.mentions.users.size > 0) {
@@ -62,7 +63,9 @@ export default {
             command_data.global_context.logger.api_error(e);
             return null;
         });
-        if(married_user === null) { return; }
+        if (married_user === null) {
+            return;
+        }
         const user_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "global_user", id: married_user.id });
         if (command_data.author_user_config.can_divorce == false) {
             command_data.msg.reply(`You can't divorce \`${married_user.tag}\`, because you're going be with them forever!`);

@@ -1,5 +1,8 @@
-import { GuildMember, TextChannel } from "discord.js";
+/* Types */
 import { GlobalContext } from "../ts/types";
+import { GuildMember, TextChannel } from "discord.js";
+
+/* Node Imports */
 import * as Sentry from "@sentry/node";
 
 export default function hook(global_context: GlobalContext) {
@@ -24,7 +27,6 @@ async function process(global_context: GlobalContext, member: GuildMember) {
     const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_member_add", id: member.guild.id });
     const server_mutes = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_mutes", id: member.guild.id });
 
-    await global_context.utils.verify_guild_roles(member.guild);
     member.guild.roles.cache
         .filter((e) => {
             return server_config.auto_roles.includes(e.id);
@@ -39,7 +41,9 @@ async function process(global_context: GlobalContext, member: GuildMember) {
         global_context.logger.api_error(e);
         return null;
     });
-    if (mute_role === null) { return; }
+    if (mute_role === null) {
+        return;
+    }
     if (
         server_mutes.some((e: any) => {
             return e.user_ID === member.user.id;
@@ -59,7 +63,9 @@ async function process(global_context: GlobalContext, member: GuildMember) {
             global_context.logger.api_error(e);
             return null;
         });
-        if (!(channel instanceof TextChannel)) { return; }
+        if (!(channel instanceof TextChannel)) {
+            return;
+        }
 
         channel.send(format).catch((e: Error) => {
             global_context.logger.api_error(e);

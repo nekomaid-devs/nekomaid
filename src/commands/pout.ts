@@ -1,5 +1,8 @@
-import { get_pout_gifs } from "../scripts/utils/util_vars";
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
+import { get_pout_gifs } from "../scripts/utils/util_vars";
 
 export default {
     name: "pout",

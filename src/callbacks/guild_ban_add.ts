@@ -1,6 +1,10 @@
-import { GuildBan, TextChannel, User } from "discord.js";
+/* Types */
 import { GlobalContext } from "../ts/types";
+import { GuildBan, TextChannel, User } from "discord.js";
+
+/* Node Imports */
 import * as Sentry from "@sentry/node";
+import { randomBytes } from "crypto";
 
 export default function hook(global_context: GlobalContext) {
     global_context.bot.on("guildBanAdd", async (ban) => {
@@ -21,7 +25,9 @@ export default function hook(global_context: GlobalContext) {
 }
 
 async function process(global_context: GlobalContext, ban: GuildBan) {
-    if(global_context.bot.user === null) { return; }
+    if (global_context.bot.user === null) {
+        return;
+    }
 
     const moderation_action = global_context.data.last_moderation_actions.get(ban.guild.id);
     const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_member_ban_add", id: ban.guild.id });
@@ -30,14 +36,20 @@ async function process(global_context: GlobalContext, ban: GuildBan) {
         const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
             global_context.logger.api_error(e);
         });
-        if (!(channel instanceof TextChannel)) { return; }
+        if (!(channel instanceof TextChannel)) {
+            return;
+        }
         const audit = await ban.guild.fetchAuditLogs().catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;
         });
-        if(audit === null) { return; }
+        if (audit === null) {
+            return;
+        }
         const last_audit = audit.entries.first();
-        if(last_audit === undefined || !(last_audit.target instanceof User) || last_audit.executor === null) { return; }
+        if (last_audit === undefined || !(last_audit.target instanceof User) || last_audit.executor === null) {
+            return;
+        }
 
         if (last_audit.action === "MEMBER_BAN_ADD" && last_audit.target.id === ban.user.id) {
             let executor;
@@ -52,7 +64,9 @@ async function process(global_context: GlobalContext, ban: GuildBan) {
                     return null;
                 });
             }
-            if(executor === null) { return; }
+            if (executor === null) {
+                return;
+            }
 
             const url = ban.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
             const embedBan: any = {
@@ -93,7 +107,7 @@ async function process(global_context: GlobalContext, ban: GuildBan) {
     }
 
     const server_ban = {
-        id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+        id: randomBytes(16).toString("hex"),
         server_ID: ban.guild.id,
         user_ID: ban.user.id,
         start: moderation_action !== undefined ? moderation_action.start : Date.now(),

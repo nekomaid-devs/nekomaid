@@ -1,9 +1,11 @@
-import { Message, TextChannel, User } from "discord.js";
+/* Types */
 import { GlobalContext } from "../../ts/types";
+import { Message, TextChannel, User } from "discord.js";
+
+/* Local Imports */
 import MarriageProposal from "../helpers/marriage_proposal";
 
 class MarriageManager {
-
     marriage_proposals: Map<any, any>;
     timeout_proposals: Map<any, any>;
 
@@ -13,7 +15,9 @@ class MarriageManager {
     }
 
     async check_marriage_proposals(global_context: GlobalContext, message: Message) {
-        if(message.member === null) { return; }
+        if (message.member === null) {
+            return;
+        }
 
         if (global_context.neko_modules_clients.marriageManager.marriage_proposals.has(message.member.user.id)) {
             if (message.content.toLowerCase() === "yes" || message.content.toLowerCase() === "no") {

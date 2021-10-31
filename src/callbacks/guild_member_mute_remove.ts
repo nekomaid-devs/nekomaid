@@ -1,5 +1,8 @@
-import { TextChannel } from "discord.js";
+/* Types */
 import { GlobalContext } from "../ts/types";
+import { TextChannel } from "discord.js";
+
+/* Node Imports */
 import * as Sentry from "@sentry/node";
 
 export default function hook(global_context: GlobalContext) {
@@ -28,7 +31,9 @@ async function process(global_context: GlobalContext, event: any) {
             global_context.logger.api_error(e);
             return null;
         });
-        if (!(channel instanceof TextChannel)) { return; }
+        if (!(channel instanceof TextChannel)) {
+            return;
+        }
 
         const url = event.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         const embedUnmute = {

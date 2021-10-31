@@ -1,7 +1,12 @@
-import { CommandData, GlobalContext } from "../ts/types";
-
-import NeededPermission from "../scripts/helpers/needed_permission";
+/* Types */
+import { CommandData, GlobalContext, ServerConfig } from "../ts/types";
 import { Message, Permissions } from "discord.js";
+
+/* Node Imports */
+import { randomBytes } from "crypto";
+
+/* Local Imports */
+import NeededPermission from "../scripts/helpers/needed_permission";
 
 export default {
     name: "rr",
@@ -24,7 +29,9 @@ export default {
             command_data.global_context.logger.api_error(e);
             return null;
         });
-        if(msg === null) { return; }
+        if (msg === null) {
+            return;
+        }
 
         const roles = new Map();
         const role_messages: any[] = [];
@@ -33,12 +40,19 @@ export default {
         this.continue_collecting(command_data.global_context, command_data.server_config, command_data.msg, msg, role_messages, roles);
     },
 
-    continue_collecting(global_context: GlobalContext, server_config: any, source_message: Message, msg: Message, role_messages: any, roles: any) {
+    continue_collecting(global_context: GlobalContext, server_config: ServerConfig, source_message: Message, msg: Message, role_messages: any, roles: any) {
         let role_name: any;
         let role: any;
-        const collector = msg.channel.createMessageCollector({ filter: (m: Message) => { return m.author.id === source_message.author.id; }, max: 1 });
+        const collector = msg.channel.createMessageCollector({
+            filter: (m: Message) => {
+                return m.author.id === source_message.author.id;
+            },
+            max: 1,
+        });
         collector.on("collect", (message) => {
-            if(msg.guild === null) { return; }
+            if (msg.guild === null) {
+                return;
+            }
 
             switch (message.content) {
                 case "stop": {
@@ -60,7 +74,7 @@ export default {
                     }
 
                     const reactionRoleMenuInfo = {
-                        id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+                        id: randomBytes(16).toString("hex"),
                         server_ID: msg.guild.id,
                         channel_ID: msg.channel.id,
                         message_ID: msg.id,
@@ -112,8 +126,13 @@ export default {
                     role_messages.push(message);
                     roles.set(role.id, "");
                     msg.edit(`React on your message with an emote you want the menu to have (${roles.size}/${roles.size})...`);
-                    
-                    const collector_2 = message.createReactionCollector({ filter: (r, u) => { return u.id === source_message.author.id; }, max: 1 });
+
+                    const collector_2 = message.createReactionCollector({
+                        filter: (r, u) => {
+                            return u.id === source_message.author.id;
+                        },
+                        max: 1,
+                    });
                     collector_2.on("collect", (r) => {
                         roles.set(role.id, r.emoji.id === null ? r.emoji.name : `<:${r.emoji.name}:${r.emoji.id}>`);
                         msg.edit(`Type in a role name or \`stop\` to finish the menu! (${roles.size} roles so far)`);

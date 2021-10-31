@@ -1,9 +1,11 @@
+/* Types */
 import { CommandData } from "../ts/types";
+import { Permissions } from "discord.js";
 
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
-import { Permissions } from "discord.js";
 
 export default {
     name: "mute",
@@ -104,7 +106,9 @@ export default {
     },
 
     create_mute_role_and_mute(command_data: CommandData) {
-        if(command_data.msg.guild === null) { return; }
+        if (command_data.msg.guild === null) {
+            return;
+        }
 
         command_data.msg.guild.roles
             .create({
@@ -115,8 +119,10 @@ export default {
                 permissions: [],
             })
             .then(async (mute_role) => {
-                if(command_data.msg.guild === null) { return; }
-                
+                if (command_data.msg.guild === null) {
+                    return;
+                }
+
                 command_data.msg.guild.channels.cache.forEach((channel) => {
                     if (channel.type === "GUILD_TEXT") {
                         channel.permissionOverwrites

@@ -1,4 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 import { get_building_field, get_building_price, get_global_building_field } from "../scripts/utils/util_vars";
 
@@ -17,7 +20,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot.user === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot.user === null || command_data.global_context.bot_config === null) {
             return;
         }
         const amount = parseInt(command_data.args[command_data.args.length - 1]);
@@ -32,11 +35,11 @@ export default {
         const embedBuild: any = {
             color: 8388736,
             author: {
-                name: `${building_name}`
+                name: `${building_name}`,
             },
             footer: {
                 text: `Requested by ${command_data.msg.author.tag}`,
-            }
+            },
         };
         const embedBuildProgress: any = {
             color: 8388736,
@@ -45,15 +48,25 @@ export default {
             },
         };
 
+        const author_user_config_map = new Map(Object.entries(command_data.author_user_config));
         if (building_field !== undefined) {
+            const building_field_level = author_user_config_map.get(building_field);
+            if (!(typeof building_field_level === "number")) {
+                return;
+            }
+            const building_field_credits = author_user_config_map.get(building_field + "_credits");
+            if (!(typeof building_field_credits === "number")) {
+                return;
+            }
+
             if (isNaN(amount)) {
-                const next_building_cost = get_building_price(command_data.author_user_config[building_field], building_field);
+                const next_building_cost = get_building_price(building_field_level, building_field);
                 const next_building_cost_text = next_building_cost !== undefined ? command_data.global_context.utils.format_number(next_building_cost) : "-";
-                const progress = next_building_cost !== undefined ? ((command_data.author_user_config[building_field + "_credits"] / next_building_cost) * 100).toFixed(2) : "0";
+                const progress = next_building_cost !== undefined ? ((building_field_credits / next_building_cost) * 100).toFixed(2) : "0";
                 let building_description = "";
-                building_description += `**🔨 Built:** ${command_data.global_context.utils.format_number(command_data.author_user_config[building_field + "_credits"])}/${next_building_cost_text} $\n`;
+                building_description += `**🔨 Built:** ${command_data.global_context.utils.format_number(building_field_credits)}/${next_building_cost_text} $\n`;
                 building_description += `**📈 Progress:** ${progress}%\n`;
-                building_description += `**⭐ Level:** ${command_data.author_user_config[building_field]}`;
+                building_description += `**⭐ Level:** ${author_user_config_map.get(building_field)}`;
 
                 const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 embedBuild.author.icon_url = url;
@@ -71,10 +84,11 @@ export default {
                     return;
                 }
 
-                command_data.author_user_config.credits -= amount;
-                command_data.author_user_config[building_field + "_credits"] += amount;
+                author_user_config_map.set("credits", command_data.author_user_config.credits - amount);
+                author_user_config_map.set(building_field + "_credits", building_field_credits + amount);
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+                const a: any = Object.fromEntries(author_user_config_map);
+                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: a });
 
                 const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 embedBuildProgress.author.icon_url = url;
@@ -84,15 +98,25 @@ export default {
                 });
             }
         }
+        const bot_config_map = new Map(Object.entries(command_data.global_context.bot_config));
         if (global_building_field !== undefined) {
+            const global_building_field_level = bot_config_map.get(global_building_field);
+            if (!(typeof global_building_field_level === "number")) {
+                return;
+            }
+            const global_building_field_credits = bot_config_map.get(global_building_field + "_credits");
+            if (!(typeof global_building_field_credits === "number")) {
+                return;
+            }
+
             if (isNaN(amount)) {
-                const next_building_cost = get_building_price(command_data.global_context.bot_config[global_building_field], global_building_field);
+                const next_building_cost = get_building_price(global_building_field_level, global_building_field);
                 const next_building_cost_text = next_building_cost !== undefined ? command_data.global_context.utils.format_number(next_building_cost) : "-";
-                const progress = next_building_cost !== undefined ? ((command_data.global_context.bot_config[global_building_field + "_credits"] / next_building_cost) * 100).toFixed(2) : "0";
+                const progress = next_building_cost !== undefined ? ((global_building_field_credits / next_building_cost) * 100).toFixed(2) : "0";
                 let building_description = "";
-                building_description += `**🔨 Built:** ${command_data.global_context.utils.format_number(command_data.global_context.bot_config[global_building_field + "_credits"])}/${next_building_cost_text} $\n`;
+                building_description += `**🔨 Built:** ${command_data.global_context.utils.format_number(global_building_field_credits)}/${next_building_cost_text} $\n`;
                 building_description += `**📈 Global Progress:** ${progress}%\n`;
-                building_description += `**⭐ Global Level:** ${command_data.global_context.bot_config[global_building_field]}`;
+                building_description += `**⭐ Global Level:** ${bot_config_map.get(global_building_field)}`;
 
                 const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 embedBuild.author.icon_url = url;
@@ -110,11 +134,13 @@ export default {
                     return;
                 }
 
-                command_data.author_user_config.credits -= amount;
-                command_data.global_context.bot_config[global_building_field + "_credits"] += amount;
+                author_user_config_map.set("credits", command_data.author_user_config.credits - amount);
+                bot_config_map.set(global_building_field + "_credits", global_building_field_credits + amount);
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: command_data.global_context.bot_config });
+                const a: any = Object.fromEntries(author_user_config_map);
+                const b: any = Object.fromEntries(bot_config_map);
+                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: a });
+                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: b });
 
                 const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 embedBuildProgress.author.icon_url = url;

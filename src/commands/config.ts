@@ -1,6 +1,12 @@
+/* Types */
 import { CommandData } from "../ts/types";
-import NeededPermission from "../scripts/helpers/needed_permission";
 import { Permissions, TextChannel } from "discord.js";
+
+/* Node Imports */
+import { randomBytes } from "crypto";
+
+/* Local Imports */
+import NeededPermission from "../scripts/helpers/needed_permission";
 import { get_error_embed } from "../scripts/utils/util_vars";
 
 export default {
@@ -69,7 +75,7 @@ export default {
                 auto_roles_text = "`None`";
             }
 
-            const embedConfig = {
+            const embedConfig: any = {
                 title: "Config",
                 description: `To set values see - \`${command_data.server_config.prefix}help config set\`\nTo add values see - \`${command_data.server_config.prefix}help config add\`\nTo remove values see - \`${command_data.server_config.prefix}help config remove\``,
                 color: 8388736,
@@ -126,11 +132,9 @@ export default {
                         }
 
                         if (command_data.args.length < 3) {
-                            command_data.msg.channel
-                                .send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`.", "add auto_role Newbie")] })
-                                .catch((e: Error) => {
-                                    command_data.global_context.logger.api_error(e);
-                                });
+                            command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`.", "add auto_role Newbie")] }).catch((e: Error) => {
+                                command_data.global_context.logger.api_error(e);
+                            });
                             return;
                         }
                         const role_name = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[2], command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length));
@@ -164,15 +168,7 @@ export default {
                         if (command_data.args.length < 3) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            "You need to enter a `type`. (Types: `allMembers`, `members`, `roles`, `channels`, `bots`)",
-                                            "add counter allMembers"
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `type`. (Types: `allMembers`, `members`, `roles`, `channels`, `bots`)", "add counter allMembers")],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -218,13 +214,7 @@ export default {
                                 command_data.msg.channel
                                     .send({
                                         embeds: [
-                                            get_error_embed(
-                                                command_data.msg,
-                                                command_data.server_config.prefix,
-                                                this,
-                                                "Invalid counter `type`- (Types: `all_members`, `members`, `roles`, `channels`, `bots`)",
-                                                "add counter all_members"
-                                            ),
+                                            get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid counter `type`- (Types: `all_members`, `members`, `roles`, `channels`, `bots`)", "add counter all_members"),
                                         ],
                                     })
                                     .catch((e: Error) => {
@@ -234,7 +224,7 @@ export default {
                             }
                         }
 
-                        const counter = { id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), type: counter_type, server_ID: command_data.msg.guild.id, channel_ID: channel.id, last_update: new Date().getTime() };
+                        const counter = { id: randomBytes(16).toString("hex"), type: counter_type, server_ID: command_data.msg.guild.id, channel_ID: channel.id, last_update: new Date().getTime() };
                         command_data.server_config.counters.push(counter);
                         setTimeout(() => {
                             command_data.global_context.neko_modules_clients.counterManager.update_counter(command_data.global_context, command_data.msg.guild, counter, true);
@@ -341,15 +331,7 @@ export default {
                         if (role_index < 0) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `No \`auto_role\` with name \`${role_name}\` found-`,
-                                            "remove auto_role Newbie"
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No \`auto_role\` with name \`${role_name}\` found-`, "remove auto_role Newbie")],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -412,15 +394,7 @@ export default {
                 if (command_data.args.length < 3) {
                     command_data.msg.channel
                         .send({
-                            embeds: [
-                                get_error_embed(
-                                    command_data.msg,
-                                    command_data.server_config.prefix,
-                                    this,
-                                    `You need to enter a new value for \`${property}\`-`,
-                                    "set " + property + " <newValue>"
-                                ),
-                            ],
+                            embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, "set " + property + " <newValue>")],
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -436,15 +410,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -464,15 +430,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -491,15 +449,7 @@ export default {
                         if (typeof value !== "string" || value.length < 1) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (text)`,
-                                            `set ${property} Welcome <user>!`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (text)`, `set ${property} Welcome <user>!`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -520,15 +470,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -547,15 +489,7 @@ export default {
                         if (typeof value !== "string" || value.length < 1) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (text)`,
-                                            `set ${property} Farawell <user>!`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (text)`, `set ${property} Farawell <user>!`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -580,15 +514,7 @@ export default {
                         if (channel === null) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (channel mention)`,
-                                            `set ${property} #${command_data.msg.channel.name}`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -597,12 +523,11 @@ export default {
                         }
 
                         const permissions = command_data.global_context.bot.user === null ? null : channel.permissionsFor(command_data.global_context.bot.user);
-                        if(permissions === null) { return; }
+                        if (permissions === null) {
+                            return;
+                        }
 
-                        if (
-                            permissions.has(Permissions.FLAGS.VIEW_CHANNEL) === false ||
-                            permissions.has(Permissions.FLAGS.SEND_MESSAGES) === false
-                        ) {
+                        if (permissions.has(Permissions.FLAGS.VIEW_CHANNEL) === false || permissions.has(Permissions.FLAGS.SEND_MESSAGES) === false) {
                             command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again.");
                             return;
                         }
@@ -623,15 +548,7 @@ export default {
                         if (channel === null) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (channel mention)`,
-                                            `set ${property} #${command_data.msg.channel.name}`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -640,12 +557,11 @@ export default {
                         }
 
                         const permissions = command_data.global_context.bot.user === null ? null : channel.permissionsFor(command_data.global_context.bot.user);
-                        if(permissions === null) { return; }
+                        if (permissions === null) {
+                            return;
+                        }
 
-                        if (
-                            permissions.has(Permissions.FLAGS.VIEW_CHANNEL) === false ||
-                            permissions.has(Permissions.FLAGS.SEND_MESSAGES) === false
-                        ) {
+                        if (permissions.has(Permissions.FLAGS.VIEW_CHANNEL) === false || permissions.has(Permissions.FLAGS.SEND_MESSAGES) === false) {
                             command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again.");
                             return;
                         }
@@ -662,15 +578,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);

@@ -1,5 +1,8 @@
-import { GuildMember, PartialGuildMember } from "discord.js";
+/* Types */
 import { GlobalContext } from "../ts/types";
+import { GuildMember, PartialGuildMember } from "discord.js";
+
+/* Node Imports */
 import * as Sentry from "@sentry/node";
 
 export default function hook(global_context: GlobalContext) {
@@ -21,7 +24,9 @@ export default function hook(global_context: GlobalContext) {
 }
 
 async function process(global_context: GlobalContext, old_member: GuildMember | PartialGuildMember, new_member: GuildMember) {
-    if (old_member === null) { return; }
+    if (old_member === null) {
+        return;
+    }
     if (old_member.nickname !== new_member.nickname) {
         global_context.bot.emit("guildMemberNicknameChange", old_member, new_member);
     }

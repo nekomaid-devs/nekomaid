@@ -1,3 +1,4 @@
+/* Types */
 import { CommandData, ExtraPermission } from "../ts/types";
 
 import NeededPermission from "../scripts/helpers/needed_permission";

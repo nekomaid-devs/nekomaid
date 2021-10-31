@@ -1,8 +1,10 @@
+/* Types */
 import { CommandData } from "../ts/types";
+import { Permissions } from "discord.js";
 
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
-import { Permissions } from "discord.js";
 
 export default {
     name: "prefix",
@@ -33,7 +35,7 @@ export default {
                     },
                 ],
                 footer: {
-                    text: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`
+                    text: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`,
                 },
             };
             command_data.msg.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {

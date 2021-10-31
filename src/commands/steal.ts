@@ -1,5 +1,10 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Node Imports */
+import { randomBytes } from "crypto";
+
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 
 export default {
@@ -17,7 +22,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
         if (command_data.tagged_user.id === command_data.msg.author.id) {
@@ -48,7 +53,7 @@ export default {
         command_data.author_user_config.credits += credits_amount;
         command_data.author_user_config.net_worth += credits_amount;
         command_data.author_user_config.notifications.push({
-            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+            id: randomBytes(16).toString("hex"),
             user_ID: command_data.msg.author.id,
             timestamp: Date.now(),
             description: `<time_ago> You stole \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` from \`${command_data.tagged_user.tag}\`.`,
@@ -58,7 +63,7 @@ export default {
         command_data.tagged_user_config.credits -= credits_amount;
         command_data.tagged_user_config.net_worth -= credits_amount;
         command_data.tagged_user_config.notifications.push({
-            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+            id: randomBytes(16).toString("hex"),
             user_ID: command_data.tagged_user.id,
             timestamp: Date.now(),
             description: `<time_ago> You were stolen \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` by \`${command_data.msg.author.tag}\`.`,

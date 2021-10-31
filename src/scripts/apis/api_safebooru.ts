@@ -1,4 +1,8 @@
+/* Types */
 import { GlobalContext } from "../../ts/types";
+
+/* Node Imports */
+import { xml2json } from "xml-js";
 
 class SafebooruAPI {
     async safebooru_result(global_context: GlobalContext, args: string[]) {
@@ -7,7 +11,7 @@ class SafebooruAPI {
             global_context.logger.neko_api_error(e);
         });
 
-        const pages_navigator = JSON.parse(global_context.modules.xmlconvert.xml2json(result_pages.data));
+        const pages_navigator = JSON.parse(xml2json(result_pages.data));
         const pages = pages_navigator.elements[0].attributes.count - 1;
         const page_index = Math.floor(Math.random() * pages) + 1;
 
@@ -16,7 +20,7 @@ class SafebooruAPI {
             global_context.logger.neko_api_error(e);
         });
 
-        const posts = JSON.parse(global_context.modules.xmlconvert.xml2json(result_main.data));
+        const posts = JSON.parse(xml2json(result_main.data));
         if (posts.elements[0].elements === undefined || posts.elements[0].elements.length < 1) {
             return { status: -1 };
         }

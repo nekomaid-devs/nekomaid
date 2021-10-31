@@ -1,3 +1,4 @@
+/* Types */
 import { GlobalContext } from "../../ts/types";
 
 export default async function fetch(global_context: GlobalContext, data: any) {

@@ -1,4 +1,8 @@
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Node Imports */
+import { randomBytes } from "crypto";
 
 export default {
     name: "beg",
@@ -14,7 +18,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
         const end = new Date();
@@ -42,7 +46,7 @@ export default {
         if (chance <= [40][0]) {
             answers = command_data.global_context.bot_config.beg_success_answers;
             command_data.author_user_config.notifications.push({
-                id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+                id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
                 description: `<time_ago> You begged and got \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`.`,
@@ -52,7 +56,7 @@ export default {
             answer_color = 15483730;
             credits_amount = 0;
             command_data.author_user_config.notifications.push({
-                id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+                id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
                 description: `<time_ago> You begged, but failed.`,

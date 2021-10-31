@@ -1,10 +1,14 @@
-import { Message, TextChannel } from "discord.js";
-import { off } from "process";
+/* Types */
 import { GlobalContext } from "../../ts/types";
+import { Message, TextChannel } from "discord.js";
+
+/* Node Imports */
+import ytdl from "ytdl-core-discord";
+
+/* Local Imports */
 import VoiceRequest from "../helpers/voice_request";
 
 class VoiceManager {
-
     connections: Map<any, any>;
 
     constructor() {
@@ -40,18 +44,22 @@ class VoiceManager {
                 global_context.neko_modules_clients.voiceManager.connections.get(id).stream.destroy();
             }
 
-            if(error_message !== null) {
+            if (error_message !== null) {
                 const guild = await global_context.bot.guilds.fetch(id).catch((e: Error) => {
                     global_context.logger.api_error(e);
                     return null;
                 });
-                if(guild === null) { return; }
+                if (guild === null) {
+                    return;
+                }
                 const channel = await guild.channels.fetch(global_context.neko_modules_clients.voiceManager.connections.get(id).current.request_channel_ID).catch((e: Error) => {
                     global_context.logger.api_error(e);
                     return null;
                 });
-                if(channel === null || !(channel instanceof TextChannel)) { return; }
-    
+                if (channel === null || !(channel instanceof TextChannel)) {
+                    return;
+                }
+
                 channel.send(error_message).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
@@ -96,7 +104,9 @@ class VoiceManager {
                     global_context.logger.api_error(e);
                     return null;
                 });
-                if(channel === null || !(channel instanceof TextChannel)) { return; }
+                if (channel === null || !(channel instanceof TextChannel)) {
+                    return;
+                }
 
                 channel.send(`I left \`${voice_data.connection.channel.name}\`, because I was left alone.`).catch((e: Error) => {
                     global_context.logger.api_error(e);
@@ -112,7 +122,9 @@ class VoiceManager {
     }
 
     async play_on_connection(global_context: GlobalContext, source_message: Message, loading_message: Message, info: any, log_type: any) {
-        if(source_message.guild === null || source_message.member === null || global_context.bot.user === null) { return; }
+        if (source_message.guild === null || source_message.member === null || global_context.bot.user === null) {
+            return;
+        }
 
         const id = source_message.guild.id;
         const voice_data = global_context.neko_modules_clients.voiceManager.connections.get(id);
@@ -151,7 +163,7 @@ class VoiceManager {
 
         let stream;
         if (voice_data.current === -1) {
-            stream = voice_data.connection.play(await global_context.modules.ytdl(info.url, { quality: "highestaudio", highWaterMark: 1 << 25 }), { type: "opus" });
+            stream = voice_data.connection.play(await ytdl(info.url, { quality: "highestaudio", highWaterMark: 1 << 25 }), { type: "opus" });
             voice_data.elapsed_ms = 0;
             stream.on("finish", () => {
                 voice_data.current = -1;
@@ -246,7 +258,7 @@ class VoiceManager {
                     current_length_2 = "Livestream";
                 }
 
-                const stream = voice_data.connection.play(await global_context.modules.ytdl(voice_request.url, { quality: "highestaudio", highWaterMark: 1 << 25 }), { type: "opus" });
+                const stream = voice_data.connection.play(await ytdl(voice_request.url, { quality: "highestaudio", highWaterMark: 1 << 25 }), { type: "opus" });
                 voice_data.elapsed_ms = 0;
                 stream.on("finish", () => {
                     voice_data.current = -1;
@@ -261,7 +273,9 @@ class VoiceManager {
                         global_context.logger.api_error(e);
                         return null;
                     });
-                    if(channel === null || !(channel instanceof TextChannel)) { return; }
+                    if (channel === null || !(channel instanceof TextChannel)) {
+                        return;
+                    }
 
                     channel.send("There was an error while playing the video...").catch((e: Error) => {
                         global_context.logger.api_error(e);
@@ -278,7 +292,9 @@ class VoiceManager {
                     global_context.logger.api_error(e);
                     return null;
                 });
-                if(channel === null || !(channel instanceof TextChannel)) { return; }
+                if (channel === null || !(channel instanceof TextChannel)) {
+                    return;
+                }
 
                 embedPlay.author.name = `🔊 Playing - ${voice_request.info.title}`;
                 embedPlay.description = `Length: \`${current_length_2}\`\nLink: ${voice_request.url}\nAdded by: <@${voice_request.request_user_ID}>`;

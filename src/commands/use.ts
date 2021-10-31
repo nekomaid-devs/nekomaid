@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 
 export default {
@@ -17,7 +19,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
         // TODO: add support for number of items

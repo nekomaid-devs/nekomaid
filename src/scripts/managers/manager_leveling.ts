@@ -1,9 +1,12 @@
-import { Permissions, TextChannel } from "discord.js";
+/* Types */
 import { CommandData } from "../../ts/types";
+import { Permissions, TextChannel } from "discord.js";
 
 class LevelingManager {
     async update_server_level(command_data: CommandData, xp_to_add: number, send_levelup_message = true) {
-        if(command_data.msg.guild === null) { return; }
+        if (command_data.msg.guild === null) {
+            return;
+        }
         if (isNaN(xp_to_add)) {
             return;
         }
@@ -26,13 +29,17 @@ class LevelingManager {
         const removed_roles: any[] = [];
 
         const process_ranks = async () => {
-            if(command_data.msg.guild === null || command_data.msg.guild.me === null) { return; }
+            if (command_data.msg.guild === null || command_data.msg.guild.me === null) {
+                return;
+            }
             if (command_data.server_config.module_level_ranks.length > 0 && command_data.msg.guild.me.permissions.has(Permissions.FLAGS.MANAGE_ROLES) === false) {
                 const channel = await command_data.global_context.bot.channels.fetch(command_data.server_config.module_level_levelup_messages_channel).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                     return null;
                 });
-                if(channel === null || !(channel instanceof TextChannel)) { return; }
+                if (channel === null || !(channel instanceof TextChannel)) {
+                    return;
+                }
 
                 channel.send("Ranks are setup, but the bot doesn't have required permissions - `Manage Roles`\nPlease add required permissions and try again-").catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
@@ -41,7 +48,9 @@ class LevelingManager {
             }
 
             command_data.server_config.module_level_ranks.forEach((rank: any) => {
-                if(command_data.msg.guild === null) { return; }
+                if (command_data.msg.guild === null) {
+                    return;
+                }
                 const role = command_data.msg.guild.roles.cache.find((r) => {
                     return r.id === rank.role_ID;
                 });
@@ -109,14 +118,16 @@ class LevelingManager {
 
             if (command_data.server_config.module_level_levelup_messages == true && send_levelup_message == true) {
                 let levelup_message = command_data.server_config.module_level_levelup_messages_format;
-                levelup_message = levelup_message.replace("<user>", command_data.server_config.module_level_levelup_messages_ping == true ? command_data.tagged_user : command_data.tagged_user.tag);
-                levelup_message = levelup_message.replace("<level>", command_data.tagged_server_user_config.level);
+                levelup_message = levelup_message.replace("<user>", command_data.server_config.module_level_levelup_messages_ping == true ? command_data.tagged_user.toString() : command_data.tagged_user.tag);
+                levelup_message = levelup_message.replace("<level>", command_data.tagged_server_user_config.level.toString());
 
                 const channel = await command_data.msg.guild.channels.fetch(command_data.server_config.module_level_levelup_messages_channel).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                     return null;
                 });
-                if(channel === null || !(channel instanceof TextChannel)) { return; }
+                if (channel === null || !(channel instanceof TextChannel)) {
+                    return;
+                }
 
                 channel.send(levelup_message + rank_message).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
@@ -129,6 +140,10 @@ class LevelingManager {
     }
 
     async update_global_level(command_data: CommandData) {
+        if (command_data.global_context.bot_config === null) {
+            return;
+        }
+
         const message_XP = command_data.global_context.bot_config.message_XP;
         const level_XP = command_data.global_context.bot_config.level_XP;
 

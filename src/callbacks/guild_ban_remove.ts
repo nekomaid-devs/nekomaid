@@ -1,5 +1,8 @@
-import { GuildBan, TextChannel, User } from "discord.js";
+/* Types */
 import { GlobalContext } from "../ts/types";
+import { GuildBan, TextChannel, User } from "discord.js";
+
+/* Node Imports */
 import * as Sentry from "@sentry/node";
 
 export default function hook(global_context: GlobalContext) {
@@ -21,7 +24,9 @@ export default function hook(global_context: GlobalContext) {
 }
 
 async function process(global_context: GlobalContext, ban: GuildBan) {
-    if(global_context.bot.user === null) { return; }
+    if (global_context.bot.user === null) {
+        return;
+    }
 
     const moderation_action = global_context.data.last_moderation_actions.get(ban.guild.id);
     const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_ban_remove", id: ban.guild.id });
@@ -32,14 +37,20 @@ async function process(global_context: GlobalContext, ban: GuildBan) {
             global_context.logger.api_error(e);
             return null;
         });
-        if (!(channel instanceof TextChannel)) { return; }
+        if (!(channel instanceof TextChannel)) {
+            return;
+        }
         const audit = await ban.guild.fetchAuditLogs().catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;
         });
-        if(audit === null) { return; }
+        if (audit === null) {
+            return;
+        }
         const last_audit = audit.entries.first();
-        if(last_audit === undefined || !(last_audit.target instanceof User) || last_audit.executor === null) { return; }
+        if (last_audit === undefined || !(last_audit.target instanceof User) || last_audit.executor === null) {
+            return;
+        }
 
         if (last_audit.action === "MEMBER_BAN_REMOVE" && last_audit.target.id === ban.user.id) {
             let executor;
@@ -54,7 +65,9 @@ async function process(global_context: GlobalContext, ban: GuildBan) {
                     return null;
                 });
             }
-            if(executor === null) { return; }
+            if (executor === null) {
+                return;
+            }
 
             const url = ban.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
             const embedBan: any = {

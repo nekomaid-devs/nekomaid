@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData, ExtraPermission } from "../ts/types";
 
+/* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
 import NeededArgument from "../scripts/helpers/needed_argument";
 
@@ -24,7 +26,9 @@ export default {
         const eval_query = command_data.total_argument;
 
         const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if(url === null) { return; }
+        if (url === null) {
+            return;
+        }
         const embedEval: any = {
             author: {
                 name: "Result for eval (current context)",
@@ -38,7 +42,9 @@ export default {
             command_data.global_context.logger.api_error(e);
             return null;
         });
-        if(message === null) { return; }
+        if (message === null) {
+            return;
+        }
 
         try {
             const t_start = command_data.global_context.modules.performance.now();

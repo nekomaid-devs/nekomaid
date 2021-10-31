@@ -1,4 +1,8 @@
+/* Types */
 import { GlobalContext } from "../../ts/types";
+
+/* Node Imports */
+import { load } from "cheerio";
 
 class RealbooruAPI {
     async realbooru_result(global_context: GlobalContext, args: string[]) {
@@ -9,7 +13,7 @@ class RealbooruAPI {
         if (result_main === undefined || result_main.data === undefined) {
             return { status: -1 };
         }
-        const $0 = await global_context.modules.cheerio.load(result_main.data);
+        const $0 = await load(result_main.data);
 
         const pages = [];
         let next_page: any = null;
@@ -55,13 +59,13 @@ class RealbooruAPI {
             if (result_posts === undefined || result_posts.data === undefined) {
                 return { status: -1 };
             }
-            const $1 = await global_context.modules.cheerio.load(result_posts.data);
+            const $1 = await load(result_posts.data);
 
             const post_links: any[] = [];
-            $1(".col").each(function (this: any) {
+            $1(".col").each(function (this) {
                 const preview = $1(this);
-                let href = -1;
-                preview.children().each(function (this: any) {
+                let href;
+                preview.children().each(function (this) {
                     href = $1(this).attr("href");
                 });
                 /*let tags_attr = -1;
@@ -83,13 +87,13 @@ class RealbooruAPI {
                 if (result_post === undefined || result_post.data === undefined) {
                     return { status: -1 };
                 }
-                const $2 = await global_context.modules.cheerio.load(result_post.data);
+                const $2 = await load(result_post.data);
 
                 const image = $2("#image");
                 const image_link = image.attr("src");
 
                 const tags_attr = image.attr("alt");
-                const tags = tags_attr.split(" ");
+                const tags = tags_attr === undefined ? [] : tags_attr.split(" ");
 
                 const page_number = pages.indexOf(page);
                 const post_info = {

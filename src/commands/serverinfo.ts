@@ -1,3 +1,4 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
 export default {
@@ -20,9 +21,10 @@ export default {
         const elapsed = new Date().getTime() - new Date(command_data.msg.guild.createdAt.toUTCString()).getTime();
         const createdAgo = command_data.global_context.neko_modules.timeConvert.convert_time(elapsed);
 
-        await command_data.global_context.utils.verify_guild_members(command_data.msg.guild);
         const url = command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
-        if(url === null) { return; }
+        if (url === null) {
+            return;
+        }
         const owner = await command_data.msg.guild.fetchOwner();
         const embedServer = {
             color: 8388736,

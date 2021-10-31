@@ -1,5 +1,6 @@
-import { Client } from "discord.js";
+/* Types */
 import { GlobalContext } from "../../ts/types";
+import { Client } from "discord.js";
 
 export async function refresh_status(global_context: GlobalContext) {
     if (global_context.neko_data.shards_ready === false || global_context.bot.shard === null || global_context.bot.user === null) {
@@ -8,7 +9,9 @@ export async function refresh_status(global_context: GlobalContext) {
 
     let guild_count = 0;
     await global_context.bot.shard
-        .broadcastEval((client: Client) => { return client.guilds.cache.size; })
+        .broadcastEval((client: Client) => {
+            return client.guilds.cache.size;
+        })
         .then((results) => {
             guild_count = results.reduce((prev, guild_count) => prev + guild_count, 0);
         })
@@ -167,7 +170,7 @@ export async function refresh_website(global_context: GlobalContext) {
 
     const economy_list = global_context.data.economy_list;
     const command_list = Array.from(global_context.commands.values())
-        .filter((e: any) => {
+        .filter((e) => {
             return e.hidden === false;
         })
         .reduce((acc: any, curr: any) => {

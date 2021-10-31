@@ -1,11 +1,14 @@
+/* Node Imports */
+import { Connection } from "mysql2/promise";
+
+/* Local Imports */
 import * as mysql_add from "./mysql_add";
 import edit from "./mysql_edit";
 import fetch from "./mysql_fetch";
 import * as mysql_remove from "./mysql_remove";
 
 class MySQL {
-
-    sql_connection: any;
+    sql_connection: Connection;
     mysql_add: any;
     edit: any;
     fetch: any;

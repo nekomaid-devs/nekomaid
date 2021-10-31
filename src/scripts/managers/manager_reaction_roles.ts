@@ -1,5 +1,6 @@
-import { Guild, TextChannel } from "discord.js";
+/* Types */
 import { GlobalContext } from "../../ts/types";
+import { Guild, TextChannel } from "discord.js";
 
 class ReactionRolesManager {
     async create_all_collectors(global_context: GlobalContext) {
@@ -19,7 +20,9 @@ class ReactionRolesManager {
             global_context.logger.api_error(e);
             return null;
         });
-        if(channel === null || !(channel instanceof TextChannel)) { return; }
+        if (channel === null || !(channel instanceof TextChannel)) {
+            return;
+        }
 
         const message = await channel.messages.fetch(rr.message_ID).catch((e: Error) => {
             global_context.logger.api_error(e);
@@ -31,17 +34,18 @@ class ReactionRolesManager {
                 rr.reaction_roles.forEach(async (role_ID: string, i: number) => {
                     const emoji = rr.reaction_role_emojis[i];
                     if (emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === "<:" + r.emoji.name + ":" + r.emoji.id + ">")) {
-                        await global_context.utils.verify_guild_members(server);
-                        await global_context.utils.verify_guild_roles(server);
-
                         const member = Array.from(server.members.cache.values()).find((e) => {
                             return e.user.id === user.id;
                         });
-                        if (member === undefined) { return; }
+                        if (member === undefined) {
+                            return;
+                        }
                         const role = Array.from(server.roles.cache.values()).find((e) => {
                             return e.id === role_ID;
                         });
-                        if(role === undefined) { return; }
+                        if (role === undefined) {
+                            return;
+                        }
 
                         member.roles.add(role).catch((e: Error) => {
                             global_context.logger.api_error(e);
@@ -54,17 +58,18 @@ class ReactionRolesManager {
                 rr.reaction_roles.forEach(async (role_ID: string, i: number) => {
                     const emoji = rr.reaction_role_emojis[i];
                     if (emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === "<:" + r.emoji.name + ":" + r.emoji.id + ">")) {
-                        await global_context.utils.verify_guild_members(server);
-                        await global_context.utils.verify_guild_roles(server);
-
                         const member = Array.from(server.members.cache.values()).find((e) => {
                             return e.user.id === user.id;
                         });
-                        if(member === undefined) { return; }
+                        if (member === undefined) {
+                            return;
+                        }
                         const role = Array.from(server.roles.cache.values()).find((e) => {
                             return e.id === role_ID;
                         });
-                        if(role === undefined) { return; }
+                        if (role === undefined) {
+                            return;
+                        }
 
                         member.roles.remove(role).catch((e: Error) => {
                             global_context.logger.api_error(e);

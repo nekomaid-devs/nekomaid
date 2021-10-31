@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 
 export default {
@@ -86,7 +88,9 @@ export default {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
-            if(message === null) { return; }
+            if (message === null) {
+                return;
+            }
             setTimeout(() => {
                 const result = command_data.global_context.utils.pick_random(options);
                 embedRoll.title = `${command_data.msg.author.tag} rolled ${result}!`;

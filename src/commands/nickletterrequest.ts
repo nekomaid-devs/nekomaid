@@ -1,7 +1,9 @@
+/* Types */
 import { CommandData } from "../ts/types";
-
-import NeededPermission from "../scripts/helpers/needed_permission";
 import { Permissions } from "discord.js";
+
+/* Local Imports */
+import NeededPermission from "../scripts/helpers/needed_permission";
 
 export default {
     name: "nickletterrequest",
@@ -24,21 +26,31 @@ export default {
             command_data.global_context.logger.api_error(e);
             return null;
         });
-        if(message === null) { return; }
+        if (message === null) {
+            return;
+        }
         await message.react("✅").catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
 
-        const collector = message.createReactionCollector({ filter: (r: any, u: any) => { return r.emoji.name === "✅" && u.id !== message.author.id; } });
+        const collector = message.createReactionCollector({
+            filter: (r, u) => {
+                return r.emoji.name === "✅" && u.id !== message.author.id;
+            },
+        });
         collector.on("collect", async (r, u) => {
-            if (command_data.msg.guild === null || command_data.msg.member === null) { return; }
+            if (command_data.msg.guild === null || command_data.msg.member === null) {
+                return;
+            }
             const author_nickname = command_data.msg.member.nickname == null ? command_data.msg.author.username : command_data.msg.member.nickname;
 
             const reacted = await command_data.msg.guild.members.fetch(u.id).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
-            if(reacted === null) { return; }
+            if (reacted === null) {
+                return;
+            }
             const reacted_nickname = reacted.nickname == null ? reacted.user.username : reacted.nickname;
 
             const author_index = Math.floor(Math.random() * (author_nickname.length - 1 - 0 + 1) + 0);

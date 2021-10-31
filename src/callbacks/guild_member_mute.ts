@@ -1,6 +1,10 @@
-import { TextChannel } from "discord.js";
+/* Types */
 import { GlobalContext } from "../ts/types";
+import { TextChannel } from "discord.js";
+
+/* Node Imports */
 import * as Sentry from "@sentry/node";
+import { randomBytes } from "crypto";
 
 export default function hook(global_context: GlobalContext) {
     global_context.bot.on("guildMemberMute", async (event) => {
@@ -28,7 +32,9 @@ async function process(global_context: GlobalContext, event: any) {
             global_context.logger.api_error(e);
             return null;
         });
-        if (!(channel instanceof TextChannel)) { return; }
+        if (!(channel instanceof TextChannel)) {
+            return;
+        }
 
         const url = event.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         const embedMute: any = {
@@ -67,7 +73,7 @@ async function process(global_context: GlobalContext, event: any) {
     }
 
     const server_mute = {
-        id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+        id: randomBytes(16).toString("hex"),
         server_ID: event.member.guild.id,
         user_ID: event.member.user.id,
         reason: event.reason,

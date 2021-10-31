@@ -1,7 +1,12 @@
+/* Types */
 import { CommandData } from "../ts/types";
-
-import NeededPermission from "../scripts/helpers/needed_permission";
 import { Permissions, TextChannel } from "discord.js";
+
+/* Node Imports */
+import { randomBytes } from "crypto";
+
+/* Local Imports */
+import NeededPermission from "../scripts/helpers/needed_permission";
 import { get_error_embed } from "../scripts/utils/util_vars";
 
 export default {
@@ -147,13 +152,7 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(
-                                        command_data.msg,
-                                        command_data.server_config.prefix,
-                                        this,
-                                        `Invalid property for \`view\`- (Check \`${command_data.server_config.prefix}help leveling view\` for help)`,
-                                        "view ranks"
-                                    ),
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`view\`- (Check \`${command_data.server_config.prefix}help leveling view\` for help)`, "view ranks"),
                                 ],
                             })
                             .catch((e: Error) => {
@@ -215,15 +214,7 @@ export default {
                         if (does_exist === true) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Rank with name \`${rank_name}\` already exists`,
-                                            "add rank Trusted 5 TrustedRole"
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Rank with name \`${rank_name}\` already exists`, "add rank Trusted 5 TrustedRole")],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -234,9 +225,7 @@ export default {
                         if (command_data.args.length < 4) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `level_requirement`", "add rank Trusted 5 TrustedRole"),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `level_requirement`", "add rank Trusted 5 TrustedRole")],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -247,15 +236,7 @@ export default {
                         if (isNaN(level_requirement) || level_requirement <= 0) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            "Invalid value for `level_requirement` (number)",
-                                            "add rank Trusted 5 TrustedRole"
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid value for `level_requirement` (number)", "add rank Trusted 5 TrustedRole")],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -278,9 +259,7 @@ export default {
                         if (role === undefined) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name \`${role_name}\` found`, "add rank Trusted 5 TrustedRole"),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name \`${role_name}\` found`, "add rank Trusted 5 TrustedRole")],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -289,7 +268,7 @@ export default {
                         }
 
                         command_data.server_config.module_level_ranks.push({
-                            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+                            id: randomBytes(16).toString("hex"),
                             server_ID: command_data.msg.guild.id,
                             name: rank_name,
                             level: level_requirement,
@@ -305,15 +284,7 @@ export default {
                         if (command_data.args.length < 3) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            "You need to enter a `channel_mention` (channel mention)",
-                                            `add ignored_channel #${command_data.msg.channel.name}`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `channel_mention` (channel mention)", `add ignored_channel #${command_data.msg.channel.name}`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -326,15 +297,7 @@ export default {
                         if (command_data.msg.guild.channels.cache.has(channel) === false) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            "Invalid value for `channel_mention` (channel mention)",
-                                            `add ignored_channel #${command_data.msg.channel.name}`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid value for `channel_mention` (channel mention)", `add ignored_channel #${command_data.msg.channel.name}`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -413,11 +376,9 @@ export default {
                 switch (property) {
                     case "rank": {
                         if (command_data.args.length < 3) {
-                            command_data.msg.channel
-                                .send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `rank_name`.", "remove rank Trusted")] })
-                                .catch((e: Error) => {
-                                    command_data.global_context.logger.api_error(e);
-                                });
+                            command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `rank_name`.", "remove rank Trusted")] }).catch((e: Error) => {
+                                command_data.global_context.logger.api_error(e);
+                            });
                             return;
                         }
                         const rank_name = command_data.args[2];
@@ -428,11 +389,9 @@ export default {
                             }
                         });
                         if (rank_ID === -1) {
-                            command_data.msg.channel
-                                .send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No rank with name \`${rank_name}\` found`, "remove rank Trusted")] })
-                                .catch((e: Error) => {
-                                    command_data.global_context.logger.api_error(e);
-                                });
+                            command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No rank with name \`${rank_name}\` found`, "remove rank Trusted")] }).catch((e: Error) => {
+                                command_data.global_context.logger.api_error(e);
+                            });
                             return;
                         }
 
@@ -447,15 +406,7 @@ export default {
                         if (command_data.args.length < 3) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            "You need to enter a `channel_mention` (channel mention)",
-                                            `add ignored_channel #${command_data.msg.channel.name}`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `channel_mention` (channel mention)", `add ignored_channel #${command_data.msg.channel.name}`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -468,15 +419,7 @@ export default {
                         if (command_data.msg.guild.channels.cache.has(channel) === false) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            "Invalid value for `channel_mention` (channel mention)",
-                                            `add ignored_channel #${command_data.msg.channel.name}`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid value for `channel_mention` (channel mention)", `add ignored_channel #${command_data.msg.channel.name}`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -554,9 +497,7 @@ export default {
                 if (command_data.args.length < 3) {
                     command_data.msg.channel
                         .send({
-                            embeds: [
-                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`),
-                            ],
+                            embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`)],
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -572,15 +513,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -600,15 +533,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -627,15 +552,7 @@ export default {
                         if (typeof value !== "string" || value.length < 1) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (text)`,
-                                            `set ${property} <user> just got level <level>!`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (text)`, `set ${property} <user> just got level <level>!`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -660,15 +577,7 @@ export default {
                         if (channel === null) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (channel mention)`,
-                                            `set ${property} #${command_data.msg.channel.name}`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -677,12 +586,11 @@ export default {
                         }
 
                         const permissions = command_data.global_context.bot.user === null ? null : channel.permissionsFor(command_data.global_context.bot.user);
-                        if(permissions === null) { return; }
+                        if (permissions === null) {
+                            return;
+                        }
 
-                        if (
-                            permissions.has(Permissions.FLAGS.VIEW_CHANNEL) === false ||
-                            permissions.has(Permissions.FLAGS.SEND_MESSAGES) === false
-                        ) {
+                        if (permissions.has(Permissions.FLAGS.VIEW_CHANNEL) === false || permissions.has(Permissions.FLAGS.SEND_MESSAGES) === false) {
                             command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again.");
                             return;
                         }
@@ -699,15 +607,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -726,9 +626,7 @@ export default {
                         if (isNaN(parseFloat(value)) || parseFloat(value) <= 0) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 2`),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 2`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -748,9 +646,7 @@ export default {
                         if (isNaN(parseFloat(value)) || parseFloat(value) <= 0) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 200`),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 200`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -770,9 +666,7 @@ export default {
                         if (isNaN(parseFloat(value)) || parseFloat(value) <= 0) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 1.3`),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 1.3`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -792,13 +686,7 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(
-                                        command_data.msg,
-                                        command_data.server_config.prefix,
-                                        this,
-                                        `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help leveling set\` for help)`,
-                                        "set enabled true"
-                                    ),
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help leveling set\` for help)`, "set enabled true"),
                                 ],
                             })
                             .catch((e: Error) => {

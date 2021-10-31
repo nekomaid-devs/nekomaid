@@ -1,5 +1,6 @@
-import { TextChannel } from "discord.js";
+/* Types */
 import { GlobalContext } from "../../ts/types";
+import { TextChannel } from "discord.js";
 
 class UpvoteManager {
     async send_upvote_message(global_context: GlobalContext, id: string, site_ID: string, is_double = false) {
@@ -7,13 +8,17 @@ class UpvoteManager {
             global_context.logger.api_error(e);
             return null;
         });
-        if(user === null) { return; }
+        if (user === null) {
+            return;
+        }
         const channel = await global_context.bot.channels.fetch("819533619805814794").catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;
         });
-        if (channel === null || !(channel instanceof TextChannel)) { return; }
-        
+        if (channel === null || !(channel instanceof TextChannel)) {
+            return;
+        }
+
         let message = "";
         switch (site_ID) {
             case "0":
@@ -47,6 +52,10 @@ class UpvoteManager {
     }
 
     async process_upvote(global_context: GlobalContext, id: string, site_ID: string, is_double = false) {
+        if (global_context.bot_config == null) {
+            return;
+        }
+
         const user_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "global_user", id: id });
         switch (site_ID) {
             case "0":

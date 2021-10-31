@@ -1,6 +1,9 @@
+/* Types */
 import { CommandData } from "../ts/types";
-import NeededPermission from "../scripts/helpers/needed_permission";
 import { Permissions } from "discord.js";
+
+/* Local Imports */
+import NeededPermission from "../scripts/helpers/needed_permission";
 
 export default {
     name: "bans",

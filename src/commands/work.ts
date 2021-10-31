@@ -1,4 +1,8 @@
-import { CommandData } from "../ts/types";
+/* Types */
+import { CommandData, ShrineBonusType } from "../ts/types";
+
+/* Node Imports */
+import { randomBytes } from "crypto";
 
 export default {
     name: "work",
@@ -14,7 +18,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
         if (command_data.author_user_config.b_pancakes < 1) {
@@ -55,10 +59,10 @@ export default {
             }
         }
         credits_amount = credits_amount * command_data.global_context.bot_config.work_multiplier;
-        credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === "work" ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.1, 1.1, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
+        credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === ShrineBonusType.WORK ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.1, 1.1, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
         credits_amount = Math.round(credits_amount * [1, 1.01, 1.03, 1.05, 1.1, 1.15, 1.2, 1.22, 1.25, 1.25, 1.25][command_data.global_context.bot_config.b_quantum_pancakes]);
         command_data.author_user_config.notifications.push({
-            id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+            id: randomBytes(16).toString("hex"),
             user_ID: command_data.msg.author.id,
             timestamp: Date.now(),
             description: `<time_ago> You cooked some pancakes and got \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`.`,

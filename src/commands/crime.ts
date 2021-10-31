@@ -1,4 +1,8 @@
-import { CommandData } from "../ts/types";
+/* Types */
+import { CommandData, ShrineBonusType } from "../ts/types";
+
+/* Node Imports */
+import { randomBytes } from "crypto";
 
 export default {
     name: "crime",
@@ -14,7 +18,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
         if (command_data.author_user_config.b_crime_den < 1) {
@@ -56,18 +60,18 @@ export default {
             credits_amount = 0;
         }
         credits_amount = credits_amount * command_data.global_context.bot_config.crime_multiplier;
-        credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === "crime" ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.1, 1.1, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
+        credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === ShrineBonusType.CRIME ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.1, 1.1, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
         credits_amount = Math.round(credits_amount * [1, 1.01, 1.03, 1.05, 1.1, 1.15, 1.2, 1.22, 1.25, 1.25, 1.25][command_data.global_context.bot_config.b_crime_monopoly]);
         if (credits_amount !== 0) {
             command_data.author_user_config.notifications.push({
-                id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+                id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
                 description: `<time_ago> You did some crime and got \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`.`,
             });
         } else {
             command_data.author_user_config.notifications.push({
-                id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"),
+                id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
                 description: `<time_ago> You did some crime, but failed.`,

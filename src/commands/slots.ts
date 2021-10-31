@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 
 export default {
@@ -91,7 +93,9 @@ export default {
             command_data.global_context.logger.api_error(e);
             return null;
         });
-        if(message === null) { return; }
+        if (message === null) {
+            return;
+        }
         setTimeout(async () => {
             const res_0 = command_data.global_context.utils.pick_random(options);
             embedSlots.description = slotsDescription.replace("<res_0>", res_0).replace("<res_1>", "❓").replace("<res_2>", "❓");

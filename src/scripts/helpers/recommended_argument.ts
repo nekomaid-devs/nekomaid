@@ -1,3 +1,4 @@
+/* Local Imports */
 import Argument from "./argument";
 
 class RecommendedArgument extends Argument {

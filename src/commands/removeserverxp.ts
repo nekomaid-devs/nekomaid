@@ -1,8 +1,10 @@
+/* Types */
 import { CommandData } from "../ts/types";
+import { Permissions } from "discord.js";
 
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
-import { Permissions } from "discord.js";
 
 export default {
     name: "removeserverxp",

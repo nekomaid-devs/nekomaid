@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 
 export default {
@@ -61,7 +63,9 @@ export default {
             command_data.global_context.logger.api_error(e);
             return null;
         });
-        if(message === null) { return; }
+        if (message === null) {
+            return;
+        }
         const reactions = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
         parts.forEach((part, i) => {
             message.react(reactions[i]).catch((e: Error) => {

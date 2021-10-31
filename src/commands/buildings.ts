@@ -1,4 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import { get_building_price } from "../scripts/utils/util_vars";
 
@@ -53,7 +56,9 @@ export default {
         } (${command_data.global_context.utils.format_number(get_building_price(command_data.tagged_user_config.b_pawn_shop, "b_pawn_shop"))} $)\``;
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if(url === null) { return; }
+        if (url === null) {
+            return;
+        }
         const embedBuildings = {
             color: 8388736,
             author: {

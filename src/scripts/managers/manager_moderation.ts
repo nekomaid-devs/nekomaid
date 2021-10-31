@@ -1,5 +1,6 @@
-import { Guild } from "discord.js";
+/* Types */
 import { GlobalContext } from "../../ts/types";
+import { Guild } from "discord.js";
 
 class ModerationManager {
     async timeout_all_mutes(global_context: GlobalContext) {
@@ -30,7 +31,6 @@ class ModerationManager {
 
     // TODO: add audit log for this
     async timeout_mutes(global_context: GlobalContext, server: Guild, server_mutes: any[]) {
-        await global_context.utils.verify_guild_members(server);
         const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server", id: server.id });
         server_mutes.forEach((mute) => {
             global_context.neko_modules_clients.mySQL.mysql_remove.remove_server_mute(global_context, mute.id);
@@ -48,7 +48,6 @@ class ModerationManager {
 
     // TODO: add audit log for this
     async timeout_bans(global_context: GlobalContext, server: Guild, server_bans: any[]) {
-        await global_context.utils.verify_guild_members(server);
         server_bans.forEach((ban) => {
             global_context.neko_modules_clients.mySQL.mysql_remove.remove_server_ban(global_context, ban.id);
 

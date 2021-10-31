@@ -1,7 +1,9 @@
-//Import modules
+/* Types */
 import Discord from "discord.js";
+
+/* Node Imports */
 import http from "http";
-import fs from "fs";
+import { readFileSync } from "fs";
 
 //Setup utils
 const get_formatted_time = () => {
@@ -10,12 +12,9 @@ const get_formatted_time = () => {
     const m = date.getMinutes();
     return (h < 10 ? "0" + h.toString() : h.toString()) + ":" + (m < 10 ? "0" + m.toString() : m.toString());
 };
-const read_JSON = (path: string) => {
-    return JSON.parse(fs.readFileSync(process.cwd() + path).toString());
-};
 
 //Load default config
-const config = read_JSON("/configs/default.json");
+const config = JSON.parse(readFileSync(process.cwd() + "/configs/default.json").toString());
 
 //Create log colors
 const log_color_shard = "\x1b[94m";

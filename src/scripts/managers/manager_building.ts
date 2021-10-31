@@ -1,4 +1,8 @@
-import { GlobalContext } from "../../ts/types";
+/* Types */
+import { GlobalContext, ShrineBonusType } from "../../ts/types";
+
+/* Node Imports */
+import { randomBytes } from "crypto";
 
 class BuildingManager {
     async update_all_buildings(global_context: GlobalContext) {
@@ -9,6 +13,10 @@ class BuildingManager {
     }
 
     async update_buildings(global_context: GlobalContext, user: any) {
+        if (global_context.bot_config == null) {
+            return;
+        }
+
         const rarity_names: Record<string, string> = { common: "Common", uncommon: "Uncommon", rare: "Rare", legendary: "Legendary" };
         const end = new Date();
         let start = new Date();
@@ -20,13 +28,13 @@ class BuildingManager {
         diff = Math.abs(Math.round(diff * global_context.bot_config.speed));
         if (user.b_lewd_services > 0 && diff >= 60) {
             let credits_amount = [0, 30, 35, 40, 50, 70, 100, 140, 200, 300, 500][user.b_lewd_services];
-            credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === "hourly" ? [1, 1, 1, 1, 1.01, 1.02, 1.03, 1.05, 1.05, 1.07, 1.1][global_context.bot_config.b_shrine] : 1);
+            credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === ShrineBonusType.HOURLY ? [1, 1, 1, 1, 1.01, 1.02, 1.03, 1.05, 1.05, 1.07, 1.1][global_context.bot_config.b_shrine] : 1);
             credits_amount = Math.round(credits_amount);
 
             user.b_lewd_services_last_update = end.getTime();
             user.credits += credits_amount;
             user.notifications.push({
-                id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+                id: randomBytes(16).toString("hex"),
                 user_ID: user.user_ID,
                 timestamp: Date.now(),
                 description: `<time_ago> \`❤️ Neko's Lewd Services\` generated \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
@@ -41,13 +49,13 @@ class BuildingManager {
         diff = Math.abs(Math.round(diff * global_context.bot_config.speed));
         if (user.b_casino > 0 && diff >= 60) {
             let credits_amount = [0, 45, 50, 60, 90, 125, 160, 225, 275, 500, 750][user.b_casino];
-            credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === "hourly" ? [1, 1, 1, 1, 1.01, 1.02, 1.03, 1.05, 1.05, 1.07, 1.1][global_context.bot_config.b_shrine] : 1);
+            credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === ShrineBonusType.HOURLY ? [1, 1, 1, 1, 1.01, 1.02, 1.03, 1.05, 1.05, 1.07, 1.1][global_context.bot_config.b_shrine] : 1);
             credits_amount = Math.round(credits_amount);
 
             user.b_casino_last_update = end.getTime();
             user.credits += credits_amount;
             user.notifications.push({
-                id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+                id: randomBytes(16).toString("hex"),
                 user_ID: user.user_ID,
                 timestamp: Date.now(),
                 description: `<time_ago> \`🎰 Neko's Casino\` generated \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
@@ -69,22 +77,22 @@ class BuildingManager {
                 const chance_needed = [0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 15][user.b_scrapyard];
 
                 const rarity = chance <= chance_needed ? "legendary" : "rare";
-                items = Array.from(global_context.bot_config.items.values()).filter((e: any) => {
+                items = Array.from(global_context.bot_config.items.values()).filter((e) => {
                     return e.rarity === rarity && e.can_be_scavanged === true;
                 });
             } else if (user.b_scrapyard >= 3) {
-                items = Array.from(global_context.bot_config.items.values()).filter((e: any) => {
+                items = Array.from(global_context.bot_config.items.values()).filter((e) => {
                     return e.rarity === "uncommon" && e.can_be_scavanged === true;
                 });
             } else {
-                items = Array.from(global_context.bot_config.items.values()).filter((e: any) => {
+                items = Array.from(global_context.bot_config.items.values()).filter((e) => {
                     return e.rarity === "common" && e.can_be_scavanged === true;
                 });
             }
             const item = global_context.utils.pick_random(items);
-            user.inventory.push({ id: global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: user.user_ID, item_ID: item.id });
+            user.inventory.push({ id: randomBytes(16).toString("hex"), user_ID: user.user_ID, item_ID: item.id });
             user.notifications.push({
-                id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+                id: randomBytes(16).toString("hex"),
                 user_ID: user.user_ID,
                 timestamp: Date.now(),
                 description: `<time_ago> Neko at \`⛏️ Neko's Scrapyard\` found \`1x ${rarity_names[item.rarity]} ${item.display_name}\`.`,
@@ -99,18 +107,30 @@ class BuildingManager {
         diff = Math.abs(Math.round(diff * global_context.bot_config.speed));
         if (user.b_pawn_shop > 0) {
             const l_items = user.inventory.filter((e: any) => {
+                if (global_context.bot_config == null) {
+                    return false;
+                }
                 const item = global_context.bot_config.items.get(e.item_ID);
                 return item.rarity === "legendary" && item.can_be_scavanged === true;
             });
             const r_items = user.inventory.filter((e: any) => {
+                if (global_context.bot_config == null) {
+                    return false;
+                }
                 const item = global_context.bot_config.items.get(e.item_ID);
                 return item.rarity === "rare" && item.can_be_scavanged === true;
             });
             const u_items = user.inventory.filter((e: any) => {
+                if (global_context.bot_config == null) {
+                    return false;
+                }
                 const item = global_context.bot_config.items.get(e.item_ID);
                 return item.rarity === "uncommon" && item.can_be_scavanged === true;
             });
             const c_items = user.inventory.filter((e: any) => {
+                if (global_context.bot_config == null) {
+                    return false;
+                }
                 const item = global_context.bot_config.items.get(e.item_ID);
                 return item.rarity === "common" && item.can_be_scavanged === true;
             });
@@ -121,12 +141,12 @@ class BuildingManager {
                     const sold_item = global_context.bot_config.items.get(sold_items[0].item_ID);
 
                     let credits_amount = [0, 0, 0, 0, 0, 0, 0, 0, 7500, 9500, 10000][user.b_pawn_shop];
-                    credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === "sells" ? [1, 1, 1, 1, 1, 1, 1, 1.05, 1.1, 1.15, 1.15][global_context.bot_config.b_shrine] : 1);
+                    credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === ShrineBonusType.SELLS ? [1, 1, 1, 1, 1, 1, 1, 1.05, 1.1, 1.15, 1.15][global_context.bot_config.b_shrine] : 1);
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
                     user.notifications.push({
-                        id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+                        id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
@@ -140,12 +160,12 @@ class BuildingManager {
                     const sold_item = global_context.bot_config.items.get(sold_items[0].item_ID);
 
                     let credits_amount = [0, 0, 0, 0, 1000, 1250, 1250, 1250, 1250, 1250, 1500][user.b_pawn_shop];
-                    credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === "sells" ? [1, 1, 1, 1, 1, 1, 1, 1.05, 1.1, 1.15, 1.15][global_context.bot_config.b_shrine] : 1);
+                    credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === ShrineBonusType.SELLS ? [1, 1, 1, 1, 1, 1, 1, 1.05, 1.1, 1.15, 1.15][global_context.bot_config.b_shrine] : 1);
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
                     user.notifications.push({
-                        id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+                        id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
@@ -159,12 +179,12 @@ class BuildingManager {
                     const sold_item = global_context.bot_config.items.get(sold_items[0].item_ID);
 
                     let credits_amount = [0, 0, 500, 700, 700, 700, 700, 700, 700, 700, 725][user.b_pawn_shop];
-                    credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === "sells" ? [1, 1, 1, 1, 1, 1, 1, 1.05, 1.1, 1.15, 1.15][global_context.bot_config.b_shrine] : 1);
+                    credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === ShrineBonusType.SELLS ? [1, 1, 1, 1, 1, 1, 1, 1.05, 1.1, 1.15, 1.15][global_context.bot_config.b_shrine] : 1);
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
                     user.notifications.push({
-                        id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+                        id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
@@ -178,12 +198,12 @@ class BuildingManager {
                     const sold_item = global_context.bot_config.items.get(sold_items[0].item_ID);
 
                     let credits_amount = [0, 350, 350, 450, 450, 450, 450, 450, 450, 450, 460][user.b_pawn_shop];
-                    credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === "sells" ? [1, 1, 1, 1, 1, 1, 1, 1.05, 1.1, 1.15, 1.15][global_context.bot_config.b_shrine] : 1);
+                    credits_amount = credits_amount * (global_context.bot_config.shrine_bonus === ShrineBonusType.SELLS ? [1, 1, 1, 1, 1, 1, 1, 1.05, 1.1, 1.15, 1.15][global_context.bot_config.b_shrine] : 1);
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
                     user.notifications.push({
-                        id: global_context.modules.crypto.randomBytes(16).toString("hex"),
+                        id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,

@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 
 export default {
@@ -28,7 +30,9 @@ export default {
             command_data.global_context.logger.api_error(e);
             return null;
         });
-        if(user === null) { return; }
+        if (user === null) {
+            return;
+        }
         const embedSuggestion = {
             title: `Suggestion from \`${command_data.msg.author.tag}\``,
             description: command_data.total_argument,

@@ -1,9 +1,12 @@
+/* Types */
 import { GlobalContext } from "../ts/types";
-
 import Discord from "discord.js";
-import fs from "fs";
+
+/* Node Imports */
+import { readFileSync } from "fs";
 import performance from "perf_hooks";
 
+/* Local Imports */
 import import_into_context from "./shard_importer";
 import * as bot_commands from "../commands";
 import * as bot_callbacks from "../callbacks";
@@ -45,8 +48,8 @@ async function run() {
 
     //Create global context
     let global_context: GlobalContext = {
-        config: {},
-        bot_config: undefined,
+        config: JSON.parse(readFileSync(process.cwd() + "/configs/default.json").toString()),
+        bot_config: null,
 
         bot: bot,
 
@@ -67,7 +70,6 @@ async function run() {
 
     //Import modules
     global_context.modules.Discord = Discord;
-    global_context.modules.fs = fs;
     global_context.modules.performance = performance.performance;
 
     //Setup utils
@@ -77,13 +79,6 @@ async function run() {
         const m = date.getMinutes();
         return (h < 10 ? "0" + h.toString() : h.toString()) + ":" + (m < 10 ? "0" + m.toString() : m.toString());
     };
-    global_context.utils.read_JSON = (path: string) => {
-        return JSON.parse(global_context.modules.fs.readFileSync(process.cwd() + path));
-    };
-
-    //Load default config
-    const config = global_context.utils.read_JSON("/configs/default.json");
-    global_context.config = config;
 
     global_context.bot = bot;
     global_context.neko_data = {};
@@ -159,14 +154,14 @@ async function run() {
     const t_loading_start = global_context.modules.performance.now();
 
     //Setup commands
-    const commands: any = Object.values(bot_commands);
+    const commands = Object.values(bot_commands);
     commands.forEach((command: any) => {
         global_context.commands.set(command.name, command);
     });
 
     //Setup command aliases
-    global_context.commands.forEach((command: any) => {
-        if(command.aliases !== undefined) {
+    global_context.commands.forEach((command) => {
+        if (command.aliases !== undefined) {
             command.aliases.forEach((alias: string) => {
                 global_context.command_aliases.set(alias, command.name);
             });
@@ -208,7 +203,7 @@ async function run() {
         if (global_context.neko_modules_clients.eventManager !== undefined && global_context.bot.shard.ids[0] === 0) {
             const date = new Date();
             if (date.getHours() % 2 === 0 && date.getMinutes() === 0 && Date.now() > last_timestamp + 1000 * 60) {
-                global_context.neko_modules_clients.eventManager.spawn_event(global_context, global_context.config.neko_);
+                global_context.neko_modules_clients.eventManager.spawn_event(global_context, global_context.config.events_channel_ID);
                 last_timestamp = Date.now();
             }
         }
@@ -294,7 +289,7 @@ async function run() {
         refresh_status(global_context);
         global_context.neko_modules_clients.reactionRolesManager.create_all_collectors(global_context);
 
-        const callbacks: any = Object.values(bot_callbacks);
+        const callbacks = Object.values(bot_callbacks);
         callbacks.forEach((hook: any) => {
             hook(global_context);
         });

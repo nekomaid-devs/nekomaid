@@ -1,5 +1,4 @@
 export default class MarriageProposal {
-
     source_ID: string;
     source_tag: string;
     target_ID: string;
@@ -13,5 +12,4 @@ export default class MarriageProposal {
         this.target_tag = "";
         this.channel_ID = "";
     }
-    
 }

@@ -1,5 +1,8 @@
-import { GuildMember, PartialGuildMember, TextChannel, User } from "discord.js";
+/* Types */
 import { GlobalContext } from "../ts/types";
+import { GuildMember, PartialGuildMember, TextChannel, User } from "discord.js";
+
+/* Node Imports */
 import * as Sentry from "@sentry/node";
 
 export default function hook(global_context: GlobalContext) {
@@ -21,7 +24,9 @@ export default function hook(global_context: GlobalContext) {
 }
 
 async function process(global_context: GlobalContext, member: GuildMember | PartialGuildMember) {
-    if(member.user === null || global_context.bot.user === null) { return; }
+    if (member.user === null || global_context.bot.user === null) {
+        return;
+    }
 
     const moderation_action = global_context.data.last_moderation_actions.get(member.guild.id);
     const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_member_remove", id: member.guild.id });
@@ -35,7 +40,9 @@ async function process(global_context: GlobalContext, member: GuildMember | Part
             global_context.logger.api_error(e);
             return null;
         });
-        if (channel === null || !(channel instanceof TextChannel)) { return; }
+        if (channel === null || !(channel instanceof TextChannel)) {
+            return;
+        }
         channel.send(format).catch((e: Error) => {
             global_context.logger.api_error(e);
         });
@@ -45,14 +52,20 @@ async function process(global_context: GlobalContext, member: GuildMember | Part
         const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
             global_context.logger.api_error(e);
         });
-        if (!(channel instanceof TextChannel)) { return; }
+        if (!(channel instanceof TextChannel)) {
+            return;
+        }
         const audit = await member.guild.fetchAuditLogs().catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;
         });
-        if(audit === null) { return; }
+        if (audit === null) {
+            return;
+        }
         const last_audit = audit.entries.first();
-        if(last_audit === undefined || !(last_audit.target instanceof User) || last_audit.executor === null) { return; }
+        if (last_audit === undefined || !(last_audit.target instanceof User) || last_audit.executor === null) {
+            return;
+        }
 
         if (last_audit.action === "MEMBER_KICK" && last_audit.target.id === member.user.id) {
             let executor;
@@ -68,7 +81,9 @@ async function process(global_context: GlobalContext, member: GuildMember | Part
                     return null;
                 });
             }
-            if(executor === null) { return; }
+            if (executor === null) {
+                return;
+            }
 
             const embedKick: any = {
                 author: {

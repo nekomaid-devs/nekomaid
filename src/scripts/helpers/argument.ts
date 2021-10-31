@@ -1,3 +1,4 @@
+/* Types */
 import { Command, CommandData } from "../../ts/types";
 
 class Argument {

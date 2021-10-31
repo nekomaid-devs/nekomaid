@@ -1,3 +1,4 @@
+/* Types */
 import { GlobalContext } from "../../ts/types";
 
 export async function add_server(global_context: GlobalContext, server: any) {

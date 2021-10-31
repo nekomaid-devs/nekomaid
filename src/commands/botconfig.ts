@@ -1,4 +1,7 @@
+/* Types */
 import { CommandData, ExtraPermission } from "../ts/types";
+
+/* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
 import { get_error_embed } from "../scripts/utils/util_vars";
 
@@ -20,7 +23,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.msg.member === null) {
+        if (command_data.msg.guild === null || command_data.msg.member === null || command_data.global_context.bot_config === null) {
             return;
         }
         // TODO: make normal reply messages
@@ -186,9 +189,7 @@ export default {
                 if (command_data.args.length < 3) {
                     command_data.msg.channel
                         .send({
-                            embeds: [
-                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`),
-                            ],
+                            embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`)],
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -202,9 +203,7 @@ export default {
                         if (isNaN(parseFloat(value)) || parseFloat(value) <= 0) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 2`),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 2`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -224,13 +223,7 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(
-                                        command_data.msg,
-                                        command_data.server_config.prefix,
-                                        this,
-                                        `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help botconfig set\` for help)`,
-                                        "set speed 2"
-                                    ),
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help botconfig set\` for help)`, "set speed 2"),
                                 ],
                             })
                             .catch((e: Error) => {

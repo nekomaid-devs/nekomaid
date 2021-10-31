@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 RUN apk update
 RUN apk add bash jq
 
-RUN apk add git build-base
+RUN apk add git build-base ffmpeg
 
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
 RUN python3 -m ensurepip

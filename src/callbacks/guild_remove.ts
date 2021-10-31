@@ -1,5 +1,8 @@
-import { Guild } from "discord.js";
+/* Types */
 import { GlobalContext } from "../ts/types";
+import { Guild } from "discord.js";
+
+/* Node Imports */
 import * as Sentry from "@sentry/node";
 
 export default function hook(global_context: GlobalContext) {

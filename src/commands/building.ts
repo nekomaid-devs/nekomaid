@@ -1,4 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 import { get_building_description, get_building_field, get_global_building_field } from "../scripts/utils/util_vars";
 

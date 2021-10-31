@@ -1,5 +1,6 @@
-import { TextChannel, VoiceChannel } from "discord.js";
+/* Types */
 import { GlobalContext } from "../../ts/types";
+import { VoiceChannel } from "discord.js";
 
 class CounterManager {
     async update_all_counters(global_context: GlobalContext) {
@@ -15,7 +16,9 @@ class CounterManager {
     }
 
     async update_counter(global_context: GlobalContext, server: any, counter: any, force_update = false) {
-        if(global_context.bot.shard === null) { return; }
+        if (global_context.bot.shard === null) {
+            return;
+        }
 
         const end = new Date();
         const start = new Date(counter.last_update);
@@ -30,11 +33,12 @@ class CounterManager {
                 global_context.logger.api_error(e);
                 return null;
             });
-            if (channel === null || !(channel instanceof VoiceChannel)) { return; }
+            if (channel === null || !(channel instanceof VoiceChannel)) {
+                return;
+            }
 
             switch (counter.type) {
                 case "all_members": {
-                    await global_context.utils.verify_guild_members(server);
                     const member_count = Array.from(server.members.cache.values()).length;
                     channel.setName(`All Members: ${member_count}`).catch((e: Error) => {
                         global_context.logger.api_error(e);
@@ -43,7 +47,6 @@ class CounterManager {
                 }
 
                 case "members": {
-                    await global_context.utils.verify_guild_members(server);
                     const member_count = Array.from(server.members.cache.values()).filter((e: any) => {
                         return e.user.bot === false;
                     }).length;
@@ -54,7 +57,6 @@ class CounterManager {
                 }
 
                 case "roles": {
-                    await global_context.utils.verify_guild_roles(server);
                     const roles_count = Array.from(server.members.cache.values()).length;
                     channel.setName(`Roles: ${roles_count}`).catch((e: Error) => {
                         global_context.logger.api_error(e);
@@ -63,7 +65,6 @@ class CounterManager {
                 }
 
                 case "channels": {
-                    await global_context.utils.verify_guild_channels(server);
                     const channels_count = Array.from(server.members.cache.values()).length;
                     channel.setName(`Channels: ${channels_count}`).catch((e: Error) => {
                         global_context.logger.api_error(e);
@@ -72,7 +73,6 @@ class CounterManager {
                 }
 
                 case "bots": {
-                    await global_context.utils.verify_guild_members(server);
                     const bot_count = Array.from(server.members.cache.values()).filter((e: any) => {
                         return e.user.bot === false;
                     }).length;

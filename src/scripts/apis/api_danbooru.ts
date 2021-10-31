@@ -1,3 +1,4 @@
+/* Types */
 import { GlobalContext } from "../../ts/types";
 
 class DanbooruAPI {

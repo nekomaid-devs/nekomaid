@@ -1,6 +1,8 @@
+/* Types */
 import { GlobalContext } from "../../ts/types";
+import { Guild, User } from "discord.js";
 
-export async function remove_server_warnings_from_user(global_context: GlobalContext, server: any, user: any) {
+export async function remove_server_warnings_from_user(global_context: GlobalContext, server: Guild, user: User) {
     const query = "DELETE FROM server_warnings WHERE server_ID='" + server.id + "' AND user_ID='" + user.id + "'";
     return await global_context.neko_modules_clients.mySQL.sql_connection.promise().query(query);
 }

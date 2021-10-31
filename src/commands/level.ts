@@ -1,5 +1,7 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import { get_top_server_level } from "../scripts/utils/util_sort_by";
 

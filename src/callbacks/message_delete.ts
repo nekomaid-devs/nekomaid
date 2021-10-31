@@ -1,5 +1,8 @@
-import { Message, PartialMessage, TextChannel } from "discord.js";
+/* Types */
 import { GlobalContext } from "../ts/types";
+import { Message, PartialMessage, TextChannel } from "discord.js";
+
+/* Node Imports */
 import * as Sentry from "@sentry/node";
 
 export default function hook(global_context: GlobalContext) {
@@ -31,7 +34,9 @@ async function process(global_context: GlobalContext, message: Message | Partial
             global_context.logger.api_error(e);
             return null;
         });
-        if (!(channel instanceof TextChannel)) { return; }
+        if (!(channel instanceof TextChannel)) {
+            return;
+        }
 
         const url = message.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
         const embedDeletedMessage: any = {

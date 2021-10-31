@@ -1,5 +1,9 @@
+/* Types */
 import { CommandData } from "../ts/types";
+
+/* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
+import { randomBytes } from "crypto";
 
 export default {
     name: "buy",
@@ -16,11 +20,11 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
         const item_name = command_data.total_argument;
-        const target_item: any = Array.from(command_data.global_context.bot_config.items.values()).find((e: any) => {
+        const target_item: any = Array.from(command_data.global_context.bot_config.items.values()).find((e) => {
             return e.display_name.toLowerCase() === item_name.toLowerCase();
         });
         if (target_item === undefined) {
@@ -28,7 +32,7 @@ export default {
             return;
         }
 
-        const target_shop_item: any = Array.from(command_data.global_context.bot_config.shopItems.values()).find((e: any) => {
+        const target_shop_item: any = Array.from(command_data.global_context.bot_config.shopItems.values()).find((e) => {
             return e.id === target_item.id;
         });
         if (target_shop_item === undefined) {
@@ -42,7 +46,7 @@ export default {
         }
 
         command_data.author_user_config.credits -= target_shop_item.price;
-        command_data.author_user_config.inventory.push({ id: command_data.global_context.modules.crypto.randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, item_ID: target_shop_item.id });
+        command_data.author_user_config.inventory.push({ id: randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, item_ID: target_shop_item.id });
         command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
 
         const embedBuy = {

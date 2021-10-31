@@ -1,6 +1,9 @@
+/* Types */
 import { CommandData } from "../ts/types";
-import NeededPermission from "../scripts/helpers/needed_permission";
 import { Permissions, TextChannel } from "discord.js";
+
+/* Local Imports */
+import NeededPermission from "../scripts/helpers/needed_permission";
 import { get_error_embed } from "../scripts/utils/util_vars";
 
 export default {
@@ -112,9 +115,7 @@ export default {
                 if (command_data.args.length < 3) {
                     command_data.msg.channel
                         .send({
-                            embeds: [
-                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`),
-                            ],
+                            embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`)],
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -129,15 +130,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -157,15 +150,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -185,15 +170,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -213,15 +190,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -241,15 +210,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -269,15 +230,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -297,15 +250,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (true/false)`,
-                                            `set ${property} true`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -329,15 +274,7 @@ export default {
                         if (channel === null) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `Invalid value to set for \`${property}\`. (channel mention)`,
-                                            `set ${property} #${command_data.msg.channel.name}`
-                                        ),
-                                    ],
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -346,12 +283,11 @@ export default {
                         }
 
                         const permissions = command_data.global_context.bot.user === null ? null : channel.permissionsFor(command_data.global_context.bot.user);
-                        if(permissions === null) { return; }
+                        if (permissions === null) {
+                            return;
+                        }
 
-                        if (
-                            permissions.has(Permissions.FLAGS.VIEW_CHANNEL) === false ||
-                            permissions.has(Permissions.FLAGS.SEND_MESSAGES) === false
-                        ) {
+                        if (permissions.has(Permissions.FLAGS.VIEW_CHANNEL) === false || permissions.has(Permissions.FLAGS.SEND_MESSAGES) === false) {
                             command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again.");
                             return;
                         }
@@ -367,13 +303,7 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(
-                                        command_data.msg,
-                                        command_data.server_config.prefix,
-                                        this,
-                                        `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`,
-                                        "set bans true"
-                                    ),
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true"),
                                 ],
                             })
                             .catch((e: Error) => {
@@ -388,11 +318,9 @@ export default {
             }
 
             default: {
-                command_data.msg.channel
-                    .send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `set`)", "set bans true")] })
-                    .catch((e: Error) => {
-                        command_data.global_context.logger.api_error(e);
-                    });
+                command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `set`)", "set bans true")] }).catch((e: Error) => {
+                    command_data.global_context.logger.api_error(e);
+                });
                 break;
             }
         }

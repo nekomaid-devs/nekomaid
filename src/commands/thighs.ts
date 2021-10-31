@@ -1,3 +1,4 @@
+/* Types */
 import { CommandData } from "../ts/types";
 
 export default {

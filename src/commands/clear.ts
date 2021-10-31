@@ -1,8 +1,11 @@
+/* Types */
 import { CommandData } from "../ts/types";
+import { Message, Permissions, TextChannel } from "discord.js";
+
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
 import NeededArgument from "../scripts/helpers/needed_argument";
-import { Message, Permissions, TextChannel } from "discord.js";
 
 export default {
     name: "clear",
@@ -31,13 +34,17 @@ export default {
 
         if (command_data.msg.mentions.users.size > 0) {
             const target_user: any = command_data.msg.mentions.users.first();
-            const messages = Array.from(await command_data.msg.channel.messages.fetch({ limit: 99 }).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
-                return new Map<string, Message>();
-            }));
+            const messages = Array.from(
+                await command_data.msg.channel.messages.fetch({ limit: 99 }).catch((e: Error) => {
+                    command_data.global_context.logger.api_error(e);
+                    return new Map<string, Message>();
+                })
+            );
 
             messages.pop();
-            let target_messages: any = messages.filter((m: any) => { return m.author.id === target_user.id; });
+            let target_messages: any = messages.filter((m: any) => {
+                return m.author.id === target_user.id;
+            });
             target_messages = target_messages.slice(target_messages.length - num_messages, target_messages.length + 1);
 
             command_data.msg.channel.bulkDelete(1, true).catch((e: Error) => {

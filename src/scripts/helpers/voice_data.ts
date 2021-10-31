@@ -1,9 +1,8 @@
 export default class VoiceData {
-
     id: string;
     connection: any;
     init_message_channel_ID: string;
-    
+
     mode: number;
     current: any;
     queue: any[];
@@ -22,7 +21,7 @@ export default class VoiceData {
         this.current = -1;
         this.queue = [];
         this.persistent_queue = [];
-        
+
         this.should_timeout = false;
         this.timeout_delay = 30000;
         this.elapsed_ms = 0;

@@ -1,5 +1,4 @@
 export default class VoiceRequest {
-
     info: any;
     url: string;
     stream: any;

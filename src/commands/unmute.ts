@@ -1,9 +1,11 @@
+/* Types */
 import { CommandData } from "../ts/types";
+import { Permissions } from "discord.js";
 
+/* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
-import { Permissions } from "discord.js";
 
 export default {
     name: "unmute",
@@ -48,7 +50,9 @@ export default {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
-            if(mute_role === null) { return; }
+            if (mute_role === null) {
+                return;
+            }
             command_data.tagged_member.roles.remove(mute_role);
 
             command_data.msg.channel.send(`Unmuted \`${command_data.tagged_user.tag}\`. (Reason: \`${unmute_reason}\`)`).catch((e: Error) => {

@@ -1,3 +1,4 @@
+/* Types */
 import { CommandData, ExtraPermission } from "../../ts/types";
 
 class NeededPermission {
@@ -10,7 +11,9 @@ class NeededPermission {
     }
 
     passes(command_data: CommandData) {
-        if(command_data.msg.member === null || command_data.msg.guild === null || command_data.msg.guild.me === null) { return false; }
+        if (command_data.msg.member === null || command_data.msg.guild === null || command_data.msg.guild.me === null || command_data.global_context.bot_config === null) {
+            return false;
+        }
 
         switch (this.user_type) {
             case "author": {

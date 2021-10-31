@@ -1,5 +1,7 @@
-import { get_sleepy_gifs } from "../scripts/utils/util_vars";
+/* Types */
 import { CommandData } from "../ts/types";
+
+import { get_sleepy_gifs } from "../scripts/utils/util_vars";
 
 export default {
     name: "sleepy",
