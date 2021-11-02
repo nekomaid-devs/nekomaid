@@ -1,11 +1,12 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 export default {
     name: "repeat",
     category: "Music",
     description: "Repeats the current queue of songs.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: ["loop"],
     subcommandHelp: new Map(),
@@ -38,4 +39,4 @@ export default {
             });
         }
     },
-};
+} as Command;

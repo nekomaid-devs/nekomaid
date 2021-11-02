@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, ExtraPermission } from "../ts/types";
+import { CommandData, Command, ExtraPermission } from "../ts/base";
 
 /* Node Imports */
 import { randomBytes } from "crypto";
@@ -29,8 +29,8 @@ export default {
         const amount = parseInt(command_data.args[1]);
         const item_ID = command_data.args[2];
 
-        const target_item = command_data.global_context.bot_config.items.has(item_ID) === true ? command_data.global_context.bot_config.items.get(item_ID) : -1;
-        if (target_item === -1) {
+        const target_item = command_data.global_context.bot_config.items.get(item_ID);
+        if (target_item === undefined) {
             command_data.msg.reply(`There isn't any item with id \`${item_ID}\`.`);
             return;
         }
@@ -44,4 +44,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext } from "../../ts/types";
+import { GlobalContext } from "../../ts/base";
 import { Client } from "discord.js";
 
 export async function refresh_status(global_context: GlobalContext) {
@@ -29,7 +29,7 @@ export async function refresh_website(global_context: GlobalContext) {
         return;
     }
 
-    const shard_list: any[] = [];
+    const shard_list = [];
     for (let i = 0; i < global_context.bot.shard.count; i++) {
         shard_list[i] = { online: true };
     }

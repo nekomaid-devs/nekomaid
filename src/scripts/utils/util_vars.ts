@@ -1,5 +1,5 @@
 /* Types */
-import { Command, CommandData } from "../../ts/types";
+import { Command, CommandData } from "../../ts/base";
 import { Message } from "discord.js";
 
 export function get_8ball_answers() {

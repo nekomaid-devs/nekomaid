@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext } from "../../ts/types";
+import { GlobalContext } from "../../ts/base";
 
 class E621API {
     async e621_result(global_context: GlobalContext, args: string[]) {

@@ -1,11 +1,12 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 export default {
     name: "leave",
     category: "Music",
     description: "Leaves the voice channel.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: ["stop"],
     subcommandHelp: new Map(),
@@ -29,4 +30,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

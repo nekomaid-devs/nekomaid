@@ -1,11 +1,12 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 export default {
     name: "shuffle",
     category: "Music",
     description: "Randomizes the current queue.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -59,4 +60,4 @@ export default {
             });
         }
     },
-};
+} as Command;

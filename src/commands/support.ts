@@ -1,11 +1,12 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 export default {
     name: "support",
     category: "Help & Information",
     description: "Join the support server if you have any issues or questions.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: ["server"],
     subcommandHelp: new Map(),
@@ -34,4 +35,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

@@ -1,11 +1,12 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 export default {
     name: "osulast",
     category: "Utility",
     description: "Shows latest osu! play.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -108,4 +109,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

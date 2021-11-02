@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext } from "../../ts/types";
+import { GlobalContext } from "../../ts/base";
 import { VoiceChannel } from "discord.js";
 
 class CounterManager {

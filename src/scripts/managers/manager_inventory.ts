@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../../ts/types";
+import { CommandData } from "../../ts/base";
 
 class InventoryManager {
     use_item(command_data: CommandData, item_prefab: any, target_indexes: any) {

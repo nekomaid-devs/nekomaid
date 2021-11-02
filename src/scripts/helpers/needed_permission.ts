@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, ExtraPermission } from "../../ts/types";
+import { CommandData, ExtraPermission } from "../../ts/base";
 
 class NeededPermission {
     user_type: string;

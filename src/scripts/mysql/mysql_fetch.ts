@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext } from "../../ts/types";
+import { GlobalContext } from "../../ts/base";
 
 export default async function fetch(global_context: GlobalContext, data: any) {
     const defaultFormat = (e: any) => {

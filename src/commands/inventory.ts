@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command, UserItemData } from "../ts/base";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
@@ -28,7 +28,7 @@ export default {
             inventory_text = "Empty";
         } else {
             const inventory_map = new Map();
-            inventory.forEach((item: any) => {
+            inventory.forEach((item: UserItemData) => {
                 inventory_map.set(item.item_ID, inventory_map.has(item.item_ID) === true ? inventory_map.get(item.item_ID) + 1 : 1);
             });
 
@@ -41,8 +41,8 @@ export default {
                 if (inventory_text != "") {
                     inventory_text += ", ";
                 }
-                if (command_data.global_context.bot_config.items.has(id) === true) {
-                    const item = command_data.global_context.bot_config.items.get(id);
+                const item = command_data.global_context.bot_config.items.get(id);
+                if (item !== undefined) {
                     inventory_text += "`" + count + "x " + item.display_name + "`";
                 }
             });
@@ -67,4 +67,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

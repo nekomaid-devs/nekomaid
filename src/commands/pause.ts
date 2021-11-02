@@ -1,11 +1,12 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 export default {
     name: "pause",
     category: "Music",
     description: "Pauses the current song",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -38,4 +39,4 @@ export default {
             });
         }
     },
-};
+} as Command;

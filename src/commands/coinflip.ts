@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
@@ -108,4 +108,4 @@ export default {
             });
         }
     },
-};
+} as Command;

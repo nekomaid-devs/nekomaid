@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 /* Node Imports */
 import { loadFont, measureText, read } from "jimp";
@@ -43,4 +43,4 @@ export default {
             });
         });
     },
-};
+} as Command;

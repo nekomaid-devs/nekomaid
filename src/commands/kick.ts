@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
@@ -42,4 +42,4 @@ export default {
         command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id });
         command_data.tagged_member.kick(kick_reason);
     },
-};
+} as Command;

@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 import { TextChannel } from "discord.js";
 
 /* Local Imports */
@@ -167,4 +167,4 @@ export default {
             });
         }
     },
-};
+} as Command;

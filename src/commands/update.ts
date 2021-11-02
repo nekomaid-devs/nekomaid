@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, ExtraPermission } from "../ts/types";
+import { CommandData, Command, ExtraPermission } from "../ts/base";
 
 import NeededPermission from "../scripts/helpers/needed_permission";
 
@@ -8,6 +8,7 @@ export default {
     category: "Testing",
     description: "Updates the bot's status.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
@@ -33,4 +34,4 @@ export default {
         command_data.global_context.neko_modules_clients.web.refresh_status(command_data.global_context);
         command_data.global_context.neko_modules_clients.web.refresh_bot_list(command_data.global_context);
     },
-};
+} as Command;

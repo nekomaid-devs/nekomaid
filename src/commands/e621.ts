@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
@@ -9,6 +9,7 @@ export default {
     category: "NSFW",
     description: "Posts an image from e621 with specified tag (or filters out tag with at beginning of the tag !)",
     helpUsage: "[?tag/!tag]`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -48,4 +49,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

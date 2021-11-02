@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
@@ -50,4 +50,4 @@ export default {
 
         command_data.global_context.neko_modules_clients.inventoryManager.use_item(command_data, item_prefab, target_indexes);
     },
-};
+} as Command;

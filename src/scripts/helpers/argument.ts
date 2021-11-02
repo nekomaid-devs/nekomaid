@@ -1,5 +1,5 @@
 /* Types */
-import { Command, CommandData } from "../../ts/types";
+import { Command, CommandData } from "../../ts/base";
 
 class Argument {
     position: number;

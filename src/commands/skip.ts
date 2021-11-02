@@ -1,11 +1,12 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 export default {
     name: "skip",
     category: "Music",
     description: "Skips a song from the queue.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -40,4 +41,4 @@ export default {
 
         command_data.global_context.neko_modules_clients.voiceManager.play_next_on_connection(command_data.global_context, command_data.msg.guild.id);
     },
-};
+} as Command;

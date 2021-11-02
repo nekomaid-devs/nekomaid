@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext } from "../../ts/types";
+import { GlobalContext } from "../../ts/base";
 import { Guild, User } from "discord.js";
 
 export async function remove_server_warnings_from_user(global_context: GlobalContext, server: Guild, user: User) {

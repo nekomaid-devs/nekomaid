@@ -1,11 +1,12 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 export default {
     name: "np",
     category: "Music",
     description: "Displays the current playing song.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -52,4 +53,4 @@ export default {
             });
         }
     },
-};
+} as Command;

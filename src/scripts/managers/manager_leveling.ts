@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../../ts/types";
+import { CommandData } from "../../ts/base";
 import { Permissions, TextChannel } from "discord.js";
 
 class LevelingManager {
@@ -121,7 +121,7 @@ class LevelingManager {
                 levelup_message = levelup_message.replace("<user>", command_data.server_config.module_level_levelup_messages_ping == true ? command_data.tagged_user.toString() : command_data.tagged_user.tag);
                 levelup_message = levelup_message.replace("<level>", command_data.tagged_server_user_config.level.toString());
 
-                const channel = await command_data.msg.guild.channels.fetch(command_data.server_config.module_level_levelup_messages_channel).catch((e: Error) => {
+                const channel = await command_data.global_context.bot.channels.fetch(command_data.server_config.module_level_levelup_messages_channel).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                     return null;
                 });

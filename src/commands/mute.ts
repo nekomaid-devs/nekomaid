@@ -1,11 +1,65 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
+
+function create_mute_role_and_mute(command_data: CommandData) {
+    if (command_data.msg.guild === null) {
+        return;
+    }
+
+    command_data.msg.guild.roles
+        .create({
+            name: "Muted",
+            color: "#4b4b4b",
+            hoist: true,
+            mentionable: false,
+            permissions: [],
+        })
+        .then(async (mute_role) => {
+            if (command_data.msg.guild === null) {
+                return;
+            }
+
+            command_data.msg.guild.channels.cache.forEach((channel) => {
+                if (channel.type === "GUILD_TEXT") {
+                    channel.permissionOverwrites
+                        .create(mute_role, {
+                            SEND_MESSAGES: false,
+                            ADD_REACTIONS: false,
+                        })
+                        .catch((e: Error) => {
+                            command_data.global_context.logger.api_error(e);
+                        });
+                } else if (channel.type === "GUILD_VOICE") {
+                    channel.permissionOverwrites
+                        .create(mute_role, {
+                            CONNECT: false,
+                            SPEAK: false,
+                        })
+                        .catch((e: Error) => {
+                            command_data.global_context.logger.api_error(e);
+                        });
+                }
+            });
+
+            // TODO: please just await
+            command_data.tagged_member.roles
+                .add(mute_role)
+                .then(() => {
+                    command_data.server_config.mute_role_ID = mute_role.id;
+                    command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server_mute", server: command_data.server_config });
+                })
+                .catch((err) => {
+                    command_data.global_context.logger.error(err);
+                    command_data.msg.reply(`Couldn't mute \`${command_data.tagged_member.user.tag}\`! (Try moving Nekomaid's permissions above the user you want to mute)`);
+                });
+        });
+}
 
 export default {
     name: "mute",
@@ -91,7 +145,7 @@ export default {
         }
 
         if (command_data.server_config.mute_role_ID === null) {
-            this.create_mute_role_and_mute(command_data);
+            create_mute_role_and_mute(command_data);
             return;
         }
 
@@ -100,63 +154,9 @@ export default {
             return null;
         });
         if (mute_role === null) {
-            this.create_mute_role_and_mute(command_data);
+            create_mute_role_and_mute(command_data);
         } else {
             command_data.tagged_member.roles.add(mute_role);
         }
     },
-
-    create_mute_role_and_mute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
-            return;
-        }
-
-        command_data.msg.guild.roles
-            .create({
-                name: "Muted",
-                color: "#4b4b4b",
-                hoist: true,
-                mentionable: false,
-                permissions: [],
-            })
-            .then(async (mute_role) => {
-                if (command_data.msg.guild === null) {
-                    return;
-                }
-
-                command_data.msg.guild.channels.cache.forEach((channel) => {
-                    if (channel.type === "GUILD_TEXT") {
-                        channel.permissionOverwrites
-                            .create(mute_role, {
-                                SEND_MESSAGES: false,
-                                ADD_REACTIONS: false,
-                            })
-                            .catch((e: Error) => {
-                                command_data.global_context.logger.api_error(e);
-                            });
-                    } else if (channel.type === "GUILD_VOICE") {
-                        channel.permissionOverwrites
-                            .create(mute_role, {
-                                CONNECT: false,
-                                SPEAK: false,
-                            })
-                            .catch((e: Error) => {
-                                command_data.global_context.logger.api_error(e);
-                            });
-                    }
-                });
-
-                // TODO: please just await
-                command_data.tagged_member.roles
-                    .add(mute_role)
-                    .then(() => {
-                        command_data.server_config.mute_role_ID = mute_role.id;
-                        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server_mute", server: command_data.server_config });
-                    })
-                    .catch((err) => {
-                        command_data.global_context.logger.error(err);
-                        command_data.msg.reply(`Couldn't mute \`${command_data.tagged_member.user.tag}\`! (Try moving Nekomaid's permissions above the user you want to mute)`);
-                    });
-            });
-    },
-};
+} as Command;

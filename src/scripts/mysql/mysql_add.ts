@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext } from "../../ts/types";
+import { GlobalContext } from "../../ts/base";
 
 export async function add_server(global_context: GlobalContext, server: any) {
     const query = "INSERT IGNORE INTO servers (server_ID, auto_roles, module_level_ignored_channels, banned_words) VALUES('" + server.id + "', '', '', '')";

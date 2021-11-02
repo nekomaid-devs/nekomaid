@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext } from "../ts/types";
+import { Callback, Command, GlobalContext } from "../ts/base";
 import Discord from "discord.js";
 
 /* Node Imports */
@@ -155,7 +155,7 @@ async function run() {
 
     //Setup commands
     const commands = Object.values(bot_commands);
-    commands.forEach((command: any) => {
+    commands.forEach((command: Command) => {
         global_context.commands.set(command.name, command);
     });
 
@@ -290,8 +290,8 @@ async function run() {
         global_context.neko_modules_clients.reactionRolesManager.create_all_collectors(global_context);
 
         const callbacks = Object.values(bot_callbacks);
-        callbacks.forEach((hook: any) => {
-            hook(global_context);
+        callbacks.forEach((callback: Callback) => {
+            callback.hook(global_context);
         });
     });
     bot.on("ratelimit", (ratelimit) => {

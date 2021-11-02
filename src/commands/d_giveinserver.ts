@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, ExtraPermission } from "../ts/types";
+import { CommandData, Command, ExtraPermission } from "../ts/base";
 
 /* Node Imports */
 import { randomBytes } from "crypto";
@@ -13,6 +13,7 @@ export default {
     category: "Testing",
     description: "Adds an item to all users in a server.",
     helpUsage: "[amount] [itemID]`",
+    exampleUsage: "",
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
@@ -48,4 +49,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext } from "../../ts/types";
+import { GlobalContext } from "../../ts/base";
 
 export default async function edit(global_context: GlobalContext, data: any) {
     switch (data.type) {

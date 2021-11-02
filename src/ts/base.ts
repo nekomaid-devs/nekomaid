@@ -6,7 +6,8 @@ import Argument from "../scripts/helpers/argument";
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
 
-export enum ShrineBonusType {
+/* Enums */
+export enum ShrineBonus {
     DAILY,
     HOURLY,
     WORK,
@@ -18,6 +19,91 @@ export enum ExtraPermission {
     BOT_OWNER,
 }
 
+export enum ItemRarity {
+    LEGENDARY,
+    RARE,
+    UNCOMMON,
+    COMMON,
+}
+
+/* Global Context */
+export type GlobalContext = {
+    config: Config;
+    bot_config: BotData | null;
+
+    bot: Client;
+
+    commands: Map<string, Command>;
+    command_aliases: Map<string, string>;
+
+    modules: any;
+    modules_clients: any;
+
+    neko_data: any;
+    neko_modules: any;
+    neko_modules_clients: any;
+
+    logger: any;
+    utils: any;
+    data: any;
+};
+
+/* Commands */
+export type CommandData = {
+    global_context: GlobalContext;
+    msg: Message;
+
+    args: string[];
+    total_argument: string;
+
+    tagged_users: User[];
+    tagged_user: User;
+    tagged_user_tags: string;
+
+    tagged_members: GuildMember[];
+    tagged_member: GuildMember;
+
+    server_config: GuildData;
+    server_bans: ServerBanData[];
+    server_mutes: ServerMuteData[];
+    server_warns: ServerWarnData[];
+
+    author_user_config: GlobalUserData;
+    author_server_user_config: ServerUserData;
+
+    tagged_user_config: GlobalUserData;
+    tagged_server_user_config: ServerUserData;
+};
+
+export type Command = {
+    name: string;
+    category: string;
+    description: string;
+
+    helpUsage: string;
+    exampleUsage: string;
+
+    hidden: boolean;
+    aliases: string[];
+    subcommandHelp: Map<string, string>;
+
+    argumentsNeeded: NeededArgument[];
+    argumentsRecommended: Argument[];
+    permissionsNeeded: NeededPermission[];
+
+    nsfw: boolean;
+    cooldown: number;
+
+    execute(command_data: CommandData): void;
+};
+
+/* Callbacks */
+export type Callback = {
+    hook(global_context: GlobalContext): void;
+    process(...args: any[]): void;
+};
+
+/* Config */
 export type Config = {
     token: string;
     shard_count: number;
@@ -61,7 +147,8 @@ export type Config = {
     version: string;
 };
 
-export type BotConfig = {
+/* Structures */
+export type BotData = {
     id: string;
     bot_owners: string[];
 
@@ -76,7 +163,7 @@ export type BotConfig = {
 
     upvote_credits: number;
     daily_credits: number;
-    shrine_bonus: ShrineBonusType;
+    shrine_bonus: ShrineBonus;
     speed: number;
     work_multiplier: number;
     crime_multiplier: number;
@@ -98,11 +185,11 @@ export type BotConfig = {
     b_pet_shelter: number;
     b_pet_shelter_credits: number;
 
-    items: Map<any, any>;
-    shopItems: Map<any, any>;
+    items: Map<string, ItemData>;
+    shopItems: Map<string, ShopItemData>;
 };
 
-export type ServerConfig = {
+export type GuildData = {
     server_ID: string;
 
     prefix: string;
@@ -123,9 +210,9 @@ export type ServerConfig = {
     leave_messages_channel: string | null;
     leave_messages_format: string;
 
-    counters: any[];
+    counters: CounterData[];
 
-    reaction_roles: any[];
+    reaction_roles: ReactionRoleData[];
 
     module_level_enabled: boolean;
     module_level_message_exp: number;
@@ -136,7 +223,7 @@ export type ServerConfig = {
     module_level_levelup_messages_ping: boolean;
     module_level_levelup_messages_format: string;
     module_level_ignored_channels: string[];
-    module_level_ranks: any[];
+    module_level_ranks: RankData[];
 
     audit_channel: string | null;
     audit_bans: boolean;
@@ -148,7 +235,7 @@ export type ServerConfig = {
     audit_edited_messages: boolean;
 };
 
-export type GlobalUserConfig = {
+export type GlobalUserData = {
     user_ID: string;
 
     xp: number;
@@ -158,8 +245,8 @@ export type GlobalUserConfig = {
     bank: number;
     bank_limit: number;
     net_worth: number;
-    inventory: any[];
-    notifications: any[];
+    inventory: UserItemData[];
+    notifications: NotificationData[];
     married_ID: string | null;
     can_divorce: boolean;
 
@@ -183,19 +270,23 @@ export type GlobalUserConfig = {
     b_crime_den_credits: number;
     b_pawn_shop: number;
     b_pawn_shop_credits: number;
+    b_pawn_shop_last_update: number;
     b_scrapyard: number;
     b_scrapyard_credits: number;
+    b_scrapyard_last_update: number;
     b_casino: number;
     b_casino_credits: number;
+    b_casino_last_update: number;
     b_lewd_services: number;
     b_lewd_services_credits: number;
+    b_lewd_services_last_update: number;
     b_sanctuary: number;
     b_sanctuary_credits: number;
     b_lab: number;
     b_lab_credits: number;
 };
 
-export type ServerUserConfig = {
+export type ServerUserData = {
     fast_find_ID: string;
     user_ID: string;
     server_ID: string;
@@ -204,71 +295,87 @@ export type ServerUserConfig = {
     level: number;
 };
 
-export type GlobalContext = {
-    config: Config;
-    bot_config: BotConfig | null;
+export type ServerBanData = {
+    id: string;
+    server_ID: string;
+    user_ID: string;
 
-    bot: Client;
-
-    commands: Map<string, Command>;
-    command_aliases: Map<string, string>;
-
-    modules: any;
-    modules_clients: any;
-
-    neko_data: any;
-    neko_modules: any;
-    neko_modules_clients: any;
-
-    logger: any;
-    utils: any;
-    data: any;
+    start: number;
+    end: number | null;
+    reason: string | null;
 };
 
-export type CommandData = {
-    global_context: GlobalContext;
-    msg: Message;
+export type ServerMuteData = {
+    id: string;
+    server_ID: string;
+    user_ID: string;
 
-    args: string[];
-    total_argument: string;
-
-    tagged_users: User[];
-    tagged_user: User;
-    tagged_user_tags: string;
-
-    tagged_members: GuildMember[];
-    tagged_member: GuildMember;
-
-    server_config: ServerConfig;
-    server_bans: any[];
-    server_mutes: any[];
-    server_warns: any[];
-
-    author_user_config: GlobalUserConfig;
-    author_server_user_config: ServerUserConfig;
-
-    tagged_user_config: GlobalUserConfig;
-    tagged_server_user_config: ServerUserConfig;
+    start: number;
+    end: number | null;
+    reason: string | null;
 };
 
-export type Command = {
-    name: string;
-    category: string;
+export type ServerWarnData = {
+    id: string;
+    server_ID: string;
+    user_ID: string;
+
+    start: number;
+    reason: string | null;
+};
+
+export type ItemData = {
+    item_ID: string;
+
+    display_name: string;
+    rarity: ItemRarity;
+    can_be_scavanged: boolean;
+};
+
+export type UserItemData = {
+    id: string;
+    item_ID: string;
+    user_ID: string;
+};
+
+export type ShopItemData = {
+    item_ID: string;
+
+    price: number;
+};
+
+export type NotificationData = {
+    id: string;
+    user_ID: string;
+
+    timestamp: number;
     description: string;
+};
 
-    helpUsage: string;
-    exampleUsage: string;
+export type CounterData = {
+    id: string;
+    server_ID: string;
+    channel_ID: string;
 
-    hidden: boolean;
-    aliases: string[];
-    subcommandHelp: Map<string, string>;
+    type: string;
+    last_update: number;
+};
 
-    argumentsNeeded: NeededArgument[];
-    argumentsRecommended: Argument[];
-    permissionsNeeded: NeededPermission[];
+export type ReactionRoleData = {
+    id: string;
+    server_ID: string;
+    channel_ID: string;
+    message_ID: string;
 
-    nsfw: boolean;
-    cooldown: number;
+    reaction_roles: string[];
+    reaction_role_emojis: string[];
+};
 
-    execute: any;
+export type RankData = {
+    id: string;
+    server_ID: string;
+    role_ID: string;
+
+    level: number;
+    name: string;
 };

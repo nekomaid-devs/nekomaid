@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
@@ -10,6 +10,7 @@ export default {
     category: "Moderation",
     description: "Displays all mutes on this server.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -43,7 +44,7 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
             if (mutedUser !== undefined) {
-                const remainingText = mute.end === -1 ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(mute.end - now);
+                const remainingText = mute.end === null ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(mute.end - now);
                 embedMutes.addField(`Mute - ${mutedUser.tag}`, `Remaining: \`${remainingText}\``);
             }
 
@@ -55,4 +56,4 @@ export default {
             }
         });
     },
-};
+} as Command;

@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
@@ -10,6 +10,7 @@ export default {
     category: "Moderation",
     description: "Displays all bans on this server.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -46,7 +47,7 @@ export default {
                 command_data.server_bans.slice(-25).forEach((ban) => {
                     const bannedMember = serverBansByID.get(ban.user_ID);
                     if (bannedMember !== undefined) {
-                        const remainingText = ban.end === -1 ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(ban.end - now);
+                        const remainingText = ban.end === null ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(ban.end - now);
                         embedBans.addField(`Ban - ${bannedMember.user.tag}`, `Remaining: \`${remainingText}\``);
                     }
                 });
@@ -59,4 +60,4 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
     },
-};
+} as Command;

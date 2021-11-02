@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, ShrineBonusType } from "../ts/types";
+import { CommandData, Command, ShrineBonus } from "../ts/base";
 
 /* Node Imports */
 import { randomBytes } from "crypto";
@@ -9,6 +9,7 @@ export default {
     category: "Profile",
     description: "Gets or loses credits by doing crimes.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -60,7 +61,7 @@ export default {
             credits_amount = 0;
         }
         credits_amount = credits_amount * command_data.global_context.bot_config.crime_multiplier;
-        credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === ShrineBonusType.CRIME ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.1, 1.1, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
+        credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === ShrineBonus.CRIME ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.1, 1.1, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
         credits_amount = Math.round(credits_amount * [1, 1.01, 1.03, 1.05, 1.1, 1.15, 1.2, 1.22, 1.25, 1.25, 1.25][command_data.global_context.bot_config.b_crime_monopoly]);
         if (credits_amount !== 0) {
             command_data.author_user_config.notifications.push({
@@ -96,4 +97,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

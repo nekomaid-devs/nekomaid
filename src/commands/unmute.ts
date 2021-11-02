@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
@@ -62,4 +62,4 @@ export default {
             command_data.global_context.bot.emit("guildMemberMuteRemove", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: unmute_reason, previous_mute: previous_mute });
         }
     },
-};
+} as Command;

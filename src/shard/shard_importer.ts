@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext, ServerConfig, ServerUserConfig } from "../ts/types";
+import { GlobalContext, GuildData, ServerUserData } from "../ts/base";
 
 /* Node Imports */
 import * as axios from "axios";
@@ -91,7 +91,7 @@ export default async function import_into_context(global_context: GlobalContext)
             });
         return playlist;
     };
-    global_context.utils.get_level_XP = (server_config: ServerConfig, author_config: ServerUserConfig) => {
+    global_context.utils.get_level_XP = (server_config: GuildData, author_config: ServerUserData) => {
         let level_XP = server_config.module_level_level_exp;
         for (let i = 1; i < author_config.level; i++) {
             level_XP *= server_config.module_level_level_multiplier;

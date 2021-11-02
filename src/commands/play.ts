@@ -1,17 +1,16 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 import { Message, Permissions, VoiceChannel } from "discord.js";
 
 /* Node Imports */
 import ytpl, { validateID } from "ytpl";
 import ytsr from "ytsr";
-import { validateURL } from "ytdl-core-discord";
+import ytdl from "ytdl-core";
 
 /* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
 import NeededArgument from "../scripts/helpers/needed_argument";
 import { create_comparator } from "../scripts/utils/util_sort_by";
-import VoiceData from "../scripts/helpers/voice_data";
 
 export default {
     name: "play",
@@ -41,13 +40,7 @@ export default {
         }
 
         if (command_data.global_context.neko_modules_clients.voiceManager.connections.has(command_data.msg.guild.id) === false) {
-            const connection = -1;
-            const voice_data = new VoiceData();
-            voice_data.id = command_data.msg.guild.id;
-            voice_data.connection = connection;
-            voice_data.init_message_channel_ID = command_data.msg.channel.id;
-
-            command_data.global_context.neko_modules_clients.voiceManager.add_connection(command_data.global_context, command_data.msg.guild.id, voice_data);
+            const voice_connection = command_data.global_context.neko_modules_clients.voiceManager.add_connection(command_data.global_context, command_data.msg.member.voice.channel, command_data.msg);
 
             const embedJoin = {
                 author: {
@@ -115,7 +108,7 @@ export default {
                 await command_data.msg.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
-            } else if (validateURL(url) === true) {
+            } else if (ytdl.validateURL(url) === true) {
                 url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
                 command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, command_data.msg, loading_message, url, 2);
             } else {
@@ -180,4 +173,4 @@ export default {
             }
         }
     },
-};
+} as Command;

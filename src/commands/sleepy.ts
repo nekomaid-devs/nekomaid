@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 
 import { get_sleepy_gifs } from "../scripts/utils/util_vars";
 
@@ -8,6 +8,7 @@ export default {
     category: "Emotes",
     description: "Posts a sleepy gif.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -33,4 +34,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

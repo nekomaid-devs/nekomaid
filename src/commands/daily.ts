@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, ShrineBonusType } from "../ts/types";
+import { CommandData, Command, ShrineBonus } from "../ts/base";
 
 /* Node Imports */
 import { randomBytes } from "crypto";
@@ -9,6 +9,7 @@ export default {
     category: "Profile",
     description: "Gets a daily reward to user.",
     helpUsage: "`",
+    exampleUsage: "",
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
@@ -38,7 +39,7 @@ export default {
 
         let credits_amount = [1000][0];
         credits_amount = credits_amount * command_data.global_context.bot_config.daily_multiplier;
-        credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === ShrineBonusType.DAILY ? [1, 1.1, 1.15, 1.15, 1.15, 1.2, 1.25, 1.3, 1.5, 1.5, 1.5][command_data.global_context.bot_config.b_shrine] : 1);
+        credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === ShrineBonus.DAILY ? [1, 1.1, 1.15, 1.15, 1.15, 1.2, 1.25, 1.3, 1.5, 1.5, 1.5][command_data.global_context.bot_config.b_shrine] : 1);
         credits_amount = Math.round(credits_amount);
         command_data.author_user_config.notifications.push({
             id: randomBytes(16).toString("hex"),
@@ -64,4 +65,4 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
     },
-};
+} as Command;

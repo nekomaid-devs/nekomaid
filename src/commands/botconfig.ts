@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, ExtraPermission } from "../ts/types";
+import { CommandData, Command, ExtraPermission } from "../ts/base";
 
 /* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
@@ -322,4 +322,4 @@ export default {
             }
         }
     },
-};
+} as Command;

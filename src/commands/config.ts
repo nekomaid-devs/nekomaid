@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 import { Permissions, TextChannel } from "discord.js";
 
 /* Node Imports */
@@ -44,8 +44,8 @@ export default {
         // TODO: check for wrong error embeds
         command_data.server_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         if (command_data.args.length < 1) {
-            let channel_1 = command_data.server_config.welcome_messages_channel === null ? (command_data.server_config.welcome_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.welcome_messages_channel}>`;
-            let channel_2 = command_data.server_config.leave_messages_channel === null ? (command_data.server_config.leave_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.leave_messages_channel}>`;
+            const channel_1 = command_data.server_config.welcome_messages_channel === null ? (command_data.server_config.welcome_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.welcome_messages_channel}>`;
+            const channel_2 = command_data.server_config.leave_messages_channel === null ? (command_data.server_config.leave_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.leave_messages_channel}>`;
 
             let auto_roles_text = "";
             for (let i = 0; i < command_data.server_config.auto_roles.length; i++) {
@@ -500,11 +500,11 @@ export default {
 
                     case "welcome_messages_channel": {
                         value = value.includes("<#") ? value.replace("<#", "").replace(">", "") : value;
-                        const channel = await command_data.msg.guild.channels.fetch(value).catch((e: Error) => {
+                        const channel = await command_data.global_context.bot.channels.fetch(value).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                             return null;
                         });
-                        if (channel === null) {
+                        if (channel === null || !(channel instanceof TextChannel)) {
                             command_data.msg.channel
                                 .send({
                                     embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
@@ -534,11 +534,11 @@ export default {
 
                     case "leave_messages_channel": {
                         value = value.includes("<#") ? value.replace("<#", "").replace(">", "") : value;
-                        const channel = await command_data.msg.guild.channels.fetch(value).catch((e: Error) => {
+                        const channel = await command_data.global_context.bot.channels.fetch(value).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                             return null;
                         });
-                        if (channel === null) {
+                        if (channel === null || !(channel instanceof TextChannel)) {
                             command_data.msg.channel
                                 .send({
                                     embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
@@ -634,4 +634,4 @@ export default {
             });
         }
     },
-};
+} as Command;

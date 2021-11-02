@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData } from "../ts/types";
+import { CommandData, Command } from "../ts/base";
 import { Permissions, TextChannel } from "discord.js";
 
 /* Local Imports */
@@ -36,7 +36,7 @@ export default {
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
         if (command_data.args.length < 1) {
-            let channel = command_data.server_config.audit_channel === null ? "`None`" : `<#${command_data.server_config.audit_channel}>`;
+            const channel = command_data.server_config.audit_channel === null ? "`None`" : `<#${command_data.server_config.audit_channel}>`;
             const embedConfig = {
                 title: "Audit Logs",
                 description: `To set values see - \`${command_data.server_config.prefix}help auditlog set\``,
@@ -263,11 +263,11 @@ export default {
 
                     case "audit_channel": {
                         value = value.includes("<#") ? value.replace("<#", "").replace(">", "") : value;
-                        const channel = await command_data.msg.guild.channels.fetch(value).catch((e: Error) => {
+                        const channel = await command_data.global_context.bot.channels.fetch(value).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                             return null;
                         });
-                        if (channel === null) {
+                        if (channel === null || !(channel instanceof TextChannel)) {
                             command_data.msg.channel
                                 .send({
                                     embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
@@ -321,4 +321,4 @@ export default {
             }
         }
     },
-};
+} as Command;
