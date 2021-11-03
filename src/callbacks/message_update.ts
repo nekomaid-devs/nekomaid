@@ -39,10 +39,11 @@ export default {
                 return;
             }
 
-            const embedMessageEdit: any = {
+            const url = new_message.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
+            const embedMessageEdit = {
                 author: {
                     name: `Message edited | ${new_message.member.user.tag}`,
-                    icon_url: new_message.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 }),
+                    icon_url: url === null ? undefined : url,
                 },
                 fields: [
                     {

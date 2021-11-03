@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, Command } from "../ts/base";
+import { CommandData, Command, ItemData } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
@@ -22,29 +22,28 @@ export default {
         if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
-        // TODO: this needs to be refactored fr
-        let item_name = command_data.total_argument;
-        item_name = item_name.includes("<@") ? item_name.substring(0, item_name.indexOf("<@") - 1) : item_name;
 
-        let item_ID = -1;
-        let item_prefab = -1;
-        const target_indexes: any[] = [];
-
-        command_data.global_context.bot_config.items.forEach((item: any) => {
-            if (item.display_name.toLowerCase() === item_name.toLowerCase()) {
-                item_ID = item.id;
+        let item_prefab: ItemData | null = null;
+        command_data.global_context.bot_config.items.forEach((item) => {
+            if (item.display_name.toLowerCase() === command_data.total_argument.toLowerCase()) {
                 item_prefab = item;
             }
         });
+        if(item_prefab === null) {
+            command_data.msg.reply(`No item with name \`${command_data.total_argument}\` exists.`);
+            return;
+        }
 
-        command_data.author_user_config.inventory.forEach((item: any, index: number) => {
-            if (item.item_ID === item_ID) {
+        const target_indexes: number[] = [];
+        command_data.author_user_config.inventory.forEach((item, index) => {
+            if(item_prefab === null) { return; }
+            if (item.item_ID === item_prefab.item_ID) {
                 target_indexes.push(index);
             }
         });
         target_indexes.reverse();
         if (target_indexes.length < 1) {
-            command_data.msg.reply(`You don't have any items called \`${item_name}\`-`);
+            command_data.msg.reply(`You don't have any items called \`${command_data.total_argument}\`.`);
             return;
         }
 

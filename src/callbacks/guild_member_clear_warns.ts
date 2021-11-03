@@ -36,7 +36,7 @@ export default {
                 const embedClearWarns = {
                     author: {
                         name: `Case ${server_config.case_ID}# | Cleared warnings | ${event.member.user.tag}`,
-                        icon_url: url,
+                        icon_url: url === null ? undefined : url,
                     },
                     fields: [
                         {

@@ -20,7 +20,7 @@ class RealbooruAPI {
         let last_page: any = null;
 
         const navigation_elements = $0(".pagination").children();
-        navigation_elements.each(function (this: any) {
+        navigation_elements.each(function (this) {
             const child = $0(this);
             const alt = child.attr("alt");
 

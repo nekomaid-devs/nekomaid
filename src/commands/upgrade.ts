@@ -31,13 +31,6 @@ export default {
             command_data.msg.reply(`Haven't found any building with name \`${building_name}\`.`);
         }
 
-        const embedUpgrade: any = {
-            color: 8388736,
-            author: {
-                name: `Upgrading - ${building_name}`,
-            },
-        };
-
         const author_user_config_map = new Map(Object.entries(command_data.author_user_config));
         if (building_field !== undefined) {
             const building_field_level = author_user_config_map.get(building_field);
@@ -62,12 +55,18 @@ export default {
             author_user_config_map.set(building_field, building_field_level + 1);
             author_user_config_map.set(building_field + "_credits", building_field_credits - next_building_cost);
 
-            const a: any = Object.fromEntries(author_user_config_map);
+            const a = Object.fromEntries(author_user_config_map);
             command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: a });
 
             const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
-            embedUpgrade.author.icon_url = url;
-            embedUpgrade.description = `Upgraded the building onto level ${building_field_level + 1}.`;
+            const embedUpgrade = {
+                color: 8388736,
+                author: {
+                    name: `Upgrading - ${building_name}`,
+                    icon_url: url === null ? undefined : url
+                },
+                description: `Upgraded the building onto level ${building_field_level + 1}.`
+            };
             command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
@@ -100,12 +99,18 @@ export default {
             bot_config_map.set(global_building_field, global_building_field_level + 1);
             bot_config_map.set(global_building_field + "_credits", global_building_field_credits - next_building_cost);
 
-            const a: any = Object.fromEntries(bot_config_map);
+            const a = Object.fromEntries(bot_config_map);
             command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: a });
 
             const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-            embedUpgrade.author.icon_url = url;
-            embedUpgrade.description = `Upgraded the building onto level ${global_building_field_level + 1}.`;
+            const embedUpgrade = {
+                color: 8388736,
+                author: {
+                    name: `Upgrading - ${building_name}`,
+                    icon_url: url === null ? undefined : url
+                },
+                description: `Upgraded the building onto level ${global_building_field_level + 1}.`
+            };
             command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });

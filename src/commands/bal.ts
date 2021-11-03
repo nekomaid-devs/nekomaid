@@ -23,16 +23,13 @@ export default {
             return;
         }
         // TODO: add position in top
-        const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if (url === null) {
-            return;
-        }
 
+        const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         const embedBalance = {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Balance`,
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
             fields: [
                 {
@@ -47,7 +44,7 @@ export default {
                 },
             ],
             thumbnail: {
-                url: url,
+                url: url === null ? undefined : url,
             },
             footer: {
                 text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`,

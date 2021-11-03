@@ -45,14 +45,11 @@ export default {
         const premium_text = diff < 1440 ? " (Premium ⭐)" : "";
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if (url === null) {
-            return;
-        }
         const embedProfile = {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Profile ${premium_text}`,
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
             fields: [
                 {

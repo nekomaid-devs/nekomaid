@@ -20,7 +20,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
     const final_options = [opening, fake_opening_1, fake_opening_2, fake_opening_3];
     command_data.global_context.utils.shuffle_array(final_options);
 
-    const answered_IDs: any[] = [];
+    const answered_IDs: string[] = [];
     const correct_option = final_options.indexOf(opening) + 1;
     let dispatcher: any;
 
@@ -224,7 +224,7 @@ export default {
                 text: `0 joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`,
             },
         };
-        const joined_IDs: any[] = [];
+        const joined_IDs: string[] = [];
         const message = await command_data.msg.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
@@ -276,7 +276,7 @@ export default {
             } else if (m.content === command_data.server_config.prefix + "animetrivia start") {
                 const connection = -1;
 
-                const leaderboard: any[] = [];
+                const leaderboard: object[] = [];
                 joined_IDs.forEach((id) => {
                     leaderboard.push({ user: id, points: 0 });
                 });

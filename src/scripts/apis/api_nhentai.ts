@@ -18,11 +18,11 @@ class NHentaiAPI {
         }
         const title = result_html.substring(result_html.indexOf('<span class="pretty">') + '<span class="pretty">'.length, result_html.indexOf("</span>", result_html.indexOf('<span class="pretty">')));
         const num_of_pages = result_html.substring(result_html.indexOf('<span class="name">', result_html.indexOf("Pages:")) + '<span class="name">'.length, result_html.indexOf("</span>", result_html.indexOf("Pages:")));
-        const all_tags: any[] = [];
-        const all_languages: any[] = [];
+        const all_tags: string[] = [];
+        const all_languages: string[] = [];
         let all_favourites;
 
-        $0(".tag").each(function (this: any) {
+        $0(".tag").each(function (this) {
             const tag = $0(this);
             const href = tag.attr("href");
             if (href !== undefined && href.includes("/tag/")) {
@@ -32,8 +32,8 @@ class NHentaiAPI {
             }
         });
 
-        $0(".nobold").each(function (this: any) {
-            let all_favourites_html = $0(this).html();
+        $0(".nobold").each(function (this) {
+            const all_favourites_html = $0(this).html();
             all_favourites = all_favourites_html === null ? 0 : all_favourites_html.replace("(", "").replace(")", "");
         });
 

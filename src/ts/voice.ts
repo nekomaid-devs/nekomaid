@@ -14,17 +14,21 @@ export type VoiceConnectionData = {
     queue: VoiceRequestData[];
     persistent_queue: VoiceRequestData[];
 
-    should_timeout: boolean;
-    timeout_delay: number;
     elapsed_ms: number;
+    timeout_elapsed_ms: number;
 }
 
 export type VoiceRequestData = {
-    info: any;
-    url: string;
+    item: VoiceRequestItemData;
     stream: any;
 
     request_message_ID: string;
     request_channel_ID: string;
     request_user_ID: string;
+}
+
+export type VoiceRequestItemData = {
+    url: string;
+    title: string;
+    duration: number;
 }

@@ -46,14 +46,11 @@ export default {
         } (${command_data.global_context.utils.format_number(get_building_price(command_data.global_context.bot_config.b_pet_shelter, "b_pet_shelter"))} $)\``;
 
         const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if (url === null) {
-            return;
-        }
         const embedBuildings = {
             color: 8388736,
             author: {
                 name: `Global Buildings`,
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
             description: buildings_description,
             footer: {

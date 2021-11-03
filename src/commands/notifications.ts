@@ -36,10 +36,10 @@ export default {
         }
 
         const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        const embedNotifications: any = {
+        const embedNotifications = {
             author: {
                 name: "Notifications",
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
             description: notifications_description,
             color: 8388736,

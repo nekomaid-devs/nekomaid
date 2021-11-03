@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, Command } from "../ts/base";
+import { CommandData, Command, ServerUserData } from "../ts/base";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
@@ -29,7 +29,7 @@ export default {
         }
 
         const server_user_configs = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "all_server_users", id: command_data.msg.guild.id });
-        server_user_configs.forEach(async (server_user_config: any) => {
+        server_user_configs.forEach(async (server_user_config: ServerUserData) => {
             if (command_data.msg.guild === null) {
                 return;
             }

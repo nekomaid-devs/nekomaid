@@ -48,14 +48,11 @@ export default {
         const join_score_max = command_data.msg.guild.members.cache.size;
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if (url === null) {
-            return;
-        }
         const embedMember = {
             color: 8388736,
             author: {
                 name: "Information about user " + command_data.tagged_user.tag,
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
             fields: [
                 {
@@ -91,7 +88,7 @@ export default {
                 },
             ],
             thumbnail: {
-                url: url,
+                url: url === null ? undefined : url,
             },
             footer: {
                 text: `Requested by ${command_data.msg.author.tag}`,

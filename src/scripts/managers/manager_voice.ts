@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext } from "../../ts/base";
-import { VoiceConnectionData } from "../../ts/voice";
+import { VoiceConnectionData, VoiceRequestData } from "../../ts/voice";
 import { Message, TextChannel, VoiceChannel } from "discord.js";
 
 /* Node Imports */
@@ -29,10 +29,9 @@ class VoiceManager {
             current: null,
             queue: [],
             persistent_queue: [],
-    
-            should_timeout: false,
-            timeout_delay: 30000,
-            elapsed_ms: 0
+
+            elapsed_ms: 0,
+            timeout_elapsed_ms: 0
         };
 
         voice_connection.connection.on(VoiceConnectionStatus.Disconnected, () => {
@@ -48,21 +47,20 @@ class VoiceManager {
         return voice_connection;
     }
 
-    async remove_connection(global_context: GlobalContext, id: string, error_message: string | null) {
-        const voice_connection = this.connections.get(id);
+    async remove_connection(global_context: GlobalContext, guild_ID: string, error_message: string | null) {
+        const voice_connection = this.connections.get(guild_ID);
         if (voice_connection === undefined) {
+            return;
+        }
+        const channel = await global_context.bot.channels.fetch(voice_connection.init_message_channel_ID).catch((e: Error) => {
+            global_context.logger.api_error(e);
+            return null;
+        });
+        if (channel === null || !(channel instanceof TextChannel)) {
             return;
         }
 
         if (error_message !== null) {
-            const channel = await global_context.bot.channels.fetch(voice_connection.init_message_channel_ID).catch((e: Error) => {
-                global_context.logger.api_error(e);
-                return null;
-            });
-            if (channel === null || !(channel instanceof TextChannel)) {
-                return;
-            }
-
             channel.send(error_message).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
@@ -76,13 +74,8 @@ class VoiceManager {
         this.connections.delete(voice_connection.id);
     }
 
-    check_for_timeouts(global_context: GlobalContext) {
+    tick_connections(global_context: GlobalContext) {
         this.connections.forEach(async(voice_connection) => {
-            if (voice_connection.player === null) {
-                this.timeout_connection(global_context, voice_connection.id);
-                return;
-            }
-
             const channel = await global_context.bot.channels.fetch(voice_connection.init_message_channel_ID).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
@@ -91,11 +84,15 @@ class VoiceManager {
                 return;
             }
 
-            if (voice_connection.should_timeout === false && channel.members.size <= 1) {
-                voice_connection.should_timeout = true;
-                setTimeout(this.timeout_connection, voice_connection.timeout_delay, global_context, voice_connection.id);
+            if (channel.members.size <= 1) {
+                voice_connection.timeout_elapsed_ms += 1000;
+            } else {
+                voice_connection.timeout_elapsed_ms = 0;
             }
-
+            if(voice_connection.timeout_elapsed_ms > 30000) {
+                this.timeout_connection(global_context, voice_connection.id);
+                return;
+            }
             if (voice_connection.current !== null && voice_connection.player.state.status === AudioPlayerStatus.Paused) {
                 voice_connection.elapsed_ms += 1000;
             }
@@ -109,7 +106,6 @@ class VoiceManager {
         if (voice_connection === undefined) {
             return;
         }
-
         const channel = await global_context.bot.channels.fetch(voice_connection.channel_ID).catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;
@@ -124,51 +120,41 @@ class VoiceManager {
         this.remove_connection(global_context, guild_ID, null);
     }
 
-    async play_on_connection(global_context: GlobalContext, source_message: Message, loading_message: Message, info: any, log_type: any) {
+    async play_request_on_connection(global_context: GlobalContext, request: VoiceRequestData, source_message: Message, log: boolean) {
         if (source_message.guild === null || source_message.member === null || global_context.bot.user === null) {
             return;
         }
         const voice_connection = this.connections.get(source_message.guild.id);
         if(voice_connection === undefined) { return; }
 
-        const embedPlay: any = {
-            author: {
-                name: "-",
-            },
-            color: 8388736,
-            description: "-",
-        };
+        const current_length = global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(request.item.duration);
+        if (current_length.status !== -1 && current_length.hrs >= 3) {
+            const user_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "global_user", id: source_message.member.id });
+            const end = new Date();
+            const start = new Date(user_config.last_upvoted_time);
+            let diff = (end.getTime() - start.getTime()) / 1000;
+            diff /= 60;
+            diff = Math.abs(Math.round(diff));
 
-        const user_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "global_user", id: source_message.member.id });
-        const end = new Date();
-        const start = new Date(user_config.last_upvoted_time);
-        let diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff));
+            if(diff >= 3600) {
+                const embedError = {
+                    author: {
+                        name: "🔊 Long videos",
+                    },
+                    color: 8388736,
+                    description: `To play videos longer than \`3h\`, please upvote the bot on [here](https://top.gg/bot/${global_context.bot.user.id}/vote).`,
+                };
 
-        const current_length = global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(info.duration);
-        if (current_length.status !== -1 && (current_length.hrs >= 3 || info.duration === "P0D") && diff > 3600) {
-            embedPlay.author.name = "🔊 Long videos";
-            embedPlay.description = `To play videos longer than \`3h\`, please upvote the bot on [here](https://top.gg/bot/${global_context.bot.user.id}/vote).`;
-
-            await loading_message.delete().catch((e: Error) => {
-                global_context.logger.api_error(e);
-            });
-            await source_message.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
-                global_context.logger.api_error(e);
-            });
-            return;
-        }
-        let current_length_2 = global_context.neko_modules.timeConvert.convert_time_data_to_string(current_length);
-        if (info.duration === "P0D") {
-            current_length_2 = "Livestream";
+                await source_message.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                    global_context.logger.api_error(e);
+                });
+                return;
+            }
         }
 
-        let stream;
         if (voice_connection.current === null) {
-            const resource = createAudioResource(await ytdl(info.url, { quality: "highestaudio", highWaterMark: 1 << 25 }));
-            stream = voice_connection.player.play(resource);
-            voice_connection.elapsed_ms = 0;
+            const resource = createAudioResource(await ytdl(request.item.url, { quality: "highestaudio", highWaterMark: 1 << 25 }));
+            request.stream = voice_connection.player.play(resource);
 
             /*stream.on("finish", () => {
                 if (source_message.guild === null) { return; }
@@ -188,60 +174,51 @@ class VoiceManager {
 
                 this.remove_connection(global_context, source_message.guild.id, err.toString());
             });*/
-        }
 
-        const voice_request = {
-            url: info.url,
-            info: info,
-            request_message_ID: source_message.id,
-            request_channel_ID: source_message.channel.id,
-            request_user_ID:source_message.member.id,
-            stream: stream
-        };
+            voice_connection.elapsed_ms = 0;
+            voice_connection.current = request;
+            voice_connection.persistent_queue = [request];
 
-        if (voice_connection.current === null) {
-            voice_connection.current = voice_request;
-            voice_connection.persistent_queue = [voice_request];
-
-            if (log_type >= 1) {
-                embedPlay.author.name = `🔊 Playing - ${info.title}`;
-                embedPlay.description = `Length: \`${current_length_2}\`\nLink: ${voice_request.url}\nAdded by: <@${voice_request.request_user_ID}>`;
-                embedPlay.footer = { text: `Currently 0 in queue` };
-
-                if (log_type >= 2) {
-                    await loading_message.delete().catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                    });
-                }
+            if (log) {
+                const embedPlay = {
+                    author: {
+                        name: `🔊 Playing - ${request.item.title}`,
+                    },
+                    color: 8388736,
+                    description: `Length: \`${global_context.neko_modules.timeConvert.convert_time_data_to_string(current_length)}\`\nLink: ${request.item.url}\nAdded by: <@${request.request_user_ID}>`,
+                    footer: {
+                        text: `Currently ${voice_connection.queue.length} in queue`
+                    }
+                };
                 await source_message.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
             }
         } else {
-            voice_connection.queue.push(voice_request);
-            voice_connection.persistent_queue.push(voice_request);
-
-            if (log_type >= 1) {
-                embedPlay.author.name = `🔊 Added to queue - ${info.title}`;
-                embedPlay.description = `Length: \`${current_length_2}\`\nLink: ${voice_request.url}\nAdded by: <@${voice_request.request_user_ID}>`;
-                embedPlay.footer = { text: `Currently ${voice_connection.queue.length} in queue` };
-
-                if (log_type >= 2) {
-                    await loading_message.delete().catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                    });
-                }
+            voice_connection.queue.push(request);
+            voice_connection.persistent_queue.push(request);
+    
+            if (log) {
+                const embedPlay = {
+                    author: {
+                        name: `🔊 Added to queue - ${request.item.title}`,
+                    },
+                    color: 8388736,
+                    description: `Length: \`${global_context.neko_modules.timeConvert.convert_time_data_to_string(current_length)}\`\nLink: ${request.item.url}\nAdded by: <@${request.request_user_ID}>`,
+                    footer: {
+                        text: `Currently ${voice_connection.queue.length} in queue`
+                    }
+                };
                 await source_message.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
             }
         }
-
-        return voice_request;
     }
 
-    async play_next_on_connection(global_context: GlobalContext, guild_ID: string) {
-        const voice_connection = this.connections.get(guild_ID);
+    async play_next_on_connection(global_context: GlobalContext, source_message: Message) {
+        if(source_message.guild === null) { return; }
+        const voice_connection = this.connections.get(source_message.guild.id);
         if (voice_connection === undefined) { return; }
 
         if (voice_connection.mode === 1 && voice_connection.queue.length < 1) {
@@ -250,94 +227,39 @@ class VoiceManager {
             });
         }
 
-        const embedPlay: any = {
-            author: {
-                name: "-",
-            },
-            color: 8388736,
-            description: "-",
-        };
-
-        if (voice_connection.queue.length > 0) {
-            const voice_request = voice_connection.queue[0];
-            const current_length = global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(voice_request.info.duration);
-            let current_length_2 = global_context.neko_modules.timeConvert.convert_time_data_to_string(current_length);
-            if (voice_request.info.duration === "P0D") {
-                current_length_2 = "Livestream";
-            }
-
-            const resource = createAudioResource(await ytdl(voice_request.info.url, { quality: "highestaudio", highWaterMark: 1 << 25 }));
-            const stream = voice_connection.player.play(resource);
-            voice_connection.elapsed_ms = 0;
-
-            /*stream.on("finish", () => {
-                voice_connection.current = null;
-                if (voice_connection.mode === 0) {
-                    voice_connection.persistent_queue.shift();
-                }
-
-                this.play_next_on_connection(global_context, guild_ID);
-            });
-            stream.on("error", async (e: Error) => {
-                const channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch((err: Error) => {
-                    global_context.logger.api_error(err);
-                    return null;
-                });
-                if (channel === null || !(channel instanceof TextChannel)) {
-                    return;
-                }
-
-                channel.send("There was an error while playing the video...").catch((e: Error) => {
-                    global_context.logger.api_error(e);
-                });
-
-                global_context.logger.error(e);
-                this.remove_connection(global_context, guild_ID, e.toString());
-            });*/
-
-            voice_request.stream = stream;
-            voice_connection.current = voice_request;
-
-            const channel = await global_context.bot.channels.fetch(voice_request.request_channel_ID).catch((e: Error) => {
-                global_context.logger.api_error(e);
-                return null;
-            });
-            if (channel === null || !(channel instanceof TextChannel)) {
-                return;
-            }
-
-            embedPlay.author.name = `🔊 Playing - ${voice_request.info.title}`;
-            embedPlay.description = `Length: \`${current_length_2}\`\nLink: ${voice_request.url}\nAdded by: <@${voice_request.request_user_ID}>`;
-            embedPlay.footer = { text: `Currently ${voice_connection.queue.length - 1} in queue` };
-
-            channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
-                global_context.logger.api_error(e);
-            });
-
-            voice_connection.queue.shift();
+        const item = voice_connection.queue.shift();
+        if (item !== undefined) {
+            this.play_request_on_connection(global_context, item, source_message, false);
         }
     }
 
-    play_url_on_connection(global_context: GlobalContext, source_message: Message, loading_message: Message, url: string, log: any) {
-        const id = ytdl.getVideoID(url);
-        global_context.modules.ytinfo.retrieve(id, (err: Error | null, result: string) => {
-            if (err) {
-                global_context.logger.error(err);
+    play_url_on_connection(global_context: GlobalContext, url: string, source_message: Message, log: boolean) {
+        global_context.modules.ytinfo.retrieve(ytdl.getVideoID(url), (e: Error | null, raw_item: string) => {
+            if (e) {
+                global_context.logger.error(e);
                 return;
             }
-            result = JSON.stringify(result);
+            raw_item = JSON.stringify(raw_item);
 
-            const a = result.indexOf("lengthSeconds") + "lengthSeconds".length + '\\":\\"'.length;
-            const duration = parseInt(result.substring(a, result.indexOf("\\", a)));
-            const b = result.indexOf("title") + "title".length + '\\":\\"'.length;
-            const title = result.substring(b, result.indexOf("\\", b));
-            const result_m = {
-                title: title.split("+").join(" "),
-                url: url,
-                duration: global_context.neko_modules.timeConvert.convert_time_data_to_string(global_context.neko_modules.timeConvert.convert_string_to_time_data(global_context.neko_modules.timeConvert.convert_time(duration * 1000))),
+            const a = raw_item.indexOf("lengthSeconds") + "lengthSeconds".length + '\\":\\"'.length;
+            const duration = parseInt(raw_item.substring(a, raw_item.indexOf("\\", a)));
+            const b = raw_item.indexOf("title") + "title".length + '\\":\\"'.length;
+            let title = raw_item.substring(b, raw_item.indexOf("\\", b));
+            title = title.split("+").join(" ");
+
+            const request = {
+                item: {
+                    url: url,
+                    title: title,
+                    duration: global_context.neko_modules.timeConvert.convert_time_data_to_string(global_context.neko_modules.timeConvert.convert_string_to_time_data(global_context.neko_modules.timeConvert.convert_time(duration * 1000))),
+                },
+                stream: null,
+                request_message_ID: source_message.id,
+                request_channel_ID: source_message.channel.id,
+                request_user_ID: source_message.author.id
             };
 
-            return this.play_on_connection(global_context, source_message, loading_message, result_m, log);
+            return this.play_request_on_connection(global_context, request, source_message, log);
         });
     }
 }

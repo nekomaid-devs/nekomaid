@@ -32,8 +32,8 @@ export default {
             return;
         }
 
-        if (command_data.msg.mentions.users.size > 0) {
-            const target_user: any = command_data.msg.mentions.users.first();
+        const target_user = command_data.msg.mentions.users.first();
+        if (target_user !== undefined) {
             const messages = Array.from(
                 await command_data.msg.channel.messages.fetch({ limit: 99 }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);

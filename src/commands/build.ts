@@ -31,23 +31,7 @@ export default {
         if (building_field === undefined && global_building_field === undefined) {
             command_data.msg.reply(`Haven't found any building with name \`${building_name}\`.`);
         }
-
-        const embedBuild: any = {
-            color: 8388736,
-            author: {
-                name: `${building_name}`,
-            },
-            footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
-            },
-        };
-        const embedBuildProgress: any = {
-            color: 8388736,
-            author: {
-                name: `Building - ${building_name}`,
-            },
-        };
-
+        
         const author_user_config_map = new Map(Object.entries(command_data.author_user_config));
         if (building_field !== undefined) {
             const building_field_level = author_user_config_map.get(building_field);
@@ -69,8 +53,17 @@ export default {
                 building_description += `**⭐ Level:** ${author_user_config_map.get(building_field)}`;
 
                 const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
-                embedBuild.author.icon_url = url;
-                embedBuild.description = building_description;
+                const embedBuild = {
+                    color: 8388736,
+                    author: {
+                        name: `${building_name}`,
+                        icon_url: url === null ? undefined : url
+                    },
+                    description: building_description,
+                    footer: {
+                        text: `Requested by ${command_data.msg.author.tag}`,
+                    },
+                };
                 command_data.msg.channel.send({ embeds: [embedBuild] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
@@ -87,12 +80,18 @@ export default {
                 author_user_config_map.set("credits", command_data.author_user_config.credits - amount);
                 author_user_config_map.set(building_field + "_credits", building_field_credits + amount);
 
-                const a: any = Object.fromEntries(author_user_config_map);
+                const a = Object.fromEntries(author_user_config_map);
                 command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: a });
 
                 const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
-                embedBuildProgress.author.icon_url = url;
-                embedBuildProgress.description = `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`;
+                const embedBuildProgress = {
+                    color: 8388736,
+                    author: {
+                        name: `Building - ${building_name}`,
+                        icon_url: url === null ? undefined : url
+                    },
+                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`
+                };
                 command_data.msg.channel.send({ embeds: [embedBuildProgress] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
@@ -119,8 +118,17 @@ export default {
                 building_description += `**⭐ Global Level:** ${bot_config_map.get(global_building_field)}`;
 
                 const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-                embedBuild.author.icon_url = url;
-                embedBuild.description = building_description;
+                const embedBuild = {
+                    color: 8388736,
+                    author: {
+                        name: `${building_name}`,
+                        icon_url: url === null ? undefined : url
+                    },
+                    description: building_description,
+                    footer: {
+                        text: `Requested by ${command_data.msg.author.tag}`,
+                    },
+                };
                 command_data.msg.channel.send({ embeds: [embedBuild] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
@@ -137,14 +145,20 @@ export default {
                 author_user_config_map.set("credits", command_data.author_user_config.credits - amount);
                 bot_config_map.set(global_building_field + "_credits", global_building_field_credits + amount);
 
-                const a: any = Object.fromEntries(author_user_config_map);
-                const b: any = Object.fromEntries(bot_config_map);
+                const a = Object.fromEntries(author_user_config_map);
+                const b = Object.fromEntries(bot_config_map);
                 command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: a });
                 command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: b });
 
                 const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-                embedBuildProgress.author.icon_url = url;
-                embedBuildProgress.description = `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`;
+                const embedBuildProgress = {
+                    color: 8388736,
+                    author: {
+                        name: `Building - ${building_name}`,
+                        icon_url: url === null ? undefined : url
+                    },
+                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`
+                };
                 command_data.msg.channel.send({ embeds: [embedBuildProgress] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });

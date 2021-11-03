@@ -27,8 +27,8 @@ export default {
         }
         // TODO: make impostors change colors
         const impostor = command_data.global_context.utils.pick_random([true, false]);
-        read(impostor ? "./configs/data/among_us_impostor.png" : "./configs/data/among_us_impostor_not.png").then((image: any) => {
-            loadFont("./configs/data/among_us_font.fnt").then(async (font: any) => {
+        read(impostor ? "./configs/data/among_us_impostor.png" : "./configs/data/among_us_impostor_not.png").then((image) => {
+            loadFont("./configs/data/among_us_font.fnt").then(async (font) => {
                 image.print(font, 325 - measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
 
                 const embedImage = new command_data.global_context.modules.Discord.MessageEmbed()

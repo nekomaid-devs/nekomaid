@@ -70,10 +70,10 @@ export default {
                 }
 
                 const url = ban.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-                const embedBan: any = {
+                const embedBan = {
                     author: {
                         name: `Case ${server_config.case_ID}# | Ban | ${ban.user.tag}`,
-                        icon_url: url,
+                        icon_url: url === null ? undefined : url,
                     },
                     fields: [
                         {

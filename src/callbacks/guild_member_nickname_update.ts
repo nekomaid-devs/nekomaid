@@ -37,10 +37,10 @@ export default {
             }
 
             const url = new_member.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-            const embedNicknameChange: any = {
+            const embedNicknameChange = {
                 author: {
                     name: `Nickname changed | ${new_member.user.tag}`,
-                    icon_url: url,
+                    icon_url: url === null ? undefined : url,
                 },
                 fields: [
                     {

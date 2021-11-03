@@ -49,14 +49,11 @@ export default {
         }
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if (url === null) {
-            return;
-        }
         const embedInventory = {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Inventory (${inventory.length} items)`,
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
             description: inventory_text.length < 3072 ? inventory_text : inventory_text.substring(0, 3069) + "...",
             footer: {

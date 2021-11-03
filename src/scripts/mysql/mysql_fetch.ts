@@ -8,7 +8,7 @@ export default async function fetch(global_context: GlobalContext, data: any) {
 
     switch (data.type) {
         case "config":
-            return await fetch_data(global_context, "SELECT * FROM configs WHERE id='" + data.id + "'", format_config, undefined);
+            return await fetch_data(global_context, "SELECT * FROM configs WHERE id='" + data.id + "'", format_config, () => { return; });
 
         case "server_channel_create":
             return await fetch_data(
@@ -239,7 +239,7 @@ export default async function fetch(global_context: GlobalContext, data: any) {
     return 1;
 }
 
-async function fetch_data(global_context: GlobalContext, query: string, formattingFunc: any, creatingFunc: any) {
+async function fetch_data(global_context: GlobalContext, query: string, formattingFunc: (e: any) => void, creatingFunc: () => void) {
     let result = await global_context.neko_modules_clients.mySQL.sql_connection.promise().query(query);
     if (result.length < 1 || result[0].length < 1) {
         await creatingFunc();
@@ -254,7 +254,7 @@ async function fetch_data(global_context: GlobalContext, query: string, formatti
     return result;
 }
 
-async function fetch_multiple_data(global_context: GlobalContext, query: string, formattingFunc: any) {
+async function fetch_multiple_data(global_context: GlobalContext, query: string, formattingFunc: (e: any) => void) {
     let result = await global_context.neko_modules_clients.mySQL.sql_connection.promise().query(query);
     if (result.length < 1 || result[0].length < 1) {
         return [];
@@ -272,12 +272,12 @@ async function fetch_multiple_data(global_context: GlobalContext, query: string,
 }
 
 async function format_config(config: any) {
-    config.bot_owners = config.bot_owners.split(",").filter((a: any) => a.length > 0);
-    config.beg_success_answers = config.beg_success_answers.split(",").filter((a: any) => a.length > 0);
-    config.beg_failed_answers = config.beg_failed_answers.split(",").filter((a: any) => a.length > 0);
-    config.work_answers = config.work_answers.split("\r\n").filter((a: any) => a.length > 0);
-    config.crime_success_answers = config.crime_success_answers.split("\r\n").filter((a: any) => a.length > 0);
-    config.crime_failed_answers = config.crime_failed_answers.split("\r\n").filter((a: any) => a.length > 0);
+    config.bot_owners = config.bot_owners.split(",").filter((e: string) => e.length > 0);
+    config.beg_success_answers = config.beg_success_answers.split(",").filter((e: string) => e.length > 0);
+    config.beg_failed_answers = config.beg_failed_answers.split(",").filter((e: string) => e.length > 0);
+    config.work_answers = config.work_answers.split("\r\n").filter((e: string) => e.length > 0);
+    config.crime_success_answers = config.crime_success_answers.split("\r\n").filter((e: string) => e.length > 0);
+    config.crime_failed_answers = config.crime_failed_answers.split("\r\n").filter((e: string) => e.length > 0);
 
     const items = new Map();
     items.set("1", { id: "0", type: "box", display_name: "Common Box", box_payouts: [50, 100, 150], description: "A common lootbox with a cash prize inside~", rarity: "common" });
@@ -378,9 +378,9 @@ async function format_config(config: any) {
 }
 
 async function format_server(global_context: GlobalContext, server: any, containExtra = false, containRanks = false) {
-    server.banned_words = server.banned_words == null ? server.banned_words : server.banned_words.split(",").filter((a: any) => a.length > 0);
-    server.auto_roles = server.auto_roles == null ? server.auto_roles : server.auto_roles.split(",").filter((a: any) => a.length > 0);
-    server.module_level_ignored_channels = server.module_level_ignored_channels == null ? server.module_level_ignored_channels : server.module_level_ignored_channels.split(",").filter((a: any) => a.length > 0);
+    server.banned_words = server.banned_words == null ? server.banned_words : server.banned_words.split(",").filter((e: string) => e.length > 0);
+    server.auto_roles = server.auto_roles == null ? server.auto_roles : server.auto_roles.split(",").filter((e: string) => e.length > 0);
+    server.module_level_ignored_channels = server.module_level_ignored_channels == null ? server.module_level_ignored_channels : server.module_level_ignored_channels.split(",").filter((e: string) => e.length > 0);
     if (containExtra === true) {
         server.counters = await fetch(global_context, { type: "counters", id: server.server_ID });
         server.reaction_roles = await fetch(global_context, { type: "reaction_roles", id: server.server_ID });
@@ -405,8 +405,8 @@ async function format_global_user(global_context: GlobalContext, user: any, cont
 }
 
 async function format_reaction_role(rr: any) {
-    rr.reaction_roles = rr.reaction_roles.split(",").filter((a: any) => a.length > 0);
-    rr.reaction_role_emojis = rr.reaction_role_emojis.split(",").filter((a: any) => a.length > 0);
+    rr.reaction_roles = rr.reaction_roles.split(",").filter((e: string) => e.length > 0);
+    rr.reaction_role_emojis = rr.reaction_role_emojis.split(",").filter((e: string) => e.length > 0);
 
     return rr;
 }

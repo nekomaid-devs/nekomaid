@@ -56,14 +56,11 @@ export default {
         } (${command_data.global_context.utils.format_number(get_building_price(command_data.tagged_user_config.b_pawn_shop, "b_pawn_shop"))} $)\``;
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if (url === null) {
-            return;
-        }
         const embedBuildings = {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Buildings`,
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
             description: buildings_description,
             footer: {

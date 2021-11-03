@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, Command } from "../ts/base";
+import { CommandData, Command, ItemData } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
@@ -22,29 +22,27 @@ export default {
         if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
-        // TODO: add support for number of items
-        // TODO: this needs to be refactored fr
-        let item_name = command_data.total_argument;
-        item_name = item_name.includes("<@") ? item_name.substring(0, item_name.indexOf("<@") - 1) : item_name;
 
-        let item_ID = -1;
-        let item_prefab = -1;
-        let target_index = -1;
-
-        command_data.global_context.bot_config.items.forEach((item: any) => {
-            if (item.display_name.toLowerCase() === item_name.toLowerCase()) {
-                item_ID = item.id;
+        let item_prefab: ItemData | null = null;
+        command_data.global_context.bot_config.items.forEach((item) => {
+            if (item.display_name.toLowerCase() === command_data.total_argument.toLowerCase()) {
                 item_prefab = item;
             }
         });
+        if(item_prefab === null) {
+            command_data.msg.reply(`No item with name \`${command_data.total_argument}\` exists.`);
+            return;
+        }
 
-        command_data.author_user_config.inventory.forEach((item: any, index: number) => {
-            if (item.item_ID === item_ID) {
+        let target_index: number | null = null;
+        command_data.author_user_config.inventory.forEach((item, index) => {
+            if(item_prefab === null) { return; }
+            if (item.item_ID === item_prefab.item_ID) {
                 target_index = index;
             }
         });
-        if (target_index === -1) {
-            command_data.msg.reply(`You don't have any item called \`${item_name}\`-`);
+        if (target_index === null) {
+            command_data.msg.reply(`You don't have any item called \`${command_data.total_argument}\`.`);
             return;
         }
 

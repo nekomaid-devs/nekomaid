@@ -42,11 +42,11 @@ export default {
         author_pos += 1;
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        const embedLevel: any = {
+        const embedLevel = {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Profile (${author_pos}#)`,
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
             fields: [
                 {

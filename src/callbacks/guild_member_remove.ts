@@ -86,10 +86,11 @@ export default {
                     return;
                 }
 
-                const embedKick: any = {
+                const url = last_audit.target.avatarURL({ format: "png", dynamic: true, size: 1024 });
+                const embedKick = {
                     author: {
                         name: `Kick | ${last_audit.target.tag}`,
-                        icon_url: last_audit.target.avatarURL({ format: "png", dynamic: true, size: 1024 }),
+                        icon_url: url === null ? undefined : url,
                     },
                     fields: [
                         {

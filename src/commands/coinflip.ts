@@ -23,10 +23,6 @@ export default {
             return;
         }
         const options = ["heads", "tails"];
-        const embedCoinflip: any = {
-            title: `${command_data.msg.author.tag} is flipping...`,
-            color: 8388736,
-        };
 
         if (command_data.args.length > 0) {
             const bet_result = command_data.args.length > 1 ? command_data.args[1].toLowerCase() : "heads";
@@ -63,7 +59,11 @@ export default {
                 return;
             }
 
-            const message = await command_data.msg.channel.send({ embeds: [embedCoinflip] }).catch((e: Error) => {
+            const embedCoinflipLoading = {
+                title: `${command_data.msg.author.tag} is flipping...`,
+                color: 8388736,
+            };
+            const message = await command_data.msg.channel.send({ embeds: [embedCoinflipLoading] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
@@ -73,8 +73,7 @@ export default {
 
             setTimeout(async () => {
                 const result = command_data.global_context.utils.pick_random(options);
-                embedCoinflip.title = `${command_data.msg.author.tag} flipped ${result}!`;
-
+                let result_text = "";
                 if (result === bet_result) {
                     const won_amount = Math.floor(credits_amount * 0.75);
                     const won_amount_text = command_data.global_context.utils.format_number(credits_amount + won_amount);
@@ -82,27 +81,35 @@ export default {
                     command_data.author_user_config.credits += won_amount;
                     command_data.author_user_config.net_worth += won_amount;
                     command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
-
-                    embedCoinflip.description = `You won \`${won_amount_text}\` credits!`;
-                    embedCoinflip.footer = {
-                        text: "Win multiplier: 1.75x",
-                    };
+                    result_text = won_amount_text;
                 } else {
                     const lost_amount_text = command_data.global_context.utils.format_number(credits_amount);
+                    
                     command_data.author_user_config.credits -= credits_amount;
                     command_data.author_user_config.net_worth -= credits_amount;
                     command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
-
-                    embedCoinflip.description = `You lost \`${lost_amount_text}\` credits...`;
+                    result_text = lost_amount_text;
                 }
 
+                const embedCoinflip = {
+                    title: `${command_data.msg.author.tag} flipped ${result}!`,
+                    color: 8388736,
+                    description: result_text,
+                    footer: result === bet_result ? {
+                        text: "Win multiplier: 1.75x",
+                    } : undefined
+                };
                 message.edit({ embeds: [embedCoinflip] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }, 750);
         } else {
             const result = command_data.global_context.utils.pick_random(options);
-            embedCoinflip.title = `${command_data.msg.author.tag} flipped ${result}!`;
+
+            const embedCoinflip = {
+                title: `${command_data.msg.author.tag} flipped ${result}!`,
+                color: 8388736,
+            };
             command_data.msg.channel.send({ embeds: [embedCoinflip] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });

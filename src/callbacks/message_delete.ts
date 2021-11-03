@@ -40,10 +40,10 @@ export default {
             }
 
             const url = message.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
-            const embedDeletedMessage: any = {
+            const embedDeletedMessage = {
                 author: {
                     name: `Message Deleted | ${message.author.tag}`,
-                    icon_url: url,
+                    icon_url: url === null ? undefined : url,
                 },
                 fields: [
                     {

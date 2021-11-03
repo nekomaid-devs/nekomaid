@@ -38,10 +38,10 @@ export default {
             }
 
             const url = event.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-            const embedMute: any = {
+            const embedMute = {
                 author: {
                     name: `Case ${server_config.case_ID}# | Mute | ${event.member.user.tag}`,
-                    icon_url: url,
+                    icon_url: url === null ? undefined : url,
                 },
                 fields: [
                     {

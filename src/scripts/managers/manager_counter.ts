@@ -1,21 +1,21 @@
 /* Types */
-import { GlobalContext } from "../../ts/base";
-import { VoiceChannel } from "discord.js";
+import { CounterData, GlobalContext } from "../../ts/base";
+import { Guild, VoiceChannel } from "discord.js";
 
 class CounterManager {
     async update_all_counters(global_context: GlobalContext) {
         const counters = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "all_counters" });
         global_context.bot.guilds.cache.forEach((server) => {
-            const server_counters = counters.filter((e: any) => {
+            const server_counters = counters.filter((e: CounterData) => {
                 return e.server_ID === server.id;
             });
-            server_counters.forEach((counter: any) => {
+            server_counters.forEach((counter: CounterData) => {
                 global_context.neko_modules_clients.counterManager.update_counter(global_context, server, counter);
             });
         });
     }
 
-    async update_counter(global_context: GlobalContext, server: any, counter: any, force_update = false) {
+    async update_counter(global_context: GlobalContext, server: Guild, counter: CounterData, force_update = false) {
         if (global_context.bot.shard === null) {
             return;
         }
@@ -47,7 +47,7 @@ class CounterManager {
                 }
 
                 case "members": {
-                    const member_count = Array.from(server.members.cache.values()).filter((e: any) => {
+                    const member_count = Array.from(server.members.cache.values()).filter((e) => {
                         return e.user.bot === false;
                     }).length;
                     channel.setName(`Members: ${member_count}`).catch((e: Error) => {
@@ -66,14 +66,14 @@ class CounterManager {
 
                 case "channels": {
                     const channels_count = Array.from(server.members.cache.values()).length;
-                    channel.setName(`Channels: ${channels_count}`).catch((e: Error) => {
+                    channel.setName(`Channels: ${channels_count}`).catch((e) => {
                         global_context.logger.api_error(e);
                     });
                     break;
                 }
 
                 case "bots": {
-                    const bot_count = Array.from(server.members.cache.values()).filter((e: any) => {
+                    const bot_count = Array.from(server.members.cache.values()).filter((e) => {
                         return e.user.bot === false;
                     }).length;
                     channel.setName(`Bots: ${bot_count}`).catch((e: Error) => {

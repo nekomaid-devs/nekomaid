@@ -40,7 +40,7 @@ export default {
             const embedUnmute = {
                 author: {
                     name: `Case ${server_config.case_ID}# | Unmute | ${event.member.user.tag}`,
-                    icon_url: url,
+                    icon_url: url === null ? undefined : url,
                 },
                 fields: [
                     {

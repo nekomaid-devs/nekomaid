@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext } from "../../ts/base";
+import { Command, GlobalContext } from "../../ts/base";
 import { Client } from "discord.js";
 
 export async function refresh_status(global_context: GlobalContext) {
@@ -173,7 +173,7 @@ export async function refresh_website(global_context: GlobalContext) {
         .filter((e) => {
             return e.hidden === false;
         })
-        .reduce((acc: any, curr: any) => {
+        .reduce((acc: object[], curr) => {
             acc.push({ name: curr.name, description: curr.description, category: curr.category, aliases: curr.aliases });
             return acc;
         }, []);

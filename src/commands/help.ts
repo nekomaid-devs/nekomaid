@@ -35,7 +35,6 @@ export default {
         }
 
         if (command_data.args.length > 0) {
-            const command_keys = Array.from(command_data.global_context.commands.keys());
             let target_command_name = command_data.args[0];
 
             const aliased_name = command_data.global_context.command_aliases.get(target_command_name);
@@ -145,9 +144,9 @@ export default {
                 commands_keys.sort((a: any, b: any) => {
                     return a.name.localeCompare(b.name);
                 });
-                commands_keys.forEach((command: any, index: number) => {
+                commands_keys.forEach((command: Command, index: number) => {
                     let command_text = show_hidden === true && command.hidden === true ? "❓" + command.name : command.name;
-                    command.aliases.forEach((alias: string) => {
+                    command.aliases.forEach((alias) => {
                         command_text += "/" + alias;
                     });
 

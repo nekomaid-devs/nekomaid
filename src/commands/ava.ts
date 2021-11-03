@@ -22,11 +22,8 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if (url === null) {
-            return;
-        }
 
+        const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         const embedAvatar = {
             title: `Avatar Image of ${command_data.tagged_user.tag}`,
             color: 8388736,
@@ -37,7 +34,7 @@ export default {
                 },
             ],
             image: {
-                url: url,
+                url: url === null ? undefined : url,
             },
             footer: {
                 text: `Requested by ${command_data.msg.author.tag}`,

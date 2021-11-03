@@ -113,14 +113,11 @@ export default {
 
         const sec_taken = ((Date.now() - t) / 1000).toFixed(3);
         const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if (url === null) {
-            return;
-        }
         const embedInfo = {
             color: 8388736,
             author: {
                 name: "NekoMaid - Info",
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
             fields: [
                 {
