@@ -1,7 +1,7 @@
 services:
   nekomaid-mysql:
     container_name: nekomaid-mysql
-    image: mysql:latest
+    image: mariadb:latest
     ports:
       - "3306:3306"
     volumes:
