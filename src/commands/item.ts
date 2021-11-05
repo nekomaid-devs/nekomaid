@@ -3,6 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
+import { get_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "item",
@@ -25,7 +26,7 @@ export default {
         // TODO: maybe add some more cool information
         const item_name = command_data.total_argument;
 
-        const target_item: any = Array.from(command_data.global_context.bot_config.items.values()).find((e: any) => {
+        const target_item = Array.from(get_items().values()).find((e) => {
             return e.display_name === item_name;
         });
         if (target_item === undefined) {

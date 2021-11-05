@@ -7,6 +7,7 @@ import { randomBytes } from "crypto";
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
+import { get_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "d_giveinserver",
@@ -28,7 +29,7 @@ export default {
         }
         const amount = parseInt(command_data.args[0]);
         const item_ID = command_data.args[1];
-        const target_item: any = Array.from(command_data.global_context.bot_config.items.values()).find((e: any) => {
+        const target_item = Array.from(get_items().values()).find((e) => {
             return e.id === item_ID;
         });
 
@@ -38,11 +39,8 @@ export default {
         }
 
         command_data.msg.guild.members.cache.forEach(async (member) => {
-            const config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "global_user", id: member.user.id });
-            for (let i = 0; i < amount; i++) {
-                config.inventory.push({ id: randomBytes(16).toString("hex"), user_ID: member.user.id, item_ID: item_ID });
-            }
-            command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: config });
+            const item = { id: randomBytes(16).toString("hex"), user_ID: member.user.id, item_ID: item_ID };
+            command_data.global_context.neko_modules_clients.db.add_inventory_item(item);
         });
 
         command_data.msg.channel.send(`Added \`${amount}x ${target_item.display_name}\` to \`${command_data.msg.guild.members.cache.size}\` members!`).catch((e: Error) => {

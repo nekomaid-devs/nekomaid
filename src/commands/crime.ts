@@ -64,19 +64,21 @@ export default {
         credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === ShrineBonus.CRIME ? [1, 1.01, 1.01, 1.03, 1.05, 1.07, 1.1, 1.1, 1.15, 1.15, 1.15][command_data.global_context.bot_config.b_shrine] : 1);
         credits_amount = Math.round(credits_amount * [1, 1.01, 1.03, 1.05, 1.1, 1.15, 1.2, 1.22, 1.25, 1.25, 1.25][command_data.global_context.bot_config.b_crime_monopoly]);
         if (credits_amount !== 0) {
-            command_data.author_user_config.notifications.push({
+            const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
                 description: `<time_ago> You did some crime and got \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`.`,
-            });
+            };
+            command_data.global_context.neko_modules_clients.db.add_user_notification(notification);
         } else {
-            command_data.author_user_config.notifications.push({
+            const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
                 description: `<time_ago> You did some crime, but failed.`,
-            });
+            };
+            command_data.global_context.neko_modules_clients.db.add_user_notification(notification);
         }
 
         let answer = command_data.global_context.utils.pick_random(answers);
@@ -84,7 +86,7 @@ export default {
 
         command_data.author_user_config.credits += credits_amount;
         command_data.author_user_config.net_worth += credits_amount;
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
         const embedCrime = {
             color: answer_color,

@@ -7,7 +7,6 @@ class LevelingManager {
         if (command_data.msg.guild === null) {
             return;
         }
-        command_data.server_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containRanks: true });
         if (command_data.server_config.module_level_ignored_channels.includes(command_data.msg.channel.id) === true) {
             return;
         }
@@ -28,8 +27,10 @@ class LevelingManager {
         }
 
         command_data.tagged_server_user_config.xp = Number(command_data.tagged_server_user_config.xp.toFixed(2));
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server_user", user: command_data.tagged_server_user_config });
-        if(command_data.server_config.module_level_ranks.length < 1) { return; }
+        command_data.global_context.neko_modules_clients.db.edit_server_user(command_data.tagged_server_user_config);
+        if (command_data.server_config.module_level_ranks.length < 1) {
+            return;
+        }
 
         const rank_data = await this.process_ranks(command_data);
         if (command_data.server_config.module_level_levelup_messages == true && log == true) {
@@ -41,7 +42,7 @@ class LevelingManager {
             if (granted_roles_text === "") {
                 granted_roles_text = "`None`";
             }
-    
+
             let removed_roles_text = rank_data.removed_roles.reduce((acc, curr) => {
                 acc += "`" + curr.toString() + "`, ";
                 return acc;
@@ -50,7 +51,7 @@ class LevelingManager {
             if (removed_roles_text === "") {
                 removed_roles_text = "`None`";
             }
-    
+
             let rank_message = "\n";
             if (granted_roles_text !== "`None`") {
                 rank_message += `You've been granted role(s) \`${granted_roles_text}\`!\n`;
@@ -58,7 +59,7 @@ class LevelingManager {
             if (removed_roles_text !== "`None`") {
                 rank_message += `You've been removed role(s) \`${removed_roles_text}\`.\n`;
             }
-            
+
             let levelup_message = command_data.server_config.module_level_levelup_messages_format;
             levelup_message = levelup_message.replace("<user>", command_data.server_config.module_level_levelup_messages_ping == true ? command_data.tagged_user.toString() : command_data.tagged_user.tag);
             levelup_message = levelup_message.replace("<level>", command_data.tagged_server_user_config.level.toString());
@@ -77,7 +78,7 @@ class LevelingManager {
         }
 
         command_data.tagged_server_user_config.xp = Number(command_data.tagged_server_user_config.xp.toFixed(2));
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server_user", user: command_data.tagged_server_user_config });
+        command_data.global_context.neko_modules_clients.db.edit_server_user(command_data.tagged_server_user_config);
     }
 
     async process_ranks(command_data: CommandData) {
@@ -89,7 +90,7 @@ class LevelingManager {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
-            if (channel !== null && (channel instanceof TextChannel)) {
+            if (channel !== null && channel instanceof TextChannel) {
                 channel.send("Ranks are setup, but the bot doesn't have required permissions - `Manage Roles`\nPlease add required permissions and try again-").catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
@@ -108,7 +109,9 @@ class LevelingManager {
             const role = command_data.msg.guild.roles.cache.find((r) => {
                 return r.id === rank.role_ID;
             });
-            if (role === undefined || processed_roles.includes(role.id)) { return; }
+            if (role === undefined || processed_roles.includes(role.id)) {
+                return;
+            }
 
             if (rank.level <= command_data.tagged_server_user_config.level) {
                 command_data.tagged_member.roles.add(role).catch((e: Error) => {
@@ -127,9 +130,9 @@ class LevelingManager {
         });
 
         return {
-            granted_roles: granted_roles, 
-            removed_roles: removed_roles
-        }
+            granted_roles: granted_roles,
+            removed_roles: removed_roles,
+        };
     }
 
     async update_global_level(command_data: CommandData) {
@@ -147,7 +150,7 @@ class LevelingManager {
         }
 
         command_data.author_user_config.xp = Number(command_data.author_user_config.xp.toFixed(2));
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
     }
 }
 

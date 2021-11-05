@@ -161,7 +161,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", id: "default_config", config: command_data.global_context.bot_config });
+                command_data.global_context.neko_modules_clients.db.edit_config(command_data.global_context.bot_config);
                 break;
             }
 
@@ -233,7 +233,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: command_data.global_context.bot_config });
+                command_data.global_context.neko_modules_clients.db.edit_config(command_data.global_context.bot_config);
                 break;
             }
 
@@ -306,7 +306,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: command_data.global_context.bot_config });
+                command_data.global_context.neko_modules_clients.db.edit_config(command_data.global_context.bot_config);
                 break;
             }
 

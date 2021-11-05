@@ -2,7 +2,7 @@
 import { CommandData } from "../../ts/base";
 
 class InventoryManager {
-    use_item(command_data: CommandData, item_prefab: any, target_indexes: any) {
+    use_item(command_data: CommandData, item_prefab: any, target_indexes: number[]) {
         switch (item_prefab.type) {
             case "box": {
                 let payout_amount = 0;
@@ -62,7 +62,7 @@ class InventoryManager {
                     command_data.global_context.logger.api_error(e);
                 });
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.tagged_user_config });
+                command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.tagged_user_config);
                 break;
             }
 
@@ -71,11 +71,12 @@ class InventoryManager {
                 return;
         }
 
-        target_indexes.forEach((index: any) => {
-            command_data.author_user_config.inventory.splice(index, 1);
+        target_indexes.forEach((index) => {
+            const item = command_data.author_user_config.inventory.splice(index, 1)[0];
+            command_data.global_context.neko_modules_clients.db.remove_inventory_item(item.id);
         });
 
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
     }
 }
 

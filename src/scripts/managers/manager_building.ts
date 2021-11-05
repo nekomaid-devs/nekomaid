@@ -4,9 +4,13 @@ import { GlobalContext, GlobalUserData, ItemRarity, ShrineBonus, UserItemData } 
 /* Node Imports */
 import { randomBytes } from "crypto";
 
+/* Local Imports */
+import { get_items } from "../utils/util_vars";
+import { item } from "../../commands";
+
 class BuildingManager {
     async update_all_buildings(global_context: GlobalContext) {
-        const all_users = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "buildings_global_users" });
+        const all_users = await global_context.neko_modules_clients.db.fetch_all_global_users_with_buildings(false, false);
         all_users.forEach((user: GlobalUserData) => {
             global_context.neko_modules_clients.buildingManager.update_buildings(global_context, user);
         });
@@ -33,14 +37,15 @@ class BuildingManager {
 
             user.b_lewd_services_last_update = end.getTime();
             user.credits += credits_amount;
-            user.notifications.push({
+            const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: user.user_ID,
                 timestamp: Date.now(),
                 description: `<time_ago> \`❤️ Neko's Lewd Services\` generated \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
-            });
+            };
+            global_context.neko_modules_clients.db.add_user_notification(notification);
 
-            global_context.neko_modules_clients.mySQL.edit(global_context, { type: "global_user", user: user });
+            global_context.neko_modules_clients.db.edit_global_user(user);
         }
 
         start = new Date(user.b_casino_last_update);
@@ -54,14 +59,15 @@ class BuildingManager {
 
             user.b_casino_last_update = end.getTime();
             user.credits += credits_amount;
-            user.notifications.push({
+            const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: user.user_ID,
                 timestamp: Date.now(),
                 description: `<time_ago> \`🎰 Neko's Casino\` generated \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
-            });
+            };
+            global_context.neko_modules_clients.db.add_user_notification(notification);
 
-            global_context.neko_modules_clients.mySQL.edit(global_context, { type: "global_user", user: user });
+            global_context.neko_modules_clients.db.edit_global_user(user);
         }
 
         start = new Date(user.b_scrapyard_last_update);
@@ -77,28 +83,30 @@ class BuildingManager {
                 const chance_needed = [0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 15][user.b_scrapyard];
 
                 const rarity = chance <= chance_needed ? ItemRarity.LEGENDARY : ItemRarity.RARE;
-                items = Array.from(global_context.bot_config.items.values()).filter((e) => {
+                items = Array.from(get_items().values()).filter((e) => {
                     return e.rarity === rarity && e.can_be_scavanged === true;
                 });
             } else if (user.b_scrapyard >= 3) {
-                items = Array.from(global_context.bot_config.items.values()).filter((e) => {
+                items = Array.from(get_items().values()).filter((e) => {
                     return e.rarity === ItemRarity.UNCOMMON && e.can_be_scavanged === true;
                 });
             } else {
-                items = Array.from(global_context.bot_config.items.values()).filter((e) => {
+                items = Array.from(get_items().values()).filter((e) => {
                     return e.rarity === ItemRarity.COMMON && e.can_be_scavanged === true;
                 });
             }
+
             const item = global_context.utils.pick_random(items);
-            user.inventory.push({ id: randomBytes(16).toString("hex"), user_ID: user.user_ID, item_ID: item.id });
-            user.notifications.push({
+            global_context.neko_modules_clients.db.add_inventory_item(item);
+            const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: user.user_ID,
                 timestamp: Date.now(),
                 description: `<time_ago> Neko at \`⛏️ Neko's Scrapyard\` found \`1x ${rarity_names[item.rarity]} ${item.display_name}\`.`,
-            });
+            };
+            global_context.neko_modules_clients.db.add_user_notification(notification);
 
-            global_context.neko_modules_clients.mySQL.edit(global_context, { type: "global_user", user: user });
+            global_context.neko_modules_clients.db.edit_global_user(user);
         }
 
         start = new Date(user.b_pawn_shop_last_update);
@@ -110,35 +118,35 @@ class BuildingManager {
                 if (global_context.bot_config == null) {
                     return false;
                 }
-                const item = global_context.bot_config.items.get(e.item_ID);
+                const item = get_items().get(e.item_ID);
                 return item !== undefined && item.rarity === ItemRarity.LEGENDARY && item.can_be_scavanged === true;
             });
             const r_items = user.inventory.filter((e: UserItemData) => {
                 if (global_context.bot_config == null) {
                     return false;
                 }
-                const item = global_context.bot_config.items.get(e.item_ID);
+                const item = get_items().get(e.item_ID);
                 return item !== undefined && item.rarity === ItemRarity.RARE && item.can_be_scavanged === true;
             });
             const u_items = user.inventory.filter((e: UserItemData) => {
                 if (global_context.bot_config == null) {
                     return false;
                 }
-                const item = global_context.bot_config.items.get(e.item_ID);
+                const item = get_items().get(e.item_ID);
                 return item !== undefined && item.rarity === ItemRarity.UNCOMMON && item.can_be_scavanged === true;
             });
             const c_items = user.inventory.filter((e: UserItemData) => {
                 if (global_context.bot_config == null) {
                     return false;
                 }
-                const item = global_context.bot_config.items.get(e.item_ID);
+                const item = get_items().get(e.item_ID);
                 return item !== undefined && item.rarity === ItemRarity.COMMON && item.can_be_scavanged === true;
             });
 
             if (user.b_pawn_shop >= 8 && l_items.length > 0) {
                 if (diff >= [0, 0, 0, 0, 0, 0, 0, 0, 60 * 6, 60 * 6, 60 * 6][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(l_items[0]), 1);
-                    const sold_item = global_context.bot_config.items.get(sold_items[0].item_ID);
+                    const sold_item = get_items().get(sold_items[0].item_ID);
                     if (sold_item === undefined) {
                         return;
                     }
@@ -148,19 +156,21 @@ class BuildingManager {
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
-                    user.notifications.push({
+                    global_context.neko_modules_clients.db.remove_inventory_item(sold_items[0].id);
+                    const notification = {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
-                    });
+                    };
+                    global_context.neko_modules_clients.db.add_user_notification(notification);
 
-                    global_context.neko_modules_clients.mySQL.edit(global_context, { type: "global_user", user: user });
+                    global_context.neko_modules_clients.db.edit_global_user(user);
                 }
             } else if (user.b_pawn_shop >= 4 && r_items.length > 0) {
                 if (diff >= [0, 0, 0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 3][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(r_items[0]), 1);
-                    const sold_item = global_context.bot_config.items.get(sold_items[0].item_ID);
+                    const sold_item = get_items().get(sold_items[0].item_ID);
                     if (sold_item === undefined) {
                         return;
                     }
@@ -170,19 +180,21 @@ class BuildingManager {
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
-                    user.notifications.push({
+                    global_context.neko_modules_clients.db.remove_inventory_item(sold_items[0].id);
+                    const notification = {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
-                    });
+                    };
+                    global_context.neko_modules_clients.db.add_user_notification(notification);
 
-                    global_context.neko_modules_clients.mySQL.edit(global_context, { type: "global_user", user: user });
+                    global_context.neko_modules_clients.db.edit_global_user(user);
                 }
             } else if (user.b_pawn_shop >= 2 && u_items.length > 0) {
                 if (diff >= [0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 2][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(u_items[0]), 1);
-                    const sold_item = global_context.bot_config.items.get(sold_items[0].item_ID);
+                    const sold_item = get_items().get(sold_items[0].item_ID);
                     if (sold_item === undefined) {
                         return;
                     }
@@ -192,19 +204,21 @@ class BuildingManager {
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
-                    user.notifications.push({
+                    global_context.neko_modules_clients.db.remove_inventory_item(sold_items[0].id);
+                    const notification = {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
-                    });
+                    };
+                    global_context.neko_modules_clients.db.add_user_notification(notification);
 
-                    global_context.neko_modules_clients.mySQL.edit(global_context, { type: "global_user", user: user });
+                    global_context.neko_modules_clients.db.edit_global_user(user);
                 }
             } else if (c_items.length > 0) {
                 if (diff >= [0, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 1, 60 * 1, 60 * 1][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(c_items[0]), 1);
-                    const sold_item = global_context.bot_config.items.get(sold_items[0].item_ID);
+                    const sold_item = get_items().get(sold_items[0].item_ID);
                     if (sold_item === undefined) {
                         return;
                     }
@@ -214,14 +228,16 @@ class BuildingManager {
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
-                    user.notifications.push({
+                    global_context.neko_modules_clients.db.remove_inventory_item(sold_items[0].id);
+                    const notification = {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
-                    });
+                    };
+                    global_context.neko_modules_clients.db.add_user_notification(notification);
 
-                    global_context.neko_modules_clients.mySQL.edit(global_context, { type: "global_user", user: user });
+                    global_context.neko_modules_clients.db.edit_global_user(user);
                 }
             }
         }

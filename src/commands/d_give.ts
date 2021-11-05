@@ -7,6 +7,7 @@ import { randomBytes } from "crypto";
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
+import { get_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "d_give",
@@ -29,16 +30,16 @@ export default {
         const amount = parseInt(command_data.args[1]);
         const item_ID = command_data.args[2];
 
-        const target_item = command_data.global_context.bot_config.items.get(item_ID);
+        const target_item = get_items().get(item_ID);
         if (target_item === undefined) {
             command_data.msg.reply(`There isn't any item with id \`${item_ID}\`.`);
             return;
         }
 
         for (let i = 0; i < amount; i++) {
-            command_data.tagged_user_config.inventory.push({ id: randomBytes(16).toString("hex"), user_ID: command_data.tagged_user.id, item_ID: item_ID });
+            const item = { id: randomBytes(16).toString("hex"), user_ID: command_data.tagged_user.id, item_ID: item_ID };
+            command_data.global_context.neko_modules_clients.db.add_inventory_item(item);
         }
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.tagged_user_config });
 
         command_data.msg.channel.send(`Added \`${amount}x ${target_item.display_name}\` to \`${command_data.tagged_user.tag}\`!`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);

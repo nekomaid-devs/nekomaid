@@ -3,6 +3,7 @@ import { CommandData, Command, ItemData } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
+import { get_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "useall",
@@ -24,19 +25,21 @@ export default {
         }
 
         let item_prefab: ItemData | null = null;
-        command_data.global_context.bot_config.items.forEach((item) => {
+        get_items().forEach((item) => {
             if (item.display_name.toLowerCase() === command_data.total_argument.toLowerCase()) {
                 item_prefab = item;
             }
         });
-        if(item_prefab === null) {
+        if (item_prefab === null) {
             command_data.msg.reply(`No item with name \`${command_data.total_argument}\` exists.`);
             return;
         }
 
         const target_indexes: number[] = [];
         command_data.author_user_config.inventory.forEach((item, index) => {
-            if(item_prefab === null) { return; }
+            if (item_prefab === null) {
+                return;
+            }
             if (item.item_ID === item_prefab.item_ID) {
                 target_indexes.push(index);
             }

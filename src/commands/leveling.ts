@@ -1,5 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
+import { GuildEditType } from "../scripts/db/db_utils";
 import { Permissions, TextChannel } from "discord.js";
 
 /* Node Imports */
@@ -43,7 +44,6 @@ export default {
         }
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
-        command_data.server_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         if (command_data.args.length < 1) {
             const channel =
                 command_data.server_config.module_level_levelup_messages_channel === null
@@ -269,13 +269,14 @@ export default {
                             return;
                         }
 
-                        command_data.server_config.module_level_ranks.push({
+                        const rank = {
                             id: randomBytes(16).toString("hex"),
                             server_ID: command_data.msg.guild.id,
                             name: rank_name,
                             level: level_requirement,
                             role_ID: role.id,
-                        });
+                        };
+                        command_data.global_context.neko_modules_clients.db.add_rank(rank);
                         command_data.msg.channel.send("Added rank `" + rank_name + "` for level `" + level_requirement + "` with role `" + role_name + "`.").catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
@@ -350,7 +351,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server", server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 break;
             }
 
@@ -384,20 +385,20 @@ export default {
                             return;
                         }
                         const rank_name = command_data.args[2];
-                        let rank_ID = -1;
+                        let rank_ID;
                         command_data.server_config.module_level_ranks.forEach((rank: any) => {
                             if (rank.name === rank_name) {
                                 rank_ID = rank.id;
                             }
                         });
-                        if (rank_ID === -1) {
+                        if (rank_ID === undefined) {
                             command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No rank with name \`${rank_name}\` found`, "remove rank Trusted")] }).catch((e: Error) => {
                                 command_data.global_context.logger.api_error(e);
                             });
                             return;
                         }
 
-                        command_data.global_context.neko_modules_clients.mySQL.mysql_remove.remove_rank(command_data.global_context, rank_ID);
+                        command_data.global_context.neko_modules_clients.db.remove_rank(rank_ID);
                         command_data.msg.channel.send(`Removed rank \`${rank_name}\`.`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
@@ -471,7 +472,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server", server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 break;
             }
 
@@ -698,7 +699,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server", server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 break;
             }
 

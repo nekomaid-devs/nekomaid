@@ -4,7 +4,7 @@ import { Guild, VoiceChannel } from "discord.js";
 
 class CounterManager {
     async update_all_counters(global_context: GlobalContext) {
-        const counters = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "all_counters" });
+        const counters = await global_context.neko_modules_clients.db.fetch_all_counters();
         global_context.bot.guilds.cache.forEach((server) => {
             const server_counters = counters.filter((e: CounterData) => {
                 return e.server_ID === server.id;
@@ -124,7 +124,7 @@ class CounterManager {
                 }
             }
 
-            global_context.neko_modules_clients.mySQL.edit(global_context, { type: "counter", counter: counter });
+            global_context.neko_modules_clients.db.edit_counter(counter);
         }
     }
 }

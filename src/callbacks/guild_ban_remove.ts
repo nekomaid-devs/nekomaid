@@ -1,5 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
+import { GuildEditType, GuildFetchType } from "../scripts/db/db_utils";
 import { GuildBan, TextChannel, User } from "discord.js";
 
 /* Node Imports */
@@ -30,8 +31,11 @@ export default {
         }
 
         const moderation_action = global_context.data.last_moderation_actions.get(ban.guild.id);
-        const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_ban_remove", id: ban.guild.id });
-        const server_bans = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_bans", id: ban.guild.id });
+        const server_config = await global_context.neko_modules_clients.db.fetch_server(ban.guild.id, GuildFetchType.AUDIT, false, false);
+        if (server_config === null) {
+            return;
+        }
+        const server_bans = await global_context.neko_modules_clients.db.fetch_server_bans(ban.guild.id);
 
         if (server_config.audit_bans == true && server_config.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
@@ -95,7 +99,7 @@ export default {
                 };
 
                 server_config.case_ID += 1;
-                global_context.neko_modules_clients.mySQL.edit(global_context, { type: "server_cb", server: server_config });
+                global_context.neko_modules_clients.db.edit_server(server_config, GuildEditType.AUDIT);
 
                 channel.send({ embeds: [embedBan] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
@@ -107,7 +111,7 @@ export default {
             return ban.user_ID === ban.user.id;
         });
         if (previous_ban !== undefined) {
-            global_context.neko_modules_clients.mySQL.mysql_remove.remove_server_ban(global_context, previous_ban.id);
+            global_context.neko_modules_clients.db.remove_server_ban(previous_ban.id);
         }
         global_context.data.last_moderation_actions.delete(ban.guild.id);
     },

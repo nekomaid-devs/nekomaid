@@ -80,7 +80,7 @@ export default {
                 },
             ],
             thumbnail: {
-                url: url,
+                url: url === null ? undefined : url,
             },
             footer: {
                 text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`,

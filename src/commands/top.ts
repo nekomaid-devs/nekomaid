@@ -82,7 +82,7 @@ export default {
         const embedTop = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`❯    Top - \`${top_text}\` ${top_text_2}`);
 
         let author_pos = -1;
-        let author_config = -1;
+        let author_config = null;
         for (let i = 0; i < items.length; i += 1) {
             const user = items[i];
             if (user.user_ID === command_data.msg.author.id) {
@@ -90,6 +90,9 @@ export default {
                 author_config = user;
                 break;
             }
+        }
+        if (author_config === null) {
+            return;
         }
 
         const limit = items.length < 10 ? items.length : 10;
@@ -104,7 +107,7 @@ export default {
             }
 
             const net = props.reduce((acc, curr) => {
-                acc += user_config[curr];
+                acc += new Map(Object.entries(user_config)).get(curr) as number;
                 return acc;
             }, 0);
             const target_user = await command_data.global_context.bot.users.fetch(user_config.user_ID).catch((e: Error) => {

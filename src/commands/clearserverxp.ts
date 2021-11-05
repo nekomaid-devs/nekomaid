@@ -28,7 +28,7 @@ export default {
             return;
         }
 
-        const server_user_configs = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "all_server_users", id: command_data.msg.guild.id });
+        const server_user_configs = await command_data.global_context.neko_modules_clients.db.fetch_server_users(command_data.msg.guild.id);
         server_user_configs.forEach(async (server_user_config: ServerUserData) => {
             if (command_data.msg.guild === null) {
                 return;

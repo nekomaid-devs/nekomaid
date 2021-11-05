@@ -31,7 +31,7 @@ import XBooruAPI from "../scripts/apis/api_xbooru";
 import GelbooruAPI from "../scripts/apis/api_gelbooru";
 import Rule34API from "../scripts/apis/api_rule34";
 import * as timeConvert from "../scripts/utils/util_time_convert";
-import MySQL from "../scripts/mysql/mysql_manager";
+import Database from "../scripts/db/db";
 
 export default async function import_into_context(global_context: GlobalContext) {
     const t_start = global_context.modules.performance.now();
@@ -113,25 +113,24 @@ export default async function import_into_context(global_context: GlobalContext)
     global_context.logger.log(`Finished loading utils (took ${(t_utils_end - t_modules_end).toFixed(1)}ms)...`);
 
     //Setup MySQL
-    const sql_connection = sql.createConnection({
-        host: global_context.config.sql_host,
-        user: global_context.config.sql_user,
-        password: global_context.config.sql_password,
-        database: global_context.config.sql_database,
-        charset: "utf8mb4",
+    const sql_connection = sql
+        .createConnection({
+            host: global_context.config.sql_host,
+            user: global_context.config.sql_user,
+            password: global_context.config.sql_password,
+            database: global_context.config.sql_database,
+            charset: "utf8mb4",
+        })
+        .promise();
+    await sql_connection.connect().catch((e: Error) => {
+        global_context.logger.error(e);
     });
-    await sql_connection
-        .promise()
-        .connect()
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
 
     const t_sql_end = global_context.modules.performance.now();
     global_context.logger.log(`Finished establishing SQL connection (took ${(t_sql_end - t_utils_end).toFixed(1)}ms)...`);
 
     //Setup Nekomaid's modules
-    global_context.neko_modules_clients.mySQL = new MySQL(sql_connection);
+    global_context.neko_modules_clients.db = new Database(sql_connection);
     global_context.neko_modules_clients.r34 = new Rule34API();
     global_context.neko_modules_clients.gelbooru = new GelbooruAPI();
     global_context.neko_modules_clients.xbooru = new XBooruAPI();

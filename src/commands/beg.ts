@@ -46,22 +46,24 @@ export default {
         let answer_color = 6732650;
         if (chance <= [40][0]) {
             answers = command_data.global_context.bot_config.beg_success_answers;
-            command_data.author_user_config.notifications.push({
+            const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
                 description: `<time_ago> You begged and got \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`.`,
-            });
+            };
+            command_data.global_context.neko_modules_clients.db.add_user_notification(notification);
         } else {
             answers = command_data.global_context.bot_config.beg_failed_answers;
             answer_color = 15483730;
             credits_amount = 0;
-            command_data.author_user_config.notifications.push({
+            const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
-                description: `<time_ago> You begged, but failed.`,
-            });
+                description: "<time_ago> You begged, but failed.",
+            };
+            command_data.global_context.neko_modules_clients.db.add_user_notification(notification);
         }
 
         let answer = command_data.global_context.utils.pick_random(answers);
@@ -72,7 +74,7 @@ export default {
 
         command_data.author_user_config.credits += credits_amount;
         command_data.author_user_config.net_worth += credits_amount;
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
         const embedBeg = {
             color: answer_color,

@@ -1,5 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
+import { GuildEditType } from "../scripts/db/db_utils";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
@@ -52,7 +53,7 @@ function create_mute_role_and_mute(command_data: CommandData) {
                 .add(mute_role)
                 .then(() => {
                     command_data.server_config.mute_role_ID = mute_role.id;
-                    command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server_mute", server: command_data.server_config });
+                    command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 })
                 .catch((err) => {
                     command_data.global_context.logger.error(err);

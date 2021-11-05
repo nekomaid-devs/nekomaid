@@ -3,6 +3,7 @@ import { CommandData, Command, UserItemData } from "../ts/base";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import { get_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "inventory",
@@ -41,7 +42,7 @@ export default {
                 if (inventory_text != "") {
                     inventory_text += ", ";
                 }
-                const item = command_data.global_context.bot_config.items.get(id);
+                const item = get_items().get(id);
                 if (item !== undefined) {
                     inventory_text += "`" + count + "x " + item.display_name + "`";
                 }

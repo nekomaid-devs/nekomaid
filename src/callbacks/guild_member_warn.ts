@@ -1,5 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
+import { GuildEditType, GuildFetchType } from "../scripts/db/db_utils";
 import { TextChannel } from "discord.js";
 
 /* Node Imports */
@@ -26,8 +27,10 @@ export default {
     },
 
     async process(global_context: GlobalContext, event: any) {
-        const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_member_warn", id: event.member.guild.id });
-
+        const server_config = await global_context.neko_modules_clients.db.fetch_server(event.member.guild.id, GuildFetchType.AUDIT, false, false);
+        if (server_config === null) {
+            return;
+        }
         if (server_config.audit_warns == true && server_config.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
@@ -66,7 +69,7 @@ export default {
             };
 
             server_config.case_ID += 1;
-            global_context.neko_modules_clients.mySQL.edit(global_context, { type: "server", server: server_config });
+            global_context.neko_modules_clients.db.edit_server(server_config, GuildEditType.AUDIT);
 
             channel.send({ embeds: [embedWarn] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
@@ -81,6 +84,6 @@ export default {
             reason: event.reason,
         };
 
-        global_context.neko_modules_clients.mySQL.mysql_add.add_server_warning(global_context, server_warning, event.member.guild);
+        global_context.neko_modules_clients.db.add_server_warning(server_warning);
     },
 } as Callback;

@@ -56,7 +56,10 @@ class UpvoteManager {
             return;
         }
 
-        const user_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "global_user", id: id });
+        const user_config = await global_context.neko_modules_clients.db.fetch_global_user(id, false, false);
+        if (user_config === null) {
+            return;
+        }
         switch (site_ID) {
             case "0":
                 user_config.credits += Math.round(global_context.bot_config.upvote_credits * 0.75);
@@ -95,7 +98,7 @@ class UpvoteManager {
                 break;
         }
 
-        global_context.neko_modules_clients.mySQL.edit(global_context, { type: "global_user", user: user_config });
+        global_context.neko_modules_clients.db.edit_global_user(user_config);
     }
 }
 

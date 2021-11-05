@@ -1,5 +1,6 @@
 /* Types */
 import { Callback, CommandData, GlobalContext } from "../ts/base";
+import { GuildFetchType } from "../scripts/db/db_utils";
 import { Message, Permissions, TextChannel } from "discord.js";
 
 /* Node Imports */
@@ -49,8 +50,27 @@ export default {
         tagged_user_tags = tagged_user_tags.slice(0, tagged_user_tags.length - 2);
 
         // TODO: add support for tagging users with IDs
-        const author_user_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "global_user", id: message.author.id });
-        const author_server_user_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_user", server_ID: message.guild.id, user_ID: message.member.user.id });
+        const server_config = await global_context.neko_modules_clients.db.fetch_server(message.guild.id, GuildFetchType.MINIMAL, false, false);
+        if (server_config === null) {
+            return;
+        }
+        const author_user_config = await global_context.neko_modules_clients.db.fetch_global_user(message.author.id, false, false);
+        if (author_user_config === null) {
+            return;
+        }
+        const author_server_user_config = await global_context.neko_modules_clients.db.fetch_server_user(message.guild.id, message.member.user.id);
+        if (author_server_user_config === null) {
+            return;
+        }
+        const tagged_user_config = taggedUser === undefined ? author_user_config : await global_context.neko_modules_clients.db.fetch_global_user(taggedUser.id, false, false);
+        if (tagged_user_config === null) {
+            return;
+        }
+        const tagged_server_user_config = taggedUser === undefined ? author_server_user_config : await global_context.neko_modules_clients.db.fetch_server_user(message.guild.id, taggedUser.id);
+        if (tagged_server_user_config === null) {
+            return;
+        }
+
         const command_data: CommandData = {
             global_context: global_context,
             msg: message,
@@ -65,7 +85,7 @@ export default {
             tagged_members: taggedMembers !== undefined ? taggedMembers : [message.member],
             tagged_member: taggedMember !== undefined ? taggedMember : message.member,
 
-            server_config: await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_message", id: message.guild.id }),
+            server_config: server_config,
             server_bans: [],
             server_mutes: [],
             server_warns: [],
@@ -73,9 +93,8 @@ export default {
             author_user_config: author_user_config,
             author_server_user_config: author_server_user_config,
 
-            tagged_user_config: taggedUser === undefined ? author_user_config : await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "global_user", id: taggedUser.id }),
-            tagged_server_user_config:
-                taggedUser === undefined ? author_server_user_config : await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_user", server_ID: message.guild.id, user_ID: taggedUser.id }),
+            tagged_user_config: tagged_user_config,
+            tagged_server_user_config: tagged_server_user_config,
         };
         command_data.tagged_server_user_config = command_data.author_server_user_config;
 
@@ -156,13 +175,18 @@ export default {
             transaction_prepare = transaction.startChild({ op: "prepare_command" });
         }
 
+        const server_config_full = await global_context.neko_modules_clients.db.fetch_server(message.guild.id, GuildFetchType.ALL, true, true);
+        if (server_config_full === null) {
+            return;
+        }
+
         // Populate server data
         // TODO: make this into an array of promises and Promise.all()
         command_data.args = message.content.slice(command_data.server_config.prefix.length).split(" ");
-        command_data.server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server", id: message.guild.id });
-        command_data.server_bans = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_bans", id: message.guild.id });
-        command_data.server_mutes = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_mutes", id: message.guild.id });
-        command_data.server_warns = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_warnings", id: message.guild.id });
+        command_data.server_config = server_config_full;
+        command_data.server_bans = await global_context.neko_modules_clients.db.fetch_server_bans(message.guild.id);
+        command_data.server_mutes = await global_context.neko_modules_clients.db.fetch_server_mutes(message.guild.id);
+        command_data.server_warns = await global_context.neko_modules_clients.db.fetch_server_warnings(message.guild.id);
 
         // Get command either by it's name or alias
         let command_name = command_data.args.shift();

@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext, GuildData, ServerUserData } from "../../ts/base";
+import { GlobalContext, GlobalUserData, GuildData, ServerUserData } from "../../ts/base";
 import { Guild } from "discord.js";
 
 export function create_comparator(props: string[]) {
@@ -30,15 +30,15 @@ export function create_comparator_server_level(global_context: GlobalContext, se
 }
 
 export async function get_top(global_context: GlobalContext, props: string[]) {
-    const items = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "all_global_users" });
+    const items = await global_context.neko_modules_clients.db.fetch_all_global_users(false, false);
     items.sort(create_comparator(props));
 
     return items;
 }
 
 export async function get_top_server(global_context: GlobalContext, server: Guild, props: string[]) {
-    let items = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "all_global_users" });
-    items = items.filter((val: any) => {
+    let items = await global_context.neko_modules_clients.db.fetch_all_global_users(false, false);
+    items = items.filter((val: GlobalUserData) => {
         return server.members.cache.has(val.user_ID);
     });
     items.sort(create_comparator(props));
@@ -47,7 +47,7 @@ export async function get_top_server(global_context: GlobalContext, server: Guil
 }
 
 export async function get_top_server_level(global_context: GlobalContext, server_config: GuildData, server: Guild) {
-    const items = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "all_server_users", id: server.id });
+    const items = await global_context.neko_modules_clients.db.fetch_server_users(server.id);
     items.sort(create_comparator_server_level(global_context, server_config));
 
     return items;

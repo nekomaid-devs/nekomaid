@@ -103,7 +103,7 @@ export default {
 
                     command_data.author_user_config.credits += won_amount;
                     command_data.author_user_config.net_worth += won_amount;
-                    command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+                    command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
                     embedRoll.description = `You won \`${won_amount_text}\` credits!`;
                     embedRoll.footer = {
@@ -114,7 +114,7 @@ export default {
 
                     command_data.author_user_config.credits -= credits_amount;
                     command_data.author_user_config.net_worth -= credits_amount;
-                    command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+                    command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
                     embedRoll.description = `You lost \`${lost_amount_text}\` credits...`;
                 }

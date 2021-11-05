@@ -55,17 +55,17 @@ export default {
             author_user_config_map.set(building_field, building_field_level + 1);
             author_user_config_map.set(building_field + "_credits", building_field_credits - next_building_cost);
 
-            const a = Object.fromEntries(author_user_config_map);
-            command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: a });
+            const a = Object.fromEntries(author_user_config_map) as any;
+            command_data.global_context.neko_modules_clients.db.edit_global_user(a);
 
             const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
             const embedUpgrade = {
                 color: 8388736,
                 author: {
                     name: `Upgrading - ${building_name}`,
-                    icon_url: url === null ? undefined : url
+                    icon_url: url === null ? undefined : url,
                 },
-                description: `Upgraded the building onto level ${building_field_level + 1}.`
+                description: `Upgraded the building onto level ${building_field_level + 1}.`,
             };
             command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
@@ -99,17 +99,17 @@ export default {
             bot_config_map.set(global_building_field, global_building_field_level + 1);
             bot_config_map.set(global_building_field + "_credits", global_building_field_credits - next_building_cost);
 
-            const a = Object.fromEntries(bot_config_map);
-            command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: a });
+            const a = Object.fromEntries(bot_config_map) as any;
+            command_data.global_context.neko_modules_clients.db.edit_config(a);
 
             const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
             const embedUpgrade = {
                 color: 8388736,
                 author: {
                     name: `Upgrading - ${building_name}`,
-                    icon_url: url === null ? undefined : url
+                    icon_url: url === null ? undefined : url,
                 },
-                description: `Upgraded the building onto level ${global_building_field_level + 1}.`
+                description: `Upgraded the building onto level ${global_building_field_level + 1}.`,
             };
             command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);

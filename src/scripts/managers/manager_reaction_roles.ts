@@ -4,7 +4,7 @@ import { Guild, TextChannel } from "discord.js";
 
 class ReactionRolesManager {
     async create_all_collectors(global_context: GlobalContext) {
-        const reaction_roles = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "all_reaction_roles" });
+        const reaction_roles = await global_context.neko_modules_clients.db.fetch_all_reaction_roles();
         global_context.bot.guilds.cache.forEach((server) => {
             const server_reaction_roles = reaction_roles.filter((e: ReactionRoleData) => {
                 return e.server_ID === server.id;
@@ -26,9 +26,16 @@ class ReactionRolesManager {
         const message = await channel.messages.fetch(rr.message_ID).catch((e: Error) => {
             global_context.logger.api_error(e);
         });
-        if (message === undefined) { return; }
+        if (message === undefined) {
+            return;
+        }
 
-        const collector = message.createReactionCollector({ filter: (r, u) => { return !u.bot; }, dispose: true });
+        const collector = message.createReactionCollector({
+            filter: (r, u) => {
+                return !u.bot;
+            },
+            dispose: true,
+        });
         collector.on("collect", (r, user) => {
             rr.reaction_roles.forEach(async (role_ID: string, i: number) => {
                 const emoji = rr.reaction_role_emojis[i];

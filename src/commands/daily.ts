@@ -41,16 +41,17 @@ export default {
         credits_amount = credits_amount * command_data.global_context.bot_config.daily_multiplier;
         credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === ShrineBonus.DAILY ? [1, 1.1, 1.15, 1.15, 1.15, 1.2, 1.25, 1.3, 1.5, 1.5, 1.5][command_data.global_context.bot_config.b_shrine] : 1);
         credits_amount = Math.round(credits_amount);
-        command_data.author_user_config.notifications.push({
+        const notification = {
             id: randomBytes(16).toString("hex"),
             user_ID: command_data.msg.author.id,
             timestamp: Date.now(),
             description: `<time_ago> You picked up a daily reward of \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`.`,
-        });
+        };
+        command_data.global_context.neko_modules_clients.db.add_user_notification(notification);
 
         command_data.author_user_config.credits += credits_amount;
         command_data.author_user_config.net_worth += credits_amount;
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
         const embedDaily = {
             color: 6732650,

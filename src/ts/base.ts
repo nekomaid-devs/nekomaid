@@ -1,5 +1,6 @@
 /* Types */
 import { Client, GuildMember, Message, User } from "discord.js";
+import Database from "../scripts/db/db";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
@@ -184,9 +185,6 @@ export type BotData = {
     b_crime_monopoly_credits: number;
     b_pet_shelter: number;
     b_pet_shelter_credits: number;
-
-    items: Map<string, ItemData>;
-    shopItems: Map<string, ShopItemData>;
 };
 
 export type GuildData = {
@@ -245,6 +243,7 @@ export type GlobalUserData = {
     bank: number;
     bank_limit: number;
     net_worth: number;
+    votes: number;
     inventory: UserItemData[];
     notifications: NotificationData[];
     married_ID: string | null;

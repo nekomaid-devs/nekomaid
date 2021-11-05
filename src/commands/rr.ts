@@ -1,5 +1,6 @@
 /* Types */
 import { CommandData, Command, GlobalContext, GuildData } from "../ts/base";
+import { GuildEditType } from "../scripts/db/db_utils";
 import { Message, Permissions } from "discord.js";
 
 /* Node Imports */
@@ -49,7 +50,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                     reaction_roles: roles_array,
                     reaction_role_emojis: roles_emojis_array,
                 };
-                server_config.reaction_roles.push(reactionRoleMenuInfo);
+                global_context.neko_modules_clients.db.add_reaction_role(reactionRoleMenuInfo);
 
                 role_messages.forEach((rmsg: Message) => {
                     rmsg.delete().catch((e: Error) => {
@@ -77,7 +78,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                     global_context.logger.api_error(e);
                 });
 
-                global_context.neko_modules_clients.mySQL.edit(global_context, { type: "server", server: server_config });
+                global_context.neko_modules_clients.db.edit_server(server_config, GuildEditType.ALL);
                 global_context.neko_modules_clients.reactionRolesManager.create_collector(global_context, msg.guild, reactionRoleMenuInfo);
                 break;
             }
@@ -142,7 +143,6 @@ export default {
         const roles = new Map();
         const role_messages: any[] = [];
 
-        command_data.server_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         continue_collecting(command_data.global_context, command_data.server_config, command_data.msg, msg, role_messages, roles);
     },
 } as Command;

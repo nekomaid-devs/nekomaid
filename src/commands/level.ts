@@ -30,7 +30,7 @@ export default {
 
         const items = await get_top_server_level(command_data.global_context, command_data.server_config, command_data.msg.guild);
         let author_pos = -1;
-        let author_config;
+        let author_config = null;
         for (let i = 0; i < items.length; i += 1) {
             const user = items[i];
             if (user.user_ID === command_data.tagged_user.id) {
@@ -38,6 +38,9 @@ export default {
                 author_pos = i;
                 break;
             }
+        }
+        if (author_config === null) {
+            return;
         }
         author_pos += 1;
 
@@ -55,7 +58,7 @@ export default {
                 },
             ],
             thumbnail: {
-                url: url,
+                url: url === null ? undefined : url,
             },
             footer: {
                 text: `Requested by ${command_data.msg.author.tag}`,

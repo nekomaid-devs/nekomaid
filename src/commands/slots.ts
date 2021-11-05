@@ -126,12 +126,12 @@ export default {
                         const won_amount: number = won_ammount[res_0];
 
                         command_data.author_user_config.credits += won_amount;
-                        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+                        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
                         embedSlots.footer.text = `Won ${command_data.global_context.utils.format_number(won_amount)}$!`;
                     } else {
                         command_data.author_user_config.credits -= credits_amount;
-                        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+                        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
                         embedSlots.footer.text = `Lost ${command_data.global_context.utils.format_number(credits_amount)}$...`;
                     }

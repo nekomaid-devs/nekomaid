@@ -1,5 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
+import { GuildEditType } from "../scripts/db/db_utils";
 import { Permissions, TextChannel } from "discord.js";
 
 /* Node Imports */
@@ -42,7 +43,6 @@ export default {
         }
         // TODO: make normal reply messages
         // TODO: check for wrong error embeds
-        command_data.server_config = await command_data.global_context.neko_modules_clients.mySQL.fetch(command_data.global_context, { type: "server", id: command_data.msg.guild.id, containExtra: true });
         if (command_data.args.length < 1) {
             const channel_1 = command_data.server_config.welcome_messages_channel === null ? (command_data.server_config.welcome_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.welcome_messages_channel}>`;
             const channel_2 = command_data.server_config.leave_messages_channel === null ? (command_data.server_config.leave_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.leave_messages_channel}>`;
@@ -218,7 +218,7 @@ export default {
                         }
 
                         const counter = { id: randomBytes(16).toString("hex"), type: counter_type, server_ID: command_data.msg.guild.id, channel_ID: channel.id, last_update: new Date().getTime() };
-                        command_data.server_config.counters.push(counter);
+                        command_data.global_context.neko_modules_clients.db.add_counter(counter);
                         setTimeout(() => {
                             command_data.global_context.neko_modules_clients.counterManager.update_counter(command_data.global_context, command_data.msg.guild, counter, true);
                         }, 5000);
@@ -248,7 +248,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server", server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 break;
             }
 
@@ -359,7 +359,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server", server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 break;
             }
 
@@ -606,7 +606,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server", server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 break;
             }
 

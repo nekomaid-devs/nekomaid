@@ -38,7 +38,7 @@ export default {
         }
 
         command_data.author_user_config.osu_username = command_data.total_argument;
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
         command_data.msg.channel.send(`Set osu! username to \`${command_data.total_argument}\`.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);

@@ -181,7 +181,7 @@ async function run() {
         global_context.neko_data.total_commands = global_context.data.total_commands;
         if (global_context.neko_modules_clients.voiceManager !== undefined) {
             global_context.neko_data.voiceManager_connections = global_context.neko_modules_clients.voiceManager.connections.size;
-            global_context.neko_modules_clients.voiceManager.check_for_timeouts(global_context);
+            global_context.neko_modules_clients.voiceManager.tick_connections(global_context);
         }
 
         global_context.data.processed_events = 0;
@@ -212,8 +212,8 @@ async function run() {
         }
 
         // TODO: this will need to get updated somewhere else
-        if (global_context.neko_modules_clients.mysql !== undefined) {
-            global_context.bot_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "config", id: "default_config" });
+        if (global_context.neko_modules_clients.db !== undefined) {
+            global_context.bot_config = await global_context.neko_modules_clients.db.fetch_config("default_config");
         }
     }, 10000);
     setInterval(() => {
@@ -285,7 +285,7 @@ async function run() {
         global_context.logger.log("-".repeat(30));
         global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Channels: ${bot.channels.cache.size}] - [Users: ${bot.users.cache.size}]`);
 
-        global_context.bot_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "config", id: "default_config" });
+        global_context.bot_config = await global_context.neko_modules_clients.db.fetch_config("default_config");
         refresh_status(global_context);
         global_context.neko_modules_clients.reactionRolesManager.create_all_collectors(global_context);
 

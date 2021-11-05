@@ -31,7 +31,7 @@ export default {
         if (building_field === undefined && global_building_field === undefined) {
             command_data.msg.reply(`Haven't found any building with name \`${building_name}\`.`);
         }
-        
+
         const author_user_config_map = new Map(Object.entries(command_data.author_user_config));
         if (building_field !== undefined) {
             const building_field_level = author_user_config_map.get(building_field);
@@ -57,7 +57,7 @@ export default {
                     color: 8388736,
                     author: {
                         name: `${building_name}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
                     description: building_description,
                     footer: {
@@ -80,17 +80,17 @@ export default {
                 author_user_config_map.set("credits", command_data.author_user_config.credits - amount);
                 author_user_config_map.set(building_field + "_credits", building_field_credits + amount);
 
-                const a = Object.fromEntries(author_user_config_map);
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: a });
+                const a = Object.fromEntries(author_user_config_map) as any;
+                command_data.global_context.neko_modules_clients.db.edit_global_user(a);
 
                 const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 const embedBuildProgress = {
                     color: 8388736,
                     author: {
                         name: `Building - ${building_name}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
-                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`
+                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`,
                 };
                 command_data.msg.channel.send({ embeds: [embedBuildProgress] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
@@ -122,7 +122,7 @@ export default {
                     color: 8388736,
                     author: {
                         name: `${building_name}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
                     description: building_description,
                     footer: {
@@ -145,19 +145,19 @@ export default {
                 author_user_config_map.set("credits", command_data.author_user_config.credits - amount);
                 bot_config_map.set(global_building_field + "_credits", global_building_field_credits + amount);
 
-                const a = Object.fromEntries(author_user_config_map);
-                const b = Object.fromEntries(bot_config_map);
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: a });
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "config", config: b });
+                const a = Object.fromEntries(author_user_config_map) as any;
+                const b = Object.fromEntries(bot_config_map) as any;
+                command_data.global_context.neko_modules_clients.db.edit_global_user(a);
+                command_data.global_context.neko_modules_clients.db.edit_config(b);
 
                 const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 const embedBuildProgress = {
                     color: 8388736,
                     author: {
                         name: `Building - ${building_name}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
-                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`
+                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`,
                 };
                 command_data.msg.channel.send({ embeds: [embedBuildProgress] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);

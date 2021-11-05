@@ -4,6 +4,7 @@ import { CommandData, Command } from "../ts/base";
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 import { randomBytes } from "crypto";
+import { get_items, get_shop_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "buy",
@@ -24,7 +25,7 @@ export default {
             return;
         }
         const item_name = command_data.total_argument;
-        const target_item = Array.from(command_data.global_context.bot_config.items.values()).find((e) => {
+        const target_item = Array.from(get_items().values()).find((e) => {
             return e.display_name.toLowerCase() === item_name.toLowerCase();
         });
         if (target_item === undefined) {
@@ -32,7 +33,7 @@ export default {
             return;
         }
 
-        const target_shop_item = Array.from(command_data.global_context.bot_config.shopItems.values()).find((e) => {
+        const target_shop_item = Array.from(get_shop_items().values()).find((e) => {
             return e.item_ID === target_item.item_ID;
         });
         if (target_shop_item === undefined) {
@@ -46,8 +47,10 @@ export default {
         }
 
         command_data.author_user_config.credits -= target_shop_item.price;
-        command_data.author_user_config.inventory.push({ id: randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, item_ID: target_shop_item.item_ID });
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
+
+        const item = { id: randomBytes(16).toString("hex"), user_ID: command_data.msg.author.id, item_ID: target_shop_item.item_ID };
+        command_data.global_context.neko_modules_clients.db.add_inventory_item(item);
 
         const embedBuy = {
             color: 8388736,

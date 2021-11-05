@@ -32,7 +32,7 @@ export default {
         const embedTop = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`❯    Top - \`${top_text}\``);
 
         let author_pos = -1;
-        let author_config = -1;
+        let author_config = null;
         for (let i = 0; i < items.length; i += 1) {
             const user = items[i];
             if (user.user_ID === command_data.msg.author.id) {
@@ -40,6 +40,9 @@ export default {
                 author_config = user;
                 break;
             }
+        }
+        if (author_config === null) {
+            return;
         }
 
         const limit = items.length < 10 ? items.length : 10;

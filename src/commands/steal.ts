@@ -52,23 +52,25 @@ export default {
 
         command_data.author_user_config.credits += credits_amount;
         command_data.author_user_config.net_worth += credits_amount;
-        command_data.author_user_config.notifications.push({
+        const notification = {
             id: randomBytes(16).toString("hex"),
             user_ID: command_data.msg.author.id,
             timestamp: Date.now(),
             description: `<time_ago> You stole \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` from \`${command_data.tagged_user.tag}\`.`,
-        });
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.author_user_config });
+        };
+        command_data.global_context.neko_modules_clients.db.add_user_notification(notification);
+        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
         command_data.tagged_user_config.credits -= credits_amount;
         command_data.tagged_user_config.net_worth -= credits_amount;
-        command_data.tagged_user_config.notifications.push({
+        const notification_t = {
             id: randomBytes(16).toString("hex"),
             user_ID: command_data.tagged_user.id,
             timestamp: Date.now(),
             description: `<time_ago> You were stolen \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` by \`${command_data.msg.author.tag}\`.`,
-        });
-        command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "global_user", user: command_data.tagged_user_config });
+        };
+        command_data.global_context.neko_modules_clients.db.add_user_notification(notification_t);
+        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.tagged_user_config);
 
         const embedSteal = {
             color: 8388736,

@@ -1,5 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
+import { GuildEditType } from "../scripts/db/db_utils";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
@@ -97,7 +98,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server", server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 break;
             }
 
@@ -136,7 +137,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server", server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 break;
             }
 
@@ -194,7 +195,7 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.mySQL.edit(command_data.global_context, { type: "server", server: command_data.server_config });
+                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 break;
             }
 

@@ -1,5 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
+import { GuildFetchType } from "../scripts/db/db_utils";
 import { GuildMember, PartialGuildMember, TextChannel, User } from "discord.js";
 
 /* Node Imports */
@@ -30,9 +31,12 @@ export default {
         }
 
         const moderation_action = global_context.data.last_moderation_actions.get(member.guild.id);
-        const server_config = await global_context.neko_modules_clients.mySQL.fetch(global_context, { type: "server_guild_member_remove", id: member.guild.id });
+        const server_config = await global_context.neko_modules_clients.db.fetch_server(member.guild.id, GuildFetchType.AUDIT, false, false);
+        if (server_config === null) {
+            return;
+        }
 
-        if (server_config.leave_messages == true) {
+        if (server_config.leave_messages == true && server_config.leave_messages_channel !== null) {
             let format = server_config.leave_messages_format;
             const member_display_name = "**" + member.user.tag + "**";
             format = format.replace("<user>", member_display_name);

@@ -1,5 +1,5 @@
 /* Types */
-import { Command, GlobalContext } from "../../ts/base";
+import { GlobalContext } from "../../ts/base";
 import { Client } from "discord.js";
 
 export async function refresh_status(global_context: GlobalContext) {
