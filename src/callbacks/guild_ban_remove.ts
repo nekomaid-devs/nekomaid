@@ -78,24 +78,24 @@ export default {
                 const embedBan = {
                     author: {
                         name: `Case ${server_config.case_ID}# | Unban | ${ban.user.tag}`,
-                        icon_url: url === null ? undefined : url,
+                        icon_url: url === null ? undefined : url
                     },
                     fields: [
                         {
                             name: "User:",
                             value: ban.user.tag,
-                            inline: true,
+                            inline: true
                         },
                         {
                             name: "Moderator:",
                             value: executor.toString(),
-                            inline: true,
+                            inline: true
                         },
                         {
                             name: "Reason:",
-                            value: last_audit.reason === null ? "None" : last_audit.reason,
-                        },
-                    ],
+                            value: last_audit.reason === null ? "None" : last_audit.reason
+                        }
+                    ]
                 };
 
                 server_config.case_ID += 1;
@@ -114,5 +114,5 @@ export default {
             global_context.neko_modules_clients.db.remove_server_ban(previous_ban.id);
         }
         global_context.data.last_moderation_actions.delete(ban.guild.id);
-    },
+    }
 } as Callback;

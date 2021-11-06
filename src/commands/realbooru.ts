@@ -35,18 +35,18 @@ export default {
             fields: [
                 {
                     name: "Image Link:",
-                    value: `[Click Here](${post_info.link})`,
-                },
+                    value: `[Click Here](${post_info.link})`
+                }
             ],
             image: {
-                url: post_info.link,
+                url: post_info.link
             },
             footer: {
-                text: `Page: ${post_info.page_number}/${post_info.num_of_pages} Post: ${post_info.post_number}/${post_info.num_of_posts}`,
-            },
+                text: `Page: ${post_info.page_number}/${post_info.num_of_pages} Post: ${post_info.post_number}/${post_info.num_of_posts}`
+            }
         };
         command_data.msg.channel.send({ embeds: [ embedRealbooru ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

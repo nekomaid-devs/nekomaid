@@ -17,7 +17,7 @@ export default {
     argumentsRecommended: [
         new RecommendedArgument(1, "Argument needs to be a number of sides.", "int>0"),
         new RecommendedArgument(2, "Argument needs to be a predicted result.", "int>0"),
-        new RecommendedArgument(3, "Argument needs to be a bet amount.", "int>0/all/half"),
+        new RecommendedArgument(3, "Argument needs to be a bet amount.", "int>0/all/half")
     ],
     permissionsNeeded: [],
     nsfw: false,
@@ -37,7 +37,7 @@ export default {
 
         const embedRoll: any = {
             title: `${command_data.msg.author.tag} is rolling...`,
-            color: 8388736,
+            color: 8388736
         };
 
         if (command_data.args.length > 2) {
@@ -105,7 +105,7 @@ export default {
 
                     embedRoll.description = `You won \`${won_amount_text}\` credits!`;
                     embedRoll.footer = {
-                        text: `Win multiplier: ${multiplier_text}x`,
+                        text: `Win multiplier: ${multiplier_text}x`
                     };
                 } else {
                     const lost_amount_text = command_data.global_context.utils.format_number(credits_amount);
@@ -128,5 +128,5 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    },
+    }
 } as Command;

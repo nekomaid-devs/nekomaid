@@ -66,7 +66,7 @@ export default async function import_into_context(global_context: GlobalContext)
             dsn: global_context.config.sentry_dns,
             integrations: [ new Sentry.Integrations.Http({ tracing: true }) ],
 
-            tracesSampleRate: 1.0,
+            tracesSampleRate: 1.0
         });
     }
 
@@ -125,7 +125,7 @@ export default async function import_into_context(global_context: GlobalContext)
             user: global_context.config.sql_user,
             password: global_context.config.sql_password,
             database: global_context.config.sql_database,
-            charset: "utf8mb4",
+            charset: "utf8mb4"
         })
         .promise();
     await sql_connection.connect().catch((e: Error) => {
@@ -179,7 +179,7 @@ export default async function import_into_context(global_context: GlobalContext)
     global_context.data.default_headers = {
         "Content-Type": "application/json",
         Authorization: global_context.config.nekomaid_API_key,
-        Origin: global_context.config.nekomaid_API_endpoint,
+        Origin: global_context.config.nekomaid_API_endpoint
     };
 
     const t_modules_2_end = global_context.modules.performance.now();

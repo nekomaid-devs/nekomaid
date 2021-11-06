@@ -57,7 +57,7 @@ export default {
 
         const embedPoll = {
             title: `<:n_poll:771902338646278174> Poll: ${question}`,
-            description: description,
+            description: description
         };
         const message = await command_data.msg.channel.send({ embeds: [ embedPoll ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
@@ -72,5 +72,5 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
         });
-    },
+    }
 } as Command;

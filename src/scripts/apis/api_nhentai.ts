@@ -43,7 +43,7 @@ class NHentaiAPI {
             num_of_pages: num_of_pages,
             tags: all_tags,
             languages: all_languages,
-            favourites: all_favourites,
+            favourites: all_favourites
         };
 
         return post_info;

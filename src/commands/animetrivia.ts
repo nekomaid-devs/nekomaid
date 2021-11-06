@@ -58,8 +58,8 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
         title: "❓ New song is playing. Make a guess!",
         description: `1) ${final_options[0].source}\n2) ${final_options[1].source}\n3) ${final_options[2].source}\n4) ${final_options[3].source}\n`,
         footer: {
-            text: `You have 45 seconds to answer | or end the game with ${command_data.server_config.prefix}animetrivia end`,
-        },
+            text: `You have 45 seconds to answer | or end the game with ${command_data.server_config.prefix}animetrivia end`
+        }
     };
     command_data.msg.channel.send({ embeds: [ embedSong ] }).catch((e: Error) => {
         command_data.global_context.logger.api_error(e);
@@ -72,7 +72,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
     const collector = command_data.msg.channel.createMessageCollector({
         filter: (m: Message) => {
             return m.author.bot === false && game_data.joined_IDs.includes(m.author.id);
-        },
+        }
     });
     collector.on("collect", (m) => {
         if (answered === false) {
@@ -104,7 +104,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
                     const embedTriviaEnd = {
                         title: "⭐ Game ended",
                         description: `**Rounds:** ${game_data.rounds}\n**Rounds (correct):** ${game_data.rounds_correct}/${game_data.rounds}\n**Winner:** <@${leaderboard[0].user.toString()}> (${leaderboard[0].points} points)`,
-                        footer: { text: "Hope you enjoyed the game!" },
+                        footer: { text: "Hope you enjoyed the game!" }
                     };
 
                     command_data.msg.channel.send({ embeds: [ embedTriviaEnd ] }).catch((e: Error) => {
@@ -221,8 +221,8 @@ export default {
                 `\n\`${command_data.server_config.prefix}animetrivia end\` - ends the game` +
                 "\n\nJoin by reacting with `✅` (or leave with `❌`)",
             footer: {
-                text: `0 joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`,
-            },
+                text: `0 joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`
+            }
         };
         const joined_IDs: string[] = [];
         const message = await command_data.msg.channel.send({ embeds: [ embedSong ] }).catch((e: Error) => {
@@ -242,7 +242,7 @@ export default {
         const collector_r = message.createReactionCollector({
             filter: (r, u) => {
                 return (r.emoji.name === "✅" || r.emoji.name === "❌") && u.id !== message.author.id;
-            },
+            }
         });
         collector_r.on("collect", async (r, u) => {
             if (r.emoji.name === "✅" && joined_IDs.includes(u.id) === false) {
@@ -261,7 +261,7 @@ export default {
         const collector = command_data.msg.channel.createMessageCollector({
             filter: (m) => {
                 return !m.author.bot;
-            },
+            }
         });
         collector.on("collect", (m) => {
             if (command_data.msg.member === null || command_data.msg.member.voice.channel === null) {
@@ -290,5 +290,5 @@ export default {
                 collector.stop();
             }
         });
-    },
+    }
 } as Command;

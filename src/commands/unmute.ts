@@ -61,5 +61,5 @@ export default {
             });
             command_data.global_context.bot.emit("guildMemberMuteRemove", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: unmute_reason, previous_mute: previous_mute });
         }
-    },
+    }
 } as Command;

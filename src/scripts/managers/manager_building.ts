@@ -40,7 +40,7 @@ class BuildingManager {
                 id: randomBytes(16).toString("hex"),
                 user_ID: user.user_ID,
                 timestamp: Date.now(),
-                description: `<time_ago> \`❤️ Neko's Lewd Services\` generated \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
+                description: `<time_ago> \`❤️ Neko's Lewd Services\` generated \`${global_context.utils.format_number(credits_amount)} 💵\`.`
             };
             global_context.neko_modules_clients.db.add_user_notification(notification);
 
@@ -62,7 +62,7 @@ class BuildingManager {
                 id: randomBytes(16).toString("hex"),
                 user_ID: user.user_ID,
                 timestamp: Date.now(),
-                description: `<time_ago> \`🎰 Neko's Casino\` generated \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
+                description: `<time_ago> \`🎰 Neko's Casino\` generated \`${global_context.utils.format_number(credits_amount)} 💵\`.`
             };
             global_context.neko_modules_clients.db.add_user_notification(notification);
 
@@ -101,7 +101,7 @@ class BuildingManager {
                 id: randomBytes(16).toString("hex"),
                 user_ID: user.user_ID,
                 timestamp: Date.now(),
-                description: `<time_ago> Neko at \`⛏️ Neko's Scrapyard\` found \`1x ${rarity_names[item.rarity]} ${item.display_name}\`.`,
+                description: `<time_ago> Neko at \`⛏️ Neko's Scrapyard\` found \`1x ${rarity_names[item.rarity]} ${item.display_name}\`.`
             };
             global_context.neko_modules_clients.db.add_user_notification(notification);
 
@@ -160,7 +160,7 @@ class BuildingManager {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
-                        description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
+                        description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`
                     };
                     global_context.neko_modules_clients.db.add_user_notification(notification);
 
@@ -184,7 +184,7 @@ class BuildingManager {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
-                        description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
+                        description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`
                     };
                     global_context.neko_modules_clients.db.add_user_notification(notification);
 
@@ -208,7 +208,7 @@ class BuildingManager {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
-                        description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
+                        description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`
                     };
                     global_context.neko_modules_clients.db.add_user_notification(notification);
 
@@ -232,7 +232,7 @@ class BuildingManager {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.user_ID,
                         timestamp: Date.now(),
-                        description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`,
+                        description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${global_context.utils.format_number(credits_amount)} 💵\`.`
                     };
                     global_context.neko_modules_clients.db.add_user_notification(notification);
 

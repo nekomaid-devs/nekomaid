@@ -33,7 +33,7 @@ class SafebooruAPI {
             num_of_pages: pages + 1,
             post_number: page_index,
             num_of_posts: pages + 1,
-            post_tags: result_post.attributes.tags,
+            post_tags: result_post.attributes.tags
         };
 
         return post_info;

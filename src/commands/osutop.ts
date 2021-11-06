@@ -92,18 +92,18 @@ export default {
             author: {
                 name: `osu! top plays for ${command_data.tagged_user_config.osu_username}`,
                 icon_url: `http://s.ppy.sh/a/${user.id}`,
-                url: `https://osu.ppy.sh/users/${user.id}`,
+                url: `https://osu.ppy.sh/users/${user.id}`
             },
             description: plays_description,
             thumbnail: {
-                url: `http://s.ppy.sh/a/${user.id}`,
+                url: `http://s.ppy.sh/a/${user.id}`
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
-            },
+                text: `Requested by ${command_data.msg.author.tag}`
+            }
         };
         command_data.msg.channel.send({ embeds: [ embedOsu ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

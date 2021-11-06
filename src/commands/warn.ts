@@ -37,5 +37,5 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
         command_data.global_context.bot.emit("guildMemberWarn", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: warn_reason, num_of_warnings: num_of_warnings });
-    },
+    }
 } as Command;

@@ -52,51 +52,51 @@ export default {
             color: 8388736,
             author: {
                 name: `Information about user ${command_data.tagged_user.tag}`,
-                icon_url: url === null ? undefined : url,
+                icon_url: url === null ? undefined : url
             },
             fields: [
                 {
                     name: "❯ User ID",
                     value: `${command_data.tagged_user.id}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Presence",
                     value: `${presence}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Is Bot?",
                     value: `${command_data.tagged_user.bot}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Registered",
-                    value: `${createdAgo} (${command_data.tagged_user.createdAt.toUTCString()})`,
+                    value: `${createdAgo} (${command_data.tagged_user.createdAt.toUTCString()})`
                 },
                 {
                     name: "❯ Joined",
-                    value: `${joinedAgo} (${command_data.tagged_member.joinedAt === null ? "Unknown" : command_data.tagged_member.joinedAt.toUTCString()})`,
+                    value: `${joinedAgo} (${command_data.tagged_member.joinedAt === null ? "Unknown" : command_data.tagged_member.joinedAt.toUTCString()})`
                 },
                 {
                     name: "❯ Join Score",
-                    value: `${join_score} (${join_score} out of ${join_score_max})`,
+                    value: `${join_score} (${join_score} out of ${join_score_max})`
                 },
                 {
                     name: `❯ Roles [${command_data.tagged_member.roles.cache.size}]`,
-                    value: `${roles}`,
-                },
+                    value: `${roles}`
+                }
             ],
             thumbnail: {
-                url: url === null ? undefined : url,
+                url: url === null ? undefined : url
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
-            },
+                text: `Requested by ${command_data.msg.author.tag}`
+            }
         };
 
         command_data.msg.channel.send({ embeds: [ embedMember ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

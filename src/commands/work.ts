@@ -66,7 +66,7 @@ export default {
             id: randomBytes(16).toString("hex"),
             user_ID: command_data.msg.author.id,
             timestamp: Date.now(),
-            description: `<time_ago> You cooked some pancakes and got \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`.`,
+            description: `<time_ago> You cooked some pancakes and got \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`.`
         };
         command_data.global_context.neko_modules_clients.db.add_user_notification(notification);
 
@@ -81,11 +81,11 @@ export default {
             color: 6732650,
             description: `${answer} (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`,
             footer: {
-                text: `Make sure to vote with ${command_data.server_config.prefix}vote for free credits`,
-            },
+                text: `Make sure to vote with ${command_data.server_config.prefix}vote for free credits`
+            }
         };
         command_data.msg.channel.send({ embeds: [ embedWork ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

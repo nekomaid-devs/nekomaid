@@ -131,7 +131,7 @@ class LevelingManager {
 
         return {
             granted_roles: granted_roles,
-            removed_roles: removed_roles,
+            removed_roles: removed_roles
         };
     }
 

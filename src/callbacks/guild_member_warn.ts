@@ -44,28 +44,28 @@ export default {
             const embedWarn = {
                 author: {
                     name: `Case ${server_config.case_ID}# | Warn | ${event.member.user.tag}`,
-                    icon_url: url,
+                    icon_url: url
                 },
                 fields: [
                     {
                         name: "User:",
                         value: event.member.user.toString(),
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Moderator:",
                         value: event.moderationManager.toString(),
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Reason:",
-                        value: event.reason,
+                        value: event.reason
                     },
                     {
                         name: "Strikes:",
-                        value: `${event.num_of_warnings} => ${event.num_of_warnings + 1}`,
-                    },
-                ],
+                        value: `${event.num_of_warnings} => ${event.num_of_warnings + 1}`
+                    }
+                ]
             };
 
             server_config.case_ID += 1;
@@ -81,9 +81,9 @@ export default {
             server_ID: event.member.guild.id,
             user_ID: event.member.user.id,
             start: Date.now(),
-            reason: event.reason,
+            reason: event.reason
         };
 
         global_context.neko_modules_clients.db.add_server_warning(server_warning);
-    },
+    }
 } as Callback;

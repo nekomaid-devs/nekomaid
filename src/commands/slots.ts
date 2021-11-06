@@ -58,7 +58,7 @@ export default {
             author: { name: "Slots" },
             color: 8388736,
             description: slotsDescription.replace("<res_0>", "❓").replace("<res_1>", "❓").replace("<res_2>", "❓"),
-            footer: { text: "Rolling..." },
+            footer: { text: "Rolling..." }
         };
 
         const options: any[] = [];
@@ -121,7 +121,7 @@ export default {
                             "<:n_slots_3:865742111067602964>": credits_amount * 10,
                             "<:n_slots_4:865742140658548757>": credits_amount * 10,
                             "<:n_slots_5:865742192219783230>": credits_amount * 20,
-                            "<:n_slots_6:865744198472171570>": credits_amount * 20,
+                            "<:n_slots_6:865744198472171570>": credits_amount * 20
                         };
                         const won_amount: number = won_ammount[res_0];
 
@@ -142,5 +142,5 @@ export default {
                 }, 750);
             }, 750);
         }, 750);
-    },
+    }
 } as Command;

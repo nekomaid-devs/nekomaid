@@ -38,5 +38,5 @@ export default {
         command_data.msg.channel.send(`Set \`${set_XP}\` XP to \`${command_data.tagged_user.tag}\`! (Current XP: \`${Math.round(command_data.tagged_server_user_config.xp)}\`)`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

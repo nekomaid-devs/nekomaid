@@ -57,36 +57,36 @@ export default {
             color: 8388736,
             url: `https://nhentai.net/g/${command_data.args[0]}`,
             thumbnail: {
-                url: post_info.thumbnailURL,
+                url: post_info.thumbnailURL
             },
             fields: [
                 {
                     name: "Title:",
-                    value: `\`${post_info.title}\``,
+                    value: `\`${post_info.title}\``
                 },
                 {
                     name: "Pages:",
-                    value: `\`${post_info.num_of_pages}\``,
+                    value: `\`${post_info.num_of_pages}\``
                 },
                 {
                     name: "Tags:",
-                    value: tags_text,
+                    value: tags_text
                 },
                 {
                     name: "Languages:",
-                    value: languages_text,
+                    value: languages_text
                 },
                 {
                     name: "Favourites:",
-                    value: `\`${post_info.favourites}\``,
-                },
+                    value: `\`${post_info.favourites}\``
+                }
             ],
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}...`,
-            },
+                text: `Requested by ${command_data.msg.author.tag}...`
+            }
         };
         command_data.msg.channel.send({ embeds: [ embedNHentai ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

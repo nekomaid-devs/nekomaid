@@ -38,10 +38,10 @@ export default {
             color: 8388736,
             title: `Item - ${target_item.display_name}`,
             description: target_item.description,
-            footer: { text: `Requested by ${command_data.msg.author.tag}` },
+            footer: { text: `Requested by ${command_data.msg.author.tag}` }
         };
         command_data.msg.channel.send({ embeds: [ embedItem ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

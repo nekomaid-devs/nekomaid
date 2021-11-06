@@ -49,54 +49,54 @@ export default {
         const embedRole = {
             color: 8388736,
             author: {
-                name: `Information about role ${role.name}`,
+                name: `Information about role ${role.name}`
             },
             fields: [
                 {
                     name: "❯ Role ID",
                     value: `${role.id}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Position",
                     value: `${role.position}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Members",
                     value: `${role.members.size}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Permissions",
-                    value: `${permissions}`,
+                    value: `${permissions}`
                 },
                 {
                     name: "❯ Mentionable",
                     value: `${role.mentionable}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Showing in tab",
                     value: `${role.hoist}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Color",
                     value: `${role.hexColor}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Created",
-                    value: `${createdAgo} (${role.createdAt.toUTCString()})`,
-                },
+                    value: `${createdAgo} (${role.createdAt.toUTCString()})`
+                }
             ],
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
-            },
+                text: `Requested by ${command_data.msg.author.tag}`
+            }
         };
         command_data.msg.channel.send({ embeds: [ embedRole ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

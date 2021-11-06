@@ -68,10 +68,10 @@ export default {
             color: 8388736,
             description: `Transfered \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` from \`${command_data.msg.author.tag}\` to \`${
                 command_data.tagged_user.tag
-            }\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`,
+            }\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`
         };
         command_data.msg.channel.send({ embeds: [ embedTransfer ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

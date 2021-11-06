@@ -26,13 +26,13 @@ export default {
             fields: [
                 {
                     name: "Join the support server <:n_invite:771826253694631977>",
-                    value: `[Click here](${link})`,
-                },
-            ],
+                    value: `[Click here](${link})`
+                }
+            ]
         };
 
         command_data.msg.channel.send({ embeds: [ embedSupport ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

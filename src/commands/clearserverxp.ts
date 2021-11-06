@@ -55,5 +55,5 @@ export default {
         command_data.msg.channel.send(`Cleared XP of \`${server_user_configs.length}\` users.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

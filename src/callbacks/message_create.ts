@@ -96,7 +96,7 @@ export default {
             author_server_user_config: author_server_user_config,
 
             tagged_user_config: tagged_user_config,
-            tagged_server_user_config: tagged_server_user_config,
+            tagged_server_user_config: tagged_server_user_config
         };
         command_data.tagged_server_user_config = command_data.author_server_user_config;
 
@@ -278,5 +278,5 @@ export default {
                 scope.setUser(null);
             });
         }
-    },
+    }
 } as Callback;

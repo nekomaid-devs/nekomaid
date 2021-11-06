@@ -51,5 +51,5 @@ export default {
         }
 
         command_data.global_context.neko_modules_clients.inventoryManager.use_item(command_data, item_prefab, target_indexes);
-    },
+    }
 } as Command;

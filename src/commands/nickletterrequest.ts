@@ -37,7 +37,7 @@ export default {
         const collector = message.createReactionCollector({
             filter: (r, u) => {
                 return r.emoji.name === "✅" && u.id !== message.author.id;
-            },
+            }
         });
         collector.on("collect", async (r, u) => {
             if (command_data.msg.guild === null || command_data.msg.member === null) {
@@ -68,5 +68,5 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
         });
-    },
+    }
 } as Command;

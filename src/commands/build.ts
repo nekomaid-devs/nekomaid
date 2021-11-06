@@ -57,12 +57,12 @@ export default {
                     color: 8388736,
                     author: {
                         name: `${building_name}`,
-                        icon_url: url === null ? undefined : url,
+                        icon_url: url === null ? undefined : url
                     },
                     description: building_description,
                     footer: {
-                        text: `Requested by ${command_data.msg.author.tag}`,
-                    },
+                        text: `Requested by ${command_data.msg.author.tag}`
+                    }
                 };
                 command_data.msg.channel.send({ embeds: [ embedBuild ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
@@ -88,9 +88,9 @@ export default {
                     color: 8388736,
                     author: {
                         name: `Building - ${building_name}`,
-                        icon_url: url === null ? undefined : url,
+                        icon_url: url === null ? undefined : url
                     },
-                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`,
+                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`
                 };
                 command_data.msg.channel.send({ embeds: [ embedBuildProgress ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
@@ -122,12 +122,12 @@ export default {
                     color: 8388736,
                     author: {
                         name: `${building_name}`,
-                        icon_url: url === null ? undefined : url,
+                        icon_url: url === null ? undefined : url
                     },
                     description: building_description,
                     footer: {
-                        text: `Requested by ${command_data.msg.author.tag}`,
-                    },
+                        text: `Requested by ${command_data.msg.author.tag}`
+                    }
                 };
                 command_data.msg.channel.send({ embeds: [ embedBuild ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
@@ -155,14 +155,14 @@ export default {
                     color: 8388736,
                     author: {
                         name: `Building - ${building_name}`,
-                        icon_url: url === null ? undefined : url,
+                        icon_url: url === null ? undefined : url
                     },
-                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`,
+                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`
                 };
                 command_data.msg.channel.send({ embeds: [ embedBuildProgress ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }
         }
-    },
+    }
 } as Command;

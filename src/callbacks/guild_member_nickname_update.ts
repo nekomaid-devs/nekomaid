@@ -44,24 +44,24 @@ export default {
             const embedNicknameChange = {
                 author: {
                     name: `Nickname changed | ${new_member.user.tag}`,
-                    icon_url: url === null ? undefined : url,
+                    icon_url: url === null ? undefined : url
                 },
                 fields: [
                     {
                         name: "User:",
                         value: new_member.user.toString(),
-                        inline: false,
+                        inline: false
                     },
                     {
                         name: "Change:",
-                        value: `${old_member.nickname === null ? old_member.user.username : old_member.nickname} -> ${new_member.nickname === null ? new_member.user.username : new_member.nickname}`,
-                    },
-                ],
+                        value: `${old_member.nickname === null ? old_member.user.username : old_member.nickname} -> ${new_member.nickname === null ? new_member.user.username : new_member.nickname}`
+                    }
+                ]
             };
 
             channel.send({ embeds: [ embedNicknameChange ] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
         }
-    },
+    }
 } as Callback;

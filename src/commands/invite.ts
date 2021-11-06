@@ -26,13 +26,13 @@ export default {
             fields: [
                 {
                     name: "Invite NekoMaid to your server <:n_invite:771826253694631977>",
-                    value: `[Click here](${link})`,
-                },
-            ],
+                    value: `[Click here](${link})`
+                }
+            ]
         };
 
         command_data.msg.channel.send({ embeds: [ embedInvite ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

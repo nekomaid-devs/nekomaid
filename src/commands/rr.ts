@@ -16,7 +16,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
         filter: (m: Message) => {
             return m.author.id === source_message.author.id;
         },
-        max: 1,
+        max: 1
     });
     collector.on("collect", (message) => {
         if (msg.guild === null) {
@@ -48,7 +48,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                     channel_ID: msg.channel.id,
                     message_ID: msg.id,
                     reaction_roles: roles_array,
-                    reaction_role_emojis: roles_emojis_array,
+                    reaction_role_emojis: roles_emojis_array
                 };
                 global_context.neko_modules_clients.db.add_reaction_role(reactionRoleMenuInfo);
 
@@ -102,7 +102,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                     filter: (r, u) => {
                         return u.id === source_message.author.id;
                     },
-                    max: 1,
+                    max: 1
                 });
                 collector_2.on("collect", (r) => {
                     roles.set(role.id, r.emoji.id === null ? r.emoji.name : `<:${r.emoji.name}:${r.emoji.id}>`);
@@ -146,5 +146,5 @@ export default {
         const role_messages: any[] = [];
 
         continue_collecting(command_data.global_context, command_data.server_config, command_data.msg, msg, role_messages, roles);
-    },
+    }
 } as Command;

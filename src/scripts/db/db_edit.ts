@@ -32,7 +32,7 @@ export async function _edit_config(connection: Connection, item: BotData) {
         item.b_crime_monopoly,
         item.b_crime_monopoly_credits,
         item.b_pet_shelter,
-        item.b_pet_shelter_credits,
+        item.b_pet_shelter_credits
     ];
     return await connection.execute(query, query_data);
 }
@@ -104,7 +104,7 @@ export async function _edit_global_user(connection: Connection, item: GlobalUser
         item.b_lab,
         item.b_lab_credits,
 
-        item.user_ID,
+        item.user_ID
     ];
 
     return await connection.execute(query, query_data);

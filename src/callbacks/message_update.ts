@@ -47,24 +47,24 @@ export default {
             const embedMessageEdit = {
                 author: {
                     name: `Message edited | ${new_message.member.user.tag}`,
-                    icon_url: url === null ? undefined : url,
+                    icon_url: url === null ? undefined : url
                 },
                 fields: [
                     {
                         name: "User:",
                         value: new_message.member.user.toString(),
-                        inline: false,
+                        inline: false
                     },
                     {
                         name: "Change:",
-                        value: `${old_message.content} -> ${new_message.content}`,
-                    },
-                ],
+                        value: `${old_message.content} -> ${new_message.content}`
+                    }
+                ]
             };
 
             channel.send({ embeds: [ embedMessageEdit ] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
         }
-    },
+    }
 } as Callback;

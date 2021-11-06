@@ -78,5 +78,5 @@ export default {
                 global_context.logger.api_error(e);
             });
         }
-    },
+    }
 } as Callback;

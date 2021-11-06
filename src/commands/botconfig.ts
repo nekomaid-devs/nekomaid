@@ -55,45 +55,45 @@ export default {
                     {
                         name: "Bot Owners:",
                         value: bot_owners_text,
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Speed:",
                         value: `\`${command_data.global_context.bot_config.speed.toFixed(2)}x\``,
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Padding",
                         value: "owo",
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Work (x):",
                         value: `\`${command_data.global_context.bot_config.work_multiplier.toFixed(2)}x\``,
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Crime (x):",
                         value: `\`${command_data.global_context.bot_config.crime_multiplier.toFixed(2)}x\``,
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Daily (x):",
                         value: `\`${command_data.global_context.bot_config.daily_multiplier.toFixed(2)}x\``,
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Hourly (x):",
                         value: `\`${command_data.global_context.bot_config.hourly_multiplier.toFixed(2)}x\``,
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Sells (x):",
                         value: `\`${command_data.global_context.bot_config.sells_multiplier.toFixed(2)}x\``,
-                        inline: true,
-                    },
+                        inline: true
+                    }
                 ],
-                footer: { text: "What are you looking at, owo?" },
+                footer: { text: "What are you looking at, owo?" }
             };
 
             command_data.msg.channel.send({ embeds: [ embedConfig ] }).catch((e: Error) => {
@@ -109,8 +109,8 @@ export default {
                     command_data.msg.channel
                         .send({
                             embeds: [
-                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to add a \`value\` to- (Check \`${command_data.server_config.prefix}help botconfig add\` for help)`, "add bot_owner @LamkasDev"),
-                            ],
+                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to add a \`value\` to- (Check \`${command_data.server_config.prefix}help botconfig add\` for help)`, "add bot_owner @LamkasDev")
+                            ]
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -141,8 +141,8 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help botconfig add\` for help)`, "add bot_owner @LamkasDev"),
-                                ],
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help botconfig add\` for help)`, "add bot_owner @LamkasDev")
+                                ]
                             })
                             .catch((e: Error) => {
                                 command_data.global_context.logger.api_error(e);
@@ -160,8 +160,8 @@ export default {
                     command_data.msg.channel
                         .send({
                             embeds: [
-                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true"),
-                            ],
+                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true")
+                            ]
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -173,7 +173,7 @@ export default {
                 if (command_data.args.length < 3) {
                     command_data.msg.channel
                         .send({
-                            embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`) ],
+                            embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`) ]
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -187,7 +187,7 @@ export default {
                         if (isNaN(parseFloat(value)) || parseFloat(value) <= 0) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 2`) ],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (number)`, `set ${property} 2`) ]
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -207,8 +207,8 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help botconfig set\` for help)`, "set speed 2"),
-                                ],
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help botconfig set\` for help)`, "set speed 2")
+                                ]
                             })
                             .catch((e: Error) => {
                                 command_data.global_context.logger.api_error(e);
@@ -226,8 +226,8 @@ export default {
                     command_data.msg.channel
                         .send({
                             embeds: [
-                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help botconfig remove\` for help)`, "remove bot_owner @LamkasDev"),
-                            ],
+                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help botconfig remove\` for help)`, "remove bot_owner @LamkasDev")
+                            ]
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -268,8 +268,8 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help botconfig remove\` for help)`, "remove bot_owner @LamkasDev"),
-                                ],
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help botconfig remove\` for help)`, "remove bot_owner @LamkasDev")
+                                ]
                             })
                             .catch((e: Error) => {
                                 command_data.global_context.logger.api_error(e);
@@ -285,7 +285,7 @@ export default {
             default: {
                 command_data.msg.channel
                     .send({
-                        embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "add bot_owner @LamkasDev") ],
+                        embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "add bot_owner @LamkasDev") ]
                     })
                     .catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
@@ -293,5 +293,5 @@ export default {
                 break;
             }
         }
-    },
+    }
 } as Command;

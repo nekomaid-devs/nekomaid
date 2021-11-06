@@ -29,30 +29,30 @@ export default {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Balance`,
-                icon_url: url === null ? undefined : url,
+                icon_url: url === null ? undefined : url
             },
             fields: [
                 {
                     name: "💵    Credits:",
                     value: `$ ${command_data.global_context.utils.format_number(command_data.tagged_user_config.credits)}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "🏦    Bank:",
                     value: `$ ${command_data.global_context.utils.format_number(command_data.tagged_user_config.bank)}/${command_data.global_context.utils.format_number(command_data.tagged_user_config.bank_limit)}`,
-                    inline: true,
-                },
+                    inline: true
+                }
             ],
             thumbnail: {
-                url: url === null ? undefined : url,
+                url: url === null ? undefined : url
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`,
-            },
+                text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`
+            }
         };
 
         command_data.msg.channel.send({ embeds: [ embedBalance ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

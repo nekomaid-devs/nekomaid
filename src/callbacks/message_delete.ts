@@ -47,29 +47,29 @@ export default {
             const embedDeletedMessage = {
                 author: {
                     name: `Message Deleted | ${message.author.tag}`,
-                    icon_url: url === null ? undefined : url,
+                    icon_url: url === null ? undefined : url
                 },
                 fields: [
                     {
                         name: "User:",
                         value: message.author.toString(),
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Channel:",
                         value: message.channel.toString(),
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Message:",
-                        value: `~~${message.content}~~`,
-                    },
-                ],
+                        value: `~~${message.content}~~`
+                    }
+                ]
             };
 
             channel.send({ embeds: [ embedDeletedMessage ] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
         }
-    },
+    }
 } as Callback;

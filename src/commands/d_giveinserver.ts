@@ -46,5 +46,5 @@ export default {
         command_data.msg.channel.send(`Added \`${amount}x ${target_item.display_name}\` to \`${command_data.msg.guild.members.cache.size}\` members!`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

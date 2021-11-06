@@ -59,7 +59,7 @@ export default {
 
             const embedCoinflipLoading = {
                 title: `${command_data.msg.author.tag} is flipping...`,
-                color: 8388736,
+                color: 8388736
             };
             const message = await command_data.msg.channel.send({ embeds: [ embedCoinflipLoading ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
@@ -96,9 +96,9 @@ export default {
                     footer:
                         result === bet_result
                             ? {
-                                  text: "Win multiplier: 1.75x",
+                                  text: "Win multiplier: 1.75x"
                               }
-                            : undefined,
+                            : undefined
                 };
                 message.edit({ embeds: [ embedCoinflip ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
@@ -109,11 +109,11 @@ export default {
 
             const embedCoinflip = {
                 title: `${command_data.msg.author.tag} flipped ${result}!`,
-                color: 8388736,
+                color: 8388736
             };
             command_data.msg.channel.send({ embeds: [ embedCoinflip ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    },
+    }
 } as Command;

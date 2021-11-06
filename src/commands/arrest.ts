@@ -29,12 +29,12 @@ export default {
             title: `${command_data.tagged_user_tags} ${suffix} getting arrested!`,
             color: 8388736,
             image: {
-                url: url,
-            },
+                url: url
+            }
         };
 
         command_data.msg.channel.send({ embeds: [ embedArrest ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

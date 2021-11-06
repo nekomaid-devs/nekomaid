@@ -49,23 +49,23 @@ export default {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Profile (${author_pos}#)`,
-                icon_url: url === null ? undefined : url,
+                icon_url: url === null ? undefined : url
             },
             fields: [
                 {
                     name: "⚡    Server Level:",
-                    value: `${author_config.level} (XP: ${Math.round(author_config.xp)}/${Math.round(command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.author_user_config))})`,
-                },
+                    value: `${author_config.level} (XP: ${Math.round(author_config.xp)}/${Math.round(command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.author_user_config))})`
+                }
             ],
             thumbnail: {
-                url: url === null ? undefined : url,
+                url: url === null ? undefined : url
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
-            },
+                text: `Requested by ${command_data.msg.author.tag}`
+            }
         };
         command_data.msg.channel.send({ embeds: [ embedLevel ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

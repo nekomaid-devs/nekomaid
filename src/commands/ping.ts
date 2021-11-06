@@ -32,17 +32,17 @@ export default {
             fields: [
                 {
                     name: "🏓 Ping",
-                    value: `${message.createdTimestamp - command_data.msg.createdTimestamp}ms`,
+                    value: `${message.createdTimestamp - command_data.msg.createdTimestamp}ms`
                 },
                 {
                     name: "🏠 API",
-                    value: `${Math.round(command_data.global_context.bot.ws.ping)}ms`,
-                },
-            ],
+                    value: `${Math.round(command_data.global_context.bot.ws.ping)}ms`
+                }
+            ]
         };
 
         message.edit({ embeds: [ embedPing ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

@@ -32,7 +32,7 @@ function run() {
             ThreadManager: { sweepInterval: 60 },
             ThreadMemberManager: { sweepInterval: 60 },
             UserManager: { sweepInterval: 60 },
-            VoiceStateManager: { sweepInterval: 60 },
+            VoiceStateManager: { sweepInterval: 60 }
         }),
         intents: [
             Discord.Intents.FLAGS.GUILDS,
@@ -42,8 +42,8 @@ function run() {
             Discord.Intents.FLAGS.GUILD_MESSAGES,
             Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
             Discord.Intents.FLAGS.DIRECT_MESSAGES,
-            Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-        ],
+            Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+        ]
     });
 
     // Create global context
@@ -65,7 +65,7 @@ function run() {
 
         logger: {},
         utils: {},
-        data: {},
+        data: {}
     };
 
     // Import modules
@@ -259,8 +259,8 @@ function run() {
                         b_lewd_services: neko_user.b_lewd_services,
                         b_casino: neko_user.b_casino,
                         b_scrapyard: neko_user.b_scrapyard,
-                        b_pawn_shop: neko_user.b_pawn_shop,
-                    },
+                        b_pawn_shop: neko_user.b_pawn_shop
+                    }
                 });
             }
 

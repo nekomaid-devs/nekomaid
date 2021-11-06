@@ -32,12 +32,12 @@ export default {
                 fields: [
                     {
                         name: "Current prefix is ",
-                        value: command_data.server_config.prefix,
-                    },
+                        value: command_data.server_config.prefix
+                    }
                 ],
                 footer: {
-                    text: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`,
-                },
+                    text: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`
+                }
             };
             command_data.msg.channel.send({ embeds: [ embedPrefix ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
@@ -57,13 +57,13 @@ export default {
                 fields: [
                     {
                         name: "Set bot's prefix to",
-                        value: command_data.server_config.prefix,
-                    },
-                ],
+                        value: command_data.server_config.prefix
+                    }
+                ]
             };
             command_data.msg.channel.send({ embeds: [ embedPrefix ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    },
+    }
 } as Command;

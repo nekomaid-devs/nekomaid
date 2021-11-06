@@ -49,13 +49,13 @@ export default {
                 fields: [
                     {
                         name: "Banned Words:",
-                        value: banned_words,
+                        value: banned_words
                     },
                     {
                         name: "Invites:",
-                        value: `${command_data.server_config.invites === true ? "Allowed" : "Banned"}`,
-                    },
-                ],
+                        value: `${command_data.server_config.invites === true ? "Allowed" : "Banned"}`
+                    }
+                ]
             };
 
             command_data.msg.channel.send({ embeds: [ embedConfig ] }).catch((e: Error) => {
@@ -162,7 +162,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) ],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) ]
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -181,8 +181,8 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help moderation set\` for help)`, "set invites true"),
-                                ],
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help moderation set\` for help)`, "set invites true")
+                                ]
                             })
                             .catch((e: Error) => {
                                 command_data.global_context.logger.api_error(e);
@@ -202,5 +202,5 @@ export default {
                 break;
             }
         }
-    },
+    }
 } as Command;

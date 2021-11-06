@@ -19,7 +19,7 @@ function create_mute_role_and_mute(command_data: CommandData) {
             color: "#4b4b4b",
             hoist: true,
             mentionable: false,
-            permissions: [],
+            permissions: []
         })
         .then((mute_role) => {
             if (command_data.msg.guild === null) {
@@ -31,7 +31,7 @@ function create_mute_role_and_mute(command_data: CommandData) {
                     channel.permissionOverwrites
                         .create(mute_role, {
                             SEND_MESSAGES: false,
-                            ADD_REACTIONS: false,
+                            ADD_REACTIONS: false
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -40,7 +40,7 @@ function create_mute_role_and_mute(command_data: CommandData) {
                     channel.permissionOverwrites
                         .create(mute_role, {
                             CONNECT: false,
-                            SPEAK: false,
+                            SPEAK: false
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -123,7 +123,7 @@ export default {
                 duration: mute_end_text,
                 mute_start: mute_start,
                 mute_end: mute_end,
-                time: time,
+                time: time
             });
         } else {
             mute_end = previous_mute.end + extended_time;
@@ -141,7 +141,7 @@ export default {
                 next_duration: mute_end_text,
                 mute_start: mute_start,
                 mute_end: mute_end,
-                time: time,
+                time: time
             });
         }
 
@@ -159,5 +159,5 @@ export default {
         } else {
             command_data.tagged_member.roles.add(mute_role);
         }
-    },
+    }
 } as Command;

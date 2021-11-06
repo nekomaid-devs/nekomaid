@@ -94,24 +94,24 @@ export default {
                 const embedKick = {
                     author: {
                         name: `Kick | ${last_audit.target.tag}`,
-                        icon_url: url === null ? undefined : url,
+                        icon_url: url === null ? undefined : url
                     },
                     fields: [
                         {
                             name: "User:",
                             value: last_audit.target.tag,
-                            inline: true,
+                            inline: true
                         },
                         {
                             name: "Moderator:",
                             value: executor.toString(),
-                            inline: true,
+                            inline: true
                         },
                         {
                             name: "Reason:",
-                            value: last_audit.reason === null ? "None" : last_audit.reason,
-                        },
-                    ],
+                            value: last_audit.reason === null ? "None" : last_audit.reason
+                        }
+                    ]
                 };
 
                 channel.send({ embeds: [ embedKick ] }).catch((e: Error) => {
@@ -119,5 +119,5 @@ export default {
                 });
             }
         }
-    },
+    }
 } as Callback;

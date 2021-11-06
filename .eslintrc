@@ -65,6 +65,7 @@
         "arrow-spacing": "warn",
         "block-spacing": ["warn", "always"],
         "brace-style": ["warn", "1tbs"],
+        "comma-dangle": ["error", "never"],
         "comma-spacing": ["warn", { "after": true }],
         "comma-style": ["warn", "last"],
         "computed-property-spacing": ["warn", "never"],

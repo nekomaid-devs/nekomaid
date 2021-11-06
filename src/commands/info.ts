@@ -131,7 +131,7 @@ export default {
             color: 8388736,
             author: {
                 name: "NekoMaid - Info",
-                icon_url: url === null ? undefined : url,
+                icon_url: url === null ? undefined : url
             },
             fields: [
                 {
@@ -142,7 +142,7 @@ export default {
                     **Memory Usage:**\nTotal: ${memory_string_0} (Heap: ${memory_string_1}, Objects: ${memory_string_2})\n
                     **Command Performance:**\n${shard_commands} all time\n
                     **Voice connections:**\n${shard_vc}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: `All Shards (${command_data.global_context.bot.shard.count})`,
@@ -152,30 +152,30 @@ export default {
                     **Memory Usage:**\nTotal: ${manager_memory_string_0} (Heap: ${manager_memory_string_1}, Objects: ${manager_memory_string_2})\n
                     **Command Performance:**\n${manager_commands} all time\n
                     **Voice connections:**\n${manager_vc}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "Version:",
                     value: `${command_data.global_context.config.version}`,
-                    inline: false,
+                    inline: false
                 },
                 {
                     name: "Package versions:",
                     value: "Node v16.4.0 - discord.js@13.2.0",
-                    inline: false,
+                    inline: false
                 },
                 {
                     name: "Full Date:",
                     value: `${new Date().toUTCString()}`,
-                    inline: false,
-                },
+                    inline: false
+                }
             ],
             footer: {
-                text: `Update took ${sec_taken}s...`,
-            },
+                text: `Update took ${sec_taken}s...`
+            }
         };
         command_data.msg.channel.send({ embeds: [ embedInfo ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

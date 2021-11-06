@@ -30,5 +30,5 @@ export default {
         command_data.msg.channel.send(`Set current channel's slowmode to \`${time}\` s.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

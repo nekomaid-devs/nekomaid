@@ -26,5 +26,5 @@ export default {
 
     async process(global_context: GlobalContext, reaction: MessageReaction | PartialMessageReaction) {
         /* */
-    },
+    }
 } as Callback;

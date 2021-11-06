@@ -26,12 +26,12 @@ export default {
             title: `${command_data.msg.author.tag} is sleepy!`,
             color: 8388736,
             image: {
-                url: url,
-            },
+                url: url
+            }
         };
 
         command_data.msg.channel.send({ embeds: [ embedSleepy ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

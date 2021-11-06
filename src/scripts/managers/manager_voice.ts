@@ -33,7 +33,7 @@ class VoiceManager {
             persistent_queue: [],
 
             elapsed_ms: 0,
-            timeout_elapsed_ms: 0,
+            timeout_elapsed_ms: 0
         };
 
         voice_connection.connection.on(VoiceConnectionStatus.Disconnected, () => {
@@ -150,10 +150,10 @@ class VoiceManager {
             if (diff >= 3600) {
                 const embedError = {
                     author: {
-                        name: "🔊 Long videos",
+                        name: "🔊 Long videos"
                     },
                     color: 8388736,
-                    description: `To play videos longer than \`3h\`, please upvote the bot on [here](https://top.gg/bot/${global_context.bot.user.id}/vote).`,
+                    description: `To play videos longer than \`3h\`, please upvote the bot on [here](https://top.gg/bot/${global_context.bot.user.id}/vote).`
                 };
 
                 await source_message.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
@@ -195,13 +195,13 @@ class VoiceManager {
             if (log) {
                 const embedPlay = {
                     author: {
-                        name: `🔊 Playing - ${request.item.title}`,
+                        name: `🔊 Playing - ${request.item.title}`
                     },
                     color: 8388736,
                     description: `Length: \`${global_context.neko_modules.timeConvert.convert_time_data_to_string(current_length)}\`\nLink: ${request.item.url}\nAdded by: <@${request.request_user_ID}>`,
                     footer: {
-                        text: `Currently ${voice_connection.queue.length} in queue`,
-                    },
+                        text: `Currently ${voice_connection.queue.length} in queue`
+                    }
                 };
                 await source_message.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
@@ -214,13 +214,13 @@ class VoiceManager {
             if (log) {
                 const embedPlay = {
                     author: {
-                        name: `🔊 Added to queue - ${request.item.title}`,
+                        name: `🔊 Added to queue - ${request.item.title}`
                     },
                     color: 8388736,
                     description: `Length: \`${global_context.neko_modules.timeConvert.convert_time_data_to_string(current_length)}\`\nLink: ${request.item.url}\nAdded by: <@${request.request_user_ID}>`,
                     footer: {
-                        text: `Currently ${voice_connection.queue.length} in queue`,
-                    },
+                        text: `Currently ${voice_connection.queue.length} in queue`
+                    }
                 };
                 await source_message.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
@@ -268,12 +268,12 @@ class VoiceManager {
                 item: {
                     url: url,
                     title: title,
-                    duration: global_context.neko_modules.timeConvert.convert_time_data_to_string(global_context.neko_modules.timeConvert.convert_string_to_time_data(global_context.neko_modules.timeConvert.convert_time(duration * 1000))),
+                    duration: global_context.neko_modules.timeConvert.convert_time_data_to_string(global_context.neko_modules.timeConvert.convert_string_to_time_data(global_context.neko_modules.timeConvert.convert_time(duration * 1000)))
                 },
                 stream: null,
                 request_message_ID: source_message.id,
                 request_channel_ID: source_message.channel.id,
-                request_user_ID: source_message.author.id,
+                request_user_ID: source_message.author.id
             };
 
             return this.play_request_on_connection(global_context, request, source_message, log);

@@ -39,14 +39,14 @@ export default {
         const embedNotifications = {
             author: {
                 name: "Notifications",
-                icon_url: url === null ? undefined : url,
+                icon_url: url === null ? undefined : url
             },
             description: notifications_description,
-            color: 8388736,
+            color: 8388736
         };
 
         command_data.msg.channel.send({ embeds: [ embedNotifications ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

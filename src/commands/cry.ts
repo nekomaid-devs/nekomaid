@@ -27,12 +27,12 @@ export default {
             title: `${command_data.msg.author.tag} is crying...`,
             color: 8388736,
             image: {
-                url: url,
-            },
+                url: url
+            }
         };
 
         command_data.msg.channel.send({ embeds: [ embedCry ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

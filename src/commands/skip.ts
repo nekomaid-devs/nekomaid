@@ -40,5 +40,5 @@ export default {
         }
 
         command_data.global_context.neko_modules_clients.voiceManager.play_next_on_connection(command_data.global_context, command_data.msg.guild.id);
-    },
+    }
 } as Command;

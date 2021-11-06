@@ -77,7 +77,7 @@ export function convert_string_to_time_data(time_string: string) {
         days: parseInt(days),
         hrs: parseInt(hrs),
         mins: parseInt(mins),
-        secs: parseInt(secs),
+        secs: parseInt(secs)
     };
     time_data.status =
         (time_data.days > 0 || time_data.hrs > 0 || time_data.mins > 0 || time_data.secs > 0) && isNaN(time_data.days) === false && isNaN(time_data.hrs) === false && isNaN(time_data.mins) === false && isNaN(time_data.secs) === false
@@ -115,7 +115,7 @@ export function convert_youtube_string_to_time_data_0(time_string: string) {
         days: parseInt(days),
         hrs: parseInt(hrs),
         mins: parseInt(mins),
-        secs: parseInt(secs),
+        secs: parseInt(secs)
     };
     time_data.status =
         (time_data.days > 0 || time_data.hrs > 0 || time_data.mins > 0 || time_data.secs > 0) && isNaN(time_data.days) === false && isNaN(time_data.hrs) === false && isNaN(time_data.mins) === false && isNaN(time_data.secs) === false
@@ -155,7 +155,7 @@ export function convert_youtube_string_to_time_data_1(time_string: string) {
         days: parseInt(days),
         hrs: parseInt(hrs),
         mins: parseInt(mins),
-        secs: parseInt(secs),
+        secs: parseInt(secs)
     };
     time_data.status =
         (time_data.days > 0 || time_data.hrs > 0 || time_data.mins > 0 || time_data.secs > 0) && isNaN(time_data.days) === false && isNaN(time_data.hrs) === false && isNaN(time_data.mins) === false && isNaN(time_data.secs) === false

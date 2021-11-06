@@ -54,15 +54,15 @@ export default {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Inventory (${inventory.length} items)`,
-                icon_url: url === null ? undefined : url,
+                icon_url: url === null ? undefined : url
             },
             description: inventory_text.length < 3072 ? inventory_text : `${inventory_text.substring(0, 3069)}...`,
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
-            },
+                text: `Requested by ${command_data.msg.author.tag}`
+            }
         };
         command_data.msg.channel.send({ embeds: [ embedInventory ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

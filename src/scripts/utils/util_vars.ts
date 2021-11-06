@@ -26,7 +26,7 @@ export function get_8ball_answers() {
         "Please ask again",
         "Good question",
         "Better not tell you now",
-        "It's obvious",
+        "It's obvious"
     ];
 }
 
@@ -52,7 +52,7 @@ export function get_bite_gifs() {
         "https://i.imgur.com/fGPAulI.gif",
         "https://i.imgur.com/Jp8mOWA.gif",
         "https://i.imgur.com/v5ntzUV.gif",
-        "https://i.imgur.com/EPMkKhU.gif",
+        "https://i.imgur.com/EPMkKhU.gif"
     ];
 }
 
@@ -71,7 +71,7 @@ export function get_blush_gifs() {
         "https://i.imgur.com/KZZEHtP.gif",
         "https://i.imgur.com/9FXF0Yw.gif",
         "https://i.imgur.com/qXMmjI3.gif",
-        "https://i.imgur.com/49kAafw.gif",
+        "https://i.imgur.com/49kAafw.gif"
     ];
 }
 
@@ -93,7 +93,7 @@ export function get_cry_gifs() {
         "https://i.imgur.com/wYWgggM.gif",
         "https://i.imgur.com/S0ZIL9x.gif",
         "https://i.imgur.com/FrvmmIW.gif",
-        "https://i.imgur.com/cchBAUv.gif",
+        "https://i.imgur.com/cchBAUv.gif"
     ];
 }
 
@@ -112,7 +112,7 @@ export function get_cuddle_gifs() {
         "https://i.imgur.com/KwKMJx4.gif",
         "https://i.imgur.com/0kOwoWZ.gif",
         "https://i.imgur.com/gXhEGyj.gif",
-        "https://i.imgur.com/WJoVNyR.gif",
+        "https://i.imgur.com/WJoVNyR.gif"
     ];
 }
 
@@ -135,7 +135,7 @@ export function get_dance_gifs() {
         "https://i.imgur.com/NIBOhwP.gif",
         "https://i.imgur.com/p3039Mg.gif",
         "https://i.imgur.com/qvORXs1.gif",
-        "https://i.imgur.com/BCanBC2.gif",
+        "https://i.imgur.com/BCanBC2.gif"
     ];
 }
 
@@ -155,7 +155,7 @@ export function get_hug_gifs() {
         "https://i.imgur.com/ld4ll8Z.gif",
         "https://i.imgur.com/mkN1fUD.gif",
         "https://i.imgur.com/cS4KVcw.gif",
-        "https://i.imgur.com/TwwzYbz.gif",
+        "https://i.imgur.com/TwwzYbz.gif"
     ];
 }
 
@@ -182,7 +182,7 @@ export function get_kiss_gifs() {
         "https://i.imgur.com/ziYf2om.gif",
         "https://i.imgur.com/nPnVx0h.gif",
         "https://i.imgur.com/Oz0VioF.gif",
-        "https://i.imgur.com/lvgXFFU.gif",
+        "https://i.imgur.com/lvgXFFU.gif"
     ];
 }
 
@@ -201,7 +201,7 @@ export function get_lewd_gifs() {
         "https://i.imgur.com/uWoLN3w.gif",
         "https://i.imgur.com/z8QdApD.gif",
         "https://i.imgur.com/70B6ZqI.gif",
-        "https://i.imgur.com/wZzy49c.gif",
+        "https://i.imgur.com/wZzy49c.gif"
     ];
 }
 
@@ -217,7 +217,7 @@ export function get_lick_gifs() {
         "https://i.imgur.com/hmxYQJW.gif",
         "https://i.imgur.com/cOlhigJ.gif",
         "https://i.imgur.com/zw8a0tU.gif",
-        "https://i.imgur.com/N7MibL0.gif",
+        "https://i.imgur.com/N7MibL0.gif"
     ];
 }
 
@@ -248,7 +248,7 @@ export function get_pat_gifs() {
         "https://i.imgur.com/JONnIw1.gif",
         "https://i.imgur.com/T1vupxt.gif",
         "https://i.imgur.com/JDC5xSq.gif",
-        "https://i.imgur.com/UaKSw9Y.gif",
+        "https://i.imgur.com/UaKSw9Y.gif"
     ];
 }
 
@@ -264,7 +264,7 @@ export function get_poke_gifs() {
         "https://i.imgur.com/vAA5ehy.gif",
         "https://i.imgur.com/ZsNCtY1.gif",
         "https://i.imgur.com/DMGwIW6.gif",
-        "https://i.imgur.com/F3TS1il.gif",
+        "https://i.imgur.com/F3TS1il.gif"
     ];
 }
 
@@ -280,7 +280,7 @@ export function get_pout_gifs() {
         "https://i.imgur.com/MnTffj8.gif",
         "https://i.imgur.com/sGXJZEz.gif",
         "https://i.imgur.com/dqyuyvh.gif",
-        "https://i.imgur.com/j3CJUnr.gif",
+        "https://i.imgur.com/j3CJUnr.gif"
     ];
 }
 
@@ -304,7 +304,7 @@ export function get_slap_gifs() {
         "https://i.imgur.com/xP6LNdp.gif",
         "https://i.imgur.com/CGsPAUT.gif",
         "https://i.imgur.com/JMYtV3p.gif",
-        "https://i.imgur.com/NXOo7Yz.gif",
+        "https://i.imgur.com/NXOo7Yz.gif"
     ];
 }
 
@@ -322,7 +322,7 @@ export function get_sleepy_gifs() {
         "https://i.imgur.com/R9TEgrb.gif",
         "https://i.imgur.com/1uC3C6w.gif",
         "https://i.imgur.com/Nui6iCP.gif",
-        "https://i.imgur.com/SVeev3V.gif",
+        "https://i.imgur.com/SVeev3V.gif"
     ];
 }
 
@@ -340,7 +340,7 @@ export function get_smile_gifs() {
         "https://i.imgur.com/qnstrl0.gif",
         "https://i.imgur.com/OBH9J3v.gif",
         "https://i.imgur.com/eOwq3IK.gif",
-        "https://i.imgur.com/5wKf2zl.gif",
+        "https://i.imgur.com/5wKf2zl.gif"
     ];
 }
 
@@ -358,7 +358,7 @@ export function get_smug_gifs() {
         "https://i.imgur.com/HAx6ntE.gif",
         "https://i.imgur.com/WUpOS7w.gif",
         "https://i.imgur.com/49w3zKB.gif",
-        "https://i.imgur.com/XlsPTtW.gif",
+        "https://i.imgur.com/XlsPTtW.gif"
     ];
 }
 
@@ -376,7 +376,7 @@ export function get_tickle_gifs() {
         "https://i.imgur.com/qoCSS2a.gif",
         "https://i.imgur.com/T9fbzG1.gif",
         "https://i.imgur.com/vfl0cvX.gif",
-        "https://i.imgur.com/HGoPzsq.gif",
+        "https://i.imgur.com/HGoPzsq.gif"
     ];
 }
 
@@ -394,13 +394,13 @@ export function get_error_embed(msg: Message, prefix: string, command: Command, 
         fields: [
             {
                 name: "Problem:",
-                value: problem,
+                value: problem
             },
             {
                 name: "Usage:",
-                value: usage,
-            },
-        ],
+                value: usage
+            }
+        ]
     };
 
     return embedError;
@@ -424,7 +424,7 @@ export function get_building_price(level: number, building_name: string) {
         b_community_center: [ 0, 125000, 275000, 750000, 1750000, 2500000, 12500000, 27500000, 65000000, 105000000, 260000000, 0 ],
         b_quantum_pancakes: [ 0, 150000, 350000, 900000, 2500000, 4000000, 18000000, 35000000, 75000000, 115000000, 280000000, 0 ],
         b_crime_monopoly: [ 0, 200000, 400000, 1100000, 3000000, 4500000, 20000000, 40000000, 90000000, 120000000, 295000000, 0 ],
-        b_pet_shelter: [ 0, 140000, 300000, 775000, 2000000, 3000000, 15000000, 30000000, 70000000, 110000000, 275000000, 0 ],
+        b_pet_shelter: [ 0, 140000, 300000, 775000, 2000000, 3000000, 15000000, 30000000, 70000000, 110000000, 275000000, 0 ]
     };
 
     return prices[building_name][level + 1];
@@ -448,7 +448,7 @@ export function get_building_description(building_field: string) {
         b_community_center: "`[🧱]` Unlocks events and improves payouts from them.",
         b_quantum_pancakes: "`[⭐]` Improves payouts from work for all players.",
         b_crime_monopoly: "`[⭐]` Improves payouts from crime for all players.",
-        b_pet_shelter: "`[🧱]` Unlocks pets and improves the rate at which they're available for sale and rarity of them. All players will be able to buy pets from this.",
+        b_pet_shelter: "`[🧱]` Unlocks pets and improves the rate at which they're available for sale and rarity of them. All players will be able to buy pets from this."
     };
 
     return descriptions[building_field];
@@ -474,7 +474,7 @@ export function get_buildings_guide_embed(command_data: CommandData) {
             "`⭐ Neko's Quantum Pancakes` - Improves payouts from work for all players.\n" +
             "`⭐ Neko's Crime Monopoly` - Improves payouts from crime for all players.\n" +
             "`🧱 Neko's Pet Shelter` - Unlocks pets and improves the rate at which they're available for sale and rarity of them. All players will be able to buy pets from this.",
-        footer: { text: `You can view more detailed information about a building with - ${command_data.server_config.prefix}building "building_name"` },
+        footer: { text: `You can view more detailed information about a building with - ${command_data.server_config.prefix}building "building_name"` }
     };
 
     return embed;
@@ -504,7 +504,7 @@ export function get_economy_guide_embed(command_data: CommandData) {
             "Now you're on your way to become the best pancake seller, criminal overlord or casino owner in the city!\n\n" +
             "`[👾]` If you would want to go even further, you can help everyone work on global buildings aswell. The concept is the very same, except that everyone can build and benefit from these!\n" +
             "You could also aim to be the mayor and decide on important decisions in the city. But that's for some other time...",
-        footer: { text: `If you have any questions, ask in the support server - ${command_data.server_config.prefix}support` },
+        footer: { text: `If you have any questions, ask in the support server - ${command_data.server_config.prefix}support` }
     };
 
     return embed;
@@ -521,7 +521,7 @@ export function get_building_field(building_name: string) {
         "neko's lewd services": "b_lewd_services",
         "neko's casino": "b_casino",
         "neko's scrapyard": "b_scrapyard",
-        "neko's pawn shop": "b_pawn_shop",
+        "neko's pawn shop": "b_pawn_shop"
     };
 
     return buildings[building_name];
@@ -534,7 +534,7 @@ export function get_global_building_field(building_name: string) {
         "neko's community center": "b_community_center",
         "neko's quantum pancakes": "b_quantum_pancakes",
         "neko's crime monopoly": "b_crime_monopoly",
-        "neko's pet shelter": "b_pet_shelter",
+        "neko's pet shelter": "b_pet_shelter"
     };
 
     return buildings[building_name];
@@ -555,7 +555,7 @@ export function get_items() {
         cash_payout: 250,
         users: 3,
         description: "A party popper you can use to start a party~ 3 random people will have the chance to get a cash reward~",
-        rarity: "common",
+        rarity: "common"
     });
     items.set("9", {
         id: "9",
@@ -564,7 +564,7 @@ export function get_items() {
         cash_payout: 500,
         users: 3,
         description: "A party popper you can use to start a party~ 3 random people will have the chance to get a cash reward~",
-        rarity: "uncommon",
+        rarity: "uncommon"
     });
     items.set("10", {
         id: "10",
@@ -573,7 +573,7 @@ export function get_items() {
         cash_payout: 500,
         users: 5,
         description: "A party popper you can use to start a party~ 5 random people will have the chance to get a cash reward~",
-        rarity: "rare",
+        rarity: "rare"
     });
     items.set("11", {
         id: "11",
@@ -582,7 +582,7 @@ export function get_items() {
         cash_payout: 250,
         users: 3,
         description: "A confetti ball you can open and give 3 random people in the server a cash reward~",
-        rarity: "common",
+        rarity: "common"
     });
     items.set("12", {
         id: "12",
@@ -591,7 +591,7 @@ export function get_items() {
         cash_payout: 500,
         users: 3,
         description: "A confetti ball you can open and give 3 random people in the server a cash reward~",
-        rarity: "uncommon",
+        rarity: "uncommon"
     });
     items.set("13", {
         id: "13",
@@ -600,7 +600,7 @@ export function get_items() {
         cash_payout: 500,
         users: 5,
         description: "A confetti ball you can open and give 5 random people in the server a cash reward~",
-        rarity: "rare",
+        rarity: "rare"
     });
     items.set("14", { id: "14", type: "shield", display_name: "Shield", description: "A single-use shield that protects you from thieves~", rarity: "common" });
     items.set("15", { id: "15", type: "book_red", display_name: "Red Book", description: "A red book~", can_be_scavanged: true, rarity: "common" });

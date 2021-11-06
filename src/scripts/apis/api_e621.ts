@@ -52,7 +52,7 @@ class E621API {
             num_of_pages: pages + 1,
             post_number: page_index,
             num_of_posts: pages + 1,
-            post_tags: result_main.data.tags,
+            post_tags: result_main.data.tags
         };
 
         return post_info;

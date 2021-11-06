@@ -31,54 +31,54 @@ export default {
             color: 8388736,
             author: {
                 name: `Information about server ${command_data.msg.guild.name}`,
-                icon_url: url,
+                icon_url: url
             },
             fields: [
                 {
                     name: "❯ Server ID",
                     value: `${command_data.msg.guild.id}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Region",
                     value: "xx",
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Owner",
                     value: `${owner.user.tag}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Members",
                     value: `${command_data.msg.guild.memberCount}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Channels",
                     value: `${command_data.msg.guild.channels.cache.size}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Roles",
                     value: `${command_data.msg.guild.roles.cache.size}`,
-                    inline: true,
+                    inline: true
                 },
                 {
                     name: "❯ Created",
                     value: `${createdAgo} (${command_data.msg.guild.createdAt.toUTCString()})`,
-                    inline: true,
-                },
+                    inline: true
+                }
             ],
             thumbnail: {
-                url: url,
+                url: url
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
-            },
+                text: `Requested by ${command_data.msg.author.tag}`
+            }
         };
         command_data.msg.channel.send({ embeds: [ embedServer ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

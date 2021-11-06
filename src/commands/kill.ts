@@ -36,12 +36,12 @@ export default {
             title: `${command_data.msg.author.tag} kills ${command_data.tagged_user_tags}!`,
             color: 8388736,
             image: {
-                url: url,
-            },
+                url: url
+            }
         };
 
         command_data.msg.channel.send({ embeds: [ embedKill ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

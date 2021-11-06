@@ -59,10 +59,10 @@ export default {
 
         const embedWithdraw = {
             color: 8388736,
-            description: `Withdrew \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` from bank to \`${command_data.msg.author.tag}\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`,
+            description: `Withdrew \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` from bank to \`${command_data.msg.author.tag}\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`
         };
         command_data.msg.channel.send({ embeds: [ embedWithdraw ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

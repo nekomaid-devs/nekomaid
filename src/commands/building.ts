@@ -37,10 +37,10 @@ export default {
             color: 8388736,
             title: `Building - ${building_name}`,
             description: building_description,
-            footer: { text: `Requested by ${command_data.msg.author.tag}` },
+            footer: { text: `Requested by ${command_data.msg.author.tag}` }
         };
         command_data.msg.channel.send({ embeds: [ embedBuilding ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

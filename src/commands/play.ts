@@ -44,10 +44,10 @@ export default {
 
             const embedJoin = {
                 author: {
-                    name: `🔊 Joined channel - ${command_data.msg.member.voice.channel.name}`,
+                    name: `🔊 Joined channel - ${command_data.msg.member.voice.channel.name}`
                 },
                 color: 8388736,
-                description: `Joined \`${command_data.msg.member.voice.channel.name}\` in \`${command_data.msg.guild.name}\``,
+                description: `Joined \`${command_data.msg.member.voice.channel.name}\` in \`${command_data.msg.guild.name}\``
             };
 
             command_data.msg.channel.send({ embeds: [ embedJoin ] }).catch((e: Error) => {
@@ -61,10 +61,10 @@ export default {
 
             const embedPlay: any = {
                 author: {
-                    name: "🔊 Loading...",
+                    name: "🔊 Loading..."
                 },
                 color: 8388736,
-                description: `Fetching results for \`${url}\``,
+                description: `Fetching results for \`${url}\``
             };
             const loading_message = await command_data.msg.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
@@ -90,7 +90,7 @@ export default {
                         const item = {
                             title: result.items[i].title,
                             url: result.items[i].url,
-                            duration: result.items[i].duration,
+                            duration: result.items[i].duration
                         };
 
                         await command_data.global_context.neko_modules_clients.voiceManager.play_on_connection(command_data.global_context, command_data.msg, loading_message, item, 0);
@@ -135,7 +135,7 @@ export default {
                     const item = {
                         title: videoItem.title,
                         url: videoItem.url,
-                        duration: videoItem.duration,
+                        duration: videoItem.duration
                     };
                     infosByID.set(i, item);
 
@@ -149,7 +149,7 @@ export default {
                         return (parseInt(m.content) <= 5 && parseInt(m.content) >= 1 && infosByID.has(parseInt(m.content))) || m.content.startsWith(`${command_data.server_config.prefix}play`);
                     },
                     time: 15000,
-                    max: 1,
+                    max: 1
                 });
                 collector.on("collect", (m) => {
                     if (m.content.startsWith(`${command_data.server_config.prefix}play`) === true) {
@@ -172,5 +172,5 @@ export default {
                 });
             }
         }
-    },
+    }
 } as Command;

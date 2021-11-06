@@ -113,7 +113,7 @@ export default {
                 [ "Moderation", { prefix: "<:n_moderation:771822603153047592> ", items: [], nsfw: false } ],
                 [ "Modules", { prefix: "<:n_modules:771824772652204032> ", items: [], nsfw: false } ],
                 [ "Leveling", { prefix: "<:n_leveling:771822966181724170> ", items: [], nsfw: false } ],
-                [ "Testing", { prefix: "", items: [], nsfw: false } ],
+                [ "Testing", { prefix: "", items: [], nsfw: false } ]
             ]);
             commands
                 .filter((e) => {
@@ -165,5 +165,5 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    },
+    }
 } as Command;

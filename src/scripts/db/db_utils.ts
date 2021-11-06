@@ -119,7 +119,7 @@ export function guild_edit_type_to_query_data(item: GuildData, type: GuildEditTy
                 item.audit_deleted_messages,
                 item.audit_edited_messages,
 
-                item.server_ID,
+                item.server_ID
             ];
 
         case GuildEditType.AUDIT:

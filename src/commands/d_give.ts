@@ -44,5 +44,5 @@ export default {
         command_data.msg.channel.send(`Added \`${amount}x ${target_item.display_name}\` to \`${command_data.tagged_user.tag}\`!`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

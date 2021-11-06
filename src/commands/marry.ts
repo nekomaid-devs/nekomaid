@@ -52,5 +52,5 @@ export default {
         } else {
             command_data.global_context.neko_modules_clients.marriageManager.add_marriage_proposal(command_data.global_context, command_data.msg.channel, command_data.msg.author, command_data.tagged_user);
         }
-    },
+    }
 } as Command;

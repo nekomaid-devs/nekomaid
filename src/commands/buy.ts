@@ -54,10 +54,10 @@ export default {
 
         const embedBuy = {
             color: 8388736,
-            description: `Bought \`1x ${target_item.display_name}\` for \`${command_data.global_context.utils.format_number(target_shop_item.price)} 💵\`.`,
+            description: `Bought \`1x ${target_item.display_name}\` for \`${command_data.global_context.utils.format_number(target_shop_item.price)} 💵\`.`
         };
         command_data.msg.channel.send({ embeds: [ embedBuy ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

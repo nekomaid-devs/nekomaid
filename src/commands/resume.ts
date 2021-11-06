@@ -38,5 +38,5 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    },
+    }
 } as Command;

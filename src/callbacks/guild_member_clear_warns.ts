@@ -40,28 +40,28 @@ export default {
                 const embedClearWarns = {
                     author: {
                         name: `Case ${server_config.case_ID}# | Cleared warnings | ${event.member.user.tag}`,
-                        icon_url: url === null ? undefined : url,
+                        icon_url: url === null ? undefined : url
                     },
                     fields: [
                         {
                             name: "User:",
                             value: event.member.user.toString(),
-                            inline: true,
+                            inline: true
                         },
                         {
                             name: "Moderator:",
                             value: event.moderationManager.toString(),
-                            inline: true,
+                            inline: true
                         },
                         {
                             name: "Reason:",
-                            value: event.reason,
+                            value: event.reason
                         },
                         {
                             name: "Strikes:",
-                            value: `${event.num_of_warnings} => 0`,
-                        },
-                    ],
+                            value: `${event.num_of_warnings} => 0`
+                        }
+                    ]
                 };
 
                 server_config.case_ID += 1;
@@ -74,5 +74,5 @@ export default {
         }
 
         global_context.neko_modules_clients.db.remove_server_warnings_from_user(event.member.guild, event.member.user);
-    },
+    }
 } as Callback;

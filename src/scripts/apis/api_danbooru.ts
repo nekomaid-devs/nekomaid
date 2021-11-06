@@ -52,7 +52,7 @@ class DanbooruAPI {
             num_of_pages: pages + 1,
             post_number: page_index,
             num_of_posts: pages + 1,
-            post_tags: result_main.data.tag_string,
+            post_tags: result_main.data.tag_string
         };
 
         return post_info;

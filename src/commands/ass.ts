@@ -26,15 +26,15 @@ export default {
             title: "Here are your lewds~",
             color: 8388736,
             image: {
-                url: url,
+                url: url
             },
             footer: {
-                text: "Powered by Akaneko 💖",
-            },
+                text: "Powered by Akaneko 💖"
+            }
         };
 
         command_data.msg.channel.send({ embeds: [ embedAss ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

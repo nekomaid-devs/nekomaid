@@ -35,10 +35,10 @@ export default {
         }
         const embedSuggestion = {
             title: `Suggestion from \`${command_data.msg.author.tag}\``,
-            description: command_data.total_argument,
+            description: command_data.total_argument
         };
         user.send({ embeds: [ embedSuggestion ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

@@ -45,28 +45,28 @@ export default {
             const embedMute = {
                 author: {
                     name: `Case ${server_config.case_ID}# | Mute Extension | ${event.member.user.tag}`,
-                    icon_url: url,
+                    icon_url: url
                 },
                 fields: [
                     {
                         name: "User:",
                         value: event.member.user.toString(),
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Moderator:",
                         value: event.moderationManager.toString(),
-                        inline: true,
+                        inline: true
                     },
                     {
                         name: "Reason:",
-                        value: event.reason,
+                        value: event.reason
                     },
                     {
                         name: "Duration:",
-                        value: `${event.prev_duration} -> ${event.next_duration}`,
-                    },
-                ],
+                        value: `${event.prev_duration} -> ${event.next_duration}`
+                    }
+                ]
             };
 
             server_config.case_ID += 1;
@@ -83,9 +83,9 @@ export default {
             user_ID: event.member.user.id,
             reason: event.reason,
             start: event.mute_start,
-            end: event.time === -1 ? -1 : event.mute_end,
+            end: event.time === -1 ? -1 : event.mute_end
         };
 
         global_context.neko_modules_clients.db.add_server_mute(server_mute);
-    },
+    }
 } as Callback;

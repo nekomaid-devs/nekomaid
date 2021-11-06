@@ -27,5 +27,5 @@ export default {
         command_data.msg.channel.send(`Pinged ${user.toString()}.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;

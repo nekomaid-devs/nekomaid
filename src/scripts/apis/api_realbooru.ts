@@ -105,7 +105,7 @@ class RealbooruAPI {
                     num_of_pages: pages.length,
                     post_number: page_number * 42 + post_links.indexOf(site_url_post),
                     num_of_posts: pages.length * 42,
-                    post_tags: tags,
+                    post_tags: tags
                 };
 
                 return post_info;

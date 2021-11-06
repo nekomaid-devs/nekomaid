@@ -105,13 +105,13 @@ class Argument {
             fields: [
                 {
                     name: "Problem:",
-                    value: `${this.reply}`,
+                    value: `${this.reply}`
                 },
                 {
                     name: "Usage:",
-                    value: usage,
-                },
-            ],
+                    value: usage
+                }
+            ]
         };
 
         return embedError;

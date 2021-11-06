@@ -35,20 +35,20 @@ export default {
             fields: [
                 {
                     name: "Question:",
-                    value: `${question}`,
+                    value: `${question}`
                 },
                 {
                     name: "Answer:",
-                    value: `${answer}`,
-                },
+                    value: `${answer}`
+                }
             ],
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
-            },
+                text: `Requested by ${command_data.msg.author.tag}`
+            }
         };
 
         command_data.msg.channel.send({ embeds: [ embed8Ball ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    },
+    }
 } as Command;
