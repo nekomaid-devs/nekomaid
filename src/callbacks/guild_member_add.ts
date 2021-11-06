@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildFetchType } from "../scripts/db/db_utils";
+import { GuildFetchType } from "../ts/mysql";
 import { GuildMember, TextChannel } from "discord.js";
 
 /* Node Imports */
@@ -51,7 +51,7 @@ export default {
                 return;
             }
             if (
-                server_mutes.some((e: any) => {
+                server_mutes.some((e) => {
                     return e.user_ID === member.user.id;
                 })
             ) {
@@ -78,5 +78,5 @@ export default {
                 global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Callback;

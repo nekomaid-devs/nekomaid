@@ -4,6 +4,10 @@ import { CommandData, Command } from "../ts/base";
 /* Node Imports */
 import { randomBytes } from "crypto";
 
+/* Local Imports */
+import { convert_time } from "../scripts/utils/util_time";
+import { pick_random, format_number } from "../scripts/utils/util_general";
+
 export default {
     name: "beg",
     category: "Profile",
@@ -31,26 +35,26 @@ export default {
         if (diff < 60) {
             const end_needed = new Date(start.getTime() + 3600000 * 1);
             const time_left = (end_needed.getTime() - end.getTime()) / command_data.global_context.bot_config.speed;
-            command_data.msg.reply(`You need to wait more \`${command_data.global_context.neko_modules.timeConvert.convert_time(time_left)}\` before doing this.`);
+            command_data.msg.reply(`You need to wait more \`${convert_time(time_left)}\` before doing this.`);
             return;
         }
 
         command_data.author_user_config.last_beg_time = end.getTime();
 
-        const min_credits = [ 50 ][0];
-        const max_credits = [ 80 ][0];
+        const min_credits = [50][0];
+        const max_credits = [80][0];
         let credits_amount = Math.floor(Math.random() * (max_credits - min_credits + 1) + min_credits);
 
         const chance = Math.floor(Math.random() * 100) + 1;
         let answers = [];
         let answer_color = 6732650;
-        if (chance <= [ 40 ][0]) {
+        if (chance <= [40][0]) {
             answers = command_data.global_context.bot_config.beg_success_answers;
             const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
-                description: `<time_ago> You begged and got \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`.`
+                description: `<time_ago> You begged and got \`${format_number(credits_amount)} 💵\`.`,
             };
             command_data.global_context.neko_modules_clients.db.add_user_notification(notification);
         } else {
@@ -61,15 +65,15 @@ export default {
                 id: randomBytes(16).toString("hex"),
                 user_ID: command_data.msg.author.id,
                 timestamp: Date.now(),
-                description: "<time_ago> You begged, but failed."
+                description: "<time_ago> You begged, but failed.",
             };
             command_data.global_context.neko_modules_clients.db.add_user_notification(notification);
         }
 
-        let answer = command_data.global_context.utils.pick_random(answers);
-        answer = answer.replace("<credits_amount>", `\`${command_data.global_context.utils.format_number(credits_amount)}💵\``);
+        let answer = pick_random(answers);
+        answer = answer.replace("<credits_amount>", `\`${format_number(credits_amount)}💵\``);
 
-        const member = command_data.global_context.utils.pick_random(Array.from(command_data.msg.guild.members.cache.values()));
+        const member = pick_random(Array.from(command_data.msg.guild.members.cache.values()));
         answer = answer.replace("<user>", `\`${member.user.tag}\``);
 
         command_data.author_user_config.credits += credits_amount;
@@ -78,13 +82,13 @@ export default {
 
         const embedBeg = {
             color: answer_color,
-            description: `${answer} (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`,
+            description: `${answer} (Current Credits: \`${format_number(command_data.author_user_config.credits)}$\`)`,
             footer: {
-                text: `Check out new ${command_data.server_config.prefix}economyguide`
-            }
+                text: `Check out new ${command_data.server_config.prefix}economyguide`,
+            },
         };
-        command_data.msg.channel.send({ embeds: [ embedBeg ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedBeg] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

@@ -16,9 +16,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to mention somebody.", "mention") ],
-    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a reason.", "none") ],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS) ],
+    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention")],
+    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a reason.", "none")],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -37,5 +37,5 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
         command_data.global_context.bot.emit("guildMemberWarn", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: warn_reason, num_of_warnings: num_of_warnings });
-    }
+    },
 } as Command;

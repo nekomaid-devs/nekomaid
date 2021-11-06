@@ -4,6 +4,7 @@ import { Permissions } from "discord.js";
 
 /* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
+import { convert_time } from "../scripts/utils/util_time";
 
 export default {
     name: "bans",
@@ -16,7 +17,7 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS) ],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -33,7 +34,7 @@ export default {
             .setAuthor(`❯ Bans (${command_data.server_bans.length})`, command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
 
         if (command_data.server_bans.length < 1) {
-            command_data.msg.channel.send({ embeds: [ embedBans ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedBans] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -49,17 +50,17 @@ export default {
                 command_data.server_bans.slice(-25).forEach((ban) => {
                     const bannedMember = serverBansByID.get(ban.user_ID);
                     if (bannedMember !== undefined) {
-                        const remainingText = ban.end === null ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(ban.end - now);
+                        const remainingText = ban.end === null ? "Forever" : convert_time(ban.end - now);
                         embedBans.addField(`Ban - ${bannedMember.user.tag}`, `Remaining: \`${remainingText}\``);
                     }
                 });
 
-                command_data.msg.channel.send({ embeds: [ embedBans ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedBans] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             })
             .catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
-    }
+    },
 } as Command;

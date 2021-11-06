@@ -8,7 +8,7 @@ export default {
     helpUsage: "`",
     exampleUsage: "",
     hidden: false,
-    aliases: [ "loop" ],
+    aliases: ["loop"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
@@ -19,17 +19,14 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        if (
-            command_data.global_context.neko_modules_clients.voiceManager.connections.has(command_data.msg.guild.id) === false ||
-            command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id).current === -1
-        ) {
+        const connection = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
+        if (connection === undefined || connection.current === null) {
             command_data.msg.reply("There's nothing playing!");
             return;
         }
 
-        const voice_data = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
-        voice_data.mode = voice_data.mode === 0 ? 1 : 0;
-        if (voice_data.mode === 1) {
+        connection.mode = connection.mode === 0 ? 1 : 0;
+        if (connection.mode === 1) {
             command_data.msg.channel.send("Repeating current queue.").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
@@ -38,5 +35,5 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Command;

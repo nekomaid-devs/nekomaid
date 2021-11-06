@@ -6,6 +6,7 @@ import { loadFont, measureText, read } from "jimp";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import { pick_random } from "../scripts/utils/util_general";
 
 export default {
     name: "impostor",
@@ -14,10 +15,10 @@ export default {
     helpUsage: "[mention?]`",
     exampleUsage: "/user_tag/",
     hidden: false,
-    aliases: [ "imposter" ],
+    aliases: ["imposter"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a mention.", "mention") ],
+    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -26,7 +27,7 @@ export default {
             return;
         }
         // TODO: make impostors change colors
-        const impostor = command_data.global_context.utils.pick_random([ true, false ]);
+        const impostor = pick_random([true, false]);
         read(impostor ? "./configs/data/among_us_impostor.png" : "./configs/data/among_us_impostor_not.png").then((image) => {
             loadFont("./configs/data/among_us_font.fnt").then(async (font) => {
                 image.print(font, 325 - measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
@@ -37,10 +38,10 @@ export default {
                     .setImage("attachment://image.png")
                     .setFooter(`Requested by ${command_data.msg.author.tag}`);
 
-                command_data.msg.channel.send({ embeds: [ embedImage ], files: [ { attachment: await image.getBufferAsync("image/png"), name: "image.png" } ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedImage], files: [{ attachment: await image.getBufferAsync("image/png"), name: "image.png" }] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             });
         });
-    }
+    },
 } as Command;

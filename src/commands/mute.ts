@@ -1,12 +1,13 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
-import { GuildEditType } from "../scripts/db/db_utils";
+import { GuildEditType } from "../ts/mysql";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
+import { convert_string_to_time_data, convert_time } from "../scripts/utils/util_time";
 
 function create_mute_role_and_mute(command_data: CommandData) {
     if (command_data.msg.guild === null) {
@@ -19,7 +20,7 @@ function create_mute_role_and_mute(command_data: CommandData) {
             color: "#4b4b4b",
             hoist: true,
             mentionable: false,
-            permissions: []
+            permissions: [],
         })
         .then((mute_role) => {
             if (command_data.msg.guild === null) {
@@ -31,7 +32,7 @@ function create_mute_role_and_mute(command_data: CommandData) {
                     channel.permissionOverwrites
                         .create(mute_role, {
                             SEND_MESSAGES: false,
-                            ADD_REACTIONS: false
+                            ADD_REACTIONS: false,
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -40,7 +41,7 @@ function create_mute_role_and_mute(command_data: CommandData) {
                     channel.permissionOverwrites
                         .create(mute_role, {
                             CONNECT: false,
-                            SPEAK: false
+                            SPEAK: false,
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -71,9 +72,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to mention an user.", "mention") ],
-    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a time format.", "none"), new RecommendedArgument(3, "Argument needs to be a reason.", "none") ],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES), new NeededPermission("me", Permissions.FLAGS.MANAGE_CHANNELS) ],
+    argumentsNeeded: [new NeededArgument(1, "You need to mention an user.", "mention")],
+    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a time format.", "none"), new RecommendedArgument(3, "Argument needs to be a reason.", "none")],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES), new NeededPermission("me", Permissions.FLAGS.MANAGE_CHANNELS)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -82,8 +83,8 @@ export default {
         }
 
         // TODO: previous mutes don't get removed btw
-        const time = command_data.args.length < 2 ? -1 : command_data.args[1] === "-1" ? -1 : command_data.global_context.neko_modules.timeConvert.convert_string_to_time_data(command_data.args[1]);
-        if (time !== -1 && time.status !== 1) {
+        const time = command_data.args.length < 2 ? -1 : command_data.args[1] === "-1" ? -1 : convert_string_to_time_data(command_data.args[1]);
+        if (time === undefined) {
             command_data.msg.reply("You entered invalid time format! (ex. `1d2h3m4s` or `-1`)");
             return;
         }
@@ -106,12 +107,12 @@ export default {
         // TODO: custom durations are bugged
         const mute_start = Date.now();
         let mute_end = -1;
-        const extended_time = time.days * 86400000 + time.hrs * 3600000 + time.mins * 60000 + time.secs * 1000;
-        const extended_time_text = time === -1 ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(extended_time);
+        const extended_time = time === -1 ? -1 : time.days * 86400000 + time.hrs * 3600000 + time.mins * 60000 + time.secs * 1000;
+        const extended_time_text = time === -1 ? "Forever" : convert_time(extended_time);
 
         if (previous_mute === -1) {
             mute_end = mute_start + extended_time;
-            const mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(mute_end - mute_start);
+            const mute_end_text = time === -1 ? "Forever" : convert_time(mute_end - mute_start);
 
             command_data.msg.channel.send(`Muted \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
@@ -123,12 +124,12 @@ export default {
                 duration: mute_end_text,
                 mute_start: mute_start,
                 mute_end: mute_end,
-                time: time
+                time: time,
             });
         } else {
             mute_end = previous_mute.end + extended_time;
-            const prev_mute_end_text = previous_mute.end === -1 ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(previous_mute.end - mute_start);
-            const mute_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(mute_end - mute_start);
+            const prev_mute_end_text = previous_mute.end === -1 ? "Forever" : convert_time(previous_mute.end - mute_start);
+            const mute_end_text = time === -1 ? "Forever" : convert_time(mute_end - mute_start);
 
             command_data.msg.channel.send(`Extended mute of \`${command_data.tagged_user.tag}\` by \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
@@ -141,7 +142,7 @@ export default {
                 next_duration: mute_end_text,
                 mute_start: mute_start,
                 mute_end: mute_end,
-                time: time
+                time: time,
             });
         }
 
@@ -159,5 +160,5 @@ export default {
         } else {
             command_data.tagged_member.roles.add(mute_role);
         }
-    }
+    },
 } as Command;

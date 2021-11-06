@@ -16,9 +16,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to mention an user.", "mention") ],
-    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a reason.", "none") ],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS) ],
+    argumentsNeeded: [new NeededArgument(1, "You need to mention an user.", "mention")],
+    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a reason.", "none")],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -41,5 +41,5 @@ export default {
 
         command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id });
         command_data.tagged_member.kick(kick_reason);
-    }
+    },
 } as Command;

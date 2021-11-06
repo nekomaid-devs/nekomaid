@@ -5,6 +5,18 @@ import { Client, GuildMember, Message, User } from "discord.js";
 import Argument from "../scripts/helpers/argument";
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
+import Database from "../scripts/db/db";
+import MarriageManager from "../scripts/managers/manager_marriage";
+import VoiceManager from "../scripts/managers/manager_voice";
+import UpvoteManager from "../scripts/managers/manager_upvote";
+import SupportManager from "../scripts/managers/manager_support";
+import CounterManager from "../scripts/managers/manager_counter";
+import ReactionRolesManager from "../scripts/managers/manager_reaction_roles";
+import InventoryManager from "../scripts/managers/manager_inventory";
+import EventManager from "../scripts/managers/manager_event";
+import BuildingManager from "../scripts/managers/manager_building";
+import LevelingManager from "../scripts/managers/manager_leveling";
+import ModerationManager from "../scripts/managers/manager_moderation";
 
 /* Enums */
 export enum ShrineBonus {
@@ -41,10 +53,22 @@ export type GlobalContext = {
 
     neko_data: any;
     neko_modules: any;
-    neko_modules_clients: any;
+    neko_modules_clients: {
+        db: Database;
+        marriageManager: MarriageManager;
+        voiceManager: VoiceManager;
+        upvoteManager: UpvoteManager;
+        supportManager: SupportManager;
+        counterManager: CounterManager;
+        reactionRolesManager: ReactionRolesManager;
+        inventoryManager: InventoryManager;
+        eventManager: EventManager;
+        buildingManager: BuildingManager;
+        levelingManager: LevelingManager;
+        moderationManager: ModerationManager;
+    };
 
     logger: any;
-    utils: any;
     data: any;
 };
 

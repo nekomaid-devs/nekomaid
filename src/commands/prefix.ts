@@ -1,6 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
-import { GuildEditType } from "../scripts/db/db_utils";
+import { GuildEditType } from "../ts/mysql";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
@@ -17,8 +17,8 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a new prefix.", "none") ],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD) ],
+    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a new prefix.", "none")],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -32,14 +32,14 @@ export default {
                 fields: [
                     {
                         name: "Current prefix is ",
-                        value: command_data.server_config.prefix
-                    }
+                        value: command_data.server_config.prefix,
+                    },
                 ],
                 footer: {
-                    text: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`
-                }
+                    text: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`,
+                },
             };
-            command_data.msg.channel.send({ embeds: [ embedPrefix ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         } else {
@@ -57,13 +57,13 @@ export default {
                 fields: [
                     {
                         name: "Set bot's prefix to",
-                        value: command_data.server_config.prefix
-                    }
-                ]
+                        value: command_data.server_config.prefix,
+                    },
+                ],
             };
-            command_data.msg.channel.send({ embeds: [ embedPrefix ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Command;

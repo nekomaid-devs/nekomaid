@@ -14,7 +14,7 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a page number.", "int>0") ],
+    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a page number.", "int>0")],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -37,8 +37,8 @@ export default {
          */
         embedShop.setDescription("None");
 
-        command_data.msg.channel.send({ embeds: [ embedShop ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedShop] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

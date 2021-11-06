@@ -10,7 +10,8 @@ import ytdl from "ytdl-core";
 /* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
 import NeededArgument from "../scripts/helpers/needed_argument";
-import { create_comparator } from "../scripts/utils/util_sort_by";
+import { create_comparator } from "../scripts/utils/util_sort";
+import { convert_time_data_to_string, convert_youtube_string_to_time_data } from "../scripts/utils/util_time";
 
 export default {
     name: "play",
@@ -19,11 +20,11 @@ export default {
     helpUsage: "[url/songName?]`",
     exampleUsage: "Never gonna give you up",
     hidden: false,
-    aliases: [ "p" ],
+    aliases: ["p"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in a valid url/song name.", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in a valid url/song name.", "none")],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("me", Permissions.FLAGS.CONNECT), new NeededPermission("me", Permissions.FLAGS.SPEAK) ],
+    permissionsNeeded: [new NeededPermission("me", Permissions.FLAGS.CONNECT), new NeededPermission("me", Permissions.FLAGS.SPEAK)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -44,13 +45,13 @@ export default {
 
             const embedJoin = {
                 author: {
-                    name: `🔊 Joined channel - ${command_data.msg.member.voice.channel.name}`
+                    name: `🔊 Joined channel - ${command_data.msg.member.voice.channel.name}`,
                 },
                 color: 8388736,
-                description: `Joined \`${command_data.msg.member.voice.channel.name}\` in \`${command_data.msg.guild.name}\``
+                description: `Joined \`${command_data.msg.member.voice.channel.name}\` in \`${command_data.msg.guild.name}\``,
             };
 
-            command_data.msg.channel.send({ embeds: [ embedJoin ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedJoin] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
@@ -61,12 +62,12 @@ export default {
 
             const embedPlay: any = {
                 author: {
-                    name: "🔊 Loading..."
+                    name: "🔊 Loading...",
                 },
                 color: 8388736,
-                description: `Fetching results for \`${url}\``
+                description: `Fetching results for \`${url}\``,
             };
-            const loading_message = await command_data.msg.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
+            const loading_message = await command_data.msg.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
@@ -86,31 +87,26 @@ export default {
                 }
 
                 for (let i = 0; i < result.items.length; i++) {
-                    if (result.items[i] !== undefined) {
-                        const item = {
-                            title: result.items[i].title,
-                            url: result.items[i].url,
-                            duration: result.items[i].duration
-                        };
-
-                        await command_data.global_context.neko_modules_clients.voiceManager.play_on_connection(command_data.global_context, command_data.msg, loading_message, item, 0);
-                    }
+                    await command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, result.items[i].url, command_data.msg, false);
                 }
 
-                const voice_data = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
+                const connection = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
+                if (connection === undefined) {
+                    return;
+                }
                 embedPlay.author.name = `🔊 Added ${result.items.length} songs to the queue!`;
                 embedPlay.description = undefined;
-                embedPlay.footer = { text: `Currently ${voice_data.queue.length} in queue` };
+                embedPlay.footer = { text: `Currently ${connection.queue.length} in queue` };
 
                 await loading_message.delete().catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
-                await command_data.msg.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
+                await command_data.msg.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             } else if (ytdl.validateURL(url) === true) {
                 url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
-                command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, command_data.msg, loading_message, url, 2);
+                command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, url, command_data.msg, true);
             } else {
                 const max = 5;
                 const infosByID = new Map();
@@ -124,24 +120,22 @@ export default {
                 if (result === null) {
                     return;
                 }
-                result.items.sort(create_comparator([ "views" ]));
+                result.items.sort(create_comparator(["views"]));
 
                 let description_text = "";
                 for (let i = 1; i <= result.items.length; i++) {
                     const videoItem = result.items[i];
-                    if (videoItem.type !== "video") {
+                    if (videoItem.type !== "video" || videoItem.duration === null) {
                         continue;
                     }
                     const item = {
                         title: videoItem.title,
                         url: videoItem.url,
-                        duration: videoItem.duration
+                        duration: videoItem.duration,
                     };
                     infosByID.set(i, item);
 
-                    const current_length = command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(item.duration);
-                    const current_length_1 = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(current_length);
-                    description_text += `**${i})** ${item.title} *(${current_length_1})*\n`;
+                    description_text += `**${i})** ${item.title} *(${convert_time_data_to_string(convert_youtube_string_to_time_data(item.duration))})*\n`;
                 }
 
                 const collector = command_data.msg.channel.createMessageCollector({
@@ -149,7 +143,7 @@ export default {
                         return (parseInt(m.content) <= 5 && parseInt(m.content) >= 1 && infosByID.has(parseInt(m.content))) || m.content.startsWith(`${command_data.server_config.prefix}play`);
                     },
                     time: 15000,
-                    max: 1
+                    max: 1,
                 });
                 collector.on("collect", (m) => {
                     if (m.content.startsWith(`${command_data.server_config.prefix}play`) === true) {
@@ -158,7 +152,7 @@ export default {
                     }
 
                     const pos = parseInt(m.content);
-                    command_data.global_context.neko_modules_clients.voiceManager.play_on_connection(command_data.global_context, command_data.msg, loading_message, infosByID.get(pos), 1);
+                    command_data.global_context.neko_modules_clients.voiceManager.play_request_on_connection(command_data.global_context, infosByID.get(pos), command_data.msg, false);
                 });
 
                 embedPlay.author.name = `🔊 Select a song to play (type 1-${max})`;
@@ -167,10 +161,10 @@ export default {
                 await loading_message.delete().catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
-                await command_data.msg.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
+                await command_data.msg.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }
         }
-    }
+    },
 } as Command;

@@ -3,6 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
+import { safebooru_result } from "../scripts/apis/api_safebooru";
 
 export default {
     name: "safebooru",
@@ -13,7 +14,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in a tag- (ex. `catgirl`, `foxgirl`, ...)", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in a tag- (ex. `catgirl`, `foxgirl`, ...)", "none")],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -22,11 +23,10 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        const post_info = await command_data.global_context.neko_modules_clients.safebooru.safebooru_result(command_data.global_context, command_data.args);
-        switch (post_info.status) {
-            case -1:
-                command_data.msg.reply("No results found...");
-                return;
+        const post_info = await safebooru_result(command_data.global_context, command_data.args);
+        if (post_info === undefined) {
+            command_data.msg.reply("No results found...");
+            return;
         }
 
         const embedSafebooru = {
@@ -35,18 +35,18 @@ export default {
             fields: [
                 {
                     name: "Image Link:",
-                    value: `[Click Here](${post_info.link})`
-                }
+                    value: `[Click Here](${post_info.link})`,
+                },
             ],
             image: {
-                url: post_info.link
+                url: post_info.link,
             },
             footer: {
-                text: `Page: ${post_info.page_number}/${post_info.num_of_pages} Post: ${post_info.post_number}/${post_info.num_of_posts}`
-            }
+                text: `Page: ${post_info.page_number}/${post_info.num_of_pages} Post: ${post_info.post_number}/${post_info.num_of_posts}`,
+            },
         };
-        command_data.msg.channel.send({ embeds: [ embedSafebooru ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedSafebooru] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

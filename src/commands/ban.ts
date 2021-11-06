@@ -6,6 +6,7 @@ import { Permissions } from "discord.js";
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
 import NeededArgument from "../scripts/helpers/needed_argument";
 import NeededPermission from "../scripts/helpers/needed_permission";
+import { convert_string_to_time_data, convert_time } from "../scripts/utils/util_time";
 
 export default {
     name: "ban",
@@ -16,9 +17,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to mention somebody.", "mention") ],
-    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a time format.", "none"), new RecommendedArgument(3, "Argument needs to be a reason.", "none") ],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS) ],
+    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention")],
+    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a time format.", "none"), new RecommendedArgument(3, "Argument needs to be a reason.", "none")],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -29,8 +30,8 @@ export default {
          * TODO: support swapping arguments (or improve the format)
          * TODO: this should clear all messages from them aswell
          */
-        const time = command_data.args.length < 2 ? -1 : command_data.args[1] === "-1" ? -1 : command_data.global_context.neko_modules.timeConvert.convert_string_to_time_data(command_data.args[1]);
-        if (time !== -1 && time.status !== 1) {
+        const time = command_data.args.length < 2 ? undefined : command_data.args[1] === "-1" ? -1 : convert_string_to_time_data(command_data.args[1]);
+        if (time === undefined) {
             command_data.msg.reply("You entered invalid time format! (ex. `1d2h3m4s` or `-1`)");
             return;
         }
@@ -49,12 +50,12 @@ export default {
 
         const ban_start = Date.now();
         let ban_end = -1;
-        const extended_time = time.days * 86400000 + time.hrs * 3600000 + time.mins * 60000 + time.secs * 1000;
-        const extended_time_text = time === -1 ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(extended_time);
+        const extended_time = time === -1 ? -1 : time.days * 86400000 + time.hrs * 3600000 + time.mins * 60000 + time.secs * 1000;
+        const extended_time_text = time === -1 ? "Forever" : convert_time(extended_time);
 
         if (previous_ban === undefined) {
             ban_end = ban_start + extended_time;
-            const ban_end_text = time === -1 ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(ban_end - ban_start);
+            const ban_end_text = time === -1 ? "Forever" : convert_time(ban_end - ban_start);
             command_data.msg.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\`. (Time: \`${ban_end_text}\`)`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
@@ -65,5 +66,5 @@ export default {
 
         command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id, duration: extended_time_text, start: ban_start, end: time === -1 ? -1 : ban_end, reason: ban_reason });
         command_data.tagged_member.ban({ reason: ban_reason });
-    }
+    },
 } as Command;

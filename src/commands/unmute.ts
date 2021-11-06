@@ -16,9 +16,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to mention an user.", "mention") ],
-    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a reason.", "none") ],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES) ],
+    argumentsNeeded: [new NeededArgument(1, "You need to mention an user.", "mention")],
+    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a reason.", "none")],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -61,5 +61,5 @@ export default {
             });
             command_data.global_context.bot.emit("guildMemberMuteRemove", { member: command_data.tagged_member, moderator: command_data.msg.author, reason: unmute_reason, previous_mute: previous_mute });
         }
-    }
+    },
 } as Command;

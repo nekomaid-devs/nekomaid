@@ -1,5 +1,6 @@
 /* Types */
 import { GuildData } from "../../ts/base";
+import { GuildEditType, GuildFetchType } from "../../ts/mysql";
 
 /* Node Imports */
 import { Connection, FieldPacket, OkPacket, ResultSetHeader, RowDataPacket } from "mysql2/promise";
@@ -40,11 +41,6 @@ export async function fetch_multiple_data(connection: Connection, query: string,
     return result as any[];
 }
 
-export enum GuildFetchType {
-    ALL,
-    MINIMAL,
-    AUDIT,
-}
 export function guild_fetch_type_to_selector(type: GuildFetchType) {
     switch (type) {
         case GuildFetchType.ALL:
@@ -58,10 +54,6 @@ export function guild_fetch_type_to_selector(type: GuildFetchType) {
     }
 }
 
-export enum GuildEditType {
-    ALL,
-    AUDIT,
-}
 export function guild_edit_type_to_query(type: GuildEditType) {
     switch (type) {
         case GuildEditType.ALL:
@@ -119,11 +111,11 @@ export function guild_edit_type_to_query_data(item: GuildData, type: GuildEditTy
                 item.audit_deleted_messages,
                 item.audit_edited_messages,
 
-                item.server_ID
+                item.server_ID,
             ];
 
         case GuildEditType.AUDIT:
-            return [ item.case_ID, item.server_ID ];
+            return [item.case_ID, item.server_ID];
     }
 }
 

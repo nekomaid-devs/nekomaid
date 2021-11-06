@@ -22,8 +22,8 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        command_data.msg.channel.send({ embeds: [ get_buildings_guide_embed(command_data) ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [get_buildings_guide_embed(command_data)] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

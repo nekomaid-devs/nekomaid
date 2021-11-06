@@ -15,9 +15,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in number of seconds.", "int>0") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in number of seconds.", "int>0")],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_CHANNELS), new NeededPermission("me", Permissions.FLAGS.MANAGE_CHANNELS) ],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_CHANNELS), new NeededPermission("me", Permissions.FLAGS.MANAGE_CHANNELS)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -30,5 +30,5 @@ export default {
         command_data.msg.channel.send(`Set current channel's slowmode to \`${time}\` s.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

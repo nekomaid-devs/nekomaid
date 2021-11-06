@@ -5,15 +5,46 @@ import Discord from "discord.js";
 /* Node Imports */
 import { readFileSync } from "fs";
 import performance from "perf_hooks";
+import * as sql from "mysql2";
 
 /* Local Imports */
 import import_into_context from "./shard_importer";
 import * as bot_commands from "../commands";
 import * as bot_callbacks from "../callbacks";
-import { get_top } from "../scripts/utils/util_sort_by";
+import VoiceManager from "../scripts/managers/manager_voice";
+import ModerationManager from "../scripts/managers/manager_moderation";
+import LevelingManager from "../scripts/managers/manager_leveling";
+import BuildingManager from "../scripts/managers/manager_building";
+import EventManager from "../scripts/managers/manager_event";
+import InventoryManager from "../scripts/managers/manager_inventory";
+import ReactionRolesManager from "../scripts/managers/manager_reaction_roles";
+import CounterManager from "../scripts/managers/manager_counter";
+import SupportManager from "../scripts/managers/manager_support";
+import UpvoteManager from "../scripts/managers/manager_upvote";
+import MarriageManager from "../scripts/managers/manager_marriage";
+import Database from "../scripts/db/db";
+import { get_top } from "../scripts/utils/util_sort";
 import { refresh_bot_list, refresh_status, refresh_website } from "../scripts/utils/util_web";
+import { get_formatted_time } from "../scripts/utils/util_general";
 
-function run() {
+async function run() {
+    // Load config
+    const config = JSON.parse(readFileSync(`${process.cwd()}/configs/default.json`).toString());
+
+    // Setup SQL connection
+    const sql_connection = sql
+        .createConnection({
+            host: config.sql_host,
+            user: config.sql_user,
+            password: config.sql_password,
+            database: config.sql_database,
+            charset: "utf8mb4",
+        })
+        .promise();
+    await sql_connection.connect().catch((e: Error) => {
+        global_context.logger.error(e);
+    });
+
     // Setup Discord client
     const bot = new Discord.Client({
         makeCache: Discord.Options.cacheWithLimits({
@@ -32,7 +63,7 @@ function run() {
             ThreadManager: { sweepInterval: 60 },
             ThreadMemberManager: { sweepInterval: 60 },
             UserManager: { sweepInterval: 60 },
-            VoiceStateManager: { sweepInterval: 60 }
+            VoiceStateManager: { sweepInterval: 60 },
         }),
         intents: [
             Discord.Intents.FLAGS.GUILDS,
@@ -42,13 +73,13 @@ function run() {
             Discord.Intents.FLAGS.GUILD_MESSAGES,
             Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
             Discord.Intents.FLAGS.DIRECT_MESSAGES,
-            Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
-        ]
+            Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+        ],
     });
 
     // Create global context
     let global_context: GlobalContext = {
-        config: JSON.parse(readFileSync(`${process.cwd()}/configs/default.json`).toString()),
+        config: config,
         bot_config: null,
 
         bot: bot,
@@ -61,11 +92,23 @@ function run() {
 
         neko_data: {},
         neko_modules: {},
-        neko_modules_clients: {},
+        neko_modules_clients: {
+            db: new Database(sql_connection),
+            marriageManager: new MarriageManager(),
+            voiceManager: new VoiceManager(),
+            upvoteManager: new UpvoteManager(),
+            supportManager: new SupportManager(),
+            counterManager: new CounterManager(),
+            reactionRolesManager: new ReactionRolesManager(),
+            inventoryManager: new InventoryManager(),
+            eventManager: new EventManager(),
+            buildingManager: new BuildingManager(),
+            levelingManager: new LevelingManager(),
+            moderationManager: new ModerationManager(),
+        },
 
         logger: {},
-        utils: {},
-        data: {}
+        data: {},
     };
 
     // Import modules
@@ -73,13 +116,6 @@ function run() {
     global_context.modules.performance = performance.performance;
 
     // Setup utils
-    global_context.utils.get_formatted_time = () => {
-        const date = new Date();
-        const h = date.getHours();
-        const m = date.getMinutes();
-        return `${h < 10 ? `0${h.toString()}` : h.toString()}:${m < 10 ? `0${m.toString()}` : m.toString()}`;
-    };
-
     global_context.bot = bot;
     global_context.neko_data = {};
     global_context.neko_data.shards_ready = false;
@@ -91,7 +127,7 @@ function run() {
     };
 
     // Create log colors
-    const log_colors = [ "\x1b[32m", "\x1b[33m", "\x1b[34m", "\x1b[35m", "\x1b[36m", "\x1b[37m", "\x1b[90m", "\x1b[93m", "\x1b[95m", "\x1b[96m", "\x1b[97m" ];
+    const log_colors = ["\x1b[32m", "\x1b[33m", "\x1b[34m", "\x1b[35m", "\x1b[36m", "\x1b[37m", "\x1b[90m", "\x1b[93m", "\x1b[95m", "\x1b[96m", "\x1b[97m"];
     const log_color_shard = log_colors[Math.floor(Math.random() * log_colors.length)];
     const log_color_message = "\x1b[92m";
     const log_color_api_error = "\x1b[94m";
@@ -117,7 +153,7 @@ function run() {
             if (global_context.bot.shard === null) {
                 return;
             }
-            process.stdout.write(`${log_color_time}[${global_context.utils.get_formatted_time()}] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_message}${log_message}\x1b[0m\n`);
+            process.stdout.write(`${log_color_time}[${get_formatted_time()}] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_message}${log_message}\x1b[0m\n`);
         };
     }
     if (global_context.config.logger_log_api_error === true) {
@@ -126,7 +162,7 @@ function run() {
                 return;
             }
             const log_message = error.stack === undefined ? error : error.stack;
-            process.stdout.write(`${log_color_time}[${global_context.utils.get_formatted_time()}] [API Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_api_error}${log_message}\x1b[0m\n`);
+            process.stdout.write(`${log_color_time}[${get_formatted_time()}] [API Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_api_error}${log_message}\x1b[0m\n`);
         };
     }
     if (global_context.config.logger_log_neko_api_error === true) {
@@ -135,7 +171,7 @@ function run() {
                 return;
             }
             const log_message = error.stack === undefined ? error : error.stack;
-            process.stdout.write(`${log_color_time}[${global_context.utils.get_formatted_time()}] [Nekomaid API Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_api_error}${log_message}\x1b[0m\n`);
+            process.stdout.write(`${log_color_time}[${get_formatted_time()}] [Nekomaid API Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_api_error}${log_message}\x1b[0m\n`);
         };
     }
     if (global_context.config.logger_log_error === true) {
@@ -144,7 +180,7 @@ function run() {
                 return;
             }
             const log_message = error.stack === undefined ? error : error.stack;
-            process.stdout.write(`${log_color_time}[${global_context.utils.get_formatted_time()}] [Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_error}${log_message}\x1b[0m\n`);
+            process.stdout.write(`${log_color_time}[${get_formatted_time()}] [Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_error}${log_message}\x1b[0m\n`);
         };
     }
 
@@ -201,7 +237,7 @@ function run() {
         if (global_context.neko_modules_clients.eventManager !== undefined && global_context.bot.shard.ids[0] === 0) {
             const date = new Date();
             if (date.getHours() % 2 === 0 && date.getMinutes() === 0 && Date.now() > last_timestamp + 1000 * 60) {
-                global_context.neko_modules_clients.eventManager.spawn_event(global_context, global_context.config.events_channel_ID);
+                global_context.neko_modules_clients.eventManager.spawn_event(global_context, global_context.config.events_channel_ID, -1);
                 last_timestamp = Date.now();
             }
         }
@@ -238,8 +274,8 @@ function run() {
         if (global_context.bot.shard === null) {
             return;
         }
-        if (global_context.neko_modules_clients.sortBy !== undefined && global_context.bot.shard.ids[0] === 0) {
-            const top_items = await get_top(global_context, [ "credits", "bank" ]);
+        if (global_context.bot.shard.ids[0] === 0) {
+            const top_items = await get_top(global_context, ["credits", "bank"]);
             const economy_list = [];
             for (let i = 0; i < (top_items.length < 10 ? top_items.length : 10); i++) {
                 const neko_user = top_items[i];
@@ -259,8 +295,8 @@ function run() {
                         b_lewd_services: neko_user.b_lewd_services,
                         b_casino: neko_user.b_casino,
                         b_scrapyard: neko_user.b_scrapyard,
-                        b_pawn_shop: neko_user.b_pawn_shop
-                    }
+                        b_pawn_shop: neko_user.b_pawn_shop,
+                    },
                 });
             }
 

@@ -1,6 +1,9 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
 
+/* Local Imports */
+import { convert_time } from "../scripts/utils/util_time";
+
 export default {
     name: "info",
     category: "Help & Information",
@@ -22,7 +25,7 @@ export default {
         const t = Date.now();
 
         const k = 1024;
-        const sizes = [ "Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" ];
+        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
         const bytes0 = process.memoryUsage().heapTotal;
         const bytes1 = process.memoryUsage().heapUsed;
@@ -58,13 +61,13 @@ export default {
         const m_i_2 = Math.floor(Math.log(manager_bytes2) / Math.log(k));
         const manager_memory_string_2 = `${parseFloat((manager_bytes2 / k ** m_i_2).toFixed(2))} ${sizes[m_i_2]}`;
 
-        const shard_elapsed_time = command_data.global_context.neko_modules.timeConvert.convert_time(Date.now() - command_data.global_context.data.uptime_start);
+        const shard_elapsed_time = convert_time(Date.now() - command_data.global_context.data.uptime_start);
 
         const shard_guilds = command_data.global_context.bot.guilds.cache.size;
         const manager_guilds = await command_data.global_context.bot.shard
             .fetchClientValues("guilds.cache.size")
             .then((results) => {
-                return results.reduce((acc: number, curr: number) => {
+                return results.reduce((acc: any, curr: any) => {
                     return acc + curr;
                 }, 0);
             })
@@ -131,7 +134,7 @@ export default {
             color: 8388736,
             author: {
                 name: "NekoMaid - Info",
-                icon_url: url === null ? undefined : url
+                icon_url: url === null ? undefined : url,
             },
             fields: [
                 {
@@ -142,7 +145,7 @@ export default {
                     **Memory Usage:**\nTotal: ${memory_string_0} (Heap: ${memory_string_1}, Objects: ${memory_string_2})\n
                     **Command Performance:**\n${shard_commands} all time\n
                     **Voice connections:**\n${shard_vc}`,
-                    inline: true
+                    inline: true,
                 },
                 {
                     name: `All Shards (${command_data.global_context.bot.shard.count})`,
@@ -152,30 +155,30 @@ export default {
                     **Memory Usage:**\nTotal: ${manager_memory_string_0} (Heap: ${manager_memory_string_1}, Objects: ${manager_memory_string_2})\n
                     **Command Performance:**\n${manager_commands} all time\n
                     **Voice connections:**\n${manager_vc}`,
-                    inline: true
+                    inline: true,
                 },
                 {
                     name: "Version:",
                     value: `${command_data.global_context.config.version}`,
-                    inline: false
+                    inline: false,
                 },
                 {
                     name: "Package versions:",
                     value: "Node v16.4.0 - discord.js@13.2.0",
-                    inline: false
+                    inline: false,
                 },
                 {
                     name: "Full Date:",
                     value: `${new Date().toUTCString()}`,
-                    inline: false
-                }
+                    inline: false,
+                },
             ],
             footer: {
-                text: `Update took ${sec_taken}s...`
-            }
+                text: `Update took ${sec_taken}s...`,
+            },
         };
-        command_data.msg.channel.send({ embeds: [ embedInfo ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedInfo] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

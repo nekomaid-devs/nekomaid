@@ -8,7 +8,7 @@ export default {
     helpUsage: "`",
     exampleUsage: "",
     hidden: false,
-    aliases: [ "stop" ],
+    aliases: ["stop"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
@@ -25,9 +25,9 @@ export default {
             return;
         }
 
-        command_data.global_context.neko_modules_clients.voiceManager.remove_connection(command_data.global_context, command_data.msg.guild.id);
+        command_data.global_context.neko_modules_clients.voiceManager.remove_connection(command_data.global_context, command_data.msg.guild.id, null);
         command_data.msg.channel.send("Left the voice channel.").catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

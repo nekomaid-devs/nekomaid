@@ -3,6 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import { format_number, get_level_XP } from "../scripts/utils/util_general";
 
 export default {
     name: "profile",
@@ -14,7 +15,7 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a mention.", "mention") ],
+    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -49,43 +50,43 @@ export default {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Profile ${premium_text}`,
-                icon_url: url === null ? undefined : url
+                icon_url: url === null ? undefined : url,
             },
             fields: [
                 {
                     name: "💵    Credits:",
-                    value: `$ ${command_data.global_context.utils.format_number(command_data.tagged_user_config.credits)}`,
-                    inline: true
+                    value: `$ ${format_number(command_data.tagged_user_config.credits)}`,
+                    inline: true,
                 },
                 {
                     name: "🏦    Bank:",
-                    value: `$ ${command_data.global_context.utils.format_number(command_data.tagged_user_config.bank)}/${command_data.global_context.utils.format_number(command_data.tagged_user_config.bank_limit)}`,
-                    inline: true
+                    value: `$ ${format_number(command_data.tagged_user_config.bank)}/${format_number(command_data.tagged_user_config.bank_limit)}`,
+                    inline: true,
                 },
                 {
                     name: "⚡    Level:",
-                    value: `${command_data.tagged_user_config.level} (XP: ${Math.round(command_data.tagged_user_config.xp)}/${Math.round(command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.tagged_user_config))})`,
-                    inline: true
+                    value: `${command_data.tagged_user_config.level} (XP: ${Math.round(command_data.tagged_user_config.xp)}/${Math.round(get_level_XP(command_data.global_context.bot_config, command_data.tagged_user_config))})`,
+                    inline: true,
                 },
                 {
                     name: "🎖️    Reputation:",
                     value: `${command_data.tagged_user_config.rep}`,
-                    inline: true
+                    inline: true,
                 },
                 {
                     name: "❤️    Married with:",
-                    value: `${married_text}`
-                }
+                    value: `${married_text}`,
+                },
             ],
             thumbnail: {
-                url: url === null ? undefined : url
+                url: url === null ? undefined : url,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`
-            }
+                text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`,
+            },
         };
-        command_data.msg.channel.send({ embeds: [ embedProfile ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedProfile] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

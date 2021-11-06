@@ -2,6 +2,9 @@
 import { CommandData, RankData } from "../../ts/base";
 import { Permissions, TextChannel } from "discord.js";
 
+/* Local Imports */
+import { get_server_level_XP } from "../utils/util_general";
+
 class LevelingManager {
     async update_server_level(command_data: CommandData, xp: number, log: boolean) {
         if (command_data.msg.guild === null) {
@@ -11,7 +14,7 @@ class LevelingManager {
             return;
         }
 
-        let level_XP = command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.tagged_server_user_config);
+        let level_XP = get_server_level_XP(command_data.server_config, command_data.tagged_server_user_config);
         command_data.tagged_server_user_config.xp += xp;
 
         if (command_data.tagged_server_user_config.xp < 0) {
@@ -22,7 +25,7 @@ class LevelingManager {
                 command_data.tagged_server_user_config.xp -= level_XP;
                 command_data.tagged_server_user_config.level += 1;
 
-                level_XP = command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.tagged_server_user_config);
+                level_XP = get_server_level_XP(command_data.server_config, command_data.tagged_server_user_config);
             }
         }
 
@@ -131,7 +134,7 @@ class LevelingManager {
 
         return {
             granted_roles: granted_roles,
-            removed_roles: removed_roles
+            removed_roles: removed_roles,
         };
     }
 

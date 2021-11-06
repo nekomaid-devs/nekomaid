@@ -15,9 +15,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to mention somebody.", "mention"), new NeededArgument(2, "You need to type in an amount.", "float>0") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention"), new NeededArgument(2, "You need to type in an amount.", "float>0")],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD) ],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -30,10 +30,10 @@ export default {
         }
 
         const add_XP = parseFloat(command_data.args[1]);
-        command_data.global_context.neko_modules_clients.levelingManager.update_server_level(command_data, add_XP);
+        command_data.global_context.neko_modules_clients.levelingManager.update_server_level(command_data, add_XP, false);
 
         command_data.msg.channel.send(`Added \`${add_XP}\` XP to \`${command_data.tagged_user.tag}\`! (Current XP: \`${Math.round(command_data.tagged_server_user_config.xp)}\`)`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

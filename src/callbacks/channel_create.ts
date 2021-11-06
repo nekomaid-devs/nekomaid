@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildFetchType } from "../scripts/db/db_utils";
+import { GuildFetchType } from "../ts/mysql";
 import { GuildChannel } from "discord.js";
 
 /* Node Imports */
@@ -44,7 +44,7 @@ export default {
                 channel.permissionOverwrites
                     .create(mute_role, {
                         SEND_MESSAGES: false,
-                        ADD_REACTIONS: false
+                        ADD_REACTIONS: false,
                     })
                     .catch((e: Error) => {
                         global_context.logger.api_error(e);
@@ -53,12 +53,12 @@ export default {
                 channel.permissionOverwrites
                     .create(mute_role, {
                         CONNECT: false,
-                        SPEAK: false
+                        SPEAK: false,
                     })
                     .catch((e: Error) => {
                         global_context.logger.api_error(e);
                     });
             }
         }
-    }
+    },
 } as Callback;

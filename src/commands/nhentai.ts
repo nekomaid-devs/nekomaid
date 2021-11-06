@@ -3,6 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
+import { nhentai_result } from "../scripts/apis/api_nhentai";
 
 export default {
     name: "nhentai",
@@ -13,7 +14,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in a sauce- (ex. `177013`)", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in a sauce- (ex. `177013`)", "none")],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: true,
@@ -22,11 +23,10 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        const post_info = await command_data.global_context.neko_modules_clients.nhentai.nhentai_result(command_data.global_context, command_data.args[0]);
-        switch (post_info.status) {
-            case 0:
-                command_data.msg.reply("No results found...");
-                return;
+        const post_info = await nhentai_result(command_data.global_context, command_data.args);
+        if (post_info === undefined) {
+            command_data.msg.reply("No results found...");
+            return;
         }
 
         if (post_info.tags.includes("lolicon") === true || post_info.tags.includes("shotacon") === true) {
@@ -34,7 +34,7 @@ export default {
             return;
         }
 
-        let tags_text = post_info.tags.reduce((acc: any, curr: any) => {
+        let tags_text = post_info.tags.reduce((acc, curr) => {
             acc += `\`${curr}\`, `;
             return acc;
         }, "");
@@ -43,7 +43,7 @@ export default {
             tags_text = "`None`";
         }
 
-        let languages_text = post_info.languages.reduce((acc: any, curr: any) => {
+        let languages_text = post_info.languages.reduce((acc, curr) => {
             acc += `\`${curr.toString()}\`, `;
             return acc;
         }, "");
@@ -56,37 +56,34 @@ export default {
             title: `Sauce for - ${command_data.args[0]}`,
             color: 8388736,
             url: `https://nhentai.net/g/${command_data.args[0]}`,
-            thumbnail: {
-                url: post_info.thumbnailURL
-            },
             fields: [
                 {
                     name: "Title:",
-                    value: `\`${post_info.title}\``
+                    value: `\`${post_info.title}\``,
                 },
                 {
                     name: "Pages:",
-                    value: `\`${post_info.num_of_pages}\``
+                    value: `\`${post_info.num_of_pages}\``,
                 },
                 {
                     name: "Tags:",
-                    value: tags_text
+                    value: tags_text,
                 },
                 {
                     name: "Languages:",
-                    value: languages_text
+                    value: languages_text,
                 },
                 {
                     name: "Favourites:",
-                    value: `\`${post_info.favourites}\``
-                }
+                    value: `\`${post_info.favourites}\``,
+                },
             ],
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}...`
-            }
+                text: `Requested by ${command_data.msg.author.tag}...`,
+            },
         };
-        command_data.msg.channel.send({ embeds: [ embedNHentai ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedNHentai] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

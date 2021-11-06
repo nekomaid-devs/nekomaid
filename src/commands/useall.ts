@@ -14,7 +14,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in an item name.", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in an item name.", "none")],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -51,5 +51,5 @@ export default {
         }
 
         command_data.global_context.neko_modules_clients.inventoryManager.use_item(command_data, item_prefab, target_indexes);
-    }
+    },
 } as Command;

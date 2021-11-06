@@ -1,10 +1,13 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
 
+/* Node Imports */
+import { randomBytes } from "crypto";
+
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
-import { randomBytes } from "crypto";
 import { get_items, get_shop_items } from "../scripts/utils/util_vars";
+import { format_number } from "../scripts/utils/util_general";
 
 export default {
     name: "buy",
@@ -15,7 +18,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in an item name.", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in an item name.", "none")],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -54,10 +57,10 @@ export default {
 
         const embedBuy = {
             color: 8388736,
-            description: `Bought \`1x ${target_item.display_name}\` for \`${command_data.global_context.utils.format_number(target_shop_item.price)} 💵\`.`
+            description: `Bought \`1x ${target_item.display_name}\` for \`${format_number(target_shop_item.price)} 💵\`.`,
         };
-        command_data.msg.channel.send({ embeds: [ embedBuy ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedBuy] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

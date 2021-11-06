@@ -1,6 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
-import { GuildEditType } from "../scripts/db/db_utils";
+import { GuildEditType } from "../ts/mysql";
 import { Permissions } from "discord.js";
 
 /* Local Imports */
@@ -21,7 +21,7 @@ export default {
         .set("set", "`<subcommand_prefix> invites [true/false]` - Enables/Disables posting Discord server invites"),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD) ],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -49,16 +49,16 @@ export default {
                 fields: [
                     {
                         name: "Banned Words:",
-                        value: banned_words
+                        value: banned_words,
                     },
                     {
                         name: "Invites:",
-                        value: `${command_data.server_config.invites === true ? "Allowed" : "Banned"}`
-                    }
-                ]
+                        value: `${command_data.server_config.invites === true ? "Allowed" : "Banned"}`,
+                    },
+                ],
             };
 
-            command_data.msg.channel.send({ embeds: [ embedConfig ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedConfig] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -162,7 +162,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`) ]
+                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`- (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -181,8 +181,14 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help moderation set\` for help)`, "set invites true")
-                                ]
+                                    get_error_embed(
+                                        command_data.msg,
+                                        command_data.server_config.prefix,
+                                        this,
+                                        `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help moderation set\` for help)`,
+                                        "set invites true"
+                                    ),
+                                ],
                             })
                             .catch((e: Error) => {
                                 command_data.global_context.logger.api_error(e);
@@ -196,11 +202,11 @@ export default {
             }
 
             default: {
-                command_data.msg.channel.send({ embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set invites true") ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set invites true")] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 break;
             }
         }
-    }
+    },
 } as Command;

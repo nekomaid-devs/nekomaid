@@ -19,26 +19,23 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        if (
-            command_data.global_context.neko_modules_clients.voiceManager.connections.has(command_data.msg.guild.id) === false ||
-            command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id).current === -1
-        ) {
+        const connection = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
+        if (connection === undefined || connection.current === null) {
             command_data.msg.reply("There's nothing playing!");
             return;
         }
 
-        const voice_data = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
-        const voice_request = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id).current;
-        voice_data.current.stream.destroy();
-        voice_data.current = -1;
+        const title = connection.current.item.title;
+        connection.current.stream.destroy();
+        connection.current = null;
 
-        command_data.msg.channel.send(`Skipped \`${voice_request.info.title}\`. (\`${command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id).queue.length}\` remaining)`).catch((e: Error) => {
+        command_data.msg.channel.send(`Skipped \`${title}\`. (\`${connection.queue.length}\` remaining)`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-        if (voice_data.mode === 0) {
-            voice_data.persistent_queue.shift();
+        if (connection.mode === 0) {
+            connection.persistent_queue.shift();
         }
 
-        command_data.global_context.neko_modules_clients.voiceManager.play_next_on_connection(command_data.global_context, command_data.msg.guild.id);
-    }
+        command_data.global_context.neko_modules_clients.voiceManager.play_next_on_connection(command_data.global_context, command_data.msg);
+    },
 } as Command;

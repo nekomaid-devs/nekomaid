@@ -1,6 +1,6 @@
 /* Node Imports */
 import { BotData, CounterData, GlobalUserData, GuildData, NotificationData, RankData, ReactionRoleData, ServerBanData, ServerMuteData, ServerUserData, ServerWarnData, UserItemData } from "../../ts/base";
-import { GuildEditType, GuildFetchType } from "./db_utils";
+import { GuildEditType, GuildFetchType } from "../../ts/mysql";
 import { Connection } from "mysql2/promise";
 
 /* Local Imports */
@@ -25,7 +25,7 @@ import {
     _fetch_server_users,
     _fetch_server_warnings,
     _fetch_user_inventory_items,
-    _fetch_user_notifications
+    _fetch_user_notifications,
 } from "./db_fetch";
 import { _remove_inventory_item, _remove_rank, _remove_server_ban, _remove_server_mute, _remove_server_warnings_from_user } from "./db_remove";
 

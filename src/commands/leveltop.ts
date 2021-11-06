@@ -2,7 +2,8 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { get_top_server_level } from "../scripts/utils/util_sort_by";
+import { get_top_server_level } from "../scripts/utils/util_sort";
+import { get_server_level_XP } from "../scripts/utils/util_general";
 
 export default {
     name: "leveltop",
@@ -57,7 +58,7 @@ export default {
                 i = author_pos;
             }
 
-            const net_2 = (user_config.xp / command_data.global_context.utils.get_level_XP(command_data.server_config, user_config)) * 100;
+            const net_2 = (user_config.xp / get_server_level_XP(command_data.server_config, user_config)) * 100;
             const target_user = await command_data.global_context.bot.users.fetch(user_config.user_ID).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
                 return null;
@@ -68,8 +69,8 @@ export default {
             embedTop.addField(`${i + 1}) ${target_user.tag}`, `Level ${net} (${Math.round(net_2)} %)`);
         }
 
-        command_data.msg.channel.send({ embeds: [ embedTop ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedTop] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

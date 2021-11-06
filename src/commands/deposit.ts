@@ -3,6 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
+import { format_number } from "../scripts/utils/util_general";
 
 export default {
     name: "deposit",
@@ -11,9 +12,9 @@ export default {
     helpUsage: "[amount/all/half/%]`",
     exampleUsage: "100",
     hidden: false,
-    aliases: [ "dep" ],
+    aliases: ["dep"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in an amount.", "int>0/all/half") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in an amount.", "int>0/all/half")],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -64,10 +65,10 @@ export default {
 
         const embedDeposit = {
             color: 8388736,
-            description: `Deposited \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` to bank of \`${command_data.msg.author.tag}\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`
+            description: `Deposited \`${format_number(credits_amount)} 💵\` to bank of \`${command_data.msg.author.tag}\`! (Current Credits: \`${format_number(command_data.author_user_config.credits)}$\`)`,
         };
-        command_data.msg.channel.send({ embeds: [ embedDeposit ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedDeposit] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

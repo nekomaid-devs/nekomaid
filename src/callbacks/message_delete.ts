@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildFetchType } from "../scripts/db/db_utils";
+import { GuildFetchType } from "../ts/mysql";
 import { Message, PartialMessage, TextChannel } from "discord.js";
 
 /* Node Imports */
@@ -47,29 +47,29 @@ export default {
             const embedDeletedMessage = {
                 author: {
                     name: `Message Deleted | ${message.author.tag}`,
-                    icon_url: url === null ? undefined : url
+                    icon_url: url === null ? undefined : url,
                 },
                 fields: [
                     {
                         name: "User:",
                         value: message.author.toString(),
-                        inline: true
+                        inline: true,
                     },
                     {
                         name: "Channel:",
                         value: message.channel.toString(),
-                        inline: true
+                        inline: true,
                     },
                     {
                         name: "Message:",
-                        value: `~~${message.content}~~`
-                    }
-                ]
+                        value: `~~${message.content}~~`,
+                    },
+                ],
             };
 
-            channel.send({ embeds: [ embedDeletedMessage ] }).catch((e: Error) => {
+            channel.send({ embeds: [embedDeletedMessage] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Callback;

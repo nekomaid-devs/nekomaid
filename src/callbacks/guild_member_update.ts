@@ -31,5 +31,5 @@ export default {
         if (old_member.nickname !== new_member.nickname) {
             global_context.bot.emit("guildMemberNicknameChange", old_member, new_member);
         }
-    }
+    },
 } as Callback;

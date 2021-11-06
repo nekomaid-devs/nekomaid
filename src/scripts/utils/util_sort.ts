@@ -2,6 +2,9 @@
 import { GlobalContext, GlobalUserData, GuildData, ServerUserData } from "../../ts/base";
 import { Guild } from "discord.js";
 
+/* Local Imports */
+import { get_server_level_XP } from "../utils/util_general";
+
 export function create_comparator(props: string[]) {
     return (a: any, b: any) => {
         const a_net = props.reduce((acc: any, curr: any) => {
@@ -19,8 +22,8 @@ export function create_comparator(props: string[]) {
 
 export function create_comparator_server_level(global_context: GlobalContext, server_config: GuildData) {
     return (a: ServerUserData, b: ServerUserData) => {
-        const level_XP_a = global_context.utils.get_level_XP(server_config, a);
-        const level_XP_b = global_context.utils.get_level_XP(server_config, b);
+        const level_XP_a = get_server_level_XP(server_config, a);
+        const level_XP_b = get_server_level_XP(server_config, b);
 
         const a_net = a.level + a.xp / level_XP_a;
         const b_net = b.level + b.xp / level_XP_b;

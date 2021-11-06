@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildFetchType } from "../scripts/db/db_utils";
+import { GuildFetchType } from "../ts/mysql";
 import { GuildMember, PartialGuildMember, TextChannel, User } from "discord.js";
 
 /* Node Imports */
@@ -94,30 +94,30 @@ export default {
                 const embedKick = {
                     author: {
                         name: `Kick | ${last_audit.target.tag}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
                     fields: [
                         {
                             name: "User:",
                             value: last_audit.target.tag,
-                            inline: true
+                            inline: true,
                         },
                         {
                             name: "Moderator:",
                             value: executor.toString(),
-                            inline: true
+                            inline: true,
                         },
                         {
                             name: "Reason:",
-                            value: last_audit.reason === null ? "None" : last_audit.reason
-                        }
-                    ]
+                            value: last_audit.reason === null ? "None" : last_audit.reason,
+                        },
+                    ],
                 };
 
-                channel.send({ embeds: [ embedKick ] }).catch((e: Error) => {
+                channel.send({ embeds: [embedKick] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
             }
         }
-    }
+    },
 } as Callback;

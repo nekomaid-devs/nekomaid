@@ -16,9 +16,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in an emote.", "none") ],
-    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a name.", "none") ],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS) ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in an emote.", "none")],
+    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a name.", "none")],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -47,20 +47,20 @@ export default {
             const emote = await command_data.msg.guild.emojis.create(link.includes("https://") === true ? link : `https://cdn.discordapp.com/emojis/${emote_ID}`, emote_name);
             const embedEmote = {
                 color: 6732650,
-                description: `Created new emote \`${emote_name}\` - ${emote.toString()}`
+                description: `Created new emote \`${emote_name}\` - ${emote.toString()}`,
             };
-            command_data.msg.channel.send({ embeds: [ embedEmote ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedEmote] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         } catch (e) {
             const embedError = {
                 title: "<:n_error:771852301413384192> No image found at specified location!",
-                description: link
+                description: link,
             };
 
-            command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Command;

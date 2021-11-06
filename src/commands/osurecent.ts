@@ -1,6 +1,9 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
 
+/* Local Imports */
+import { convert_time } from "../scripts/utils/util_time";
+
 export default {
     name: "osurecent",
     category: "Utility",
@@ -55,7 +58,7 @@ export default {
         for (let i = 0; i < 5; i += 1) {
             const play = recent[i];
             const elapsed = start.getTime() - play.date;
-            const ago = command_data.global_context.neko_modules.timeConvert.convert_time(elapsed);
+            const ago = convert_time(elapsed);
 
             let mods = "";
             /* eslint no-bitwise: 0*/
@@ -92,18 +95,18 @@ export default {
             author: {
                 name: `osu! recent plays for ${command_data.tagged_user_config.osu_username}`,
                 icon_url: `http://s.ppy.sh/a/${user.id}`,
-                url: `https://osu.ppy.sh/users/${user.id}`
+                url: `https://osu.ppy.sh/users/${user.id}`,
             },
             description: plays_description,
             thumbnail: {
-                url: `http://s.ppy.sh/a/${user.id}`
+                url: `http://s.ppy.sh/a/${user.id}`,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`
-            }
+                text: `Requested by ${command_data.msg.author.tag}`,
+            },
         };
-        command_data.msg.channel.send({ embeds: [ embedOsu ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedOsu] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

@@ -13,7 +13,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in an osu! username.", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in an osu! username.", "none")],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -43,5 +43,5 @@ export default {
         command_data.msg.channel.send(`Set osu! username to \`${command_data.total_argument}\`.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

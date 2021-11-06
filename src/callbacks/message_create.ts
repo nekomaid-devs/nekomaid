@@ -1,11 +1,15 @@
 /* Types */
 import { Callback, CommandData, GlobalContext } from "../ts/base";
-import { GuildFetchType } from "../scripts/db/db_utils";
+import { GuildFetchType } from "../ts/mysql";
 import { Message, Permissions, TextChannel } from "discord.js";
 
 /* Node Imports */
 import * as Sentry from "@sentry/node";
 import { Transaction } from "@sentry/types";
+import { convert_time } from "../scripts/utils/util_time";
+
+/* Local Imports */
+import { pick_random } from "../scripts/utils/util_general";
 
 export default {
     hook(global_context: GlobalContext) {
@@ -41,9 +45,9 @@ export default {
          */
 
         const taggedUser = message.mentions.users.first();
-        const taggedUsers = [ ...Array.from(message.mentions.users.values()) ];
+        const taggedUsers = [...Array.from(message.mentions.users.values())];
         const taggedMember = message.mentions.members === null ? undefined : message.mentions.members.first();
-        const taggedMembers = message.mentions.members === null ? undefined : [ ...Array.from(message.mentions.members.values()) ];
+        const taggedMembers = message.mentions.members === null ? undefined : [...Array.from(message.mentions.members.values())];
 
         let tagged_user_tags = taggedUsers.reduce((acc, curr) => {
             acc += `${curr.tag}, `;
@@ -80,11 +84,11 @@ export default {
             args: [],
             total_argument: "",
 
-            tagged_users: taggedUsers !== undefined ? taggedUsers : [ message.author ],
+            tagged_users: taggedUsers !== undefined ? taggedUsers : [message.author],
             tagged_user: taggedUser !== undefined ? taggedUser : message.author,
             tagged_user_tags: tagged_user_tags,
 
-            tagged_members: taggedMembers !== undefined ? taggedMembers : [ message.member ],
+            tagged_members: taggedMembers !== undefined ? taggedMembers : [message.member],
             tagged_member: taggedMember !== undefined ? taggedMember : message.member,
 
             server_config: server_config,
@@ -96,7 +100,7 @@ export default {
             author_server_user_config: author_server_user_config,
 
             tagged_user_config: tagged_user_config,
-            tagged_server_user_config: tagged_server_user_config
+            tagged_server_user_config: tagged_server_user_config,
         };
         command_data.tagged_server_user_config = command_data.author_server_user_config;
 
@@ -135,7 +139,7 @@ export default {
 
         // Process server levels
         if (command_data.server_config.module_level_enabled === true) {
-            global_context.neko_modules_clients.levelingManager.update_server_level(command_data, command_data.server_config.module_level_message_exp);
+            global_context.neko_modules_clients.levelingManager.update_server_level(command_data, command_data.server_config.module_level_message_exp, true);
         }
 
         // Check for @Nekomaid
@@ -148,8 +152,8 @@ export default {
 
         // Check for auto-response
         if (message.content.toLowerCase() === `thanks <@!${global_context.bot.user.id}>` || message.content.toLowerCase() === "thanks nekomaid" || message.content.toLowerCase() === "thanks neko") {
-            const responses = [ "You're welcome~ I guess- >~<", "W-What did I do?~", "No problem~ >//<", "You're welcome~ TwT" ];
-            const response = global_context.utils.pick_random(responses);
+            const responses = ["You're welcome~ I guess- >~<", "W-What did I do?~", "No problem~ >//<", "You're welcome~ TwT"];
+            const response = pick_random(responses);
 
             message.channel.send(response).catch((e: Error) => {
                 global_context.logger.api_error(e);
@@ -220,7 +224,7 @@ export default {
         const command_cooldown = command_cooldowns.get(command.name);
         if (command_cooldown + command.cooldown > Date.now()) {
             const time_left = command_cooldown + command.cooldown - Date.now();
-            message.channel.send(`You have to wait another \`${command_data.global_context.neko_modules.timeConvert.convert_time(time_left)}\`...`);
+            message.channel.send(`You have to wait another \`${convert_time(time_left)}\`...`);
             return;
         }
         command_cooldowns.set(command.name, Date.now());
@@ -278,5 +282,5 @@ export default {
                 scope.setUser(null);
             });
         }
-    }
+    },
 } as Callback;

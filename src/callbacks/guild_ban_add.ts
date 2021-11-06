@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildEditType, GuildFetchType } from "../scripts/db/db_utils";
+import { GuildEditType, GuildFetchType } from "../ts/mysql";
 import { GuildBan, TextChannel, User } from "discord.js";
 
 /* Node Imports */
@@ -77,35 +77,35 @@ export default {
                 const embedBan = {
                     author: {
                         name: `Case ${server_config.case_ID}# | Ban | ${ban.user.tag}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
                     fields: [
                         {
                             name: "User:",
                             value: ban.user.tag,
-                            inline: true
+                            inline: true,
                         },
                         {
                             name: "Moderator:",
                             value: executor.toString(),
-                            inline: true
+                            inline: true,
                         },
                         {
                             name: "Reason:",
-                            value: last_audit.reason === null ? "None" : last_audit.reason
+                            value: last_audit.reason === null ? "None" : last_audit.reason,
                         },
                         {
                             name: "Duration:",
                             value: moderation_action === undefined ? "Unknown" : moderation_action.duration,
-                            inline: true
-                        }
-                    ]
+                            inline: true,
+                        },
+                    ],
                 };
 
                 server_config.case_ID += 1;
                 global_context.neko_modules_clients.db.edit_server(server_config, GuildEditType.AUDIT);
 
-                channel.send({ embeds: [ embedBan ] }).catch((e: Error) => {
+                channel.send({ embeds: [embedBan] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
             }
@@ -117,9 +117,9 @@ export default {
             user_ID: ban.user.id,
             start: moderation_action !== undefined ? moderation_action.start : Date.now(),
             reason: moderation_action !== undefined ? moderation_action.reason : "None",
-            end: moderation_action !== undefined ? moderation_action.end : -1
+            end: moderation_action !== undefined ? moderation_action.end : -1,
         };
         global_context.neko_modules_clients.db.add_server_ban(server_ban);
         global_context.data.last_moderation_actions.delete(ban.guild.id);
-    }
+    },
 } as Callback;

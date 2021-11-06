@@ -34,7 +34,7 @@ class ReactionRolesManager {
             filter: (r, u) => {
                 return !u.bot;
             },
-            dispose: true
+            dispose: true,
         });
         collector.on("collect", (r, user) => {
             rr.reaction_roles.forEach((role_ID: string, i: number) => {

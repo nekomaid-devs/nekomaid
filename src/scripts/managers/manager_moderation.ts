@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, ServerBanData, ServerMuteData } from "../../ts/base";
-import { GuildFetchType } from "../db/db_utils";
+import { GuildFetchType } from "../../ts/mysql";
 import { Guild } from "discord.js";
 
 class ModerationManager {

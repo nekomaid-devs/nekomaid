@@ -1,9 +1,12 @@
 /* Types */
 import { BotData, CounterData, GlobalUserData, GuildData, ServerUserData } from "../../ts/base";
-import { GuildEditType, guild_edit_type_to_query, guild_edit_type_to_query_data } from "./db_utils";
+import { GuildEditType } from "../../ts/mysql";
 
 /* Node Imports */
 import { Connection } from "mysql2/promise";
+
+/* Local Imports */
+import { guild_edit_type_to_query, guild_edit_type_to_query_data } from "../utils/util_mysql";
 
 export async function _edit_config(connection: Connection, item: BotData) {
     const query = `UPDATE configs SET
@@ -32,7 +35,7 @@ export async function _edit_config(connection: Connection, item: BotData) {
         item.b_crime_monopoly,
         item.b_crime_monopoly_credits,
         item.b_pet_shelter,
-        item.b_pet_shelter_credits
+        item.b_pet_shelter_credits,
     ];
     return await connection.execute(query, query_data);
 }
@@ -45,7 +48,7 @@ export async function _edit_server(connection: Connection, item: GuildData, type
 
 export async function _edit_server_user(connection: Connection, item: ServerUserData) {
     const query = "UPDATE server_users SET level=?, xp=? WHERE fast_find_ID=?";
-    const query_data = [ item.level, item.xp, item.fast_find_ID ];
+    const query_data = [item.level, item.xp, item.fast_find_ID];
     return await connection.execute(query, query_data);
 }
 
@@ -104,7 +107,7 @@ export async function _edit_global_user(connection: Connection, item: GlobalUser
         item.b_lab,
         item.b_lab_credits,
 
-        item.user_ID
+        item.user_ID,
     ];
 
     return await connection.execute(query, query_data);
@@ -112,6 +115,6 @@ export async function _edit_global_user(connection: Connection, item: GlobalUser
 
 export async function _edit_counter(connection: Connection, item: CounterData) {
     const query = "UPDATE server_counters SET last_update=? WHERE id=?";
-    const query_data = [ item.last_update, item.id ];
+    const query_data = [item.last_update, item.id];
     return await connection.execute(query, query_data);
 }

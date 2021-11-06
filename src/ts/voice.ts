@@ -19,6 +19,7 @@ export type VoiceConnectionData = {
 };
 
 export type VoiceRequestData = {
+    id: string;
     item: VoiceRequestItemData;
     stream: any;
 

@@ -1,6 +1,6 @@
 /* Types */
 import { CommandData, Command, GlobalContext, GuildData } from "../ts/base";
-import { GuildEditType } from "../scripts/db/db_utils";
+import { GuildEditType } from "../ts/mysql";
 import { Message, Permissions } from "discord.js";
 
 /* Node Imports */
@@ -16,7 +16,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
         filter: (m: Message) => {
             return m.author.id === source_message.author.id;
         },
-        max: 1
+        max: 1,
     });
     collector.on("collect", (message) => {
         if (msg.guild === null) {
@@ -37,7 +37,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
 
                 const roles_array = [];
                 const roles_emojis_array = [];
-                for (const [ key, value ] of roles.entries()) {
+                for (const [key, value] of roles.entries()) {
                     roles_array.push(key);
                     roles_emojis_array.push(value);
                 }
@@ -48,7 +48,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                     channel_ID: msg.channel.id,
                     message_ID: msg.id,
                     reaction_roles: roles_array,
-                    reaction_role_emojis: roles_emojis_array
+                    reaction_role_emojis: roles_emojis_array,
                 };
                 global_context.neko_modules_clients.db.add_reaction_role(reactionRoleMenuInfo);
 
@@ -74,7 +74,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                 });
 
                 reactionRoleEmbed.setDescription(menu_description);
-                msg.edit({ embeds: [ reactionRoleEmbed ] }).catch((e: Error) => {
+                msg.edit({ embeds: [reactionRoleEmbed] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
 
@@ -102,7 +102,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                     filter: (r, u) => {
                         return u.id === source_message.author.id;
                     },
-                    max: 1
+                    max: 1,
                 });
                 collector_2.on("collect", (r) => {
                     roles.set(role.id, r.emoji.id === null ? r.emoji.name : `<:${r.emoji.name}:${r.emoji.id}>`);
@@ -123,11 +123,11 @@ export default {
     helpUsage: "`",
     exampleUsage: "",
     hidden: false,
-    aliases: [ "reactionroles" ],
+    aliases: ["reactionroles"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_ROLES), new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES) ],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_ROLES), new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -146,5 +146,5 @@ export default {
         const role_messages: any[] = [];
 
         continue_collecting(command_data.global_context, command_data.server_config, command_data.msg, msg, role_messages, roles);
-    }
+    },
 } as Command;

@@ -1,12 +1,11 @@
-export function convert_time_inconsistent(time: any) {
+/* Types */
+import { TimeSpan } from "../../ts/time";
+
+export function convert_time_inconsistent(time: TimeSpan) {
     return convert_string_to_time_data(convert_time(time.days * 86400000 + time.hrs * 3600000 + time.mins * 60000 + time.secs * 1000));
 }
 
-export function sum_times(time_1: any, time_2: any) {
-    if (time_2.status === -1) {
-        return time_1;
-    }
-
+export function sum_times(time_1: TimeSpan, time_2: TimeSpan) {
     time_1.days += time_2.days;
     time_1.hrs += time_2.hrs;
     time_1.mins += time_2.mins;
@@ -15,11 +14,7 @@ export function sum_times(time_1: any, time_2: any) {
     return time_1;
 }
 
-export function sub_times(time_1: any, time_2: any) {
-    if (time_2.status === -1) {
-        return time_1;
-    }
-
+export function sub_times(time_1: TimeSpan, time_2: TimeSpan) {
     time_1.days -= time_2.days;
     time_1.hrs -= time_2.hrs;
     time_1.mins -= time_2.mins;
@@ -73,24 +68,17 @@ export function convert_string_to_time_data(time_string: string) {
     prev = time_string_mod.indexOf("s", prev) === -1 ? prev : time_string_mod.indexOf("s", prev) + 1;
 
     const time_data = {
-        status: 1,
         days: parseInt(days),
         hrs: parseInt(hrs),
         mins: parseInt(mins),
-        secs: parseInt(secs)
+        secs: parseInt(secs),
     };
-    time_data.status =
-        (time_data.days > 0 || time_data.hrs > 0 || time_data.mins > 0 || time_data.secs > 0) && isNaN(time_data.days) === false && isNaN(time_data.hrs) === false && isNaN(time_data.mins) === false && isNaN(time_data.secs) === false
-            ? 1
-            : -1;
 
     return time_data;
 }
 
 export function convert_youtube_string_to_time_data(time_string: string) {
-    if (time_string === null) {
-        return { status: -1 };
-    } else if (time_string.includes("PT") === true) {
+    if (time_string.includes("PT") === true) {
         return convert_youtube_string_to_time_data_0(time_string);
     }
 
@@ -111,16 +99,11 @@ export function convert_youtube_string_to_time_data_0(time_string: string) {
     prev = time_string_mod.indexOf("S", prev) === -1 ? prev : time_string_mod.indexOf("S", prev) + 1;
 
     const time_data = {
-        status: 1,
         days: parseInt(days),
         hrs: parseInt(hrs),
         mins: parseInt(mins),
-        secs: parseInt(secs)
+        secs: parseInt(secs),
     };
-    time_data.status =
-        (time_data.days > 0 || time_data.hrs > 0 || time_data.mins > 0 || time_data.secs > 0) && isNaN(time_data.days) === false && isNaN(time_data.hrs) === false && isNaN(time_data.mins) === false && isNaN(time_data.secs) === false
-            ? 1
-            : -1;
 
     return time_data;
 }
@@ -151,25 +134,16 @@ export function convert_youtube_string_to_time_data_1(time_string: string) {
     }
 
     const time_data = {
-        status: 1,
         days: parseInt(days),
         hrs: parseInt(hrs),
         mins: parseInt(mins),
-        secs: parseInt(secs)
+        secs: parseInt(secs),
     };
-    time_data.status =
-        (time_data.days > 0 || time_data.hrs > 0 || time_data.mins > 0 || time_data.secs > 0) && isNaN(time_data.days) === false && isNaN(time_data.hrs) === false && isNaN(time_data.mins) === false && isNaN(time_data.secs) === false
-            ? 1
-            : -1;
 
     return time_data;
 }
 
-export function convert_time_data_to_string(time_data: any) {
-    if (time_data.status === -1) {
-        return "Unknown";
-    }
-
+export function convert_time_data_to_string(time_data: TimeSpan) {
     let time_string = "";
     if (time_data.days !== 0) {
         time_string += `${time_data.days}:`;

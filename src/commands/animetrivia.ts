@@ -1,24 +1,25 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
+import { Message, Permissions, VoiceChannel } from "discord.js";
 
 /* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
-import { Message, Permissions, VoiceChannel } from "discord.js";
+import { shuffle_array, pick_random } from "../scripts/utils/util_general";
 
 async function play_next(command_data: CommandData, connection: any, game_data: any) {
     const all_options = command_data.global_context.data.openings;
 
-    const opening = command_data.global_context.utils.pick_random(all_options);
+    const opening = pick_random(all_options);
     all_options.splice(all_options.indexOf(opening), 1);
-    const fake_opening_1 = command_data.global_context.utils.pick_random(all_options);
+    const fake_opening_1 = pick_random(all_options);
     all_options.splice(all_options.indexOf(fake_opening_1), 1);
-    const fake_opening_2 = command_data.global_context.utils.pick_random(all_options);
+    const fake_opening_2 = pick_random(all_options);
     all_options.splice(all_options.indexOf(fake_opening_2), 1);
-    const fake_opening_3 = command_data.global_context.utils.pick_random(all_options);
+    const fake_opening_3 = pick_random(all_options);
     all_options.splice(all_options.indexOf(fake_opening_3), 1);
 
-    const final_options = [ opening, fake_opening_1, fake_opening_2, fake_opening_3 ];
-    command_data.global_context.utils.shuffle_array(final_options);
+    const final_options = [opening, fake_opening_1, fake_opening_2, fake_opening_3];
+    shuffle_array(final_options);
 
     const answered_IDs: string[] = [];
     const correct_option = final_options.indexOf(opening) + 1;
@@ -58,10 +59,10 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
         title: "❓ New song is playing. Make a guess!",
         description: `1) ${final_options[0].source}\n2) ${final_options[1].source}\n3) ${final_options[2].source}\n4) ${final_options[3].source}\n`,
         footer: {
-            text: `You have 45 seconds to answer | or end the game with ${command_data.server_config.prefix}animetrivia end`
-        }
+            text: `You have 45 seconds to answer | or end the game with ${command_data.server_config.prefix}animetrivia end`,
+        },
     };
-    command_data.msg.channel.send({ embeds: [ embedSong ] }).catch((e: Error) => {
+    command_data.msg.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
         command_data.global_context.logger.api_error(e);
     });
 
@@ -72,7 +73,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
     const collector = command_data.msg.channel.createMessageCollector({
         filter: (m: Message) => {
             return m.author.bot === false && game_data.joined_IDs.includes(m.author.id);
-        }
+        },
     });
     collector.on("collect", (m) => {
         if (answered === false) {
@@ -104,10 +105,10 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
                     const embedTriviaEnd = {
                         title: "⭐ Game ended",
                         description: `**Rounds:** ${game_data.rounds}\n**Rounds (correct):** ${game_data.rounds_correct}/${game_data.rounds}\n**Winner:** <@${leaderboard[0].user.toString()}> (${leaderboard[0].points} points)`,
-                        footer: { text: "Hope you enjoyed the game!" }
+                        footer: { text: "Hope you enjoyed the game!" },
                     };
 
-                    command_data.msg.channel.send({ embeds: [ embedTriviaEnd ] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [embedTriviaEnd] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
 
@@ -185,7 +186,7 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("me", Permissions.FLAGS.CONNECT), new NeededPermission("me", Permissions.FLAGS.SPEAK) ],
+    permissionsNeeded: [new NeededPermission("me", Permissions.FLAGS.CONNECT), new NeededPermission("me", Permissions.FLAGS.SPEAK)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -221,11 +222,11 @@ export default {
                 `\n\`${command_data.server_config.prefix}animetrivia end\` - ends the game` +
                 "\n\nJoin by reacting with `✅` (or leave with `❌`)",
             footer: {
-                text: `0 joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`
-            }
+                text: `0 joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`,
+            },
         };
         const joined_IDs: string[] = [];
-        const message = await command_data.msg.channel.send({ embeds: [ embedSong ] }).catch((e: Error) => {
+        const message = await command_data.msg.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });
@@ -242,7 +243,7 @@ export default {
         const collector_r = message.createReactionCollector({
             filter: (r, u) => {
                 return (r.emoji.name === "✅" || r.emoji.name === "❌") && u.id !== message.author.id;
-            }
+            },
         });
         collector_r.on("collect", async (r, u) => {
             if (r.emoji.name === "✅" && joined_IDs.includes(u.id) === false) {
@@ -253,7 +254,7 @@ export default {
             }
 
             embedSong.footer.text = `${joined_IDs.length} joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`;
-            await message.edit({ embeds: [ embedSong ] }).catch((e: Error) => {
+            await message.edit({ embeds: [embedSong] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         });
@@ -261,7 +262,7 @@ export default {
         const collector = command_data.msg.channel.createMessageCollector({
             filter: (m) => {
                 return !m.author.bot;
-            }
+            },
         });
         collector.on("collect", (m) => {
             if (command_data.msg.member === null || command_data.msg.member.voice.channel === null) {
@@ -290,5 +291,5 @@ export default {
                 collector.stop();
             }
         });
-    }
+    },
 } as Command;

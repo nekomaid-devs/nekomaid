@@ -26,5 +26,5 @@ export default {
 
     async process(global_context: GlobalContext, channel: DMChannel | GuildChannel) {
         /* */
-    }
+    },
 } as Callback;

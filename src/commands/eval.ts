@@ -14,31 +14,25 @@ export default {
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in script to execute.", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in script to execute.", "none")],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("author", ExtraPermission.BOT_OWNER) ],
+    permissionsNeeded: [new NeededPermission("author", ExtraPermission.BOT_OWNER)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
         if (command_data.msg.guild === null || command_data.global_context.bot.user === null) {
             return;
         }
-        const eval_query = command_data.total_argument;
-
         const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
-        if (url === null) {
-            return;
-        }
-        const embedEval: any = {
+
+        const embedEvalLoading = {
             author: {
                 name: "Result for eval (current context)",
-                icon_url: url,
+                icon_url: url === null ? undefined : url,
             },
-            description: "Waiting...",
             footer: { text: "🕒 Took X ms..." },
         };
-        let embedFiles: any[] = [];
-        const message = await command_data.msg.channel.send({ embeds: [ embedEval ] }).catch((e: Error) => {
+        const message = await command_data.msg.channel.send({ embeds: [embedEvalLoading] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });
@@ -48,21 +42,31 @@ export default {
 
         try {
             const t_start = command_data.global_context.modules.performance.now();
-            const result = await eval(eval_query);
+            const result = await eval(command_data.total_argument);
             const t_end = command_data.global_context.modules.performance.now();
 
-            embedEval.description = result === undefined ? "Undefined" : JSON.stringify(result);
-            if (embedEval.description.length > 2048) {
-                embedFiles = [ embedEval.description ];
-                embedEval.description = undefined;
-            }
+            const embedEval = {
+                author: {
+                    name: "Result for eval (current context)",
+                    icon_url: url === null ? undefined : url,
+                },
+                description: result === undefined ? "Undefined" : JSON.stringify(result),
+                footer: { text: "🕒 Took X ms..." },
+            };
             embedEval.footer = { text: `🕒 Took ${(t_end - t_start).toFixed(1)}ms...` };
-            message.edit({ embeds: [ embedEval ], files: embedFiles }).catch((e: Error) => {
+            message.edit({ embeds: [embedEval] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
-        } catch (err) {
-            embedEval.description = err;
-            message.edit({ embeds: [ embedEval ] }).catch((e: Error) => {
+        } catch (e: any) {
+            const embedEval = {
+                author: {
+                    name: "Result for eval (current context)",
+                    icon_url: url === null ? undefined : url,
+                },
+                description: e.toString(),
+                footer: { text: "🕒 Took ?? ms..." },
+            };
+            message.edit({ embeds: [embedEval] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

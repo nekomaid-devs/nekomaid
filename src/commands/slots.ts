@@ -3,6 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
+import { pick_random, format_number } from "../scripts/utils/util_general";
 
 export default {
     name: "slots",
@@ -13,7 +14,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in an amount you're betting.", "int>0/all/half") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in an amount you're betting.", "int>0/all/half")],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -58,24 +59,24 @@ export default {
             author: { name: "Slots" },
             color: 8388736,
             description: slotsDescription.replace("<res_0>", "❓").replace("<res_1>", "❓").replace("<res_2>", "❓"),
-            footer: { text: "Rolling..." }
+            footer: { text: "Rolling..." },
         };
 
         const options: any[] = [];
-        if (command_data.global_context.utils.pick_random(true, false)) {
-            options.push(...[ "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>" ]);
+        if (pick_random([true, false])) {
+            options.push(...["<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>"]);
         } else {
-            options.push(...[ "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>" ]);
+            options.push(...["<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>"]);
         }
-        if (command_data.global_context.utils.pick_random(true, false)) {
-            options.push(...[ "<:n_slots_3:865742111067602964>", "<:n_slots_3:865742111067602964>", "<:n_slots_3:865742111067602964>" ]);
+        if (pick_random([true, false])) {
+            options.push(...["<:n_slots_3:865742111067602964>", "<:n_slots_3:865742111067602964>", "<:n_slots_3:865742111067602964>"]);
         } else {
-            options.push(...[ "<:n_slots_4:865742140658548757>", "<:n_slots_4:865742140658548757>", "<:n_slots_4:865742140658548757>" ]);
+            options.push(...["<:n_slots_4:865742140658548757>", "<:n_slots_4:865742140658548757>", "<:n_slots_4:865742140658548757>"]);
         }
-        if (command_data.global_context.utils.pick_random(true, false)) {
-            options.push(...[ "<:n_slots_5:865742192219783230>" ]);
+        if (pick_random([true, false])) {
+            options.push(...["<:n_slots_5:865742192219783230>"]);
         } else {
-            options.push(...[ "<:n_slots_6:865744198472171570>" ]);
+            options.push(...["<:n_slots_6:865744198472171570>"]);
         }
 
         /*
@@ -89,7 +90,7 @@ export default {
          * 0.1x $ 20k  = 2k
          */
 
-        const message = await command_data.msg.channel.send({ embeds: [ embedSlots ] }).catch((e: Error) => {
+        const message = await command_data.msg.channel.send({ embeds: [embedSlots] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });
@@ -97,21 +98,21 @@ export default {
             return;
         }
         setTimeout(() => {
-            const res_0 = command_data.global_context.utils.pick_random(options);
+            const res_0 = pick_random(options);
             embedSlots.description = slotsDescription.replace("<res_0>", res_0).replace("<res_1>", "❓").replace("<res_2>", "❓");
-            message.edit({ embeds: [ embedSlots ] }).catch((e: Error) => {
+            message.edit({ embeds: [embedSlots] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
 
             setTimeout(() => {
-                const res_1 = command_data.global_context.utils.pick_random(options);
+                const res_1 = pick_random(options);
                 embedSlots.description = slotsDescription.replace("<res_0>", res_0).replace("<res_1>", res_1).replace("<res_2>", "❓");
-                message.edit({ embeds: [ embedSlots ] }).catch((e: Error) => {
+                message.edit({ embeds: [embedSlots] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
 
                 setTimeout(() => {
-                    const res_2 = command_data.global_context.utils.pick_random(options);
+                    const res_2 = pick_random(options);
                     embedSlots.description = slotsDescription.replace("<res_0>", res_0).replace("<res_1>", res_1).replace("<res_2>", res_2);
 
                     if (res_0 === res_1 && res_1 === res_2) {
@@ -121,26 +122,26 @@ export default {
                             "<:n_slots_3:865742111067602964>": credits_amount * 10,
                             "<:n_slots_4:865742140658548757>": credits_amount * 10,
                             "<:n_slots_5:865742192219783230>": credits_amount * 20,
-                            "<:n_slots_6:865744198472171570>": credits_amount * 20
+                            "<:n_slots_6:865744198472171570>": credits_amount * 20,
                         };
                         const won_amount: number = won_ammount[res_0];
 
                         command_data.author_user_config.credits += won_amount;
                         command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
-                        embedSlots.footer.text = `Won ${command_data.global_context.utils.format_number(won_amount)}$!`;
+                        embedSlots.footer.text = `Won ${format_number(won_amount)}$!`;
                     } else {
                         command_data.author_user_config.credits -= credits_amount;
                         command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
 
-                        embedSlots.footer.text = `Lost ${command_data.global_context.utils.format_number(credits_amount)}$...`;
+                        embedSlots.footer.text = `Lost ${format_number(credits_amount)}$...`;
                     }
 
-                    message.edit({ embeds: [ embedSlots ] }).catch((e: Error) => {
+                    message.edit({ embeds: [embedSlots] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                 }, 750);
             }, 750);
         }, 750);
-    }
+    },
 } as Command;

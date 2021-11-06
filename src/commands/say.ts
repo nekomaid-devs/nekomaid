@@ -15,9 +15,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in what you want Nekomaid to say.", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in what you want Nekomaid to say.", "none")],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES) ],
+    permissionsNeeded: [new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -42,5 +42,5 @@ export default {
         command_data.msg.delete().catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

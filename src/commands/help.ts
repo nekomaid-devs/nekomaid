@@ -15,7 +15,7 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a command.", "none"), new RecommendedArgument(2, "Argument needs to be a subcommand.", "none") ],
+    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a command.", "none"), new RecommendedArgument(2, "Argument needs to be a subcommand.", "none")],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -69,7 +69,7 @@ export default {
                 const embedHelp = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`Help for - \`${unhidden_text + commands_text}\``);
                 embedHelp.addField("Usage:", usage);
 
-                command_data.msg.channel.send({ embeds: [ embedHelp ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             } else {
@@ -95,32 +95,35 @@ export default {
                     embedHelp.addField("Sub-commands:", commands_text_2);
                 }
 
-                command_data.msg.channel.send({ embeds: [ embedHelp ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }
         } else {
             const commands = Array.from(command_data.global_context.commands.values());
-            const categories: Map<string, any> = new Map([
-                [ "Help & Information", { prefix: "<:n_help:771821666895527986> ", items: [], nsfw: false } ],
-                [ "Actions", { prefix: "<:n_actions:771821287105363969> ", items: [], nsfw: false } ],
-                [ "Emotes", { prefix: "<:n_emotes:771822090395189258> ", items: [], nsfw: false } ],
-                [ "Fun", { prefix: "<:n_fun:771823135816941608> ", items: [], nsfw: false } ],
-                [ "Profile", { prefix: "<:n_profile:771824245688762379> ", items: [], nsfw: false } ],
-                [ "NSFW", { prefix: "<:n_nsfw:771822354497273877> ", items: [], nsfw: true } ],
-                [ "Utility", { prefix: "<:n_utility:771824485413945355> ", items: [], nsfw: false } ],
-                [ "Music", { prefix: "<:n_music:771823629570277396> ", items: [], nsfw: false } ],
-                [ "Moderation", { prefix: "<:n_moderation:771822603153047592> ", items: [], nsfw: false } ],
-                [ "Modules", { prefix: "<:n_modules:771824772652204032> ", items: [], nsfw: false } ],
-                [ "Leveling", { prefix: "<:n_leveling:771822966181724170> ", items: [], nsfw: false } ],
-                [ "Testing", { prefix: "", items: [], nsfw: false } ]
+            const categories: Map<string, { prefix: string; items: any[]; nsfw: boolean }> = new Map([
+                ["Help & Information", { prefix: "<:n_help:771821666895527986> ", items: [], nsfw: false }],
+                ["Actions", { prefix: "<:n_actions:771821287105363969> ", items: [], nsfw: false }],
+                ["Emotes", { prefix: "<:n_emotes:771822090395189258> ", items: [], nsfw: false }],
+                ["Fun", { prefix: "<:n_fun:771823135816941608> ", items: [], nsfw: false }],
+                ["Profile", { prefix: "<:n_profile:771824245688762379> ", items: [], nsfw: false }],
+                ["NSFW", { prefix: "<:n_nsfw:771822354497273877> ", items: [], nsfw: true }],
+                ["Utility", { prefix: "<:n_utility:771824485413945355> ", items: [], nsfw: false }],
+                ["Music", { prefix: "<:n_music:771823629570277396> ", items: [], nsfw: false }],
+                ["Moderation", { prefix: "<:n_moderation:771822603153047592> ", items: [], nsfw: false }],
+                ["Modules", { prefix: "<:n_modules:771824772652204032> ", items: [], nsfw: false }],
+                ["Leveling", { prefix: "<:n_leveling:771822966181724170> ", items: [], nsfw: false }],
+                ["Testing", { prefix: "", items: [], nsfw: false }],
             ]);
             commands
                 .filter((e) => {
                     return (show_hidden === true || e.hidden === false) && categories.has(e.category);
                 })
                 .forEach((command) => {
-                    categories.get(command.category).items.push(command);
+                    const category = categories.get(command.category);
+                    if (category !== undefined) {
+                        category.items.push(command);
+                    }
                 });
 
             const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
@@ -138,10 +141,13 @@ export default {
                 }
 
                 const category = categories.get(category_key);
+                if (category === undefined) {
+                    return;
+                }
                 let commands_string = "";
                 const commands_keys = category.items;
 
-                commands_keys.sort((a: any, b: any) => {
+                commands_keys.sort((a, b) => {
                     return a.name.localeCompare(b.name);
                 });
                 commands_keys.forEach((command: Command, index: number) => {
@@ -161,9 +167,9 @@ export default {
                 }
             });
 
-            command_data.msg.channel.send({ embeds: [ embedHelp ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Command;

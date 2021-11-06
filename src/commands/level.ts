@@ -3,7 +3,8 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
-import { get_top_server_level } from "../scripts/utils/util_sort_by";
+import { get_top_server_level } from "../scripts/utils/util_sort";
+import { get_level_XP } from "../scripts/utils/util_general";
 
 export default {
     name: "level",
@@ -12,15 +13,15 @@ export default {
     helpUsage: "[mention?]` *(optional argument)*",
     exampleUsage: "/user_tag/",
     hidden: false,
-    aliases: [ "lvl" ],
+    aliases: ["lvl"],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a mention.", "mention") ],
+    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.tagged_user === undefined) {
+        if (command_data.msg.guild === null || command_data.tagged_user === undefined || command_data.global_context.bot_config === null) {
             return;
         }
         if (command_data.server_config.module_level_enabled === false) {
@@ -49,23 +50,23 @@ export default {
             color: 8388736,
             author: {
                 name: `${command_data.tagged_user.tag}'s Profile (${author_pos}#)`,
-                icon_url: url === null ? undefined : url
+                icon_url: url === null ? undefined : url,
             },
             fields: [
                 {
                     name: "⚡    Server Level:",
-                    value: `${author_config.level} (XP: ${Math.round(author_config.xp)}/${Math.round(command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.author_user_config))})`
-                }
+                    value: `${author_config.level} (XP: ${Math.round(author_config.xp)}/${Math.round(get_level_XP(command_data.global_context.bot_config, command_data.author_user_config))})`,
+                },
             ],
             thumbnail: {
-                url: url === null ? undefined : url
+                url: url === null ? undefined : url,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`
-            }
+                text: `Requested by ${command_data.msg.author.tag}`,
+            },
         };
-        command_data.msg.channel.send({ embeds: [ embedLevel ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedLevel] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

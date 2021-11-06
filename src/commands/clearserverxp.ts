@@ -16,7 +16,7 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD) ],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -48,12 +48,12 @@ export default {
 
                 command_data.tagged_server_user_config = server_user_config;
                 command_data.tagged_member = member;
-                command_data.global_context.neko_modules_clients.levelingManager.update_server_level(command_data, 0);
+                command_data.global_context.neko_modules_clients.levelingManager.update_server_level(command_data, 0, false);
             }
         });
 
         command_data.msg.channel.send(`Cleared XP of \`${server_user_configs.length}\` users.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

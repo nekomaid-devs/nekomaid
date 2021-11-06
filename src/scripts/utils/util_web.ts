@@ -2,6 +2,9 @@
 import { GlobalContext } from "../../ts/base";
 import { Client } from "discord.js";
 
+/* Local Imports */
+import { pick_random } from "../../scripts/utils/util_general";
+
 export async function refresh_status(global_context: GlobalContext) {
     if (global_context.neko_data.shards_ready === false || global_context.bot.shard === null || global_context.bot.user === null) {
         return;
@@ -21,9 +24,9 @@ export async function refresh_status(global_context: GlobalContext) {
             global_context.logger.error(e);
         });
 
-    const statuses = [ "V2 live now!" ];
+    const statuses = ["V2 live now!"];
     global_context.bot.user.setStatus("online");
-    global_context.bot.user.setActivity(`${global_context.utils.pick_random(statuses)} | ${guild_count} servers`, { type: "PLAYING" });
+    global_context.bot.user.setActivity(`${pick_random(statuses)} | ${guild_count} servers`, { type: "PLAYING" });
 }
 
 export function refresh_website(global_context: GlobalContext) {
@@ -188,17 +191,21 @@ export function refresh_website(global_context: GlobalContext) {
         sentry_online: true,
         analytics_online: true,
         akaneko_online: true,
-        uptime_pings: [ Array(24).fill({ up: true }) ],
+        uptime_pings: [Array(24).fill({ up: true })],
 
         shard_list: shard_list,
         economy_list: economy_list,
-        command_list: command_list
+        command_list: command_list,
     };
 
     global_context.modules.axios
-        .post(`${global_context.config.nekomaid_API_endpoint}/v1/stats/post`, { stats: stats }, {
-                headers: global_context.data.default_headers
-            })
+        .post(
+            `${global_context.config.nekomaid_API_endpoint}/v1/stats/post`,
+            { stats: stats },
+            {
+                headers: global_context.data.default_headers,
+            }
+        )
         .catch((e: Error) => {
             global_context.logger.error(`[Nekomaid API] ${e}`);
         });
@@ -240,42 +247,42 @@ export async function refresh_bot_list(global_context: GlobalContext) {
 
     const data_1 = {
         guilds: guild_count,
-        users: user_count
+        users: user_count,
     };
     const data_2 = {
         guildCount: guild_count,
-        shardCount: global_context.bot.shard.count
+        shardCount: global_context.bot.shard.count,
     };
     const data_3 = {
         server_count: guild_count,
-        shard_count: global_context.bot.shard.count
+        shard_count: global_context.bot.shard.count,
     };
 
     const headers_POST_1 = {
         "Content-Type": "application/json",
-        Authorization: global_context.config.discord_bot_list_API_key
+        Authorization: global_context.config.discord_bot_list_API_key,
     };
     const headers_POST_2 = {
         "Content-Type": "application/json",
         Authorization: global_context.config.discord_bots_API_key,
-        "User-Agent": `NekoMaid-4177/1.0 (discord.js; +nekomaid.xyz) DBots/${global_context.bot.user.id}`
+        "User-Agent": `NekoMaid-4177/1.0 (discord.js; +nekomaid.xyz) DBots/${global_context.bot.user.id}`,
     };
     const headers_POST_3 = {
         "Content-Type": "application/json",
-        Authorization: global_context.config.discord_boats_API_key
+        Authorization: global_context.config.discord_boats_API_key,
     };
     const headers_POST_4 = {
         "Content-Type": "application/json",
-        Authorization: global_context.config.bots_for_discord_API_key
+        Authorization: global_context.config.bots_for_discord_API_key,
     };
     const headers_POST_5 = {
         "Content-Type": "application/json",
-        Authorization: global_context.config.top_gg_API_key
+        Authorization: global_context.config.top_gg_API_key,
     };
 
     global_context.modules.axios
         .post(`https://discordbotlist.com/api/v1/bots/${global_context.bot.user.id}/stats`, data_1, {
-            headers: headers_POST_1
+            headers: headers_POST_1,
         })
         .catch((e: Error) => {
             global_context.logger.error(`[Discord Botlist] ${e}`);
@@ -283,7 +290,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
 
     global_context.modules.axios
         .post(`https://discord.bots.gg/api/v1/bots/${global_context.bot.user.id}/stats`, data_2, {
-            headers: headers_POST_2
+            headers: headers_POST_2,
         })
         .catch((e: Error) => {
             global_context.logger.error(`[Discord Bots] ${e}`);
@@ -291,7 +298,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
 
     global_context.modules.axios
         .post(`https://discord.boats/api/bot/${global_context.bot.user.id}`, data_3, {
-            headers: headers_POST_3
+            headers: headers_POST_3,
         })
         .catch((e: Error) => {
             global_context.logger.error(`[Discord Boats] ${e}`);
@@ -299,7 +306,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
 
     global_context.modules.axios
         .post(`https://botsfordiscord.com/api/bot/${global_context.bot.user.id}`, data_3, {
-            headers: headers_POST_4
+            headers: headers_POST_4,
         })
         .catch((e: Error) => {
             global_context.logger.error(`[Bots For Discord] ${e}`);
@@ -307,7 +314,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
 
     global_context.modules.axios
         .post(`https://top.gg/api/bots/${global_context.bot.user.id}/stats`, data_3, {
-            headers: headers_POST_5
+            headers: headers_POST_5,
         })
         .catch((e: Error) => {
             global_context.logger.error(`[Top GG] ${e}`);

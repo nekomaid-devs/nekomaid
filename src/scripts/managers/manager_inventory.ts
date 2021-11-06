@@ -1,22 +1,27 @@
 /* Types */
 import { CommandData } from "../../ts/base";
 
+/* Local Imports */
+import { pick_random, format_number } from "../utils/util_general";
+
 class InventoryManager {
     use_item(command_data: CommandData, item_prefab: any, target_indexes: number[]) {
         switch (item_prefab.type) {
             case "box": {
                 let payout_amount = 0;
                 for (let i = 0; i < target_indexes.length; i++) {
-                    payout_amount += command_data.global_context.utils.pick_random(item_prefab.box_payouts);
+                    payout_amount += pick_random(item_prefab.box_payouts);
                 }
                 command_data.author_user_config.credits += payout_amount;
                 command_data.author_user_config.net_worth += payout_amount;
 
                 const embedBox = {
                     color: 8388736,
-                    description: `\`${command_data.msg.author.tag}\` opened \`${target_indexes.length}x ${item_prefab.display_name}\` and got \`${command_data.global_context.utils.format_number(payout_amount)}💵\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`
+                    description: `\`${command_data.msg.author.tag}\` opened \`${target_indexes.length}x ${item_prefab.display_name}\` and got \`${format_number(payout_amount)}💵\`! (Current Credits: \`${format_number(
+                        command_data.author_user_config.credits
+                    )}$\`)`,
                 };
-                command_data.msg.channel.send({ embeds: [ embedBox ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedBox] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 break;
@@ -29,9 +34,11 @@ class InventoryManager {
 
                 const embedCash = {
                     color: 8388736,
-                    description: `\`${command_data.msg.author.tag}\` opened \`${target_indexes.length}x ${item_prefab.display_name}\` and got \`${command_data.global_context.utils.format_number(payout_amount)}💵\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`
+                    description: `\`${command_data.msg.author.tag}\` opened \`${target_indexes.length}x ${item_prefab.display_name}\` and got \`${format_number(payout_amount)}💵\`! (Current Credits: \`${format_number(
+                        command_data.author_user_config.credits
+                    )}$\`)`,
                 };
-                command_data.msg.channel.send({ embeds: [ embedCash ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedCash] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 break;
@@ -50,9 +57,11 @@ class InventoryManager {
 
                 const embedCashOthers = {
                     color: 8388736,
-                    description: `\`${command_data.msg.author.tag}\` gave \`${target_indexes.length}x ${item_prefab.display_name}\` to \`${command_data.tagged_user.tag}\` and they got \`${command_data.global_context.utils.format_number(payout_amount)}💵\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.tagged_user_config.credits)}$\`)`
+                    description: `\`${command_data.msg.author.tag}\` gave \`${target_indexes.length}x ${item_prefab.display_name}\` to \`${command_data.tagged_user.tag}\` and they got \`${format_number(
+                        payout_amount
+                    )}💵\`! (Current Credits: \`${format_number(command_data.tagged_user_config.credits)}$\`)`,
                 };
-                command_data.msg.channel.send({ embeds: [ embedCashOthers ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedCashOthers] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
 

@@ -4,6 +4,7 @@ import { Permissions } from "discord.js";
 
 /* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";
+import { convert_time } from "../scripts/utils/util_time";
 
 export default {
     name: "mutes",
@@ -16,7 +17,7 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS) ],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -33,7 +34,7 @@ export default {
             .setAuthor(`❯ Mutes (${command_data.server_mutes.length})`, command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
 
         if (command_data.server_mutes.length < 1) {
-            command_data.msg.channel.send({ embeds: [ embedMutes ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedMutes] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -46,16 +47,16 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
             if (mutedUser !== undefined) {
-                const remainingText = mute.end === null ? "Forever" : command_data.global_context.neko_modules.timeConvert.convert_time(mute.end - now);
+                const remainingText = mute.end === null ? "Forever" : convert_time(mute.end - now);
                 embedMutes.addField(`Mute - ${mutedUser.tag}`, `Remaining: \`${remainingText}\``);
             }
 
             loadedMutes += 1;
             if (loadedMutes >= expectedMutes) {
-                command_data.msg.channel.send({ embeds: [ embedMutes ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedMutes] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }
         });
-    }
+    },
 } as Command;

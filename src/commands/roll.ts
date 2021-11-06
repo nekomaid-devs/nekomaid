@@ -3,6 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import { pick_random, format_number } from "../scripts/utils/util_general";
 
 export default {
     name: "roll",
@@ -17,7 +18,7 @@ export default {
     argumentsRecommended: [
         new RecommendedArgument(1, "Argument needs to be a number of sides.", "int>0"),
         new RecommendedArgument(2, "Argument needs to be a predicted result.", "int>0"),
-        new RecommendedArgument(3, "Argument needs to be a bet amount.", "int>0/all/half")
+        new RecommendedArgument(3, "Argument needs to be a bet amount.", "int>0/all/half"),
     ],
     permissionsNeeded: [],
     nsfw: false,
@@ -37,7 +38,7 @@ export default {
 
         const embedRoll: any = {
             title: `${command_data.msg.author.tag} is rolling...`,
-            color: 8388736
+            color: 8388736,
         };
 
         if (command_data.args.length > 2) {
@@ -82,7 +83,7 @@ export default {
                 return;
             }
 
-            const message = await command_data.msg.channel.send({ embeds: [ embedRoll ] }).catch((e: Error) => {
+            const message = await command_data.msg.channel.send({ embeds: [embedRoll] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
@@ -90,14 +91,14 @@ export default {
                 return;
             }
             setTimeout(() => {
-                const result = command_data.global_context.utils.pick_random(options);
+                const result = pick_random(options);
                 embedRoll.title = `${command_data.msg.author.tag} rolled ${result}!`;
 
                 if (result === bet_result) {
                     const multiplier = 0.55 + (options.length - 1) / 5;
                     const multiplier_text = (1 + multiplier).toFixed(2);
                     const won_amount = Math.floor(credits_amount * multiplier);
-                    const won_amount_text = command_data.global_context.utils.format_number(credits_amount + won_amount);
+                    const won_amount_text = format_number(credits_amount + won_amount);
 
                     command_data.author_user_config.credits += won_amount;
                     command_data.author_user_config.net_worth += won_amount;
@@ -105,10 +106,10 @@ export default {
 
                     embedRoll.description = `You won \`${won_amount_text}\` credits!`;
                     embedRoll.footer = {
-                        text: `Win multiplier: ${multiplier_text}x`
+                        text: `Win multiplier: ${multiplier_text}x`,
                     };
                 } else {
-                    const lost_amount_text = command_data.global_context.utils.format_number(credits_amount);
+                    const lost_amount_text = format_number(credits_amount);
 
                     command_data.author_user_config.credits -= credits_amount;
                     command_data.author_user_config.net_worth -= credits_amount;
@@ -117,16 +118,16 @@ export default {
                     embedRoll.description = `You lost \`${lost_amount_text}\` credits...`;
                 }
 
-                message.edit({ embeds: [ embedRoll ] }).catch((e: Error) => {
+                message.edit({ embeds: [embedRoll] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }, 750);
         } else {
-            const result = command_data.global_context.utils.pick_random(options);
+            const result = pick_random(options);
             embedRoll.title = `${command_data.msg.author.tag} rolled ${result}!`;
-            command_data.msg.channel.send({ embeds: [ embedRoll ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedRoll] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Command;

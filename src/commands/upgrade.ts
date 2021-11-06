@@ -14,7 +14,7 @@ export default {
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in a building name.", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in a building name.", "none")],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -63,11 +63,11 @@ export default {
                 color: 8388736,
                 author: {
                     name: `Upgrading - ${building_name}`,
-                    icon_url: url === null ? undefined : url
+                    icon_url: url === null ? undefined : url,
                 },
-                description: `Upgraded the building onto level ${building_field_level + 1}.`
+                description: `Upgraded the building onto level ${building_field_level + 1}.`,
             };
-            command_data.msg.channel.send({ embeds: [ embedUpgrade ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
@@ -107,13 +107,13 @@ export default {
                 color: 8388736,
                 author: {
                     name: `Upgrading - ${building_name}`,
-                    icon_url: url === null ? undefined : url
+                    icon_url: url === null ? undefined : url,
                 },
-                description: `Upgraded the building onto level ${global_building_field_level + 1}.`
+                description: `Upgraded the building onto level ${global_building_field_level + 1}.`,
             };
-            command_data.msg.channel.send({ embeds: [ embedUpgrade ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Command;

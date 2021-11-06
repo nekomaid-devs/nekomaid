@@ -75,7 +75,7 @@ class MarriageManager {
             source_tag: source_user.tag,
             target_ID: target_user.id,
             target_tag: target_user.tag,
-            channel_ID: channel.id
+            channel_ID: channel.id,
         };
 
         this.marriage_proposals.set(target_user.id, new_marriage_proposal);

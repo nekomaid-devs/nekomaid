@@ -25,13 +25,13 @@ export default {
             fields: [
                 {
                     name: "Check out our website!",
-                    value: "[Website](https://nekomaid.xyz)"
-                }
-            ]
+                    value: "[Website](https://nekomaid.xyz)",
+                },
+            ],
         };
 
-        command_data.msg.channel.send({ embeds: [ embedSite ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedSite] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

@@ -4,6 +4,7 @@ import { CommandData, Command } from "../ts/base";
 /* Local Imports */
 import NeededArgument from "../scripts/helpers/needed_argument";
 import { get_building_field, get_building_price, get_global_building_field } from "../scripts/utils/util_vars";
+import { format_number } from "../scripts/utils/util_general";
 
 export default {
     name: "build",
@@ -14,7 +15,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in a building name.", "none") ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in a building name.", "none")],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -45,10 +46,10 @@ export default {
 
             if (isNaN(amount)) {
                 const next_building_cost = get_building_price(building_field_level, building_field);
-                const next_building_cost_text = next_building_cost !== undefined ? command_data.global_context.utils.format_number(next_building_cost) : "-";
+                const next_building_cost_text = next_building_cost !== undefined ? format_number(next_building_cost) : "-";
                 const progress = next_building_cost !== undefined ? ((building_field_credits / next_building_cost) * 100).toFixed(2) : "0";
                 let building_description = "";
-                building_description += `**🔨 Built:** ${command_data.global_context.utils.format_number(building_field_credits)}/${next_building_cost_text} $\n`;
+                building_description += `**🔨 Built:** ${format_number(building_field_credits)}/${next_building_cost_text} $\n`;
                 building_description += `**📈 Progress:** ${progress}%\n`;
                 building_description += `**⭐ Level:** ${author_user_config_map.get(building_field)}`;
 
@@ -57,14 +58,14 @@ export default {
                     color: 8388736,
                     author: {
                         name: `${building_name}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
                     description: building_description,
                     footer: {
-                        text: `Requested by ${command_data.msg.author.tag}`
-                    }
+                        text: `Requested by ${command_data.msg.author.tag}`,
+                    },
                 };
-                command_data.msg.channel.send({ embeds: [ embedBuild ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedBuild] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             } else {
@@ -88,11 +89,11 @@ export default {
                     color: 8388736,
                     author: {
                         name: `Building - ${building_name}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
-                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`
+                    description: `Added \`${format_number(amount)} 💵\` towards the construction.`,
                 };
-                command_data.msg.channel.send({ embeds: [ embedBuildProgress ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedBuildProgress] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }
@@ -110,10 +111,10 @@ export default {
 
             if (isNaN(amount)) {
                 const next_building_cost = get_building_price(global_building_field_level, global_building_field);
-                const next_building_cost_text = next_building_cost !== undefined ? command_data.global_context.utils.format_number(next_building_cost) : "-";
+                const next_building_cost_text = next_building_cost !== undefined ? format_number(next_building_cost) : "-";
                 const progress = next_building_cost !== undefined ? ((global_building_field_credits / next_building_cost) * 100).toFixed(2) : "0";
                 let building_description = "";
-                building_description += `**🔨 Built:** ${command_data.global_context.utils.format_number(global_building_field_credits)}/${next_building_cost_text} $\n`;
+                building_description += `**🔨 Built:** ${format_number(global_building_field_credits)}/${next_building_cost_text} $\n`;
                 building_description += `**📈 Global Progress:** ${progress}%\n`;
                 building_description += `**⭐ Global Level:** ${bot_config_map.get(global_building_field)}`;
 
@@ -122,14 +123,14 @@ export default {
                     color: 8388736,
                     author: {
                         name: `${building_name}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
                     description: building_description,
                     footer: {
-                        text: `Requested by ${command_data.msg.author.tag}`
-                    }
+                        text: `Requested by ${command_data.msg.author.tag}`,
+                    },
                 };
-                command_data.msg.channel.send({ embeds: [ embedBuild ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedBuild] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             } else {
@@ -155,14 +156,14 @@ export default {
                     color: 8388736,
                     author: {
                         name: `Building - ${building_name}`,
-                        icon_url: url === null ? undefined : url
+                        icon_url: url === null ? undefined : url,
                     },
-                    description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`
+                    description: `Added \`${format_number(amount)} 💵\` towards the construction.`,
                 };
-                command_data.msg.channel.send({ embeds: [ embedBuildProgress ] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [embedBuildProgress] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }
         }
-    }
+    },
 } as Command;

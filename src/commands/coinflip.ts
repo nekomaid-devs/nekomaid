@@ -3,6 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import { pick_random, format_number } from "../scripts/utils/util_general";
 
 export default {
     name: "coinflip",
@@ -14,7 +15,7 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a bet amount.", "int>0/all/half"), new RecommendedArgument(2, "Argument needs to be heads/tails.", "heads/tails") ],
+    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a bet amount.", "int>0/all/half"), new RecommendedArgument(2, "Argument needs to be heads/tails.", "heads/tails")],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -22,7 +23,7 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        const options = [ "heads", "tails" ];
+        const options = ["heads", "tails"];
 
         if (command_data.args.length > 0) {
             const bet_result = command_data.args.length > 1 ? command_data.args[1].toLowerCase() : "heads";
@@ -59,9 +60,9 @@ export default {
 
             const embedCoinflipLoading = {
                 title: `${command_data.msg.author.tag} is flipping...`,
-                color: 8388736
+                color: 8388736,
             };
-            const message = await command_data.msg.channel.send({ embeds: [ embedCoinflipLoading ] }).catch((e: Error) => {
+            const message = await command_data.msg.channel.send({ embeds: [embedCoinflipLoading] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
@@ -70,18 +71,18 @@ export default {
             }
 
             setTimeout(() => {
-                const result = command_data.global_context.utils.pick_random(options);
+                const result = pick_random(options);
                 let result_text = "";
                 if (result === bet_result) {
                     const won_amount = Math.floor(credits_amount * 0.75);
-                    const won_amount_text = command_data.global_context.utils.format_number(credits_amount + won_amount);
+                    const won_amount_text = format_number(credits_amount + won_amount);
 
                     command_data.author_user_config.credits += won_amount;
                     command_data.author_user_config.net_worth += won_amount;
                     command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
                     result_text = won_amount_text;
                 } else {
-                    const lost_amount_text = command_data.global_context.utils.format_number(credits_amount);
+                    const lost_amount_text = format_number(credits_amount);
 
                     command_data.author_user_config.credits -= credits_amount;
                     command_data.author_user_config.net_worth -= credits_amount;
@@ -96,24 +97,24 @@ export default {
                     footer:
                         result === bet_result
                             ? {
-                                  text: "Win multiplier: 1.75x"
+                                  text: "Win multiplier: 1.75x",
                               }
-                            : undefined
+                            : undefined,
                 };
-                message.edit({ embeds: [ embedCoinflip ] }).catch((e: Error) => {
+                message.edit({ embeds: [embedCoinflip] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }, 750);
         } else {
-            const result = command_data.global_context.utils.pick_random(options);
+            const result = pick_random(options);
 
             const embedCoinflip = {
                 title: `${command_data.msg.author.tag} flipped ${result}!`,
-                color: 8388736
+                color: 8388736,
             };
-            command_data.msg.channel.send({ embeds: [ embedCoinflip ] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [embedCoinflip] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Command;

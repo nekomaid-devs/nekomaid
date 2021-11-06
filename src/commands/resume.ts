@@ -1,6 +1,9 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
 
+/* Node Imports */
+import { AudioPlayerStatus } from "@discordjs/voice";
+
 export default {
     name: "resume",
     category: "Music",
@@ -19,17 +22,14 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        if (
-            command_data.global_context.neko_modules_clients.voiceManager.connections.has(command_data.msg.guild.id) === false ||
-            command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id).current === -1
-        ) {
+        const connection = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
+        if (connection === undefined || connection.current === null) {
             command_data.msg.reply("There's nothing playing!");
             return;
         }
 
-        const voice_data = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
-        if (voice_data.connection.dispatcher.paused === true) {
-            voice_data.connection.dispatcher.resume();
+        if (connection.player.state.status === AudioPlayerStatus.Paused) {
+            connection.player.unpause();
             command_data.msg.channel.send("Resumed current song.").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
@@ -38,5 +38,5 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
         }
-    }
+    },
 } as Command;

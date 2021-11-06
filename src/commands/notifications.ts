@@ -1,6 +1,9 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
 
+/* Local Imports */
+import { convert_time } from "../scripts/utils/util_time";
+
 export default {
     name: "notifications",
     category: "Profile",
@@ -26,7 +29,7 @@ export default {
             .slice(0, 10)
             .reduce((acc, curr) => {
                 const time_ago = Date.now() - curr.timestamp;
-                acc += `${curr.description.replace("<time_ago>", `**[${command_data.global_context.neko_modules.timeConvert.convert_time(time_ago)}]** - `)}\n`;
+                acc += `${curr.description.replace("<time_ago>", `**[${convert_time(time_ago)}]** - `)}\n`;
 
                 return acc;
             }, "");
@@ -39,14 +42,14 @@ export default {
         const embedNotifications = {
             author: {
                 name: "Notifications",
-                icon_url: url === null ? undefined : url
+                icon_url: url === null ? undefined : url,
             },
             description: notifications_description,
-            color: 8388736
+            color: 8388736,
         };
 
-        command_data.msg.channel.send({ embeds: [ embedNotifications ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedNotifications] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

@@ -3,6 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import { get_borgar_gifs } from "../scripts/utils/util_vars";
+import { pick_random } from "../scripts/utils/util_general";
 
 export default {
     name: "borgar",
@@ -22,17 +23,17 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        const url = command_data.global_context.utils.pick_random(get_borgar_gifs());
+        const url = pick_random(get_borgar_gifs());
         const embedBorgar = {
             title: `${command_data.msg.author.tag} eats a borgar!`,
             color: 8388736,
             image: {
-                url: url
-            }
+                url: url,
+            },
         };
 
-        command_data.msg.channel.send({ embeds: [ embedBorgar ] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [embedBorgar] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-    }
+    },
 } as Command;

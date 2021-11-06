@@ -16,9 +16,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [ new NeededArgument(1, "You need to type in an username (ex. `LamkasDev` or `LamkasDev#4235`).", "text") ],
-    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a reason.", "none") ],
-    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS) ],
+    argumentsNeeded: [new NeededArgument(1, "You need to type in an username (ex. `LamkasDev` or `LamkasDev#4235`).", "text")],
+    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a reason.", "none")],
+    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -67,5 +67,5 @@ export default {
             .catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
-    }
+    },
 } as Command;

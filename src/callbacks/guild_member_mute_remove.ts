@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildEditType, GuildFetchType } from "../scripts/db/db_utils";
+import { GuildEditType, GuildFetchType } from "../ts/mysql";
 import { TextChannel } from "discord.js";
 
 /* Node Imports */
@@ -44,34 +44,34 @@ export default {
             const embedUnmute = {
                 author: {
                     name: `Case ${server_config.case_ID}# | Unmute | ${event.member.user.tag}`,
-                    icon_url: url === null ? undefined : url
+                    icon_url: url === null ? undefined : url,
                 },
                 fields: [
                     {
                         name: "User:",
                         value: event.member.user.toString(),
-                        inline: true
+                        inline: true,
                     },
                     {
                         name: "Moderator:",
                         value: event.moderationManager.toString(),
-                        inline: true
+                        inline: true,
                     },
                     {
                         name: "Reason:",
-                        value: event.reason
-                    }
-                ]
+                        value: event.reason,
+                    },
+                ],
             };
 
             server_config.case_ID += 1;
             global_context.neko_modules_clients.db.edit_server(server_config, GuildEditType.AUDIT);
 
-            channel.send({ embeds: [ embedUnmute ] }).catch((e: Error) => {
+            channel.send({ embeds: [embedUnmute] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
         }
 
         global_context.neko_modules_clients.db.remove_server_mute(event.previous_mute.id);
-    }
+    },
 } as Callback;
