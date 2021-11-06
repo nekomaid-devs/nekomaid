@@ -14,7 +14,7 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
+    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a mention.", "mention") ],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -30,8 +30,8 @@ export default {
                 command_data.global_context.logger.api_error(e);
             });
             if (married_user !== undefined && married_user !== null) {
-                married_text = married_user.username + "#" + married_user.discriminator;
-                if (command_data.tagged_user_config.can_divorce == false) {
+                married_text = `${married_user.username}#${married_user.discriminator}`;
+                if (command_data.tagged_user_config.can_divorce === false) {
                     married_text += " (🔒)";
                 }
             }
@@ -64,9 +64,7 @@ export default {
                 },
                 {
                     name: "⚡    Level:",
-                    value: `${command_data.tagged_user_config.level} (XP: ${Math.round(command_data.tagged_user_config.xp)}/${Math.round(
-                        command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.tagged_user_config)
-                    )})`,
+                    value: `${command_data.tagged_user_config.level} (XP: ${Math.round(command_data.tagged_user_config.xp)}/${Math.round(command_data.global_context.utils.get_level_XP(command_data.server_config, command_data.tagged_user_config))})`,
                     inline: true,
                 },
                 {
@@ -86,7 +84,7 @@ export default {
                 text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedProfile] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedProfile ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

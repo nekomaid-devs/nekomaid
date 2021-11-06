@@ -13,7 +13,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a tag- (ex. `ass`, `catgirl`, `foxgirl`, ...)", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in a tag- (ex. `ass`, `catgirl`, `foxgirl`, ...)", "none") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: true,
@@ -45,7 +45,7 @@ export default {
                 text: `Page: ${post_info.page_number}/${post_info.num_of_pages} Post: ${post_info.post_number}/${post_info.num_of_posts}`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedRealbooru] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedRealbooru ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

@@ -31,11 +31,11 @@ export function get_8ball_answers() {
 }
 
 export function get_angry_gifs() {
-    return ["https://i.imgur.com/S9GQ9tC.gif"];
+    return [ "https://i.imgur.com/S9GQ9tC.gif" ];
 }
 
 export function get_arrest_gifs() {
-    return ["https://i.imgur.com/zpyh599.gif", "https://i.imgur.com/erqEvRm.gif", "https://i.imgur.com/WVYmbTf.gif", "https://i.imgur.com/hqCkyKy.gif"];
+    return [ "https://i.imgur.com/zpyh599.gif", "https://i.imgur.com/erqEvRm.gif", "https://i.imgur.com/WVYmbTf.gif", "https://i.imgur.com/hqCkyKy.gif" ];
 }
 
 export function get_bite_gifs() {
@@ -76,7 +76,7 @@ export function get_blush_gifs() {
 }
 
 export function get_borgar_gifs() {
-    return ["https://i.imgur.com/ABEPwfx.gif", "https://i.imgur.com/D2h6sWy.gif", "https://i.imgur.com/qsLCxVT.gif", "https://i.imgur.com/OkVM7h9.gif"];
+    return [ "https://i.imgur.com/ABEPwfx.gif", "https://i.imgur.com/D2h6sWy.gif", "https://i.imgur.com/qsLCxVT.gif", "https://i.imgur.com/OkVM7h9.gif" ];
 }
 
 export function get_cry_gifs() {
@@ -160,7 +160,7 @@ export function get_hug_gifs() {
 }
 
 export function get_kill_gifs() {
-    return ["https://i.imgur.com/Ln8uBGd.gif", "https://i.imgur.com/l4ghSPV.gif", "https://i.imgur.com/wUCtWqP.gif", "https://i.imgur.com/jcsUpO1.gif"];
+    return [ "https://i.imgur.com/Ln8uBGd.gif", "https://i.imgur.com/l4ghSPV.gif", "https://i.imgur.com/wUCtWqP.gif", "https://i.imgur.com/jcsUpO1.gif" ];
 }
 
 export function get_kiss_gifs() {
@@ -222,7 +222,7 @@ export function get_lick_gifs() {
 }
 
 export function get_nom_gifs() {
-    return ["https://i.imgur.com/LyDB1JX.gif", "https://i.imgur.com/iIVYgGn.gif", "https://i.imgur.com/gCTrFZa.gif", "https://i.imgur.com/gpxUcs9.gif", "https://i.imgur.com/zgHo7X2.gif", "https://i.imgur.com/dr3Lln0.gif"];
+    return [ "https://i.imgur.com/LyDB1JX.gif", "https://i.imgur.com/iIVYgGn.gif", "https://i.imgur.com/gCTrFZa.gif", "https://i.imgur.com/gpxUcs9.gif", "https://i.imgur.com/zgHo7X2.gif", "https://i.imgur.com/dr3Lln0.gif" ];
 }
 
 export function get_pat_gifs() {
@@ -285,7 +285,7 @@ export function get_pout_gifs() {
 }
 
 export function get_shrug_gifs() {
-    return ["https://i.imgur.com/az36ZoI.gif", "https://i.imgur.com/P8DowRQ.gif", "https://i.imgur.com/AGA5A0v.gif", "https://i.imgur.com/9VKlRNh.gif", "https://i.imgur.com/L3mqxwD.gif", "https://i.imgur.com/NZcl6TE.gif"];
+    return [ "https://i.imgur.com/az36ZoI.gif", "https://i.imgur.com/P8DowRQ.gif", "https://i.imgur.com/AGA5A0v.gif", "https://i.imgur.com/9VKlRNh.gif", "https://i.imgur.com/L3mqxwD.gif", "https://i.imgur.com/NZcl6TE.gif" ];
 }
 
 export function get_slap_gifs() {
@@ -363,7 +363,7 @@ export function get_smug_gifs() {
 }
 
 export function get_think_gifs() {
-    return ["https://i.imgur.com/6FGx1NM.gif", "https://i.imgur.com/JoByx01.gif", "https://i.imgur.com/BKh3Xry.gif", "https://i.imgur.com/vM6sH8D.gif", "https://i.imgur.com/MD9pT3Y.gif", "https://i.imgur.com/iLd8uVA.gif"];
+    return [ "https://i.imgur.com/6FGx1NM.gif", "https://i.imgur.com/JoByx01.gif", "https://i.imgur.com/BKh3Xry.gif", "https://i.imgur.com/vM6sH8D.gif", "https://i.imgur.com/MD9pT3Y.gif", "https://i.imgur.com/iLd8uVA.gif" ];
 }
 
 export function get_tickle_gifs() {
@@ -381,7 +381,7 @@ export function get_tickle_gifs() {
 }
 
 export function get_tieup_gifs() {
-    return ["https://i.imgur.com/QaIfZSl.gif", "https://i.imgur.com/PdlUOqE.gif", "https://i.imgur.com/x0SnvSZ.gif", "https://i.imgur.com/zs5FliT.gif"];
+    return [ "https://i.imgur.com/QaIfZSl.gif", "https://i.imgur.com/PdlUOqE.gif", "https://i.imgur.com/x0SnvSZ.gif", "https://i.imgur.com/zs5FliT.gif" ];
 }
 
 export function get_error_embed(msg: Message, prefix: string, command: Command, problem: string, usage_detailed: string) {
@@ -408,23 +408,23 @@ export function get_error_embed(msg: Message, prefix: string, command: Command, 
 
 export function get_building_price(level: number, building_name: string) {
     const prices: Record<string, number[]> = {
-        b_city_hall: [0, 25000, 50000, 100000, 150000, 300000, 500000, 1000000, 2500000, 5000000, 10000000, 0],
-        b_bank: [0, 10000, 25000, 40000, 75000, 100000, 125000, 250000, 500000, 1000000, 3000000, 0],
-        b_lab: [0, 20000, 75000, 100000, 125000, 150000, 250000, 275000, 600000, 1250000, 3500000, 0],
-        b_sanctuary: [0, 15000, 35000, 50000, 90000, 110000, 135000, 265000, 540000, 1100000, 3250000, 0],
-        b_pancakes: [0, 25000, 50000, 100000, 150000, 300000, 500000, 1000000, 1300000, 2000000, 3500000, 0],
-        b_crime_den: [0, 30000, 75000, 150000, 250000, 450000, 750000, 1400000, 1950000, 2600000, 40000000, 0],
-        b_lewd_services: [0, 45000, 70000, 125000, 250000, 500000, 700000, 1300000, 2000000, 3000000, 4500000, 0],
-        b_casino: [0, 50000, 100000, 175000, 350000, 650000, 950000, 1800000, 2500000, 3750000, 50000000, 0],
-        b_scrapyard: [0, 100000, 150000, 250000, 500000, 750000, 1500000, 2500000, 4500000, 7500000, 10000000, 0],
-        b_pawn_shop: [0, 80000, 125000, 225000, 450000, 700000, 1250000, 2000000, 3800000, 5000000, 7500000, 0],
+        b_city_hall: [ 0, 25000, 50000, 100000, 150000, 300000, 500000, 1000000, 2500000, 5000000, 10000000, 0 ],
+        b_bank: [ 0, 10000, 25000, 40000, 75000, 100000, 125000, 250000, 500000, 1000000, 3000000, 0 ],
+        b_lab: [ 0, 20000, 75000, 100000, 125000, 150000, 250000, 275000, 600000, 1250000, 3500000, 0 ],
+        b_sanctuary: [ 0, 15000, 35000, 50000, 90000, 110000, 135000, 265000, 540000, 1100000, 3250000, 0 ],
+        b_pancakes: [ 0, 25000, 50000, 100000, 150000, 300000, 500000, 1000000, 1300000, 2000000, 3500000, 0 ],
+        b_crime_den: [ 0, 30000, 75000, 150000, 250000, 450000, 750000, 1400000, 1950000, 2600000, 40000000, 0 ],
+        b_lewd_services: [ 0, 45000, 70000, 125000, 250000, 500000, 700000, 1300000, 2000000, 3000000, 4500000, 0 ],
+        b_casino: [ 0, 50000, 100000, 175000, 350000, 650000, 950000, 1800000, 2500000, 3750000, 50000000, 0 ],
+        b_scrapyard: [ 0, 100000, 150000, 250000, 500000, 750000, 1500000, 2500000, 4500000, 7500000, 10000000, 0 ],
+        b_pawn_shop: [ 0, 80000, 125000, 225000, 450000, 700000, 1250000, 2000000, 3800000, 5000000, 7500000, 0 ],
 
-        b_mayor_house: [0, 250000, 450000, 1250000, 3000000, 5000000, 25000000, 50000000, 100000000, 125000000, 300000000, 0],
-        b_shrine: [0, 100000, 210000, 700000, 1500000, 2250000, 10000000, 25000000, 60000000, 100000000, 250000000, 0],
-        b_community_center: [0, 125000, 275000, 750000, 1750000, 2500000, 12500000, 27500000, 65000000, 105000000, 260000000, 0],
-        b_quantum_pancakes: [0, 150000, 350000, 900000, 2500000, 4000000, 18000000, 35000000, 75000000, 115000000, 280000000, 0],
-        b_crime_monopoly: [0, 200000, 400000, 1100000, 3000000, 4500000, 20000000, 40000000, 90000000, 120000000, 295000000, 0],
-        b_pet_shelter: [0, 140000, 300000, 775000, 2000000, 3000000, 15000000, 30000000, 70000000, 110000000, 275000000, 0],
+        b_mayor_house: [ 0, 250000, 450000, 1250000, 3000000, 5000000, 25000000, 50000000, 100000000, 125000000, 300000000, 0 ],
+        b_shrine: [ 0, 100000, 210000, 700000, 1500000, 2250000, 10000000, 25000000, 60000000, 100000000, 250000000, 0 ],
+        b_community_center: [ 0, 125000, 275000, 750000, 1750000, 2500000, 12500000, 27500000, 65000000, 105000000, 260000000, 0 ],
+        b_quantum_pancakes: [ 0, 150000, 350000, 900000, 2500000, 4000000, 18000000, 35000000, 75000000, 115000000, 280000000, 0 ],
+        b_crime_monopoly: [ 0, 200000, 400000, 1100000, 3000000, 4500000, 20000000, 40000000, 90000000, 120000000, 295000000, 0 ],
+        b_pet_shelter: [ 0, 140000, 300000, 775000, 2000000, 3000000, 15000000, 30000000, 70000000, 110000000, 275000000, 0 ],
     };
 
     return prices[building_name][level + 1];
@@ -490,20 +490,20 @@ export function get_economy_guide_embed(command_data: CommandData) {
             `You can also send money to other people with \`${command_data.server_config.prefix}transfer\` or give them reputation with \`${command_data.server_config.prefix}rep\`.\n` +
             `Also you can marry them with \`${command_data.server_config.prefix}marry\` or divorce them \`${command_data.server_config.prefix}divorce\`, if they get really annoying.\n` +
             `If you want to know who is the richest, you might want to check out \`${command_data.server_config.prefix}top\` or \`${command_data.server_config.prefix}top -server\`.\n\n` +
-            `\`[🪙]\` Now then, how to make money? That's a good question! There are a few ways...\n` +
+            "`[🪙]` Now then, how to make money? That's a good question! There are a few ways...\n" +
             `You can work at your city's pancake shop with \`${command_data.server_config.prefix}work\` or help the nekos with their shady plans with \`${command_data.server_config.prefix}crime\`.\n` +
             `If you're really down bad, you can also beg people for money with \`${command_data.server_config.prefix}beg\` or steal from somebody with \`${command_data.server_config.prefix}steal\`.\n` +
             `Also vote with \`${command_data.server_config.prefix}vote\`, it gives you goodies aswell (>w<).\n` +
             `Also, if you're feeling really lucky, you can gamble with \`${command_data.server_config.prefix}coinflip\`, \`${command_data.server_config.prefix}slots\` or \`${command_data.server_config.prefix}roll\`.\n\n` +
-            `\`[💵]\` Now that you're rich and all, you might want to know how to get even richer! That's where you can get into expanding your own city.\n` +
-            `All the time you are making pancakes or crimes, that's where your city comes to play. And improving your city also improves how much you make and unlocks cool perks and bonuses.\n` +
+            "`[💵]` Now that you're rich and all, you might want to know how to get even richer! That's where you can get into expanding your own city.\n" +
+            "All the time you are making pancakes or crimes, that's where your city comes to play. And improving your city also improves how much you make and unlocks cool perks and bonuses.\n" +
             `You can see how big your city is with \`${command_data.server_config.prefix}buildings\` or look at individual building's progress with \`${command_data.server_config.prefix}build building_name\`.\n\n` +
             `\`[🏗️]\` There is probably a lot of buildings and you don't know what to do first, but that's fine. You can see general description of all buildings with \`${command_data.server_config.prefix}buildingsguide\`.\n` +
             `Once you decide what building you want to work on, progress with the construction with \`${command_data.server_config.prefix}build building_name amount_of_credits\`.\n` +
             `If you have progressed enough (you can check with \`${command_data.server_config.prefix}build building_name\`, if you forgot), you can do \`${command_data.server_config.prefix}upgrade building_name\` to upgrade a building.\n` +
-            `Now you're on your way to become the best pancake seller, criminal overlord or casino owner in the city!\n\n` +
-            `\`[👾]\` If you would want to go even further, you can help everyone work on global buildings aswell. The concept is the very same, except that everyone can build and benefit from these!\n` +
-            `You could also aim to be the mayor and decide on important decisions in the city. But that's for some other time...`,
+            "Now you're on your way to become the best pancake seller, criminal overlord or casino owner in the city!\n\n" +
+            "`[👾]` If you would want to go even further, you can help everyone work on global buildings aswell. The concept is the very same, except that everyone can build and benefit from these!\n" +
+            "You could also aim to be the mayor and decide on important decisions in the city. But that's for some other time...",
         footer: { text: `If you have any questions, ask in the support server - ${command_data.server_config.prefix}support` },
     };
 
@@ -542,10 +542,10 @@ export function get_global_building_field(building_name: string) {
 
 export function get_items() {
     const items = new Map();
-    items.set("1", { id: "0", type: "box", display_name: "Common Box", box_payouts: [50, 100, 150], description: "A common lootbox with a cash prize inside~", rarity: "common" });
-    items.set("2", { id: "1", type: "box", display_name: "Uncommon Box", box_payouts: [100, 150, 200, 300], description: "An uncommon lootbox with a cash prize inside~", rarity: "uncommon" });
-    items.set("0", { id: "2", type: "box", display_name: "Rare Box", box_payouts: [300, 500, 750], description: "A rare lootbox with a cash prize inside~", rarity: "rare" });
-    items.set("3", { id: "3", type: "box", display_name: "Legendary Box", box_payouts: [1500, 1700, 1900, 2250], description: "A legendary lootbox with a cash prize inside~", rarity: "legendary" });
+    items.set("1", { id: "0", type: "box", display_name: "Common Box", box_payouts: [ 50, 100, 150 ], description: "A common lootbox with a cash prize inside~", rarity: "common" });
+    items.set("2", { id: "1", type: "box", display_name: "Uncommon Box", box_payouts: [ 100, 150, 200, 300 ], description: "An uncommon lootbox with a cash prize inside~", rarity: "uncommon" });
+    items.set("0", { id: "2", type: "box", display_name: "Rare Box", box_payouts: [ 300, 500, 750 ], description: "A rare lootbox with a cash prize inside~", rarity: "rare" });
+    items.set("3", { id: "3", type: "box", display_name: "Legendary Box", box_payouts: [ 1500, 1700, 1900, 2250 ], description: "A legendary lootbox with a cash prize inside~", rarity: "legendary" });
     items.set("4", { id: "4", type: "cash", display_name: "Cash Stack", cash_payout: 500, description: "A cash stack you can use to get cash~", rarity: "common" });
     items.set("5", { id: "5", type: "cash_others", display_name: "Mystery Cash Stack", cash_payout: 500, description: "A cash stack you can use on somebody else to give them cash~", rarity: "common" });
     items.set("8", {

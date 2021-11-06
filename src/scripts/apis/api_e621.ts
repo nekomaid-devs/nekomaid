@@ -11,7 +11,7 @@ class E621API {
             return { status: -1 };
         }
 
-        const pages_navigator = result_pages.data.lastIndexOf('a href="/posts?limit=1');
+        const pages_navigator = result_pages.data.lastIndexOf("a href=\"/posts?limit=1");
         const pages = parseInt(result_pages.data.substring(result_pages.data.indexOf(">", pages_navigator) + 1, result_pages.data.indexOf("<", pages_navigator)));
         let page_index = 1001;
         while (page_index > 1000) {
@@ -28,9 +28,9 @@ class E621API {
 
         const posts = [];
         let i = 0;
-        while (result_main.data.indexOf('data-id="', i) > 0) {
-            const i_2 = result_main.data.indexOf('data-id="', i) + 'data-id="'.length;
-            const post_ID = result_main.data.substring(i_2, result_main.data.indexOf('"', i_2));
+        while (result_main.data.indexOf("data-id=\"", i) > 0) {
+            const i_2 = result_main.data.indexOf("data-id=\"", i) + "data-id=\"".length;
+            const post_ID = result_main.data.substring(i_2, result_main.data.indexOf("\"", i_2));
             posts.push(post_ID);
 
             i = i_2;

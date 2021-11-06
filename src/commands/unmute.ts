@@ -16,9 +16,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention an user.", "mention")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a reason.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES)],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention an user.", "mention") ],
+    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a reason.", "none") ],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {

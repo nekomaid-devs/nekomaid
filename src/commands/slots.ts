@@ -13,7 +13,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an amount you're betting.", "int>0/all/half")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in an amount you're betting.", "int>0/all/half") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -25,33 +25,31 @@ export default {
         let credits_amount = parseInt(command_data.args[0]);
         if (command_data.args[0] === "all") {
             if (command_data.author_user_config.credits <= 0) {
-                command_data.msg.reply(`You don't have enough credits to do this.`);
+                command_data.msg.reply("You don't have enough credits to do this.");
                 return;
-            } else {
-                credits_amount = command_data.author_user_config.credits;
             }
+            credits_amount = command_data.author_user_config.credits;
         } else if (command_data.args[0] === "half") {
             if (command_data.author_user_config.credits <= 1) {
-                command_data.msg.reply(`You don't have enough credits to do this.`);
+                command_data.msg.reply("You don't have enough credits to do this.");
                 return;
-            } else {
-                credits_amount = Math.round(command_data.author_user_config.credits / 2);
             }
+            credits_amount = Math.round(command_data.author_user_config.credits / 2);
         } else if (command_data.args[0].includes("%")) {
             if (credits_amount > 0 && credits_amount <= 100) {
                 credits_amount = Math.round(command_data.author_user_config.credits * (credits_amount / 100));
                 if (credits_amount < 1 || command_data.author_user_config.credits <= 0) {
-                    command_data.msg.reply(`You don't have enough credits to do this.`);
+                    command_data.msg.reply("You don't have enough credits to do this.");
                     return;
                 }
             } else {
-                command_data.msg.reply(`Invalid percentage amount.`);
+                command_data.msg.reply("Invalid percentage amount.");
                 return;
             }
         }
 
         if (command_data.author_user_config.credits - credits_amount < 0) {
-            command_data.msg.reply(`You don't have enough credits to do this.`);
+            command_data.msg.reply("You don't have enough credits to do this.");
             return;
         }
 
@@ -65,52 +63,54 @@ export default {
 
         const options: any[] = [];
         if (command_data.global_context.utils.pick_random(true, false)) {
-            options.push(...["<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>"]);
+            options.push(...[ "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>" ]);
         } else {
-            options.push(...["<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>"]);
+            options.push(...[ "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>", "<:n_slots_2:865743599147548702>" ]);
         }
         if (command_data.global_context.utils.pick_random(true, false)) {
-            options.push(...["<:n_slots_3:865742111067602964>", "<:n_slots_3:865742111067602964>", "<:n_slots_3:865742111067602964>"]);
+            options.push(...[ "<:n_slots_3:865742111067602964>", "<:n_slots_3:865742111067602964>", "<:n_slots_3:865742111067602964>" ]);
         } else {
-            options.push(...["<:n_slots_4:865742140658548757>", "<:n_slots_4:865742140658548757>", "<:n_slots_4:865742140658548757>"]);
+            options.push(...[ "<:n_slots_4:865742140658548757>", "<:n_slots_4:865742140658548757>", "<:n_slots_4:865742140658548757>" ]);
         }
         if (command_data.global_context.utils.pick_random(true, false)) {
-            options.push(...["<:n_slots_5:865742192219783230>"]);
+            options.push(...[ "<:n_slots_5:865742192219783230>" ]);
         } else {
-            options.push(...["<:n_slots_6:865744198472171570>"]);
+            options.push(...[ "<:n_slots_6:865744198472171570>" ]);
         }
 
-        // 55.5% for min. 1 | 30% for min. 2 | 16% for min. 3
-        // 33.3% for min. 1 | 11% for min. 2 | 3.6% for min. 3
-        // 11.1% for min. 1 | 1.2% for min. 2 | 0.1% for min. 3
-        //
-        // If user bets 10k in 100 splits they get:
-        // 16x  $ 200  = 3,2k
-        // 3.6x $ 1k   = 3.6k
-        // 0.1x $ 20k  = 2k
+        /*
+         * 55.5% for min. 1 | 30% for min. 2 | 16% for min. 3
+         * 33.3% for min. 1 | 11% for min. 2 | 3.6% for min. 3
+         * 11.1% for min. 1 | 1.2% for min. 2 | 0.1% for min. 3
+         *
+         * If user bets 10k in 100 splits they get:
+         * 16x  $ 200  = 3,2k
+         * 3.6x $ 1k   = 3.6k
+         * 0.1x $ 20k  = 2k
+         */
 
-        const message = await command_data.msg.channel.send({ embeds: [embedSlots] }).catch((e: Error) => {
+        const message = await command_data.msg.channel.send({ embeds: [ embedSlots ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });
         if (message === null) {
             return;
         }
-        setTimeout(async () => {
+        setTimeout(() => {
             const res_0 = command_data.global_context.utils.pick_random(options);
             embedSlots.description = slotsDescription.replace("<res_0>", res_0).replace("<res_1>", "❓").replace("<res_2>", "❓");
-            message.edit({ embeds: [embedSlots] }).catch((e: Error) => {
+            message.edit({ embeds: [ embedSlots ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
 
-            setTimeout(async () => {
+            setTimeout(() => {
                 const res_1 = command_data.global_context.utils.pick_random(options);
                 embedSlots.description = slotsDescription.replace("<res_0>", res_0).replace("<res_1>", res_1).replace("<res_2>", "❓");
-                message.edit({ embeds: [embedSlots] }).catch((e: Error) => {
+                message.edit({ embeds: [ embedSlots ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
 
-                setTimeout(async () => {
+                setTimeout(() => {
                     const res_2 = command_data.global_context.utils.pick_random(options);
                     embedSlots.description = slotsDescription.replace("<res_0>", res_0).replace("<res_1>", res_1).replace("<res_2>", res_2);
 
@@ -136,7 +136,7 @@ export default {
                         embedSlots.footer.text = `Lost ${command_data.global_context.utils.format_number(credits_amount)}$...`;
                     }
 
-                    message.edit({ embeds: [embedSlots] }).catch((e: Error) => {
+                    message.edit({ embeds: [ embedSlots ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                 }, 750);

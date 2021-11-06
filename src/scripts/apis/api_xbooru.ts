@@ -6,7 +6,7 @@ import { load } from "cheerio";
 
 class XBooruAPI {
     async xbooru_result(global_context: GlobalContext, args: string[]) {
-        const site_url_main = `https://xbooru.com/index.php?page=post&s=list${args.length > 0 ? "&tags=" + args.join("+") : ""}`;
+        const site_url_main = `https://xbooru.com/index.php?page=post&s=list${args.length > 0 ? `&tags=${args.join("+")}` : ""}`;
         const result_main = await global_context.modules.axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
             global_context.logger.neko_api_error(e);
         });
@@ -43,7 +43,7 @@ class XBooruAPI {
         const ending_link = last_page.attr("href");
         const ending_ID = parseInt(ending_link.substring(ending_link.indexOf("pid=") + "pid=".length));
         while (current_ID <= ending_ID) {
-            pages.push(`?page=post&s=list${args.length > 0 ? "&tags=" + args.join("+") : ""}&pid=${current_ID}`);
+            pages.push(`?page=post&s=list${args.length > 0 ? `&tags=${args.join("+")}` : ""}&pid=${current_ID}`);
             current_ID += 42;
         }
 
@@ -66,8 +66,10 @@ class XBooruAPI {
                 const preview = $1(this);
                 const parent = preview.parent();
                 const href = parent.attr("href");
-                /*let tags_attr = preview.attr("alt");
-                let tags = tags_attr.split(" ");*/
+                /*
+                 *let tags_attr = preview.attr("alt");
+                 *let tags = tags_attr.split(" ");
+                 */
 
                 post_links.push(`https://xbooru.com/${href}`);
             });

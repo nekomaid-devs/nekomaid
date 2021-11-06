@@ -14,11 +14,11 @@ export default {
     helpUsage: "[numberOfMessages] [mention?]` *(1 optional argument)*",
     exampleUsage: "99 /user_tag/",
     hidden: false,
-    aliases: ["purge"],
+    aliases: [ "purge" ],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in number of messages.", "int>0")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_MESSAGES), new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES)],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in number of messages.", "int>0") ],
+    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a mention.", "mention") ],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_MESSAGES), new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -28,18 +28,16 @@ export default {
         // TODO: support swapping arguments (or improve the format)
         const num_messages = parseInt(command_data.args[0]);
         if (num_messages > 99) {
-            command_data.msg.reply(`Cannot delete more than 99 messages.`);
+            command_data.msg.reply("Cannot delete more than 99 messages.");
             return;
         }
 
         const target_user = command_data.msg.mentions.users.first();
         if (target_user !== undefined) {
-            const messages = Array.from(
-                await command_data.msg.channel.messages.fetch({ limit: 99 }).catch((e: Error) => {
+            const messages = Array.from(await command_data.msg.channel.messages.fetch({ limit: 99 }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                     return new Map<string, Message>();
-                })
-            );
+                }));
 
             messages.pop();
             let target_messages: any = messages.filter((m: any) => {
@@ -55,15 +53,13 @@ export default {
                 .then((messages) => {
                     command_data.msg.channel
                         .send(`Deleted \`${messages.size}\` messages from **${target_user.tag}**.`)
-                        .then((message) =>
-                            setTimeout(
-                                () =>
-                                    message.delete().catch((e: Error) => {
-                                        command_data.global_context.logger.api_error(e);
-                                    }),
-                                3000
-                            )
-                        )
+                        .then((message) => {
+                            return setTimeout(() => {
+                                return message.delete().catch((e: Error) => {
+                                    command_data.global_context.logger.api_error(e);
+                                });
+                            }, 3000);
+                        })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
@@ -78,15 +74,13 @@ export default {
                     const delete_messages_size = messages.size - 1;
                     command_data.msg.channel
                         .send(`Deleted \`${delete_messages_size}\` messages.`)
-                        .then((message) =>
-                            setTimeout(
-                                () =>
-                                    message.delete().catch((e: Error) => {
-                                        command_data.global_context.logger.api_error(e);
-                                    }),
-                                3000
-                            )
-                        )
+                        .then((message) => {
+                            return setTimeout(() => {
+                                return message.delete().catch((e: Error) => {
+                                    command_data.global_context.logger.api_error(e);
+                                });
+                            }, 3000);
+                        })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });

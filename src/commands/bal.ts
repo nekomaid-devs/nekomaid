@@ -11,10 +11,10 @@ export default {
     helpUsage: "[mention?]` *(optional argument)*",
     exampleUsage: "/user_tag/",
     hidden: false,
-    aliases: ["balance", "bank"],
+    aliases: [ "balance", "bank" ],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
+    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a mention.", "mention") ],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -51,7 +51,7 @@ export default {
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedBalance] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedBalance ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

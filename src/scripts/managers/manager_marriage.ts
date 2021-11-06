@@ -12,7 +12,7 @@ class MarriageManager {
         this.timeout_proposals = new Map();
     }
 
-    async check_marriage_proposals(global_context: GlobalContext, message: Message) {
+    check_marriage_proposals(global_context: GlobalContext, message: Message) {
         if (message.member === null || !(message.channel instanceof TextChannel)) {
             return;
         }

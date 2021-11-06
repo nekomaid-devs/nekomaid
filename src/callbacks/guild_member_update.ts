@@ -24,7 +24,7 @@ export default {
         });
     },
 
-    async process(global_context: GlobalContext, old_member: GuildMember | PartialGuildMember, new_member: GuildMember) {
+    process(global_context: GlobalContext, old_member: GuildMember | PartialGuildMember, new_member: GuildMember) {
         if (old_member === null) {
             return;
         }

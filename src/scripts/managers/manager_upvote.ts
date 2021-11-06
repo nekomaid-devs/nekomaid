@@ -52,7 +52,7 @@ class UpvoteManager {
     }
 
     async process_upvote(global_context: GlobalContext, id: string, site_ID: string, is_double = false) {
-        if (global_context.bot_config == null) {
+        if (global_context.bot_config === null) {
             return;
         }
 

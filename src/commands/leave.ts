@@ -8,7 +8,7 @@ export default {
     helpUsage: "`",
     exampleUsage: "",
     hidden: false,
-    aliases: ["stop"],
+    aliases: [ "stop" ],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],

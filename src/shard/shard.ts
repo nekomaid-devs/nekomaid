@@ -13,8 +13,8 @@ import * as bot_callbacks from "../callbacks";
 import { get_top } from "../scripts/utils/util_sort_by";
 import { refresh_bot_list, refresh_status, refresh_website } from "../scripts/utils/util_web";
 
-async function run() {
-    //Setup Discord client
+function run() {
+    // Setup Discord client
     const bot = new Discord.Client({
         makeCache: Discord.Options.cacheWithLimits({
             ApplicationCommandManager: { sweepInterval: 60 },
@@ -46,9 +46,9 @@ async function run() {
         ],
     });
 
-    //Create global context
+    // Create global context
     let global_context: GlobalContext = {
-        config: JSON.parse(readFileSync(process.cwd() + "/configs/default.json").toString()),
+        config: JSON.parse(readFileSync(`${process.cwd()}/configs/default.json`).toString()),
         bot_config: null,
 
         bot: bot,
@@ -68,16 +68,16 @@ async function run() {
         data: {},
     };
 
-    //Import modules
+    // Import modules
     global_context.modules.Discord = Discord;
     global_context.modules.performance = performance.performance;
 
-    //Setup utils
+    // Setup utils
     global_context.utils.get_formatted_time = () => {
         const date = new Date();
         const h = date.getHours();
         const m = date.getMinutes();
-        return (h < 10 ? "0" + h.toString() : h.toString()) + ":" + (m < 10 ? "0" + m.toString() : m.toString());
+        return `${h < 10 ? `0${h.toString()}` : h.toString()}:${m < 10 ? `0${m.toString()}` : m.toString()}`;
     };
 
     global_context.bot = bot;
@@ -90,15 +90,15 @@ async function run() {
         global_context.neko_modules_clients.upvoteManager.process_upvote(global_context, id, site_ID, is_double);
     };
 
-    //Create log colors
-    const log_colors = ["\x1b[32m", "\x1b[33m", "\x1b[34m", "\x1b[35m", "\x1b[36m", "\x1b[37m", "\x1b[90m", "\x1b[93m", "\x1b[95m", "\x1b[96m", "\x1b[97m"];
+    // Create log colors
+    const log_colors = [ "\x1b[32m", "\x1b[33m", "\x1b[34m", "\x1b[35m", "\x1b[36m", "\x1b[37m", "\x1b[90m", "\x1b[93m", "\x1b[95m", "\x1b[96m", "\x1b[97m" ];
     const log_color_shard = log_colors[Math.floor(Math.random() * log_colors.length)];
     const log_color_message = "\x1b[92m";
     const log_color_api_error = "\x1b[94m";
     const log_color_error = "\x1b[31m";
     const log_color_time = "\x1b[91m";
 
-    //Console setup
+    // Console setup
     global_context.logger.log = () => {
         /* */
     };
@@ -117,7 +117,7 @@ async function run() {
             if (global_context.bot.shard === null) {
                 return;
             }
-            process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] " + log_color_shard + "[shard_" + global_context.bot.shard.ids[0] + "] " + log_color_message + log_message + "\x1b[0m\n");
+            process.stdout.write(`${log_color_time}[${global_context.utils.get_formatted_time()}] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_message}${log_message}\x1b[0m\n`);
         };
     }
     if (global_context.config.logger_log_api_error === true) {
@@ -126,7 +126,7 @@ async function run() {
                 return;
             }
             const log_message = error.stack === undefined ? error : error.stack;
-            process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] [API Error] " + log_color_shard + "[shard_" + global_context.bot.shard.ids[0] + "] " + log_color_api_error + log_message + "\x1b[0m\n");
+            process.stdout.write(`${log_color_time}[${global_context.utils.get_formatted_time()}] [API Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_api_error}${log_message}\x1b[0m\n`);
         };
     }
     if (global_context.config.logger_log_neko_api_error === true) {
@@ -135,9 +135,7 @@ async function run() {
                 return;
             }
             const log_message = error.stack === undefined ? error : error.stack;
-            process.stdout.write(
-                log_color_time + "[" + global_context.utils.get_formatted_time() + "] [Nekomaid API Error] " + log_color_shard + "[shard_" + global_context.bot.shard.ids[0] + "] " + log_color_api_error + log_message + "\x1b[0m\n"
-            );
+            process.stdout.write(`${log_color_time}[${global_context.utils.get_formatted_time()}] [Nekomaid API Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_api_error}${log_message}\x1b[0m\n`);
         };
     }
     if (global_context.config.logger_log_error === true) {
@@ -146,20 +144,20 @@ async function run() {
                 return;
             }
             const log_message = error.stack === undefined ? error : error.stack;
-            process.stdout.write(log_color_time + "[" + global_context.utils.get_formatted_time() + "] [Error] " + log_color_shard + "[shard_" + global_context.bot.shard.ids[0] + "] " + log_color_error + log_message + "\x1b[0m\n");
+            process.stdout.write(`${log_color_time}[${global_context.utils.get_formatted_time()}] [Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_error}${log_message}\x1b[0m\n`);
         };
     }
 
     global_context.logger.log("Started logging into the shard...");
     const t_loading_start = global_context.modules.performance.now();
 
-    //Setup commands
+    // Setup commands
     const commands = Object.values(bot_commands);
     commands.forEach((command: Command) => {
         global_context.commands.set(command.name, command);
     });
 
-    //Setup command aliases
+    // Setup command aliases
     global_context.commands.forEach((command) => {
         if (command.aliases !== undefined) {
             command.aliases.forEach((alias: string) => {
@@ -168,7 +166,7 @@ async function run() {
         }
     });
 
-    //Log into Discord
+    // Log into Discord
     bot.login(global_context.config.token);
 
     let last_timestamp = Date.now();
@@ -241,7 +239,7 @@ async function run() {
             return;
         }
         if (global_context.neko_modules_clients.sortBy !== undefined && global_context.bot.shard.ids[0] === 0) {
-            const top_items = await get_top(global_context, ["credits", "bank"]);
+            const top_items = await get_top(global_context, [ "credits", "bank" ]);
             const economy_list = [];
             for (let i = 0; i < (top_items.length < 10 ? top_items.length : 10); i++) {
                 const neko_user = top_items[i];
@@ -275,8 +273,8 @@ async function run() {
         global_context.logger.log(`Finished logging into the shard (took ${(t_logging_end - t_loading_start).toFixed(1)}ms)...`);
         global_context.logger.log("-".repeat(30));
 
-        //Stuff the bot with goods uwu :pleading_emoji:
-        global_context.logger.log(`Started loading the shard...`);
+        // Stuff the bot with goods uwu :pleading_emoji:
+        global_context.logger.log("Started loading the shard...");
         global_context = await import_into_context(global_context);
         global_context.neko_data.uptime_start = global_context.data.uptime_start;
 
@@ -295,7 +293,7 @@ async function run() {
         });
     });
     bot.on("ratelimit", (ratelimit) => {
-        global_context.logger.log("Ratelimit: " + ratelimit.timeout + " (" + ratelimit.path + " - " + ratelimit.route + ")");
+        global_context.logger.log(`Ratelimit: ${ratelimit.timeout} (${ratelimit.path} - ${ratelimit.route})`);
     });
 }
 

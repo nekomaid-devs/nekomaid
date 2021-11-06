@@ -16,7 +16,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention an user.", "mention")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention an user.", "mention") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,

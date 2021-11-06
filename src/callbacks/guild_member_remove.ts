@@ -36,9 +36,9 @@ export default {
             return;
         }
 
-        if (server_config.leave_messages == true && server_config.leave_messages_channel !== null) {
+        if (server_config.leave_messages === true && server_config.leave_messages_channel !== null) {
             let format = server_config.leave_messages_format;
-            const member_display_name = "**" + member.user.tag + "**";
+            const member_display_name = `**${member.user.tag}**`;
             format = format.replace("<user>", member_display_name);
 
             const channel = await global_context.bot.channels.fetch(server_config.leave_messages_channel).catch((e: Error) => {
@@ -53,7 +53,7 @@ export default {
             });
         }
 
-        if (server_config.audit_kicks == true && server_config.audit_channel !== null) {
+        if (server_config.audit_kicks === true && server_config.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
@@ -114,7 +114,7 @@ export default {
                     ],
                 };
 
-                channel.send({ embeds: [embedKick] }).catch((e: Error) => {
+                channel.send({ embeds: [ embedKick ] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
             }

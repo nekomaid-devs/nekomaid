@@ -14,7 +14,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an item name.", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in an item name.", "none") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -40,7 +40,7 @@ export default {
             description: target_item.description,
             footer: { text: `Requested by ${command_data.msg.author.tag}` },
         };
-        command_data.msg.channel.send({ embeds: [embedItem] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedItem ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

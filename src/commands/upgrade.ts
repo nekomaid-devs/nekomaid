@@ -14,7 +14,7 @@ export default {
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a building name.", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in a building name.", "none") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -37,23 +37,23 @@ export default {
             if (!(typeof building_field_level === "number")) {
                 return;
             }
-            const building_field_credits = author_user_config_map.get(building_field + "_credits");
+            const building_field_credits = author_user_config_map.get(`${building_field}_credits`);
             if (!(typeof building_field_credits === "number")) {
                 return;
             }
 
             const next_building_cost = get_building_price(building_field_level, building_field);
             if (next_building_cost === undefined) {
-                command_data.msg.reply(`This building is already at it's max level.`);
+                command_data.msg.reply("This building is already at it's max level.");
                 return;
             }
             if (building_field_credits < next_building_cost) {
-                command_data.msg.reply(`The building haven't been built enough for an upgrade.`);
+                command_data.msg.reply("The building haven't been built enough for an upgrade.");
                 return;
             }
 
             author_user_config_map.set(building_field, building_field_level + 1);
-            author_user_config_map.set(building_field + "_credits", building_field_credits - next_building_cost);
+            author_user_config_map.set(`${building_field}_credits`, building_field_credits - next_building_cost);
 
             const a = Object.fromEntries(author_user_config_map) as any;
             command_data.global_context.neko_modules_clients.db.edit_global_user(a);
@@ -67,7 +67,7 @@ export default {
                 },
                 description: `Upgraded the building onto level ${building_field_level + 1}.`,
             };
-            command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedUpgrade ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
@@ -77,27 +77,27 @@ export default {
             if (!(typeof global_building_field_level === "number")) {
                 return;
             }
-            const global_building_field_credits = bot_config_map.get(global_building_field + "_credits");
+            const global_building_field_credits = bot_config_map.get(`${global_building_field}_credits`);
             if (!(typeof global_building_field_credits === "number")) {
                 return;
             }
 
             const next_building_cost = get_building_price(global_building_field_level, global_building_field);
             if (command_data.msg.author.id !== command_data.global_context.bot_config.mayor_ID) {
-                command_data.msg.reply(`Only the mayor can upgrade global buildings.`);
+                command_data.msg.reply("Only the mayor can upgrade global buildings.");
                 return;
             }
             if (next_building_cost === undefined) {
-                command_data.msg.reply(`This building is already at it's max level.`);
+                command_data.msg.reply("This building is already at it's max level.");
                 return;
             }
             if (global_building_field_credits < next_building_cost) {
-                command_data.msg.reply(`The building haven't been built enough for an upgrade.`);
+                command_data.msg.reply("The building haven't been built enough for an upgrade.");
                 return;
             }
 
             bot_config_map.set(global_building_field, global_building_field_level + 1);
-            bot_config_map.set(global_building_field + "_credits", global_building_field_credits - next_building_cost);
+            bot_config_map.set(`${global_building_field}_credits`, global_building_field_credits - next_building_cost);
 
             const a = Object.fromEntries(bot_config_map) as any;
             command_data.global_context.neko_modules_clients.db.edit_config(a);
@@ -111,7 +111,7 @@ export default {
                 },
                 description: `Upgraded the building onto level ${global_building_field_level + 1}.`,
             };
-            command_data.msg.channel.send({ embeds: [embedUpgrade] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedUpgrade ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

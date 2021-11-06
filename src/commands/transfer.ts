@@ -11,9 +11,9 @@ export default {
     helpUsage: "[mention] [amount/all/half/%]`",
     exampleUsage: "/user_tag/ 100",
     hidden: false,
-    aliases: ["pay"],
+    aliases: [ "pay" ],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention"), new NeededArgument(2, "You need to type in an amount.", "int>0/all/half")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention somebody.", "mention"), new NeededArgument(2, "You need to type in an amount.", "int>0/all/half") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -30,33 +30,31 @@ export default {
         let credits_amount = parseInt(command_data.args[1]);
         if (command_data.args[1] === "all") {
             if (command_data.author_user_config.credits <= 0) {
-                command_data.msg.reply(`You don't have enough credits to do this.`);
+                command_data.msg.reply("You don't have enough credits to do this.");
                 return;
-            } else {
-                credits_amount = command_data.author_user_config.credits;
             }
+            credits_amount = command_data.author_user_config.credits;
         } else if (command_data.args[1] === "half") {
             if (command_data.author_user_config.credits <= 1) {
-                command_data.msg.reply(`You don't have enough credits to do this.`);
+                command_data.msg.reply("You don't have enough credits to do this.");
                 return;
-            } else {
-                credits_amount = Math.round(command_data.author_user_config.credits / 2);
             }
+            credits_amount = Math.round(command_data.author_user_config.credits / 2);
         } else if (command_data.args[1].includes("%")) {
             if (credits_amount > 0 && credits_amount <= 100) {
                 credits_amount = Math.round(command_data.author_user_config.credits * (credits_amount / 100));
                 if (credits_amount < 1 || command_data.author_user_config.credits <= 0) {
-                    command_data.msg.reply(`You don't have enough credits to do this.`);
+                    command_data.msg.reply("You don't have enough credits to do this.");
                     return;
                 }
             } else {
-                command_data.msg.reply(`Invalid percentage amount.`);
+                command_data.msg.reply("Invalid percentage amount.");
                 return;
             }
         }
 
         if (command_data.author_user_config.credits - credits_amount < 0) {
-            command_data.msg.reply(`You don't have enough credits to do this.`);
+            command_data.msg.reply("You don't have enough credits to do this.");
             return;
         }
 
@@ -72,7 +70,7 @@ export default {
                 command_data.tagged_user.tag
             }\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`,
         };
-        command_data.msg.channel.send({ embeds: [embedTransfer] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedTransfer ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

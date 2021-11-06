@@ -8,7 +8,7 @@ export default {
     helpUsage: "`",
     exampleUsage: "",
     hidden: false,
-    aliases: ["loop"],
+    aliases: [ "loop" ],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],

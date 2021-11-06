@@ -13,7 +13,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention somebody.", "mention") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,

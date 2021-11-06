@@ -8,7 +8,7 @@ export default {
     helpUsage: "`",
     exampleUsage: "",
     hidden: false,
-    aliases: ["server"],
+    aliases: [ "server" ],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
@@ -31,7 +31,7 @@ export default {
             ],
         };
 
-        command_data.msg.channel.send({ embeds: [embedSupport] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedSupport ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

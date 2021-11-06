@@ -19,30 +19,29 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map()
-        .set("add", "`<subcommand_prefix> auto_role [roleName]` - Adds auto role\n" + "`<subcommand_prefix> counter [all_members/members/roles/channels/bots]` - Adds a counter")
+        .set("add", "`<subcommand_prefix> auto_role [roleName]` - Adds auto role\n`<subcommand_prefix> counter [all_members/members/roles/channels/bots]` - Adds a counter")
         .set("remove", "`<subcommand_prefix> auto_role [roleName]` - Removes auto role")
-        .set(
-            "set",
-            "`<subcommand_prefix> say_command [true/false]` - Enables/Disables the say command\n\n" +
+        .set("set", "`<subcommand_prefix> say_command [true/false]` - Enables/Disables the say command\n\n" +
                 "`<subcommand_prefix> welcome_messages [true/false]` - Enables/Disables welcome messages\n" +
                 "`<subcommand_prefix> welcome_messages_format [text]` - Changes the welcome message (include <user> in your message to show username)\n" +
                 "`<subcommand_prefix> welcome_messages_channel [channel_mention]` - Changes the channel for welcome messages\n" +
                 "`<subcommand_prefix> welcome_messages_ping [true/false]` - Enables/Disables mentions in welcome messages\n\n" +
                 "`<subcommand_prefix> leave_messages [true/false]` - Enables/Disables leave messages\n" +
                 "`<subcommand_prefix> leave_messages_format [text]` - Changes the leave message (include <user> in your message to show username)\n" +
-                "`<subcommand_prefix> leave_messages_channel [channel_mention]` - Changes the channel for leave messages"
-        ),
+                "`<subcommand_prefix> leave_messages_channel [channel_mention]` - Changes the channel for leave messages"),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
         if (command_data.msg.guild === null || command_data.msg.guild.me === null || !(command_data.msg.channel instanceof TextChannel)) {
             return;
         }
-        // TODO: make normal reply messages
-        // TODO: check for wrong error embeds
+        /*
+         * TODO: make normal reply messages
+         * TODO: check for wrong error embeds
+         */
         if (command_data.args.length < 1) {
             const channel_1 = command_data.server_config.welcome_messages_channel === null ? (command_data.server_config.welcome_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.welcome_messages_channel}>`;
             const channel_2 = command_data.server_config.leave_messages_channel === null ? (command_data.server_config.leave_messages === true ? "`None❗`" : "`None`") : `<#${command_data.server_config.leave_messages_channel}>`;
@@ -55,9 +54,9 @@ export default {
                     return null;
                 });
                 if (role === null) {
-                    auto_roles_text += "`" + role_ID + "`";
+                    auto_roles_text += `\`${role_ID}\``;
                 } else {
-                    auto_roles_text += "`" + role.name + "`";
+                    auto_roles_text += `\`${role.name}\``;
                 }
 
                 if (command_data.server_config.auto_roles.length - 1 > i) {
@@ -100,7 +99,7 @@ export default {
                 ],
             };
 
-            command_data.msg.channel.send({ embeds: [embedConfig] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedConfig ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -125,17 +124,19 @@ export default {
                         }
 
                         if (command_data.args.length < 3) {
-                            command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`.", "add auto_role Newbie")] }).catch((e: Error) => {
+                            command_data.msg.channel.send({ embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `roleName`.", "add auto_role Newbie") ] }).catch((e: Error) => {
                                 command_data.global_context.logger.api_error(e);
                             });
                             return;
                         }
                         const role_name = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[2], command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length));
-                        const role = command_data.msg.guild.roles.cache.find((role_temp) => role_temp.name === role_name);
+                        const role = command_data.msg.guild.roles.cache.find((role_temp) => {
+                            return role_temp.name === role_name;
+                        });
                         if (role === undefined) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name .\`${role_name}\` found-`, "add auto_role Newbie")],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name .\`${role_name}\` found-`, "add auto_role Newbie") ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -161,7 +162,7 @@ export default {
                         if (command_data.args.length < 3) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `type`. (Types: `allMembers`, `members`, `roles`, `channels`, `bots`)", "add counter allMembers")],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, "You need to enter a `type`. (Types: `allMembers`, `members`, `roles`, `channels`, `bots`)", "add counter allMembers") ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -222,7 +223,7 @@ export default {
                         setTimeout(() => {
                             command_data.global_context.neko_modules_clients.counterManager.update_counter(command_data.global_context, command_data.msg.guild, counter, true);
                         }, 5000);
-                        command_data.msg.channel.send(`Added new counter, wait for it to load.`).catch((e: Error) => {
+                        command_data.msg.channel.send("Added new counter, wait for it to load.").catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -232,13 +233,7 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(
-                                        command_data.msg,
-                                        command_data.server_config.prefix,
-                                        this,
-                                        `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help config add\` for help)`,
-                                        "add auto_role Newbie"
-                                    ),
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`add\`- (Check \`${command_data.server_config.prefix}help config add\` for help)`, "add auto_role Newbie"),
                                 ],
                             })
                             .catch((e: Error) => {
@@ -257,13 +252,7 @@ export default {
                     command_data.msg.channel
                         .send({
                             embeds: [
-                                get_error_embed(
-                                    command_data.msg,
-                                    command_data.server_config.prefix,
-                                    this,
-                                    `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help config remove\` for help)`,
-                                    `remove auto_role <value>`
-                                ),
+                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, "remove auto_role <value>"),
                             ],
                         })
                         .catch((e: Error) => {
@@ -286,13 +275,7 @@ export default {
                             command_data.msg.channel
                                 .send({
                                     embeds: [
-                                        get_error_embed(
-                                            command_data.msg,
-                                            command_data.server_config.prefix,
-                                            this,
-                                            `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help config remove\` for help)`,
-                                            `remove ${property} <value>`
-                                        ),
+                                        get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to remove a \`value\` from- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, `remove ${property} <value>`),
                                     ],
                                 })
                                 .catch((e: Error) => {
@@ -301,11 +284,13 @@ export default {
                             return;
                         }
                         const role_name = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[2], command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length));
-                        const role = command_data.msg.guild.roles.cache.find((role_temp) => role_temp.name === role_name);
+                        const role = command_data.msg.guild.roles.cache.find((role_temp) => {
+                            return role_temp.name === role_name;
+                        });
                         if (role === undefined) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name \`${role_name}\` found-`, "remove auto_role Newbie")],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No role with name \`${role_name}\` found-`, "remove auto_role Newbie") ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -324,7 +309,7 @@ export default {
                         if (role_index < 0) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No \`auto_role\` with name \`${role_name}\` found-`, "remove auto_role Newbie")],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `No \`auto_role\` with name \`${role_name}\` found-`, "remove auto_role Newbie") ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -343,13 +328,7 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(
-                                        command_data.msg,
-                                        command_data.server_config.prefix,
-                                        this,
-                                        `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help config remove\` for help)`,
-                                        "remove auto_role Newbie"
-                                    ),
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`remove\`- (Check \`${command_data.server_config.prefix}help config remove\` for help)`, "remove auto_role Newbie"),
                                 ],
                             })
                             .catch((e: Error) => {
@@ -368,13 +347,7 @@ export default {
                     command_data.msg.channel
                         .send({
                             embeds: [
-                                get_error_embed(
-                                    command_data.msg,
-                                    command_data.server_config.prefix,
-                                    this,
-                                    `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help config set\` for help)`,
-                                    "set welcome_messages true"
-                                ),
+                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help config set\` for help)`, "set welcome_messages true"),
                             ],
                         })
                         .catch((e: Error) => {
@@ -387,7 +360,7 @@ export default {
                 if (command_data.args.length < 3) {
                     command_data.msg.channel
                         .send({
-                            embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, "set " + property + " <newValue>")],
+                            embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <newValue>`) ],
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -403,7 +376,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -423,7 +396,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -442,7 +415,7 @@ export default {
                         if (typeof value !== "string" || value.length < 1) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (text)`, `set ${property} Welcome <user>!`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (text)`, `set ${property} Welcome <user>!`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -452,7 +425,7 @@ export default {
 
                         value = value_text;
                         command_data.server_config.welcome_messages_format = value;
-                        command_data.msg.channel.send(`Edited the welcome messages format.`).catch((e: Error) => {
+                        command_data.msg.channel.send("Edited the welcome messages format.").catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -463,7 +436,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -482,7 +455,7 @@ export default {
                         if (typeof value !== "string" || value.length < 1) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (text)`, `set ${property} Farawell <user>!`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (text)`, `set ${property} Farawell <user>!`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -492,7 +465,7 @@ export default {
 
                         value = value_text;
                         command_data.server_config.leave_messages_format = value;
-                        command_data.msg.channel.send(`Edited the leave messages format.`).catch((e: Error) => {
+                        command_data.msg.channel.send("Edited the leave messages format.").catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -507,7 +480,7 @@ export default {
                         if (channel === null || !(channel instanceof TextChannel)) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -541,7 +514,7 @@ export default {
                         if (channel === null || !(channel instanceof TextChannel)) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -571,7 +544,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -590,13 +563,7 @@ export default {
                         command_data.msg.channel
                             .send({
                                 embeds: [
-                                    get_error_embed(
-                                        command_data.msg,
-                                        command_data.server_config.prefix,
-                                        this,
-                                        `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help config set\` for help)`,
-                                        "set welcome_messages true"
-                                    ),
+                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help config set\` for help)`, "set welcome_messages true"),
                                 ],
                             })
                             .catch((e: Error) => {
@@ -613,7 +580,7 @@ export default {
             default: {
                 command_data.msg.channel
                     .send({
-                        embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set welcome_messages true")],
+                        embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `add`, `set`, `remove`)", "set welcome_messages true") ],
                     })
                     .catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);

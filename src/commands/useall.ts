@@ -14,7 +14,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an item name.", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in an item name.", "none") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,

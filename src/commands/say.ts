@@ -15,16 +15,16 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in what you want Nekomaid to say.", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in what you want Nekomaid to say.", "none") ],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES)],
+    permissionsNeeded: [ new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES) ],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
-        if (command_data.server_config.say_command == false) {
+        if (command_data.server_config.say_command === false) {
             return;
         }
         if ((command_data.msg.mentions.members !== null && command_data.msg.mentions.members.size > 0) || command_data.msg.mentions.roles.size > 0 || command_data.msg.mentions.everyone === true) {

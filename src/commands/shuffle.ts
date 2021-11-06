@@ -30,7 +30,7 @@ export default {
         const voice_data = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
         if (voice_data.mode === 0) {
             voice_data.queue = command_data.global_context.utils.shuffle_playlist(voice_data.queue);
-            voice_data.persistent_queue = [voice_data.current];
+            voice_data.persistent_queue = [ voice_data.current ];
             voice_data.queue.forEach((voiceRequest: any) => {
                 voice_data.persistent_queue.push(voiceRequest);
             });

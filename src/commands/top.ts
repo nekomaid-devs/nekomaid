@@ -12,10 +12,10 @@ export default {
     helpUsage: "[?property] [?-server]` *(all arguments optional)*",
     exampleUsage: "credits -server",
     hidden: false,
-    aliases: ["leaderboard", "lb"],
+    aliases: [ "leaderboard", "lb" ],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a property.", "none")],
+    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a property.", "none") ],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -25,18 +25,18 @@ export default {
         }
         let prop = "credits";
         if (command_data.args.length > 0) {
-            if (command_data.args[0] != "-server") {
+            if (command_data.args[0] !== "-server") {
                 prop = command_data.args[0];
             }
         }
 
-        let props = [prop];
+        let props = [ prop ];
         let top_text = prop;
         let top_user_text = prop;
 
         switch (prop) {
             case "credits":
-                props = ["credits", "bank"];
+                props = [ "credits", "bank" ];
                 top_text = "💵 Credits";
                 top_user_text = "$";
                 break;
@@ -48,14 +48,14 @@ export default {
 
             case "rep":
             case "reputation":
-                props = ["rep"];
+                props = [ "rep" ];
                 top_text = "🎖️ Reputation";
                 top_user_text = "reputation";
                 break;
 
             case "lvl":
             case "level":
-                props = ["level"];
+                props = [ "level" ];
                 top_text = "⚡ Level";
                 top_user_text = "level";
                 break;
@@ -120,7 +120,7 @@ export default {
             embedTop.addField(`${i + 1}) ${target_user.tag}`, `${command_data.global_context.utils.format_number(net)} ${top_user_text}`);
         }
 
-        command_data.msg.channel.send({ embeds: [embedTop] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedTop ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

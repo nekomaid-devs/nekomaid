@@ -37,14 +37,14 @@ export default {
 
         command_data.author_user_config.last_beg_time = end.getTime();
 
-        const min_credits = [50][0];
-        const max_credits = [80][0];
+        const min_credits = [ 50 ][0];
+        const max_credits = [ 80 ][0];
         let credits_amount = Math.floor(Math.random() * (max_credits - min_credits + 1) + min_credits);
 
         const chance = Math.floor(Math.random() * 100) + 1;
         let answers = [];
         let answer_color = 6732650;
-        if (chance <= [40][0]) {
+        if (chance <= [ 40 ][0]) {
             answers = command_data.global_context.bot_config.beg_success_answers;
             const notification = {
                 id: randomBytes(16).toString("hex"),
@@ -67,10 +67,10 @@ export default {
         }
 
         let answer = command_data.global_context.utils.pick_random(answers);
-        answer = answer.replace("<credits_amount>", "`" + command_data.global_context.utils.format_number(credits_amount) + "💵`");
+        answer = answer.replace("<credits_amount>", `\`${command_data.global_context.utils.format_number(credits_amount)}💵\``);
 
         const member = command_data.global_context.utils.pick_random(Array.from(command_data.msg.guild.members.cache.values()));
-        answer = answer.replace("<user>", "`" + member.user.tag + "`");
+        answer = answer.replace("<user>", `\`${member.user.tag}\``);
 
         command_data.author_user_config.credits += credits_amount;
         command_data.author_user_config.net_worth += credits_amount;
@@ -83,7 +83,7 @@ export default {
                 text: `Check out new ${command_data.server_config.prefix}economyguide`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedBeg] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedBeg ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

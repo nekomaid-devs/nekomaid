@@ -41,7 +41,7 @@ export default {
                 },
                 {
                     name: "❯ Region",
-                    value: `xx`,
+                    value: "xx",
                     inline: true,
                 },
                 {
@@ -77,7 +77,7 @@ export default {
                 text: `Requested by ${command_data.msg.author.tag}`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedServer] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedServer ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

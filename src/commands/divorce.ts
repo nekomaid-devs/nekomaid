@@ -36,7 +36,7 @@ export default {
         if (user_config === null) {
             return;
         }
-        if (command_data.author_user_config.can_divorce == false) {
+        if (command_data.author_user_config.can_divorce === false) {
             command_data.msg.reply(`You can't divorce \`${married_user.tag}\`, because you're going be with them forever!`);
             return;
         }

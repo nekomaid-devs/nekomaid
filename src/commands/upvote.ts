@@ -8,7 +8,7 @@ export default {
     helpUsage: "`",
     exampleUsage: "",
     hidden: false,
-    aliases: ["vote"],
+    aliases: [ "vote" ],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
@@ -27,7 +27,7 @@ export default {
             fields: [
                 {
                     name: "Upvote NekoMaid ˇˇ",
-                    value: `[top.gg](https://top.gg/bot/691398095841263678)`,
+                    value: "[top.gg](https://top.gg/bot/691398095841263678)",
                 },
             ],
             thumbnail: {
@@ -37,7 +37,7 @@ export default {
                 text: "Thank you for voting 💖",
             },
         };
-        command_data.msg.channel.send({ embeds: [embedUpvote] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedUpvote ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

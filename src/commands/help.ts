@@ -15,7 +15,7 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a command.", "none"), new RecommendedArgument(2, "Argument needs to be a subcommand.", "none")],
+    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a command.", "none"), new RecommendedArgument(2, "Argument needs to be a subcommand.", "none") ],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -60,7 +60,7 @@ export default {
                 }
 
                 const unhidden_text = show_hidden === true && command.hidden === true ? "❓" : "";
-                const commands_text = command.name + " " + target_subcommand_name;
+                const commands_text = `${command.name} ${target_subcommand_name}`;
                 let usage = command.subcommandHelp.get(target_subcommand_name);
                 if (usage !== undefined) {
                     usage = usage.split("<subcommand_prefix>").join(command_data.server_config.prefix + commands_text);
@@ -69,7 +69,7 @@ export default {
                 const embedHelp = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`Help for - \`${unhidden_text + commands_text}\``);
                 embedHelp.addField("Usage:", usage);
 
-                command_data.msg.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [ embedHelp ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             } else {
@@ -77,14 +77,14 @@ export default {
                 let commands_text = command.name;
                 const usage = command.helpUsage;
                 command.aliases.forEach((alias) => {
-                    commands_text += "/" + alias;
+                    commands_text += `/${alias}`;
                 });
 
                 const embedHelp = new command_data.global_context.modules.Discord.MessageEmbed()
                     .setColor(8388736)
                     .setTitle(`Help for - \`${unhidden_text + commands_text}\``)
                     .setDescription(command.description);
-                embedHelp.addField("Usage:", "`" + command_data.server_config.prefix + commands_text + " " + usage);
+                embedHelp.addField("Usage:", `\`${command_data.server_config.prefix}${commands_text} ${usage}`);
 
                 if (command.subcommandHelp.size > 0) {
                     let commands_text_2 = "";
@@ -95,25 +95,25 @@ export default {
                     embedHelp.addField("Sub-commands:", commands_text_2);
                 }
 
-                command_data.msg.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [ embedHelp ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }
         } else {
             const commands = Array.from(command_data.global_context.commands.values());
             const categories: Map<string, any> = new Map([
-                ["Help & Information", { prefix: "<:n_help:771821666895527986> ", items: [], nsfw: false }],
-                ["Actions", { prefix: "<:n_actions:771821287105363969> ", items: [], nsfw: false }],
-                ["Emotes", { prefix: "<:n_emotes:771822090395189258> ", items: [], nsfw: false }],
-                ["Fun", { prefix: "<:n_fun:771823135816941608> ", items: [], nsfw: false }],
-                ["Profile", { prefix: "<:n_profile:771824245688762379> ", items: [], nsfw: false }],
-                ["NSFW", { prefix: "<:n_nsfw:771822354497273877> ", items: [], nsfw: true }],
-                ["Utility", { prefix: "<:n_utility:771824485413945355> ", items: [], nsfw: false }],
-                ["Music", { prefix: "<:n_music:771823629570277396> ", items: [], nsfw: false }],
-                ["Moderation", { prefix: "<:n_moderation:771822603153047592> ", items: [], nsfw: false }],
-                ["Modules", { prefix: "<:n_modules:771824772652204032> ", items: [], nsfw: false }],
-                ["Leveling", { prefix: "<:n_leveling:771822966181724170> ", items: [], nsfw: false }],
-                ["Testing", { prefix: "", items: [], nsfw: false }],
+                [ "Help & Information", { prefix: "<:n_help:771821666895527986> ", items: [], nsfw: false } ],
+                [ "Actions", { prefix: "<:n_actions:771821287105363969> ", items: [], nsfw: false } ],
+                [ "Emotes", { prefix: "<:n_emotes:771822090395189258> ", items: [], nsfw: false } ],
+                [ "Fun", { prefix: "<:n_fun:771823135816941608> ", items: [], nsfw: false } ],
+                [ "Profile", { prefix: "<:n_profile:771824245688762379> ", items: [], nsfw: false } ],
+                [ "NSFW", { prefix: "<:n_nsfw:771822354497273877> ", items: [], nsfw: true } ],
+                [ "Utility", { prefix: "<:n_utility:771824485413945355> ", items: [], nsfw: false } ],
+                [ "Music", { prefix: "<:n_music:771823629570277396> ", items: [], nsfw: false } ],
+                [ "Moderation", { prefix: "<:n_moderation:771822603153047592> ", items: [], nsfw: false } ],
+                [ "Modules", { prefix: "<:n_modules:771824772652204032> ", items: [], nsfw: false } ],
+                [ "Leveling", { prefix: "<:n_leveling:771822966181724170> ", items: [], nsfw: false } ],
+                [ "Testing", { prefix: "", items: [], nsfw: false } ],
             ]);
             commands
                 .filter((e) => {
@@ -145,9 +145,9 @@ export default {
                     return a.name.localeCompare(b.name);
                 });
                 commands_keys.forEach((command: Command, index: number) => {
-                    let command_text = show_hidden === true && command.hidden === true ? "❓" + command.name : command.name;
+                    let command_text = show_hidden === true && command.hidden === true ? `❓${command.name}` : command.name;
                     command.aliases.forEach((alias) => {
-                        command_text += "/" + alias;
+                        command_text += `/${alias}`;
                     });
 
                     commands_string += `\`${command_text}\``;
@@ -156,12 +156,12 @@ export default {
                     }
                 });
 
-                if (commands_string != "") {
+                if (commands_string !== "") {
                     embedHelp.addField(category.prefix + category_key, category.nsfw && command_data.msg.channel.nsfw === false ? "Hidden in SFW channel, try changing this channel to NSFW" : commands_string);
                 }
             });
 
-            command_data.msg.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedHelp ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

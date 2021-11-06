@@ -16,8 +16,8 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS)],
+    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a mention.", "mention") ],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS) ],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -33,7 +33,7 @@ export default {
             .setAuthor(`❯ Warnings for ${command_data.tagged_user.tag} (${warns.length})`, command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }));
 
         if (warns.length < 1) {
-            command_data.msg.channel.send({ embeds: [embedWarns] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedWarns ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -45,7 +45,7 @@ export default {
             embedWarns.addField(`Warn #${warns.length - index}`, `Warned for - ${warn.reason} (${elapsedTime} ago)`);
         });
 
-        command_data.msg.channel.send({ embeds: [embedWarns] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedWarns ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

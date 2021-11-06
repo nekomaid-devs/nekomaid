@@ -16,8 +16,8 @@ class NHentaiAPI {
         if (result_html === null) {
             return;
         }
-        const title = result_html.substring(result_html.indexOf('<span class="pretty">') + '<span class="pretty">'.length, result_html.indexOf("</span>", result_html.indexOf('<span class="pretty">')));
-        const num_of_pages = result_html.substring(result_html.indexOf('<span class="name">', result_html.indexOf("Pages:")) + '<span class="name">'.length, result_html.indexOf("</span>", result_html.indexOf("Pages:")));
+        const title = result_html.substring(result_html.indexOf("<span class=\"pretty\">") + "<span class=\"pretty\">".length, result_html.indexOf("</span>", result_html.indexOf("<span class=\"pretty\">")));
+        const num_of_pages = result_html.substring(result_html.indexOf("<span class=\"name\">", result_html.indexOf("Pages:")) + "<span class=\"name\">".length, result_html.indexOf("</span>", result_html.indexOf("Pages:")));
         const all_tags: string[] = [];
         const all_languages: string[] = [];
         let all_favourites;

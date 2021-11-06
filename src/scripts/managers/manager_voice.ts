@@ -156,7 +156,7 @@ class VoiceManager {
                     description: `To play videos longer than \`3h\`, please upvote the bot on [here](https://top.gg/bot/${global_context.bot.user.id}/vote).`,
                 };
 
-                await source_message.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                await source_message.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
                 return;
@@ -167,28 +167,30 @@ class VoiceManager {
             const resource = createAudioResource(await ytdl(request.item.url, { quality: "highestaudio", highWaterMark: 1 << 25 }));
             request.stream = voice_connection.player.play(resource);
 
-            /*stream.on("finish", () => {
-                if (source_message.guild === null) { return; }
-                voice_connection.current = null;
-                if (voice_connection.mode === 0) {
-                    voice_connection.persistent_queue.shift();
-                }
-
-                this.play_next_on_connection(global_context, source_message.guild.id);
-            });
-            stream.on("error", (err: Error) => {
-                if (source_message.guild === null) { return; }
-                source_message.channel.send("There was an error while playing the video...").catch((e: Error) => {
-                    global_context.logger.api_error(e);
-                });
-                global_context.logger.error(err);
-
-                this.remove_connection(global_context, source_message.guild.id, err.toString());
-            });*/
+            /*
+             *stream.on("finish", () => {
+             *  if (source_message.guild === null) { return; }
+             *  voice_connection.current = null;
+             *  if (voice_connection.mode === 0) {
+             *      voice_connection.persistent_queue.shift();
+             *  }
+             *
+             *  this.play_next_on_connection(global_context, source_message.guild.id);
+             *});
+             *stream.on("error", (err: Error) => {
+             *  if (source_message.guild === null) { return; }
+             *  source_message.channel.send("There was an error while playing the video...").catch((e: Error) => {
+             *      global_context.logger.api_error(e);
+             *  });
+             *  global_context.logger.error(err);
+             *
+             *  this.remove_connection(global_context, source_message.guild.id, err.toString());
+             *});
+             */
 
             voice_connection.elapsed_ms = 0;
             voice_connection.current = request;
-            voice_connection.persistent_queue = [request];
+            voice_connection.persistent_queue = [ request ];
 
             if (log) {
                 const embedPlay = {
@@ -201,7 +203,7 @@ class VoiceManager {
                         text: `Currently ${voice_connection.queue.length} in queue`,
                     },
                 };
-                await source_message.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
+                await source_message.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
             }
@@ -220,14 +222,14 @@ class VoiceManager {
                         text: `Currently ${voice_connection.queue.length} in queue`,
                     },
                 };
-                await source_message.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
+                await source_message.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
             }
         }
     }
 
-    async play_next_on_connection(global_context: GlobalContext, source_message: Message) {
+    play_next_on_connection(global_context: GlobalContext, source_message: Message) {
         if (source_message.guild === null) {
             return;
         }
@@ -256,9 +258,9 @@ class VoiceManager {
             }
             raw_item = JSON.stringify(raw_item);
 
-            const a = raw_item.indexOf("lengthSeconds") + "lengthSeconds".length + '\\":\\"'.length;
+            const a = raw_item.indexOf("lengthSeconds") + "lengthSeconds".length + "\\\":\\\"".length;
             const duration = parseInt(raw_item.substring(a, raw_item.indexOf("\\", a)));
-            const b = raw_item.indexOf("title") + "title".length + '\\":\\"'.length;
+            const b = raw_item.indexOf("title") + "title".length + "\\\":\\\"".length;
             let title = raw_item.substring(b, raw_item.indexOf("\\", b));
             title = title.split("+").join(" ");
 

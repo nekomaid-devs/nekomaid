@@ -15,18 +15,15 @@ export default {
     exampleUsage: "set bans true",
     hidden: false,
     aliases: [],
-    subcommandHelp: new Map().set(
-        "set",
-        "`<subcommand_prefix> bans [true/false]` - Enables/Disables logging bans\n" +
+    subcommandHelp: new Map().set("set", "`<subcommand_prefix> bans [true/false]` - Enables/Disables logging bans\n" +
             "`<subcommand_prefix> kicks [true/false]` - Enables/Disables logging kicks\n" +
             "`<subcommand_prefix> mutes [true/false]` - Enables/Disables logging mutes\n\n" +
             "`<subcommand_prefix> nicknames [true/false]` - Enables/Disables logging nickname changes\n\n" +
             "`<subcommand_prefix> deleted_messages [true/false]` - Enables/Disables logging deleted messages\n\n" +
-            "`<subcommand_prefix> audit_channel [channel_mention]` - Changes the channel for logging"
-    ),
+            "`<subcommand_prefix> audit_channel [channel_mention]` - Changes the channel for logging"),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD), new NeededPermission("me", Permissions.FLAGS.VIEW_AUDIT_LOG)],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD), new NeededPermission("me", Permissions.FLAGS.VIEW_AUDIT_LOG) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -34,8 +31,10 @@ export default {
             return;
         }
 
-        // TODO: make normal reply messages
-        // TODO: check for wrong error embeds
+        /*
+         * TODO: make normal reply messages
+         * TODO: check for wrong error embeds
+         */
         if (command_data.args.length < 1) {
             const channel = command_data.server_config.audit_channel === null ? "`None`" : `<#${command_data.server_config.audit_channel}>`;
             const embedConfig = {
@@ -80,7 +79,7 @@ export default {
                 ],
             };
 
-            command_data.msg.channel.send({ embeds: [embedConfig] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedConfig ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -93,13 +92,7 @@ export default {
                     command_data.msg.channel
                         .send({
                             embeds: [
-                                get_error_embed(
-                                    command_data.msg,
-                                    command_data.server_config.prefix,
-                                    this,
-                                    `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`,
-                                    "set bans true"
-                                ),
+                                get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true"),
                             ],
                         })
                         .catch((e: Error) => {
@@ -112,7 +105,7 @@ export default {
                 if (command_data.args.length < 3) {
                     command_data.msg.channel
                         .send({
-                            embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`)],
+                            embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`) ],
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -127,7 +120,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -147,7 +140,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -167,7 +160,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -187,7 +180,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -207,7 +200,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -227,7 +220,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -247,7 +240,7 @@ export default {
                         if (typeof bool !== "boolean") {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -271,7 +264,7 @@ export default {
                         if (channel === null || !(channel instanceof TextChannel)) {
                             command_data.msg.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
+                                    embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`) ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -315,7 +308,7 @@ export default {
             }
 
             default: {
-                command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `set`)", "set bans true")] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [ get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `set`)", "set bans true") ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 break;

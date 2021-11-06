@@ -37,9 +37,9 @@ class ReactionRolesManager {
             dispose: true,
         });
         collector.on("collect", (r, user) => {
-            rr.reaction_roles.forEach(async (role_ID: string, i: number) => {
+            rr.reaction_roles.forEach((role_ID: string, i: number) => {
                 const emoji = rr.reaction_role_emojis[i];
-                if (emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === "<:" + r.emoji.name + ":" + r.emoji.id + ">")) {
+                if (emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === `<:${r.emoji.name}:${r.emoji.id}>`)) {
                     const member = Array.from(server.members.cache.values()).find((e) => {
                         return e.user.id === user.id;
                     });
@@ -60,9 +60,9 @@ class ReactionRolesManager {
             });
         });
         collector.on("remove", (r, user) => {
-            rr.reaction_roles.forEach(async (role_ID: string, i: number) => {
+            rr.reaction_roles.forEach((role_ID: string, i: number) => {
                 const emoji = rr.reaction_role_emojis[i];
-                if (emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === "<:" + r.emoji.name + ":" + r.emoji.id + ">")) {
+                if (emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === `<:${r.emoji.name}:${r.emoji.id}>`)) {
                     const member = Array.from(server.members.cache.values()).find((e) => {
                         return e.user.id === user.id;
                     });

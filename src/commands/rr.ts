@@ -37,7 +37,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
 
                 const roles_array = [];
                 const roles_emojis_array = [];
-                for (const [key, value] of roles.entries()) {
+                for (const [ key, value ] of roles.entries()) {
                     roles_array.push(key);
                     roles_emojis_array.push(value);
                 }
@@ -74,7 +74,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                 });
 
                 reactionRoleEmbed.setDescription(menu_description);
-                msg.edit({ embeds: [reactionRoleEmbed] }).catch((e: Error) => {
+                msg.edit({ embeds: [ reactionRoleEmbed ] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
 
@@ -85,7 +85,9 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
 
             default: {
                 role_name = message.content;
-                role = msg.guild.roles.cache.find((roleTemp) => roleTemp.name === role_name || roleTemp.id === role_name);
+                role = msg.guild.roles.cache.find((roleTemp) => {
+                    return roleTemp.name === role_name || roleTemp.id === role_name;
+                });
                 if (role === undefined) {
                     msg.edit(`You typed invalid role name! Type in existing role name or \`stop\` to finish the menu! (${roles.size} roles so far)`);
                     continue_collecting(global_context, server_config, source_message, msg, role_messages, roles);
@@ -121,11 +123,11 @@ export default {
     helpUsage: "`",
     exampleUsage: "",
     hidden: false,
-    aliases: ["reactionroles"],
+    aliases: [ "reactionroles" ],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_ROLES), new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES)],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_ROLES), new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {

@@ -15,25 +15,25 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
+    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a mention.", "mention") ],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
-    async execute(command_data: CommandData) {
+    execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
         let buildings_description = "";
-        buildings_description += `\`[Neko's City Hall]     [${"=".repeat(command_data.tagged_user_config.b_city_hall) + ">" + " ".repeat(10 - command_data.tagged_user_config.b_city_hall)}] Level ${
+        buildings_description += `\`[Neko's City Hall]     [${`${"=".repeat(command_data.tagged_user_config.b_city_hall)}>${" ".repeat(10 - command_data.tagged_user_config.b_city_hall)}`}] Level ${
             command_data.tagged_user_config.b_city_hall
         } (${command_data.global_context.utils.format_number(get_building_price(command_data.tagged_user_config.b_city_hall, "b_city_hall"))} $)\`\n`;
         buildings_description += `\`[Neko's Bank]          [${"=".repeat(command_data.tagged_user_config.b_bank)}>${" ".repeat(10 - command_data.tagged_user_config.b_bank)}] Level ${
             command_data.tagged_user_config.b_bank
         } (${command_data.global_context.utils.format_number(get_building_price(command_data.tagged_user_config.b_bank, "b_bank"))} $)\`\n`;
-        buildings_description += `\`[Neko's Lab]           [${"=".repeat(command_data.tagged_user_config.b_lab) + ">" + " ".repeat(10 - command_data.tagged_user_config.b_lab)}] Level ${
+        buildings_description += `\`[Neko's Lab]           [${`${"=".repeat(command_data.tagged_user_config.b_lab)}>${" ".repeat(10 - command_data.tagged_user_config.b_lab)}`}] Level ${
             command_data.tagged_user_config.b_lab
         } (${command_data.global_context.utils.format_number(get_building_price(command_data.tagged_user_config.b_lab, "b_lab"))} $)\`\n`;
-        buildings_description += `\`[Neko's Sanctuary]     [${"=".repeat(command_data.tagged_user_config.b_sanctuary) + ">" + " ".repeat(10 - command_data.tagged_user_config.b_sanctuary)}] Level ${
+        buildings_description += `\`[Neko's Sanctuary]     [${`${"=".repeat(command_data.tagged_user_config.b_sanctuary)}>${" ".repeat(10 - command_data.tagged_user_config.b_sanctuary)}`}] Level ${
             command_data.tagged_user_config.b_sanctuary
         } (${command_data.global_context.utils.format_number(get_building_price(command_data.tagged_user_config.b_sanctuary, "b_sanctuary"))} $)\`\n`;
         buildings_description += `\`[Neko's Pancakes]      [${"=".repeat(command_data.tagged_user_config.b_pancakes)}>${" ".repeat(10 - command_data.tagged_user_config.b_pancakes)}] Level ${
@@ -67,7 +67,7 @@ export default {
                 text: `Requested by ${command_data.msg.author.tag}`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedBuildings] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedBuildings ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

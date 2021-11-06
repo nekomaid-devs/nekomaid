@@ -34,7 +34,7 @@ export default {
         if (server_config === null) {
             return;
         }
-        if (server_config.audit_deleted_messages == true && server_config.audit_channel !== null) {
+        if (server_config.audit_deleted_messages === true && server_config.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
@@ -67,7 +67,7 @@ export default {
                 ],
             };
 
-            channel.send({ embeds: [embedDeletedMessage] }).catch((e: Error) => {
+            channel.send({ embeds: [ embedDeletedMessage ] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
         }

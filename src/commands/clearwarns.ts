@@ -16,12 +16,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention an user.", "mention")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a reason.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS)],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention an user.", "mention") ],
+    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a reason.", "none") ],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS) ],
     nsfw: false,
     cooldown: 1500,
-    async execute(command_data: CommandData) {
+    execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
@@ -30,7 +30,9 @@ export default {
             warn_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[0]) + command_data.args[0].length + 1);
         }
 
-        const warns = command_data.server_warns.filter((warn) => warn.user_ID === command_data.tagged_user.id);
+        const warns = command_data.server_warns.filter((warn) => {
+            return warn.user_ID === command_data.tagged_user.id;
+        });
         command_data.msg.channel.send(`Cleared warnings of \`${command_data.tagged_user.tag}\`. (Reason: \`${warn_reason}\`, Strikes: \`${warns.length}\` => \`0\`)-`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });

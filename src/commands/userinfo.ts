@@ -11,14 +11,14 @@ export default {
     helpUsage: "[mention?]` *(optional argument)*",
     exampleUsage: "/user_tag/",
     hidden: false,
-    aliases: ["memberinfo"],
+    aliases: [ "memberinfo" ],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
+    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a mention.", "mention") ],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
-    async execute(command_data: CommandData) {
+    execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
@@ -30,7 +30,7 @@ export default {
         const joinedAgo = command_data.global_context.neko_modules.timeConvert.convert_time(elapsedJoined);
 
         let roles = Array.from(command_data.tagged_member.roles.cache.values()).reduce((acc, curr) => {
-            acc += curr.toString() + ", ";
+            acc += `${curr.toString()}, `;
             return acc;
         }, "");
         roles = roles.slice(0, roles.length - 2);
@@ -51,7 +51,7 @@ export default {
         const embedMember = {
             color: 8388736,
             author: {
-                name: "Information about user " + command_data.tagged_user.tag,
+                name: `Information about user ${command_data.tagged_user.tag}`,
                 icon_url: url === null ? undefined : url,
             },
             fields: [
@@ -83,7 +83,7 @@ export default {
                     value: `${join_score} (${join_score} out of ${join_score_max})`,
                 },
                 {
-                    name: "❯ Roles [" + command_data.tagged_member.roles.cache.size + "]",
+                    name: `❯ Roles [${command_data.tagged_member.roles.cache.size}]`,
                     value: `${roles}`,
                 },
             ],
@@ -95,7 +95,7 @@ export default {
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedMember] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedMember ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

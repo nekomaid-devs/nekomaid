@@ -37,9 +37,9 @@ export default {
 
         command_data.author_user_config.last_daily_time = end.getTime();
 
-        let credits_amount = [1000][0];
-        credits_amount = credits_amount * command_data.global_context.bot_config.daily_multiplier;
-        credits_amount = credits_amount * (command_data.global_context.bot_config.shrine_bonus === ShrineBonus.DAILY ? [1, 1.1, 1.15, 1.15, 1.15, 1.2, 1.25, 1.3, 1.5, 1.5, 1.5][command_data.global_context.bot_config.b_shrine] : 1);
+        let credits_amount = [ 1000 ][0];
+        credits_amount *= command_data.global_context.bot_config.daily_multiplier;
+        credits_amount *= command_data.global_context.bot_config.shrine_bonus === ShrineBonus.DAILY ? [ 1, 1.1, 1.15, 1.15, 1.15, 1.2, 1.25, 1.3, 1.5, 1.5, 1.5 ][command_data.global_context.bot_config.b_shrine] : 1;
         credits_amount = Math.round(credits_amount);
         const notification = {
             id: randomBytes(16).toString("hex"),
@@ -55,14 +55,12 @@ export default {
 
         const embedDaily = {
             color: 6732650,
-            description: `Picked up daily reward of \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`! (Current Credits: \`${command_data.global_context.utils.format_number(
-                command_data.author_user_config.credits
-            )}$\`)`,
+            description: `Picked up daily reward of \`${command_data.global_context.utils.format_number(credits_amount)} 💵\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`,
             footer: {
                 text: `Check out new ${command_data.server_config.prefix}economyguide`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedDaily] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedDaily ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

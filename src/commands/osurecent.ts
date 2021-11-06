@@ -58,7 +58,7 @@ export default {
             const ago = command_data.global_context.neko_modules.timeConvert.convert_time(elapsed);
 
             let mods = "";
-            /*eslint no-bitwise: 0*/
+            /* eslint no-bitwise: 0*/
             mods += play.raw_mods & 1 ? "NF" : "";
             mods += play.raw_mods & 2 ? "EZ" : "";
             mods += play.raw_mods & 8 ? "HD" : "";
@@ -82,7 +82,7 @@ export default {
             rank = play.rank === "F" ? "<:n_F:725012761465061531>" : rank;
 
             plays_description += `**[${play.beatmap.title}](https://osu.ppy.sh/beatmaps/${play.beatmap.id}) ${mods}** [${parseFloat(play.beatmap.difficulty.rating).toFixed(2)}★]\n`;
-            plays_description += `**▸ ${rank} ▸ ${play.pp == null ? "??" : play.pp}pp ▸** ${(play.accuracy * 100).toFixed(2)}%\n`;
+            plays_description += `**▸ ${rank} ▸ ${play.pp === null ? "??" : play.pp}pp ▸** ${(play.accuracy * 100).toFixed(2)}%\n`;
             plays_description += `▸ ${play.score} ▸ ${play.maxCombo}/${play.beatmap.maxCombo}x ▸ [${play.counts["300"]}/${play.counts["100"]}/${play.counts["50"]}/${play.counts.miss}]\n`;
             plays_description += `▸ ${ago} ago\n`;
         }
@@ -102,7 +102,7 @@ export default {
                 text: `Requested by ${command_data.msg.author.tag}`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedOsu] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedOsu ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

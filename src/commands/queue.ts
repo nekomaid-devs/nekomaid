@@ -43,9 +43,7 @@ export default {
                         });
 
                         if (user !== undefined) {
-                            const current_length = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(
-                                command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(voice_request.info.duration)
-                            );
+                            const current_length = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(voice_request.info.duration));
                             description_text += `${i}) [${voice_request.info.title}](${voice_request.info.url}) *(${current_length})* by *[${user.username}]*\n`;
                         }
                     }
@@ -69,9 +67,7 @@ export default {
                 total_length = command_data.global_context.neko_modules.timeConvert.convert_time_inconsistent(total_length);
                 const total_length_2 = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(total_length);
 
-                const current_length = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(
-                    command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(voice_data.current.info.duration)
-                );
+                const current_length = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(voice_data.current.info.duration));
                 embedQueue.addField("Currenly playing", `[${voice_data.current.info.title}](${voice_data.current.info.url}) *(${current_length})*`, false);
                 embedQueue.addField("Total queue time", `\`${total_length_2}\``, true);
                 break;
@@ -108,9 +104,7 @@ export default {
 
                         if (user2 !== undefined) {
                             // TODO: the position i3 is wrong (if i'm not dumb)
-                            const current_length = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(
-                                command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(voice_request_2.info.duration)
-                            );
+                            const current_length = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(voice_request_2.info.duration));
                             description_text += i2 === current_persistent_index ? `**${i3})** ` : `${i3}) `;
                             description_text += `[${voice_request_2.info.title}](${voice_request_2.info.url}) *(${current_length})* - by [${user2.username}]\n`;
                         }
@@ -136,16 +130,14 @@ export default {
                 total_length_2_b = command_data.global_context.neko_modules.timeConvert.convert_time_inconsistent(total_length_2_b);
                 const total_length_2_c = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(total_length_2_b);
 
-                const current_length_b = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(
-                    command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(voice_data.persistent_queue[current_persistent_index].info.duration)
-                );
+                const current_length_b = command_data.global_context.neko_modules.timeConvert.convert_time_data_to_string(command_data.global_context.neko_modules.timeConvert.convert_youtube_string_to_time_data(voice_data.persistent_queue[current_persistent_index].info.duration));
                 embedQueue.addField("Currenly playing", `[${voice_data.persistent_queue[current_persistent_index].info.title}](${voice_data.persistent_queue[current_persistent_index].info.url}) *(${current_length_b})*`, false);
                 embedQueue.addField("Total queue time", `\`${total_length_2_c}\``, true);
                 break;
             }
         }
 
-        command_data.msg.channel.send({ embeds: [embedQueue] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedQueue ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

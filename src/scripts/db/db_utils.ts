@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext, GuildData } from "../../ts/base";
+import { GuildData } from "../../ts/base";
 
 /* Node Imports */
 import { Connection, FieldPacket, OkPacket, ResultSetHeader, RowDataPacket } from "mysql2/promise";
@@ -123,7 +123,7 @@ export function guild_edit_type_to_query_data(item: GuildData, type: GuildEditTy
             ];
 
         case GuildEditType.AUDIT:
-            return [item.case_ID, item.server_ID];
+            return [ item.case_ID, item.server_ID ];
     }
 }
 

@@ -14,7 +14,7 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", ExtraPermission.BOT_OWNER)],
+    permissionsNeeded: [ new NeededPermission("author", ExtraPermission.BOT_OWNER) ],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -27,7 +27,7 @@ export default {
             footer: { text: `Version: Nekomaid ${command_data.global_context.config.version}` },
         };
 
-        command_data.msg.channel.send({ embeds: [embedUpdate] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedUpdate ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
 

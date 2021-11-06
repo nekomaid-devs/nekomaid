@@ -21,7 +21,7 @@ function create_mute_role_and_mute(command_data: CommandData) {
             mentionable: false,
             permissions: [],
         })
-        .then(async (mute_role) => {
+        .then((mute_role) => {
             if (command_data.msg.guild === null) {
                 return;
             }
@@ -71,9 +71,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention an user.", "mention")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a time format.", "none"), new RecommendedArgument(3, "Argument needs to be a reason.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES), new NeededPermission("me", Permissions.FLAGS.MANAGE_CHANNELS)],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention an user.", "mention") ],
+    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a time format.", "none"), new RecommendedArgument(3, "Argument needs to be a reason.", "none") ],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES), new NeededPermission("me", Permissions.FLAGS.MANAGE_CHANNELS) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {

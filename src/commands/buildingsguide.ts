@@ -18,11 +18,11 @@ export default {
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
-    async execute(command_data: CommandData) {
+    execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
-        command_data.msg.channel.send({ embeds: [get_buildings_guide_embed(command_data)] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ get_buildings_guide_embed(command_data) ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

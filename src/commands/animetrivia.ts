@@ -17,7 +17,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
     const fake_opening_3 = command_data.global_context.utils.pick_random(all_options);
     all_options.splice(all_options.indexOf(fake_opening_3), 1);
 
-    const final_options = [opening, fake_opening_1, fake_opening_2, fake_opening_3];
+    const final_options = [ opening, fake_opening_1, fake_opening_2, fake_opening_3 ];
     command_data.global_context.utils.shuffle_array(final_options);
 
     const answered_IDs: string[] = [];
@@ -28,27 +28,27 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
     let a = file.substring(0, file.indexOf("-"));
     a = a.replace("Opening", "OP");
     a = a.replace("Ending", "ED");
-    a = a.length >= 4 ? a : a.substring(0, 2) + "0" + a.substring(2);
+    a = a.length >= 4 ? a : `${a.substring(0, 2)}0${a.substring(2)}`;
     const b = file.substring(file.indexOf("-") + 1, file.lastIndexOf("."));
-    const final_file_a = b + "-" + a + "-NCOLD.mp4";
-    const final_file_b = b + "-" + a + "-NCBD.mp4";
+    const final_file_a = `${b}-${a}-NCOLD.mp4`;
+    const final_file_b = `${b}-${a}-NCBD.mp4`;
 
     let check_a = true;
     let check_b = true;
-    await command_data.global_context.modules.axios.get("https://openings.moe/video/" + final_file_a, { maxContentLength: 248 }).catch((e: any) => {
+    await command_data.global_context.modules.axios.get(`https://openings.moe/video/${final_file_a}`, { maxContentLength: 248 }).catch((e: any) => {
         if (e.response && e.response.status === 404) {
             check_a = false;
         }
     });
-    await command_data.global_context.modules.axios.get("https://openings.moe/video/" + final_file_b, { maxContentLength: 248 }).catch((e: any) => {
+    await command_data.global_context.modules.axios.get(`https://openings.moe/video/${final_file_b}`, { maxContentLength: 248 }).catch((e: any) => {
         if (e.response && e.response.status === 404) {
             check_b = false;
         }
     });
     if (check_a === true) {
-        dispatcher = connection.play("https://openings.moe/video/" + final_file_a);
+        dispatcher = connection.play(`https://openings.moe/video/${final_file_a}`);
     } else if (check_b === true) {
-        dispatcher = connection.play("https://openings.moe/video/" + final_file_b);
+        dispatcher = connection.play(`https://openings.moe/video/${final_file_b}`);
     } else {
         play_next(command_data, connection, game_data);
         return;
@@ -56,12 +56,12 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
 
     const embedSong = {
         title: "❓ New song is playing. Make a guess!",
-        description: "1) " + final_options[0].source + "\n2) " + final_options[1].source + "\n3) " + final_options[2].source + "\n4) " + final_options[3].source + "\n",
+        description: `1) ${final_options[0].source}\n2) ${final_options[1].source}\n3) ${final_options[2].source}\n4) ${final_options[3].source}\n`,
         footer: {
             text: `You have 45 seconds to answer | or end the game with ${command_data.server_config.prefix}animetrivia end`,
         },
     };
-    command_data.msg.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
+    command_data.msg.channel.send({ embeds: [ embedSong ] }).catch((e: Error) => {
         command_data.global_context.logger.api_error(e);
     });
 
@@ -76,7 +76,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
     });
     collector.on("collect", (m) => {
         if (answered === false) {
-            if (m.content.startsWith(command_data.server_config.prefix + "animetrivia skip")) {
+            if (m.content.startsWith(`${command_data.server_config.prefix}animetrivia skip`)) {
                 if (m.author.id === game_data.moderationManager) {
                     answered = true;
                     dispatcher.end();
@@ -93,7 +93,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
                         command_data.global_context.logger.api_error(e);
                     });
                 }
-            } else if (m.content.startsWith(command_data.server_config.prefix + "animetrivia end")) {
+            } else if (m.content.startsWith(`${command_data.server_config.prefix}animetrivia end`)) {
                 if (m.author.id === game_data.moderationManager) {
                     answered = true;
                     connection.disconnect();
@@ -107,7 +107,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
                         footer: { text: "Hope you enjoyed the game!" },
                     };
 
-                    command_data.msg.channel.send({ embeds: [embedTriviaEnd] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [ embedTriviaEnd ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
 
@@ -185,7 +185,7 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("me", Permissions.FLAGS.CONNECT), new NeededPermission("me", Permissions.FLAGS.SPEAK)],
+    permissionsNeeded: [ new NeededPermission("me", Permissions.FLAGS.CONNECT), new NeededPermission("me", Permissions.FLAGS.SPEAK) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -201,7 +201,7 @@ export default {
             });
             return;
         }
-        if (command_data.msg.member.voice.channel == null || !(command_data.msg.member.voice.channel instanceof VoiceChannel)) {
+        if (command_data.msg.member.voice.channel === null || !(command_data.msg.member.voice.channel instanceof VoiceChannel)) {
             command_data.msg.reply("You need to join a voice channel.");
             return;
         }
@@ -219,13 +219,13 @@ export default {
                 `\n\`${command_data.server_config.prefix}animetrivia start\` - starts the game` +
                 `\n\`${command_data.server_config.prefix}animetrivia skip\` - skips the round` +
                 `\n\`${command_data.server_config.prefix}animetrivia end\` - ends the game` +
-                `\n\nJoin by reacting with \`✅\` (or leave with \`❌\`)`,
+                "\n\nJoin by reacting with `✅` (or leave with `❌`)",
             footer: {
                 text: `0 joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`,
             },
         };
         const joined_IDs: string[] = [];
-        const message = await command_data.msg.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
+        const message = await command_data.msg.channel.send({ embeds: [ embedSong ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });
@@ -253,7 +253,7 @@ export default {
             }
 
             embedSong.footer.text = `${joined_IDs.length} joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`;
-            await message.edit({ embeds: [embedSong] }).catch((e: Error) => {
+            await message.edit({ embeds: [ embedSong ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         });
@@ -263,7 +263,7 @@ export default {
                 return !m.author.bot;
             },
         });
-        collector.on("collect", async (m) => {
+        collector.on("collect", (m) => {
             if (command_data.msg.member === null || command_data.msg.member.voice.channel === null) {
                 return;
             }
@@ -273,7 +273,7 @@ export default {
                     command_data.global_context.logger.api_error(e);
                 });
                 collector.stop();
-            } else if (m.content === command_data.server_config.prefix + "animetrivia start") {
+            } else if (m.content === `${command_data.server_config.prefix}animetrivia start`) {
                 const connection = -1;
 
                 const leaderboard: object[] = [];

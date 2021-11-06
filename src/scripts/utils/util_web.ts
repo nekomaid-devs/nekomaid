@@ -13,18 +13,20 @@ export async function refresh_status(global_context: GlobalContext) {
             return client.guilds.cache.size;
         })
         .then((results) => {
-            guild_count = results.reduce((prev, guild_count) => prev + guild_count, 0);
+            guild_count = results.reduce((acc, curr) => {
+                return acc + curr;
+            }, 0);
         })
         .catch((e: Error) => {
             global_context.logger.error(e);
         });
 
-    const statuses = ["V2 live now!"];
+    const statuses = [ "V2 live now!" ];
     global_context.bot.user.setStatus("online");
     global_context.bot.user.setActivity(`${global_context.utils.pick_random(statuses)} | ${guild_count} servers`, { type: "PLAYING" });
 }
 
-export async function refresh_website(global_context: GlobalContext) {
+export function refresh_website(global_context: GlobalContext) {
     if (global_context.neko_data.shards_ready === false || global_context.config.nekomaid_API_update_stats === false || global_context.bot.shard === null) {
         return;
     }
@@ -34,139 +36,141 @@ export async function refresh_website(global_context: GlobalContext) {
         shard_list[i] = { online: true };
     }
 
-    /*await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.neko_data.uptime_start;
-        })
-        .then((results) => {
-            results.forEach((start, i) => {
-                shard_list[i].start = start;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
-
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.guilds.cache.size;
-        })
-        .then((results) => {
-            results.forEach((guilds, i) => {
-                shard_list[i].guilds = guilds;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0);
-        })
-        .then((results) => {
-            results.forEach((users, i) => {
-                shard_list[i].users = users;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
-    // TODO: maybe change this, since we don't cache channels?
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.channels.cache.size;
-        })
-        .then((results) => {
-            results.forEach((channels, i) => {
-                shard_list[i].channels = channels;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
-
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.neko_data.processed_events;
-        })
-        .then((results) => {
-            results.forEach((processed_events, i) => {
-                shard_list[i].processed_events = processed_events;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.neko_data.total_events;
-        })
-        .then((results) => {
-            results.forEach((total_events, i) => {
-                shard_list[i].total_events = total_events;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.neko_data.processed_messages;
-        })
-        .then((results) => {
-            results.forEach((processed_messages, i) => {
-                shard_list[i].processed_messages = processed_messages;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.neko_data.total_messages;
-        })
-        .then((results) => {
-            results.forEach((total_messages, i) => {
-                shard_list[i].total_messages = total_messages;
-            });
-        });
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.neko_data.processed_commands;
-        })
-        .then((results) => {
-            results.forEach((processed_commands, i) => {
-                shard_list[i].processed_commands = processed_commands;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.neko_data.total_commands;
-        })
-        .then((results) => {
-            results.forEach((total_commands, i) => {
-                shard_list[i].total_commands = total_commands;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });
-
-    await global_context.bot.shard
-        .broadcastEval((client) => {
-            return client.neko_data.voiceManager_connections;
-        })
-        .then((results) => {
-            results.forEach((voice_connections, i) => {
-                shard_list[i].voice_connections = voice_connections;
-            });
-        })
-        .catch((e: Error) => {
-            global_context.logger.error(e);
-        });*/
+    /*
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.neko_data.uptime_start;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((start, i) => {
+     *          shard_list[i].start = start;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     *
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.guilds.cache.size;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((guilds, i) => {
+     *          shard_list[i].guilds = guilds;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
+     *  })
+     *  .then((results) => {
+     *      results.forEach((users, i) => {
+     *          shard_list[i].users = users;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     * // TODO: maybe change this, since we don't cache channels?
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.channels.cache.size;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((channels, i) => {
+     *          shard_list[i].channels = channels;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     *
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.neko_data.processed_events;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((processed_events, i) => {
+     *          shard_list[i].processed_events = processed_events;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.neko_data.total_events;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((total_events, i) => {
+     *          shard_list[i].total_events = total_events;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.neko_data.processed_messages;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((processed_messages, i) => {
+     *          shard_list[i].processed_messages = processed_messages;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.neko_data.total_messages;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((total_messages, i) => {
+     *          shard_list[i].total_messages = total_messages;
+     *      });
+     *  });
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.neko_data.processed_commands;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((processed_commands, i) => {
+     *          shard_list[i].processed_commands = processed_commands;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.neko_data.total_commands;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((total_commands, i) => {
+     *          shard_list[i].total_commands = total_commands;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     *
+     *await global_context.bot.shard
+     *  .broadcastEval((client) => {
+     *      return client.neko_data.voiceManager_connections;
+     *  })
+     *  .then((results) => {
+     *      results.forEach((voice_connections, i) => {
+     *          shard_list[i].voice_connections = voice_connections;
+     *      });
+     *  })
+     *  .catch((e: Error) => {
+     *      global_context.logger.error(e);
+     *  });
+     */
 
     const economy_list = global_context.data.economy_list;
     const command_list = Array.from(global_context.commands.values())
@@ -184,7 +188,7 @@ export async function refresh_website(global_context: GlobalContext) {
         sentry_online: true,
         analytics_online: true,
         akaneko_online: true,
-        uptime_pings: [Array(24).fill({ up: true })],
+        uptime_pings: [ Array(24).fill({ up: true }) ],
 
         shard_list: shard_list,
         economy_list: economy_list,
@@ -192,15 +196,11 @@ export async function refresh_website(global_context: GlobalContext) {
     };
 
     global_context.modules.axios
-        .post(
-            `${global_context.config.nekomaid_API_endpoint}/v1/stats/post`,
-            { stats: stats },
-            {
+        .post(`${global_context.config.nekomaid_API_endpoint}/v1/stats/post`, { stats: stats }, {
                 headers: global_context.data.default_headers,
-            }
-        )
+            })
         .catch((e: Error) => {
-            global_context.logger.error("[Nekomaid API] " + e);
+            global_context.logger.error(`[Nekomaid API] ${e}`);
         });
 }
 
@@ -216,17 +216,23 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             return client.guilds.cache.size;
         })
         .then((results) => {
-            guild_count = results.reduce((prev, guild_count) => prev + guild_count, 0);
+            guild_count = results.reduce((acc, curr) => {
+                return acc + curr;
+            }, 0);
         })
         .catch((e: Error) => {
             global_context.logger.error(e);
         });
     await global_context.bot.shard
         .broadcastEval((client) => {
-            return client.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0);
+            return client.guilds.cache.reduce((acc, curr) => {
+                return acc + curr.memberCount;
+            }, 0);
         })
         .then((results) => {
-            user_count = results.reduce((prev, user_count) => prev + user_count, 0);
+            user_count = results.reduce((acc, curr) => {
+                return acc + curr;
+            }, 0);
         })
         .catch((e: Error) => {
             global_context.logger.error(e);
@@ -272,7 +278,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             headers: headers_POST_1,
         })
         .catch((e: Error) => {
-            global_context.logger.error("[Discord Botlist] " + e);
+            global_context.logger.error(`[Discord Botlist] ${e}`);
         });
 
     global_context.modules.axios
@@ -280,7 +286,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             headers: headers_POST_2,
         })
         .catch((e: Error) => {
-            global_context.logger.error("[Discord Bots] " + e);
+            global_context.logger.error(`[Discord Bots] ${e}`);
         });
 
     global_context.modules.axios
@@ -288,7 +294,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             headers: headers_POST_3,
         })
         .catch((e: Error) => {
-            global_context.logger.error("[Discord Boats] " + e);
+            global_context.logger.error(`[Discord Boats] ${e}`);
         });
 
     global_context.modules.axios
@@ -296,7 +302,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             headers: headers_POST_4,
         })
         .catch((e: Error) => {
-            global_context.logger.error("[Bots For Discord] " + e);
+            global_context.logger.error(`[Bots For Discord] ${e}`);
         });
 
     global_context.modules.axios
@@ -304,6 +310,6 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             headers: headers_POST_5,
         })
         .catch((e: Error) => {
-            global_context.logger.error("[Top GG] " + e);
+            global_context.logger.error(`[Top GG] ${e}`);
         });
 }

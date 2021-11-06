@@ -16,7 +16,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention somebody.", "mention") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -46,9 +46,9 @@ export default {
         command_data.author_user_config.last_steal_time = end.getTime();
 
         const min_credits = 0;
-        const max_credits = Math.round((command_data.tagged_user_config.credits / 100) * [7][0]);
+        const max_credits = Math.round((command_data.tagged_user_config.credits / 100) * [ 7 ][0]);
         let credits_amount = Math.floor(Math.random() * (max_credits - min_credits + 1) + min_credits);
-        credits_amount = credits_amount > [500][0] ? [500][0] : credits_amount;
+        credits_amount = credits_amount > [ 500 ][0] ? [ 500 ][0] : credits_amount;
 
         command_data.author_user_config.credits += credits_amount;
         command_data.author_user_config.net_worth += credits_amount;
@@ -74,11 +74,9 @@ export default {
 
         const embedSteal = {
             color: 8388736,
-            description: `You stole \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` from \`${command_data.tagged_user.tag}\`! (Current Credits: \`${command_data.global_context.utils.format_number(
-                command_data.author_user_config.credits
-            )}$\`)`,
+            description: `You stole \`${command_data.global_context.utils.format_number(credits_amount)} 💵\` from \`${command_data.tagged_user.tag}\`! (Current Credits: \`${command_data.global_context.utils.format_number(command_data.author_user_config.credits)}$\`)`,
         };
-        command_data.msg.channel.send({ embeds: [embedSteal] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedSteal ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

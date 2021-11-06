@@ -16,14 +16,14 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
-        if (command_data.server_config.module_level_enabled == false) {
+        if (command_data.server_config.module_level_enabled === false) {
             command_data.msg.reply(`Leveling isn't enabled on this server. (see \`${command_data.server_config.prefix}leveling\` for help)`);
             return;
         }
@@ -36,7 +36,7 @@ export default {
             server_user_config.level = 1;
             server_user_config.xp = 0;
 
-            //TODO: this won't work
+            // TODO: this won't work
             if (command_data.msg.guild.members.cache.has(server_user_config.user_ID) === true) {
                 const member = await command_data.msg.guild.members.fetch(server_user_config.user_ID).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);

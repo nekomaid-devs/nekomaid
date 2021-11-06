@@ -1,6 +1,5 @@
 /* Types */
 import { Client, GuildMember, Message, User } from "discord.js";
-import Database from "../scripts/db/db";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";

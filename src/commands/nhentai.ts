@@ -13,7 +13,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a sauce- (ex. `177013`)", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in a sauce- (ex. `177013`)", "none") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: true,
@@ -35,7 +35,7 @@ export default {
         }
 
         let tags_text = post_info.tags.reduce((acc: any, curr: any) => {
-            acc += "`" + curr + "`, ";
+            acc += `\`${curr}\`, `;
             return acc;
         }, "");
         tags_text = tags_text.slice(0, tags_text.length - 2);
@@ -44,7 +44,7 @@ export default {
         }
 
         let languages_text = post_info.languages.reduce((acc: any, curr: any) => {
-            acc += "`" + curr.toString() + "`, ";
+            acc += `\`${curr.toString()}\`, `;
             return acc;
         }, "");
         languages_text = languages_text.slice(0, languages_text.length - 2);
@@ -85,7 +85,7 @@ export default {
                 text: `Requested by ${command_data.msg.author.tag}...`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedNHentai] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedNHentai ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

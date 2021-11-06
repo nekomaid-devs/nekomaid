@@ -13,7 +13,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a suggestion.", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in a suggestion.", "none") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -37,7 +37,7 @@ export default {
             title: `Suggestion from \`${command_data.msg.author.tag}\``,
             description: command_data.total_argument,
         };
-        user.send({ embeds: [embedSuggestion] }).catch((e: Error) => {
+        user.send({ embeds: [ embedSuggestion ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

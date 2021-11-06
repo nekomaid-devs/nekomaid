@@ -18,12 +18,12 @@ export default {
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an amount.", "int>0"), new NeededArgument(2, "You need to type in an item ID.", "int")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in an amount.", "int>0"), new NeededArgument(2, "You need to type in an item ID.", "int") ],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", ExtraPermission.BOT_OWNER)],
+    permissionsNeeded: [ new NeededPermission("author", ExtraPermission.BOT_OWNER) ],
     nsfw: false,
     cooldown: 1500,
-    async execute(command_data: CommandData) {
+    execute(command_data: CommandData) {
         if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
             return;
         }
@@ -38,7 +38,7 @@ export default {
             return;
         }
 
-        command_data.msg.guild.members.cache.forEach(async (member) => {
+        command_data.msg.guild.members.cache.forEach((member) => {
             const item = { id: randomBytes(16).toString("hex"), user_ID: member.user.id, item_ID: item_ID };
             command_data.global_context.neko_modules_clients.db.add_inventory_item(item);
         });

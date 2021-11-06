@@ -18,20 +18,19 @@ class Argument {
         const embedError = this.getEmbed(command_data, command);
         if (command_data.args.length < this.position) {
             if (this.is_needed === true) {
-                command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 return false;
-            } else {
-                return true;
             }
+            return true;
         }
 
         const argument = command_data.args[this.position - 1];
         switch (this.type) {
             case "mention":
                 if ((argument.startsWith("<@!") === false && argument.startsWith("<@") === false) || argument.endsWith(">") === false || (argument.length !== 21 && argument.length !== 22)) {
-                    command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                     return false;
@@ -40,13 +39,13 @@ class Argument {
 
             case "int>0":
                 if (isNaN(parseInt(argument))) {
-                    command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                     return false;
                 } else if (parseInt(argument) < 0) {
                     embedError.fields[0].value = "Value must be a number above 0.";
-                    command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                     return false;
@@ -55,13 +54,13 @@ class Argument {
 
             case "float>0":
                 if (isNaN(parseFloat(argument))) {
-                    command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                     return false;
                 } else if (parseFloat(argument) < 0) {
                     embedError.fields[0].value = "Value must be a number above 0.";
-                    command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                     return false;
@@ -70,13 +69,13 @@ class Argument {
 
             case "int>0/all/half":
                 if (isNaN(parseInt(argument)) && argument !== "all" && argument !== "half") {
-                    command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                     return false;
                 } else if (isNaN(parseInt(argument)) === false && parseInt(argument) < 0) {
                     embedError.fields[0].value = "Value must be a number above 0.";
-                    command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                     return false;
@@ -85,7 +84,7 @@ class Argument {
 
             case "heads/tails":
                 if (argument !== "heads" && argument !== "tails") {
-                    command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+                    command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                     return false;

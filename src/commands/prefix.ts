@@ -17,8 +17,8 @@ export default {
     aliases: [],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a new prefix.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
+    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a new prefix.", "none") ],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD) ],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -39,7 +39,7 @@ export default {
                     text: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`,
                 },
             };
-            command_data.msg.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedPrefix ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         } else {
@@ -61,7 +61,7 @@ export default {
                     },
                 ],
             };
-            command_data.msg.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedPrefix ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

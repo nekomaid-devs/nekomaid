@@ -16,22 +16,24 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS)],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS) ],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
-        // TODO: support piping into file
-        // TODO: add pagination
+        /*
+         * TODO: support piping into file
+         * TODO: add pagination
+         */
         const now = Date.now();
         const embedMutes = new command_data.global_context.modules.Discord.MessageEmbed()
             .setColor(8388736)
             .setAuthor(`❯ Mutes (${command_data.server_mutes.length})`, command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
 
         if (command_data.server_mutes.length < 1) {
-            command_data.msg.channel.send({ embeds: [embedMutes] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedMutes ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -50,7 +52,7 @@ export default {
 
             loadedMutes += 1;
             if (loadedMutes >= expectedMutes) {
-                command_data.msg.channel.send({ embeds: [embedMutes] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [ embedMutes ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }

@@ -63,7 +63,7 @@ export default {
 
         if (server_config.welcome_messages == true && server_config.welcome_messages_channel !== null) {
             let format = server_config.welcome_messages_format;
-            const member_display_name = server_config.welcome_messages_ping ? `${member.toString()}` : "**" + member.user.tag + "**";
+            const member_display_name = server_config.welcome_messages_ping ? `${member.toString()}` : `**${member.user.tag}**`;
             format = format.replace("<user>", member_display_name);
 
             const channel = await global_context.bot.channels.fetch(server_config.welcome_messages_channel).catch((e: Error) => {

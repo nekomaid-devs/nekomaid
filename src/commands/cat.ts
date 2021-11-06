@@ -27,11 +27,11 @@ export default {
                 url: obj.url,
             },
             footer: {
-                text: "Requested by " + command_data.msg.author.tag,
+                text: `Requested by ${command_data.msg.author.tag}`,
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedCat] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedCat ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

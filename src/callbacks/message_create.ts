@@ -33,18 +33,20 @@ export default {
             return;
         }
         // TODO: deal with this in other way, because there's shouldn't be a cache for channel overwrites
-        /*let can_send_messages = message.guild.me.permissionsIn(message.channel).has(Permissions.FLAGS.SEND_MESSAGES);
-        if(can_send_messages === false) {
-            return;
-        }*/
+        /*
+         *let can_send_messages = message.guild.me.permissionsIn(message.channel).has(Permissions.FLAGS.SEND_MESSAGES);
+         *if(can_send_messages === false) {
+         *  return;
+         *}
+         */
 
         const taggedUser = message.mentions.users.first();
-        const taggedUsers = [...Array.from(message.mentions.users.values())];
+        const taggedUsers = [ ...Array.from(message.mentions.users.values()) ];
         const taggedMember = message.mentions.members === null ? undefined : message.mentions.members.first();
-        const taggedMembers = message.mentions.members === null ? undefined : [...Array.from(message.mentions.members.values())];
+        const taggedMembers = message.mentions.members === null ? undefined : [ ...Array.from(message.mentions.members.values()) ];
 
         let tagged_user_tags = taggedUsers.reduce((acc, curr) => {
-            acc += curr.tag + ", ";
+            acc += `${curr.tag}, `;
             return acc;
         }, "");
         tagged_user_tags = tagged_user_tags.slice(0, tagged_user_tags.length - 2);
@@ -78,11 +80,11 @@ export default {
             args: [],
             total_argument: "",
 
-            tagged_users: taggedUsers !== undefined ? taggedUsers : [message.author],
+            tagged_users: taggedUsers !== undefined ? taggedUsers : [ message.author ],
             tagged_user: taggedUser !== undefined ? taggedUser : message.author,
             tagged_user_tags: tagged_user_tags,
 
-            tagged_members: taggedMembers !== undefined ? taggedMembers : [message.member],
+            tagged_members: taggedMembers !== undefined ? taggedMembers : [ message.member ],
             tagged_member: taggedMember !== undefined ? taggedMember : message.member,
 
             server_config: server_config,
@@ -100,7 +102,7 @@ export default {
 
         // Check if user manages the guild
         let manages_guild = false;
-        if (command_data.server_config.banned_words.length > 0 || command_data.server_config.invites == false) {
+        if (command_data.server_config.banned_words.length > 0 || command_data.server_config.invites === false) {
             manages_guild = message.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD);
         }
 
@@ -117,7 +119,7 @@ export default {
                 }
             }
 
-            if (command_data.server_config.invites == false) {
+            if (command_data.server_config.invites === false) {
                 if (message.content.toLowerCase().includes("discord.gg") === true || message.content.toLowerCase().includes("discordapp.com/invite") === true || message.content.toLowerCase().includes("discord.com/invite") === true) {
                     message.reply("Sending invites isn't allowed on here-");
                     message.delete().catch((e: Error) => {
@@ -132,7 +134,7 @@ export default {
         global_context.neko_modules_clients.marriageManager.check_marriage_proposals(global_context, message);
 
         // Process server levels
-        if (command_data.server_config.module_level_enabled == true) {
+        if (command_data.server_config.module_level_enabled === true) {
             global_context.neko_modules_clients.levelingManager.update_server_level(command_data, command_data.server_config.module_level_message_exp);
         }
 
@@ -146,7 +148,7 @@ export default {
 
         // Check for auto-response
         if (message.content.toLowerCase() === `thanks <@!${global_context.bot.user.id}>` || message.content.toLowerCase() === "thanks nekomaid" || message.content.toLowerCase() === "thanks neko") {
-            const responses = ["You're welcome~ I guess- >~<", "W-What did I do?~", "No problem~ >//<", "You're welcome~ TwT"];
+            const responses = [ "You're welcome~ I guess- >~<", "W-What did I do?~", "No problem~ >//<", "You're welcome~ TwT" ];
             const response = global_context.utils.pick_random(responses);
 
             message.channel.send(response).catch((e: Error) => {
@@ -180,8 +182,10 @@ export default {
             return;
         }
 
-        // Populate server data
-        // TODO: make this into an array of promises and Promise.all()
+        /*
+         * Populate server data
+         * TODO: make this into an array of promises and Promise.all()
+         */
         command_data.args = message.content.slice(command_data.server_config.prefix.length).split(" ");
         command_data.server_config = server_config_full;
         command_data.server_bans = await global_context.neko_modules_clients.db.fetch_server_bans(message.guild.id);

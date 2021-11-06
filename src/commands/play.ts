@@ -19,11 +19,11 @@ export default {
     helpUsage: "[url/songName?]`",
     exampleUsage: "Never gonna give you up",
     hidden: false,
-    aliases: ["p"],
+    aliases: [ "p" ],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a valid url/song name.", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in a valid url/song name.", "none") ],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("me", Permissions.FLAGS.CONNECT), new NeededPermission("me", Permissions.FLAGS.SPEAK)],
+    permissionsNeeded: [ new NeededPermission("me", Permissions.FLAGS.CONNECT), new NeededPermission("me", Permissions.FLAGS.SPEAK) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -40,7 +40,7 @@ export default {
         }
 
         if (command_data.global_context.neko_modules_clients.voiceManager.connections.has(command_data.msg.guild.id) === false) {
-            const voice_connection = command_data.global_context.neko_modules_clients.voiceManager.add_connection(command_data.global_context, command_data.msg.member.voice.channel, command_data.msg);
+            command_data.global_context.neko_modules_clients.voiceManager.add_connection(command_data.global_context, command_data.msg.member.voice.channel, command_data.msg);
 
             const embedJoin = {
                 author: {
@@ -50,7 +50,7 @@ export default {
                 description: `Joined \`${command_data.msg.member.voice.channel.name}\` in \`${command_data.msg.guild.name}\``,
             };
 
-            command_data.msg.channel.send({ embeds: [embedJoin] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedJoin ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }
@@ -66,7 +66,7 @@ export default {
                 color: 8388736,
                 description: `Fetching results for \`${url}\``,
             };
-            const loading_message = await command_data.msg.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
+            const loading_message = await command_data.msg.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
@@ -105,7 +105,7 @@ export default {
                 await loading_message.delete().catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
-                await command_data.msg.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
+                await command_data.msg.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             } else if (ytdl.validateURL(url) === true) {
@@ -124,7 +124,7 @@ export default {
                 if (result === null) {
                     return;
                 }
-                result.items.sort(create_comparator(["views"]));
+                result.items.sort(create_comparator([ "views" ]));
 
                 let description_text = "";
                 for (let i = 1; i <= result.items.length; i++) {
@@ -146,7 +146,7 @@ export default {
 
                 const collector = command_data.msg.channel.createMessageCollector({
                     filter: (m: Message) => {
-                        return (parseInt(m.content) <= 5 && parseInt(m.content) >= 1 && infosByID.has(parseInt(m.content))) || m.content.startsWith(command_data.server_config.prefix + "play");
+                        return (parseInt(m.content) <= 5 && parseInt(m.content) >= 1 && infosByID.has(parseInt(m.content))) || m.content.startsWith(`${command_data.server_config.prefix}play`);
                     },
                     time: 15000,
                     max: 1,
@@ -167,7 +167,7 @@ export default {
                 await loading_message.delete().catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
-                await command_data.msg.channel.send({ embeds: [embedPlay] }).catch((e: Error) => {
+                await command_data.msg.channel.send({ embeds: [ embedPlay ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }

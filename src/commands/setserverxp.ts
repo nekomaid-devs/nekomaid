@@ -15,9 +15,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention"), new NeededArgument(1, "You need to type in an amount.", "float>0")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention somebody.", "mention"), new NeededArgument(1, "You need to type in an amount.", "float>0") ],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD) ],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -25,7 +25,7 @@ export default {
             return;
         }
         // TODO: add limit to this (+ check type)
-        if (command_data.server_config.module_level_enabled == false) {
+        if (command_data.server_config.module_level_enabled === false) {
             command_data.msg.reply(`Leveling isn't enabled on this server. (see \`${command_data.server_config.prefix}leveling\` for help)`);
             return;
         }

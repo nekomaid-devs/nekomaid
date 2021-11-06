@@ -15,7 +15,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an item name.", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in an item name.", "none") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -42,7 +42,7 @@ export default {
         }
 
         if (command_data.author_user_config.credits < target_shop_item.price) {
-            command_data.msg.reply(`You don't have enough credits to do this.`);
+            command_data.msg.reply("You don't have enough credits to do this.");
             return;
         }
 
@@ -56,7 +56,7 @@ export default {
             color: 8388736,
             description: `Bought \`1x ${target_item.display_name}\` for \`${command_data.global_context.utils.format_number(target_shop_item.price)} 💵\`.`,
         };
-        command_data.msg.channel.send({ embeds: [embedBuy] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedBuy ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

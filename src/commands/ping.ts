@@ -41,7 +41,7 @@ export default {
             ],
         };
 
-        message.edit({ embeds: [embedPing] }).catch((e: Error) => {
+        message.edit({ embeds: [ embedPing ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

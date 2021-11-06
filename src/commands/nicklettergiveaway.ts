@@ -16,7 +16,7 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("me", Permissions.FLAGS.CHANGE_NICKNAME), new NeededPermission("me", Permissions.FLAGS.MANAGE_NICKNAMES)],
+    permissionsNeeded: [ new NeededPermission("me", Permissions.FLAGS.CHANGE_NICKNAME), new NeededPermission("me", Permissions.FLAGS.MANAGE_NICKNAMES) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -43,7 +43,7 @@ export default {
             if (command_data.msg.guild === null || command_data.msg.member === null) {
                 return;
             }
-            const author_nickname = command_data.msg.member.nickname == null ? command_data.msg.author.username : command_data.msg.member.nickname;
+            const author_nickname = command_data.msg.member.nickname === null ? command_data.msg.author.username : command_data.msg.member.nickname;
 
             const reacted = await command_data.msg.guild.members.fetch(u.id).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
@@ -52,7 +52,7 @@ export default {
             if (reacted === null) {
                 return;
             }
-            const reacted_nickname = reacted.nickname == null ? reacted.user.username : reacted.nickname;
+            const reacted_nickname = reacted.nickname === null ? reacted.user.username : reacted.nickname;
 
             const author_index = Math.floor(Math.random() * (author_nickname.length - 1 - 0 + 1) + 0);
             const reacted_index = Math.floor(Math.random() * (reacted_nickname.length - 1 - 0 + 1) + 0);

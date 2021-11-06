@@ -45,7 +45,7 @@ export async function _edit_server(connection: Connection, item: GuildData, type
 
 export async function _edit_server_user(connection: Connection, item: ServerUserData) {
     const query = "UPDATE server_users SET level=?, xp=? WHERE fast_find_ID=?";
-    const query_data = [item.level, item.xp, item.fast_find_ID];
+    const query_data = [ item.level, item.xp, item.fast_find_ID ];
     return await connection.execute(query, query_data);
 }
 
@@ -112,6 +112,6 @@ export async function _edit_global_user(connection: Connection, item: GlobalUser
 
 export async function _edit_counter(connection: Connection, item: CounterData) {
     const query = "UPDATE server_counters SET last_update=? WHERE id=?";
-    const query_data = [item.last_update, item.id];
+    const query_data = [ item.last_update, item.id ];
     return await connection.execute(query, query_data);
 }

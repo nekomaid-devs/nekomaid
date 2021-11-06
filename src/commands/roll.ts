@@ -50,41 +50,39 @@ export default {
             let credits_amount = parseInt(command_data.args[2]);
             if (command_data.args[2] === "all") {
                 if (command_data.author_user_config.credits <= 0) {
-                    command_data.msg.reply(`You don't have enough credits to do this.`);
+                    command_data.msg.reply("You don't have enough credits to do this.");
                     return;
-                } else {
-                    credits_amount = command_data.author_user_config.credits;
                 }
+                credits_amount = command_data.author_user_config.credits;
             } else if (command_data.args[2] === "half") {
                 if (command_data.author_user_config.credits <= 1) {
-                    command_data.msg.reply(`You don't have enough credits to do this.`);
+                    command_data.msg.reply("You don't have enough credits to do this.");
                     return;
-                } else {
-                    credits_amount = Math.round(command_data.author_user_config.credits / 2);
                 }
+                credits_amount = Math.round(command_data.author_user_config.credits / 2);
             } else if (command_data.args[2].includes("%")) {
                 if (credits_amount > 0 && credits_amount <= 100) {
                     credits_amount = Math.round(command_data.author_user_config.credits * (credits_amount / 100));
                     if (credits_amount < 1 || command_data.author_user_config.credits <= 0) {
-                        command_data.msg.reply(`You don't have enough credits to do this.`);
+                        command_data.msg.reply("You don't have enough credits to do this.");
                         return;
                     }
                 } else {
-                    command_data.msg.reply(`Invalid percentage amount.`);
+                    command_data.msg.reply("Invalid percentage amount.");
                     return;
                 }
             }
 
             if (command_data.author_user_config.credits - credits_amount < 0) {
-                command_data.msg.reply(`You don't have enough credits to do this.`);
+                command_data.msg.reply("You don't have enough credits to do this.");
                 return;
             }
             if (roll_type !== 6) {
-                command_data.msg.reply(`You can only bet on a 6-sided dice.`);
+                command_data.msg.reply("You can only bet on a 6-sided dice.");
                 return;
             }
 
-            const message = await command_data.msg.channel.send({ embeds: [embedRoll] }).catch((e: Error) => {
+            const message = await command_data.msg.channel.send({ embeds: [ embedRoll ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
@@ -119,14 +117,14 @@ export default {
                     embedRoll.description = `You lost \`${lost_amount_text}\` credits...`;
                 }
 
-                message.edit({ embeds: [embedRoll] }).catch((e: Error) => {
+                message.edit({ embeds: [ embedRoll ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }, 750);
         } else {
             const result = command_data.global_context.utils.pick_random(options);
             embedRoll.title = `${command_data.msg.author.tag} rolled ${result}!`;
-            command_data.msg.channel.send({ embeds: [embedRoll] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedRoll ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

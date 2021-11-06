@@ -37,7 +37,7 @@ export default {
         }
         const server_bans = await global_context.neko_modules_clients.db.fetch_server_bans(ban.guild.id);
 
-        if (server_config.audit_bans == true && server_config.audit_channel !== null) {
+        if (server_config.audit_bans === true && server_config.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
@@ -101,7 +101,7 @@ export default {
                 server_config.case_ID += 1;
                 global_context.neko_modules_clients.db.edit_server(server_config, GuildEditType.AUDIT);
 
-                channel.send({ embeds: [embedBan] }).catch((e: Error) => {
+                channel.send({ embeds: [ embedBan ] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
             }

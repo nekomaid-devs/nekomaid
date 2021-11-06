@@ -14,7 +14,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention somebody.", "mention") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -33,7 +33,7 @@ export default {
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedArrest] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedArrest ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

@@ -50,9 +50,11 @@ class ModerationManager {
     }
 
     // TODO: add audit log for this
-    async timeout_bans(global_context: GlobalContext, server: Guild, server_bans: ServerBanData[]) {
-        //const server_config = await global_context.neko_modules_clients.mySQL.fetch_server(server.id, GuildFetchType.ALL, false, false);
-        //if(server_config === null) { return; }
+    timeout_bans(global_context: GlobalContext, server: Guild, server_bans: ServerBanData[]) {
+        /*
+         * const server_config = await global_context.neko_modules_clients.mySQL.fetch_server(server.id, GuildFetchType.ALL, false, false);
+         * if(server_config === null) { return; }
+         */
         server_bans.forEach((ban) => {
             global_context.neko_modules_clients.db.remove_server_ban(ban.id);
 

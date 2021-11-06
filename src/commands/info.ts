@@ -22,17 +22,17 @@ export default {
         const t = Date.now();
 
         const k = 1024;
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+        const sizes = [ "Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" ];
 
         const bytes0 = process.memoryUsage().heapTotal;
         const bytes1 = process.memoryUsage().heapUsed;
         const bytes2 = process.memoryUsage().heapTotal - process.memoryUsage().heapUsed;
         const i0 = Math.floor(Math.log(bytes0) / Math.log(k));
-        const memory_string_0 = parseFloat((bytes0 / k ** i0).toFixed(2)) + " " + sizes[i0];
+        const memory_string_0 = `${parseFloat((bytes0 / k ** i0).toFixed(2))} ${sizes[i0]}`;
         const i = Math.floor(Math.log(bytes1) / Math.log(k));
-        const memory_string_1 = parseFloat((bytes1 / k ** i).toFixed(1)) + " " + sizes[i];
+        const memory_string_1 = `${parseFloat((bytes1 / k ** i).toFixed(1))} ${sizes[i]}`;
         const i2 = Math.floor(Math.log(bytes2) / Math.log(k));
-        const memory_string_2 = parseFloat((bytes2 / k ** i2).toFixed(1)) + " " + sizes[i2];
+        const memory_string_2 = `${parseFloat((bytes2 / k ** i2).toFixed(1))} ${sizes[i2]}`;
 
         const allShards_memory_usage: any = await command_data.global_context.bot.shard
             .broadcastEval(() => {
@@ -52,18 +52,22 @@ export default {
         }
 
         const m_i_0 = Math.floor(Math.log(manager_bytes0) / Math.log(k));
-        const manager_memory_string_0 = parseFloat((manager_bytes0 / k ** m_i_0).toFixed(2)) + " " + sizes[m_i_0];
+        const manager_memory_string_0 = `${parseFloat((manager_bytes0 / k ** m_i_0).toFixed(2))} ${sizes[m_i_0]}`;
         const m_i_1 = Math.floor(Math.log(manager_bytes1) / Math.log(k));
-        const manager_memory_string_1 = parseFloat((manager_bytes1 / k ** m_i_1).toFixed(2)) + " " + sizes[m_i_1];
+        const manager_memory_string_1 = `${parseFloat((manager_bytes1 / k ** m_i_1).toFixed(2))} ${sizes[m_i_1]}`;
         const m_i_2 = Math.floor(Math.log(manager_bytes2) / Math.log(k));
-        const manager_memory_string_2 = parseFloat((manager_bytes2 / k ** m_i_2).toFixed(2)) + " " + sizes[m_i_2];
+        const manager_memory_string_2 = `${parseFloat((manager_bytes2 / k ** m_i_2).toFixed(2))} ${sizes[m_i_2]}`;
 
         const shard_elapsed_time = command_data.global_context.neko_modules.timeConvert.convert_time(Date.now() - command_data.global_context.data.uptime_start);
 
         const shard_guilds = command_data.global_context.bot.guilds.cache.size;
         const manager_guilds = await command_data.global_context.bot.shard
             .fetchClientValues("guilds.cache.size")
-            .then((results) => results.reduce((prev: any, guildCount: any) => prev + guildCount, 0))
+            .then((results) => {
+                return results.reduce((acc: number, curr: number) => {
+                    return acc + curr;
+                }, 0);
+            })
             .catch((e: Error) => {
                 command_data.global_context.logger.error(e);
             });
@@ -74,42 +78,52 @@ export default {
         });
         const manager_members = await command_data.global_context.bot.shard
             .broadcastEval((client) => {
-                return client.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0);
+                return client.guilds.cache.reduce((acc, curr) => {
+                    return acc + curr.memberCount;
+                }, 0);
             })
-            .then((results) => results.reduce((prev, memberCount) => prev + memberCount, 0))
+            .then((results) => {
+                return results.reduce((acc, curr) => {
+                    return acc + curr;
+                }, 0);
+            })
             .catch((e: Error) => {
                 command_data.global_context.logger.error(e);
             });
 
         const shard_commands = command_data.global_context.neko_data.total_commands;
         const manager_commands = 0;
-        /*await command_data.global_context.bot.shard
-            .broadcastEval((client) => {
-                return client.neko_data.total_commands;
-            })
-            .then((results) => {
-                results.forEach((result) => {
-                    manager_commands += result;
-                });
-            })
-            .catch((e: Error) => {
-                command_data.global_context.logger.error(e);
-            });*/
+        /*
+         *await command_data.global_context.bot.shard
+         *  .broadcastEval((client) => {
+         *      return client.neko_data.total_commands;
+         *  })
+         *  .then((results) => {
+         *      results.forEach((result) => {
+         *          manager_commands += result;
+         *      });
+         *  })
+         *  .catch((e: Error) => {
+         *      command_data.global_context.logger.error(e);
+         *  });
+         */
 
         const shard_vc = command_data.global_context.neko_data.voiceManager_connections;
         const manager_vc = 0;
-        /*await command_data.global_context.bot.shard
-            .broadcastEval((client) => {
-                return client.neko_data.voiceManager_connections;
-            })
-            .then((results) => {
-                results.forEach((result) => {
-                    manager_vc += result;
-                });
-            })
-            .catch((e: Error) => {
-                command_data.global_context.logger.error(e);
-            });*/
+        /*
+         *await command_data.global_context.bot.shard
+         *  .broadcastEval((client) => {
+         *      return client.neko_data.voiceManager_connections;
+         *  })
+         *  .then((results) => {
+         *      results.forEach((result) => {
+         *          manager_vc += result;
+         *      });
+         *  })
+         *  .catch((e: Error) => {
+         *      command_data.global_context.logger.error(e);
+         *  });
+         */
 
         const sec_taken = ((Date.now() - t) / 1000).toFixed(3);
         const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
@@ -160,7 +174,7 @@ export default {
                 text: `Update took ${sec_taken}s...`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedInfo] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedInfo ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

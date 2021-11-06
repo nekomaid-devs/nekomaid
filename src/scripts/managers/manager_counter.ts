@@ -87,7 +87,9 @@ class CounterManager {
                     await global_context.bot.shard
                         .fetchClientValues("guilds.cache.size")
                         .then((results: any) => {
-                            guild_count = results.reduce((prev: any, guild_count: any) => prev + guild_count, 0);
+                            guild_count = results.reduce((acc: number, curr: number) => {
+                                return acc + curr;
+                            }, 0);
                         })
                         .catch((e: Error) => {
                             global_context.logger.error(e);
@@ -103,10 +105,14 @@ class CounterManager {
                     let member_count = 0;
                     await global_context.bot.shard
                         .broadcastEval((client) => {
-                            return client.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0);
+                            return client.guilds.cache.reduce((acc, curr) => {
+                                return acc + curr.memberCount;
+                            }, 0);
                         })
                         .then((results) => {
-                            member_count = results.reduce((prev, member_count) => prev + member_count, 0);
+                            member_count = results.reduce((acc, curr) => {
+                                return acc + curr;
+                            }, 0);
                         })
                         .catch((e: Error) => {
                             global_context.logger.error(e);

@@ -24,7 +24,7 @@ export default {
         });
     },
 
-    async process(global_context: GlobalContext, guild: Guild) {
+    process(global_context: GlobalContext, guild: Guild) {
         global_context.logger.log(`Added to new Guild! [Name: ${guild.name}] - [ID: ${guild.id}] - [Members: ${guild.memberCount}]`);
     },
 } as Callback;

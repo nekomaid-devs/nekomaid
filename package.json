@@ -12,19 +12,8 @@
         "build": "tsc",
         "serve": "node build/index.js",
         "lint": "eslint 'src/**/*.{ts,tsx}'",
-        "pretty": "prettier --write 'src/**/*.{ts,tsx}'",
+        "linty": "eslint 'src/**/*.{ts,tsx}' --fix",
         "typecheck": "tsc --noEmit"
-    },
-    "eslintConfig": {
-        "parser": "@typescript-eslint/parser",
-        "extends": [
-            "plugin:@typescript-eslint/recommended"
-        ]
-    },
-    "commitlint": {
-        "extends": [
-            "@commitlint/config-conventional"
-        ]
     },
     "devDependencies": {
         "@commitlint/cli": "^13.2.1",
@@ -34,9 +23,7 @@
         "@typescript-eslint/eslint-plugin": "^5.2.0",
         "@typescript-eslint/parser": "^5.2.0",
         "eslint": "^8.1.0",
-        "eslint-config-prettier": "^8.3.0",
         "husky": "^7.0.4",
-        "prettier": "^2.4.1",
         "typescript": "^4.4.4"
     },
     "dependencies": {

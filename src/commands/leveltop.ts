@@ -22,8 +22,8 @@ export default {
         if (command_data.msg.guild === null) {
             return;
         }
-        if (command_data.server_config.module_level_enabled == false) {
-            command_data.msg.reply("Leveling isn't enabled on this server. (see `" + command_data.server_config.prefix + "leveling` for help)");
+        if (command_data.server_config.module_level_enabled === false) {
+            command_data.msg.reply(`Leveling isn't enabled on this server. (see \`${command_data.server_config.prefix}leveling\` for help)`);
             return;
         }
 
@@ -68,7 +68,7 @@ export default {
             embedTop.addField(`${i + 1}) ${target_user.tag}`, `Level ${net} (${Math.round(net_2)} %)`);
         }
 
-        command_data.msg.channel.send({ embeds: [embedTop] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedTop ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

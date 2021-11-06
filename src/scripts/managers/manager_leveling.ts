@@ -33,9 +33,9 @@ class LevelingManager {
         }
 
         const rank_data = await this.process_ranks(command_data);
-        if (command_data.server_config.module_level_levelup_messages == true && log == true) {
+        if (command_data.server_config.module_level_levelup_messages === true && log === true) {
             let granted_roles_text = rank_data.granted_roles.reduce((acc, curr) => {
-                acc += "`" + curr.toString() + "`, ";
+                acc += `\`${curr.toString()}\`, `;
                 return acc;
             }, "");
             granted_roles_text = granted_roles_text.slice(0, granted_roles_text.length - 2);
@@ -44,7 +44,7 @@ class LevelingManager {
             }
 
             let removed_roles_text = rank_data.removed_roles.reduce((acc, curr) => {
-                acc += "`" + curr.toString() + "`, ";
+                acc += `\`${curr.toString()}\`, `;
                 return acc;
             }, "");
             removed_roles_text = removed_roles_text.slice(0, removed_roles_text.length - 2);
@@ -61,7 +61,7 @@ class LevelingManager {
             }
 
             let levelup_message = command_data.server_config.module_level_levelup_messages_format;
-            levelup_message = levelup_message.replace("<user>", command_data.server_config.module_level_levelup_messages_ping == true ? command_data.tagged_user.toString() : command_data.tagged_user.tag);
+            levelup_message = levelup_message.replace("<user>", command_data.server_config.module_level_levelup_messages_ping === true ? command_data.tagged_user.toString() : command_data.tagged_user.tag);
             levelup_message = levelup_message.replace("<level>", command_data.tagged_server_user_config.level.toString());
 
             const channel = await command_data.global_context.bot.channels.fetch(command_data.server_config.module_level_levelup_messages_channel).catch((e: Error) => {
@@ -135,7 +135,7 @@ class LevelingManager {
         };
     }
 
-    async update_global_level(command_data: CommandData) {
+    update_global_level(command_data: CommandData) {
         if (command_data.global_context.bot_config === null) {
             return;
         }

@@ -16,19 +16,21 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a time format.", "none"), new RecommendedArgument(3, "Argument needs to be a reason.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS)],
+    argumentsNeeded: [ new NeededArgument(1, "You need to mention somebody.", "mention") ],
+    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a time format.", "none"), new RecommendedArgument(3, "Argument needs to be a reason.", "none") ],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS) ],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
-        // TODO: support swapping arguments (or improve the format)
-        // TODO: this should clear all messages from them aswell
+        /*
+         * TODO: support swapping arguments (or improve the format)
+         * TODO: this should clear all messages from them aswell
+         */
         const time = command_data.args.length < 2 ? -1 : command_data.args[1] === "-1" ? -1 : command_data.global_context.neko_modules.timeConvert.convert_string_to_time_data(command_data.args[1]);
-        if (time != -1 && time.status != 1) {
+        if (time !== -1 && time.status !== 1) {
             command_data.msg.reply("You entered invalid time format! (ex. `1d2h3m4s` or `-1`)");
             return;
         }

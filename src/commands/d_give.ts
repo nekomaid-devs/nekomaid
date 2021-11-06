@@ -18,9 +18,9 @@ export default {
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type mention somebody.", "mention"), new NeededArgument(2, "You need to type in an amount.", "int>0"), new NeededArgument(3, "You need to type in an item ID.", "int")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type mention somebody.", "mention"), new NeededArgument(2, "You need to type in an amount.", "int>0"), new NeededArgument(3, "You need to type in an item ID.", "int") ],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", ExtraPermission.BOT_OWNER)],
+    permissionsNeeded: [ new NeededPermission("author", ExtraPermission.BOT_OWNER) ],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {

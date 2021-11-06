@@ -16,9 +16,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an emote.", "none")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a name.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS)],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in an emote.", "none") ],
+    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a name.", "none") ],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS) ],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
@@ -38,7 +38,7 @@ export default {
         const a = text.indexOf(":", text.indexOf(":") + 1) + 1;
         const emote_ID = text.substring(a, text.indexOf(">", a));
 
-        if (text.includes("https://") === false && emote_ID.length != 18) {
+        if (text.includes("https://") === false && emote_ID.length !== 18) {
             command_data.msg.reply(`Invalid emote_ID length! (${emote_ID}, ${emote_ID.length}/18)`);
             return;
         }
@@ -49,7 +49,7 @@ export default {
                 color: 6732650,
                 description: `Created new emote \`${emote_name}\` - ${emote.toString()}`,
             };
-            command_data.msg.channel.send({ embeds: [embedEmote] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedEmote ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         } catch (e) {
@@ -58,7 +58,7 @@ export default {
                 description: link,
             };
 
-            command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedError ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

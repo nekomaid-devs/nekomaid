@@ -16,10 +16,10 @@ export default {
     subcommandHelp: new Map(),
     argumentsNeeded: [],
     argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MENTION_EVERYONE)],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.MENTION_EVERYONE) ],
     nsfw: false,
     cooldown: 1500,
-    async execute(command_data: CommandData) {
+    execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }

@@ -14,7 +14,7 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a building name.", "none")],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in a building name.", "none") ],
     argumentsRecommended: [],
     permissionsNeeded: [],
     nsfw: false,
@@ -38,7 +38,7 @@ export default {
             if (!(typeof building_field_level === "number")) {
                 return;
             }
-            const building_field_credits = author_user_config_map.get(building_field + "_credits");
+            const building_field_credits = author_user_config_map.get(`${building_field}_credits`);
             if (!(typeof building_field_credits === "number")) {
                 return;
             }
@@ -64,21 +64,21 @@ export default {
                         text: `Requested by ${command_data.msg.author.tag}`,
                     },
                 };
-                command_data.msg.channel.send({ embeds: [embedBuild] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [ embedBuild ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             } else {
                 if (amount <= 0) {
-                    command_data.msg.reply(`Invalid credits amount.`);
+                    command_data.msg.reply("Invalid credits amount.");
                     return;
                 }
                 if (command_data.author_user_config.credits - amount < 0) {
-                    command_data.msg.reply(`You don't have enough credits to do this.`);
+                    command_data.msg.reply("You don't have enough credits to do this.");
                     return;
                 }
 
                 author_user_config_map.set("credits", command_data.author_user_config.credits - amount);
-                author_user_config_map.set(building_field + "_credits", building_field_credits + amount);
+                author_user_config_map.set(`${building_field}_credits`, building_field_credits + amount);
 
                 const a = Object.fromEntries(author_user_config_map) as any;
                 command_data.global_context.neko_modules_clients.db.edit_global_user(a);
@@ -92,7 +92,7 @@ export default {
                     },
                     description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`,
                 };
-                command_data.msg.channel.send({ embeds: [embedBuildProgress] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [ embedBuildProgress ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }
@@ -103,7 +103,7 @@ export default {
             if (!(typeof global_building_field_level === "number")) {
                 return;
             }
-            const global_building_field_credits = bot_config_map.get(global_building_field + "_credits");
+            const global_building_field_credits = bot_config_map.get(`${global_building_field}_credits`);
             if (!(typeof global_building_field_credits === "number")) {
                 return;
             }
@@ -129,21 +129,21 @@ export default {
                         text: `Requested by ${command_data.msg.author.tag}`,
                     },
                 };
-                command_data.msg.channel.send({ embeds: [embedBuild] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [ embedBuild ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             } else {
                 if (amount <= 0) {
-                    command_data.msg.reply(`Invalid credits amount.`);
+                    command_data.msg.reply("Invalid credits amount.");
                     return;
                 }
                 if (command_data.author_user_config.credits - amount < 0) {
-                    command_data.msg.reply(`You don't have enough credits to do this.`);
+                    command_data.msg.reply("You don't have enough credits to do this.");
                     return;
                 }
 
                 author_user_config_map.set("credits", command_data.author_user_config.credits - amount);
-                bot_config_map.set(global_building_field + "_credits", global_building_field_credits + amount);
+                bot_config_map.set(`${global_building_field}_credits`, global_building_field_credits + amount);
 
                 const a = Object.fromEntries(author_user_config_map) as any;
                 const b = Object.fromEntries(bot_config_map) as any;
@@ -159,7 +159,7 @@ export default {
                     },
                     description: `Added \`${command_data.global_context.utils.format_number(amount)} 💵\` towards the construction.`,
                 };
-                command_data.msg.channel.send({ embeds: [embedBuildProgress] }).catch((e: Error) => {
+                command_data.msg.channel.send({ embeds: [ embedBuildProgress ] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }

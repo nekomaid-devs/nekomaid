@@ -16,9 +16,9 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an username (ex. `LamkasDev` or `LamkasDev#4235`).", "text")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a reason.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS)],
+    argumentsNeeded: [ new NeededArgument(1, "You need to type in an username (ex. `LamkasDev` or `LamkasDev#4235`).", "text") ],
+    argumentsRecommended: [ new RecommendedArgument(2, "Argument needs to be a reason.", "none") ],
+    permissionsNeeded: [ new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS) ],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
@@ -41,9 +41,9 @@ export default {
                     return;
                 }
                 server_bans_result.forEach((ban) => {
-                    const tagged_user_display_name_modded = tagged_user_display_name.endsWith("#" + ban.user.discriminator) ? tagged_user_display_name : tagged_user_display_name + "#" + ban.user.discriminator;
-                    if (ban.user.username + "#" + ban.user.discriminator === tagged_user_display_name_modded) {
-                        usernames.push(ban.user.username + "#" + ban.user.discriminator);
+                    const tagged_user_display_name_modded = tagged_user_display_name.endsWith(`#${ban.user.discriminator}`) ? tagged_user_display_name : `${tagged_user_display_name}#${ban.user.discriminator}`;
+                    if (`${ban.user.username}#${ban.user.discriminator}` === tagged_user_display_name_modded) {
+                        usernames.push(`${ban.user.username}#${ban.user.discriminator}`);
                         ban_info = ban;
                     }
                 });

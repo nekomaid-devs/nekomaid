@@ -12,10 +12,10 @@ export default {
     helpUsage: "[mention?]` *(optional argument)*",
     exampleUsage: "/user_tag/",
     hidden: false,
-    aliases: ["lvl"],
+    aliases: [ "lvl" ],
     subcommandHelp: new Map(),
     argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
+    argumentsRecommended: [ new RecommendedArgument(1, "Argument needs to be a mention.", "mention") ],
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
@@ -23,7 +23,7 @@ export default {
         if (command_data.msg.guild === null || command_data.tagged_user === undefined) {
             return;
         }
-        if (command_data.server_config.module_level_enabled == false) {
+        if (command_data.server_config.module_level_enabled === false) {
             command_data.msg.reply(`Leveling isn't enabled on this server. (see \`${command_data.server_config.prefix}leveling\` for help)`);
             return;
         }
@@ -64,7 +64,7 @@ export default {
                 text: `Requested by ${command_data.msg.author.tag}`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedLevel] }).catch((e: Error) => {
+        command_data.msg.channel.send({ embeds: [ embedLevel ] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

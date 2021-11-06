@@ -31,7 +31,7 @@ export default {
         if (server_config === null) {
             return;
         }
-        if (server_config.audit_nicknames == true && server_config.audit_channel !== null) {
+        if (server_config.audit_nicknames === true && server_config.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
@@ -54,12 +54,12 @@ export default {
                     },
                     {
                         name: "Change:",
-                        value: (old_member.nickname === null ? old_member.user.username : old_member.nickname) + " -> " + (new_member.nickname === null ? new_member.user.username : new_member.nickname),
+                        value: `${old_member.nickname === null ? old_member.user.username : old_member.nickname} -> ${new_member.nickname === null ? new_member.user.username : new_member.nickname}`,
                     },
                 ],
             };
 
-            channel.send({ embeds: [embedNicknameChange] }).catch((e: Error) => {
+            channel.send({ embeds: [ embedNicknameChange ] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
         }

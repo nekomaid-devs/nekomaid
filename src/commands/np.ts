@@ -48,7 +48,7 @@ export default {
             embedNP.addField("Title", descriptionText);
             embedNP.addField("Requested by", `\`${user.tag}\``);
             embedNP.addField("Remaining", `\`${totalLength}\``);
-            command_data.msg.channel.send({ embeds: [embedNP] }).catch((e: Error) => {
+            command_data.msg.channel.send({ embeds: [ embedNP ] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

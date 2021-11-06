@@ -171,16 +171,16 @@ export function convert_time_data_to_string(time_data: any) {
     }
 
     let time_string = "";
-    if (time_data.days != 0) {
-        time_string += time_data.days + ":";
+    if (time_data.days !== 0) {
+        time_string += `${time_data.days}:`;
     }
-    if (time_data.hrs != 0 || time_data.days > 0) {
+    if (time_data.hrs !== 0 || time_data.days > 0) {
         time_string += time_data.hrs.toString().length < 2 ? `0${time_data.hrs}:` : `${time_data.hrs}:`;
     }
-    if (time_data.mins != 0 || time_data.hrs > 0 || time_data.days > 0) {
+    if (time_data.mins !== 0 || time_data.hrs > 0 || time_data.days > 0) {
         time_string += time_data.mins.toString().length < 2 ? `0${time_data.mins}:` : `${time_data.mins}:`;
     }
-    if (time_data.secs != 0 || time_data.mins > 0 || time_data.hrs > 0 || time_data.days > 0) {
+    if (time_data.secs !== 0 || time_data.mins > 0 || time_data.hrs > 0 || time_data.days > 0) {
         time_string += time_data.secs.toString().length < 2 ? `0${time_data.secs}:` : `${time_data.secs}:`;
     }
     if (time_data.days === 0 && time_data.hrs === 0 && time_data.mins === 0) {
