@@ -1,6 +1,6 @@
 /* Types */
 import { CommandData, RankData } from "../../ts/base";
-import { Permissions, TextChannel } from "discord.js";
+import { Permissions, TextChannel } from "discord.js-light";
 
 /* Local Imports */
 import { get_server_level_XP } from "../utils/util_general";

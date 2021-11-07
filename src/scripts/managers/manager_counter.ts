@@ -1,6 +1,6 @@
 /* Types */
 import { CounterData, GlobalContext } from "../../ts/base";
-import { Guild, VoiceChannel } from "discord.js";
+import { Guild, VoiceChannel } from "discord.js-light";
 
 class CounterManager {
     async update_all_counters(global_context: GlobalContext) {

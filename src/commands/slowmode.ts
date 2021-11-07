@@ -1,6 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
-import { Permissions, TextChannel } from "discord.js";
+import { Permissions, TextChannel } from "discord.js-light";
 
 /* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";

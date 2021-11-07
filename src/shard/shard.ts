@@ -1,6 +1,6 @@
 /* Types */
 import { Callback, Command, GlobalContext } from "../ts/base";
-import Discord from "discord.js";
+import Discord from "discord.js-light";
 
 /* Node Imports */
 import { readFileSync } from "fs";
@@ -48,22 +48,27 @@ async function run() {
     // Setup Discord client
     const bot = new Discord.Client({
         makeCache: Discord.Options.cacheWithLimits({
-            ApplicationCommandManager: { sweepInterval: 60 },
-            BaseGuildEmojiManager: { sweepInterval: 60 },
-            GuildEmojiManager: { sweepInterval: 60 },
-            GuildMemberManager: { sweepInterval: 60 },
-            GuildBanManager: { sweepInterval: 60 },
-            GuildInviteManager: { sweepInterval: 60 },
-            GuildStickerManager: { sweepInterval: 60 },
-            MessageManager: { sweepInterval: 60 },
-            PresenceManager: { sweepInterval: 60 },
-            ReactionManager: { sweepInterval: 60 },
-            ReactionUserManager: { sweepInterval: 60 },
-            StageInstanceManager: { sweepInterval: 60 },
-            ThreadManager: { sweepInterval: 60 },
-            ThreadMemberManager: { sweepInterval: 60 },
-            UserManager: { sweepInterval: 60 },
-            VoiceStateManager: { sweepInterval: 60 },
+            ApplicationCommandManager: { maxSize: 0 },
+            BaseGuildEmojiManager: { maxSize: 0 },
+            ChannelManager: { maxSize: 256 },
+            GuildManager: { maxSize: 256 },
+            GuildChannelManager: { maxSize: 256 },
+            GuildEmojiManager: { maxSize: 0 },
+            GuildMemberManager: { maxSize: 0 },
+            GuildBanManager: { maxSize: 0 },
+            GuildInviteManager: { maxSize: 0 },
+            GuildStickerManager: { maxSize: 0 },
+            MessageManager: { maxSize: 0 },
+            PresenceManager: { maxSize: 0 },
+            PermissionOverwriteManager: { maxSize: 256 },
+            ReactionManager: { maxSize: 0 },
+            ReactionUserManager: { maxSize: 0 },
+            RoleManager: { maxSize: 256 },
+            StageInstanceManager: { maxSize: 0 },
+            ThreadManager: { maxSize: 0 },
+            ThreadMemberManager: { maxSize: 0 },
+            UserManager: { maxSize: 0 },
+            VoiceStateManager: { maxSize: 0 },
         }),
         intents: [
             Discord.Intents.FLAGS.GUILDS,

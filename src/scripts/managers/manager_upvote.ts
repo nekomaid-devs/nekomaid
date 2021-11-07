@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext } from "../../ts/base";
-import { TextChannel } from "discord.js";
+import { TextChannel } from "discord.js-light";
 
 class UpvoteManager {
     async send_upvote_message(global_context: GlobalContext, id: string, site_ID: string, is_double = false) {

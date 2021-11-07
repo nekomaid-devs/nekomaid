@@ -1,7 +1,7 @@
 /* Types */
 import { Callback, CommandData, GlobalContext } from "../ts/base";
 import { GuildFetchType } from "../ts/mysql";
-import { Message, Permissions, TextChannel } from "discord.js";
+import { Message, Permissions, TextChannel } from "discord.js-light";
 
 /* Node Imports */
 import * as Sentry from "@sentry/node";

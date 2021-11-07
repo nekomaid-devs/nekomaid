@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext } from "../../ts/base";
-import { Client } from "discord.js";
+import { Client } from "discord.js-light";
 
 /* Local Imports */
 import { pick_random } from "../../scripts/utils/util_general";

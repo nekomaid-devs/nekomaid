@@ -1,6 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
-import { TextChannel } from "discord.js";
+import { TextChannel } from "discord.js-light";
 
 /* Local Imports */
 import RecommendedArgument from "../scripts/helpers/recommended_argument";

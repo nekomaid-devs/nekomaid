@@ -1,6 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
-import { Message, Permissions, VoiceChannel } from "discord.js";
+import { Message, Permissions, VoiceChannel } from "discord.js-light";
 
 /* Node Imports */
 import ytpl, { validateID } from "ytpl";

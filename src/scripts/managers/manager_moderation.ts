@@ -1,7 +1,7 @@
 /* Types */
 import { GlobalContext, ServerBanData, ServerMuteData } from "../../ts/base";
 import { GuildFetchType } from "../../ts/mysql";
-import { Guild } from "discord.js";
+import { Guild } from "discord.js-light";
 
 class ModerationManager {
     async timeout_all_mutes(global_context: GlobalContext) {

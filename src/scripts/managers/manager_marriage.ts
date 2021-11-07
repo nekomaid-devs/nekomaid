@@ -1,7 +1,7 @@
 /* Types */
 import { GlobalContext } from "../../ts/base";
 import { MarriageProposal } from "../../ts/marriage";
-import { Message, TextChannel, User } from "discord.js";
+import { Message, TextChannel, User } from "discord.js-light";
 
 class MarriageManager {
     marriage_proposals: Map<string, MarriageProposal>;

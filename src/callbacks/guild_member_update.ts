@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildMember, PartialGuildMember } from "discord.js";
+import { GuildMember, PartialGuildMember } from "discord.js-light";
 
 /* Node Imports */
 import * as Sentry from "@sentry/node";

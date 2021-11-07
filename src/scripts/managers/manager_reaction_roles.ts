@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, ReactionRoleData } from "../../ts/base";
-import { Guild, TextChannel } from "discord.js";
+import { Guild, TextChannel } from "discord.js-light";
 
 class ReactionRolesManager {
     async create_all_collectors(global_context: GlobalContext) {

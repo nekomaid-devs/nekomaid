@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { MessageReaction, PartialMessageReaction } from "discord.js";
+import { MessageReaction, PartialMessageReaction } from "discord.js-light";
 
 /* Node Imports */
 import * as Sentry from "@sentry/node";

@@ -1,5 +1,5 @@
 /* Types */
-import Discord from "discord.js";
+import Discord from "discord.js-light";
 
 /* Node Imports */
 import http from "http";

@@ -1,7 +1,7 @@
 /* Types */
 import { GlobalContext } from "../../ts/base";
 import { VoiceConnectionData, VoiceRequestData } from "../../ts/voice";
-import { Message, TextChannel, VoiceChannel } from "discord.js";
+import { Message, TextChannel, VoiceChannel } from "discord.js-light";
 
 /* Node Imports */
 import { AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel, VoiceConnectionStatus } from "@discordjs/voice";

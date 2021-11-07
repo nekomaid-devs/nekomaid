@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, GlobalUserData, GuildData, ServerUserData } from "../../ts/base";
-import { Guild } from "discord.js";
+import { Guild } from "discord.js-light";
 
 /* Local Imports */
 import { get_server_level_XP } from "../utils/util_general";

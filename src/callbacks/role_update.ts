@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { Role } from "discord.js";
+import { Role } from "discord.js-light";
 
 /* Node Imports */
 import * as Sentry from "@sentry/node";

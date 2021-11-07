@@ -1,5 +1,5 @@
 /* Types */
-import { Client, GuildMember, Message, User } from "discord.js";
+import { Client, GuildMember, Message, User } from "discord.js-light";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";

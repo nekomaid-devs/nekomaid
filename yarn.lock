@@ -581,9 +581,9 @@
     fastq "^1.6.0"
 
 "@sapphire/async-queue@^1.1.8":
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/@sapphire/async-queue/-/async-queue-1.1.8.tgz#dac698654a17fb0e202fa3ff0c2c176bbdc08935"
-  integrity sha512-Oi4EEi8vOne8RM1tCdQ3kYAtl/J6ztak3Th6wwGFqA2SVNJtedw196LjsLX0bK8Li8cwaljbFf08N+0zeqhkWQ==
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/@sapphire/async-queue/-/async-queue-1.1.9.tgz#ce69611c8753c4affd905a7ef43061c7eb95c01b"
+  integrity sha512-CbXaGwwlEMq+l1TRu01FJCvySJ1CEFKFclHT48nIfNeZXaAAmmwwy7scUKmYHPUa3GhoMp6Qr1B3eAJux6XgOQ==
 
 "@sentry/core@6.14.1":
   version "6.14.1"
@@ -1300,7 +1300,14 @@ discord-api-types@^0.24.0:
   resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.24.0.tgz#9e429b8a1ddb4147134dfb3109093422de7ec549"
   integrity sha512-X0uA2a92cRjowUEXpLZIHWl4jiX1NsUpDhcEOpa1/hpO1vkaokgZ8kkPtPih9hHth5UVQ3mHBu/PpB4qjyfJ4A==
 
-discord.js@^13.3.1:
+discord.js-light@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/discord.js-light/-/discord.js-light-4.3.1.tgz#6f4952e09e0409f7317348723a311423c1ac573e"
+  integrity sha512-QCk2BA5MBl/S5hilbO8XVjhVknjFAzs3YKgkWu/Q/aYq2UQ5xOjw2WoQ7fgk5LWyApIySwpjRNionp1z59iFLA==
+  dependencies:
+    discord.js "13.3.1"
+
+discord.js@13.3.1:
   version "13.3.1"
   resolved "https://registry.yarnpkg.com/discord.js/-/discord.js-13.3.1.tgz#94fe05bc3ec0a3e4761e4f312a2a418c29721ab6"
   integrity sha512-zn4G8tL5+tMV00+0aSsVYNYcIfMSdT2g0nudKny+Ikd+XKv7m6bqI7n3Vji0GIRqXDr5ArPaw+iYFM2I1Iw3vg==

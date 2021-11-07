@@ -1,7 +1,7 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
 import { GuildEditType } from "../ts/mysql";
-import { Permissions } from "discord.js";
+import { Permissions } from "discord.js-light";
 
 /* Local Imports */
 import NeededPermission from "../scripts/helpers/needed_permission";

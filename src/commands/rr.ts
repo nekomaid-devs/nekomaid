@@ -1,7 +1,7 @@
 /* Types */
 import { CommandData, Command, GlobalContext, GuildData } from "../ts/base";
 import { GuildEditType } from "../ts/mysql";
-import { Message, Permissions } from "discord.js";
+import { Message, Permissions } from "discord.js-light";
 
 /* Node Imports */
 import { randomBytes } from "crypto";
