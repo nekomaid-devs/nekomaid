@@ -70,7 +70,7 @@ export default {
                 auto_roles_text = "`None`";
             }
 
-            const embedConfig: any = {
+            const embedConfig = {
                 title: "Config",
                 description: `To set values see - \`${command_data.server_config.prefix}help config set\`\nTo add values see - \`${command_data.server_config.prefix}help config add\`\nTo remove values see - \`${command_data.server_config.prefix}help config remove\``,
                 color: 8388736,
@@ -97,7 +97,7 @@ export default {
                     },
                     {
                         name: "Counters:",
-                        value: command_data.server_config.counters.length,
+                        value: command_data.server_config.counters.length.toString(),
                     },
                 ],
             };

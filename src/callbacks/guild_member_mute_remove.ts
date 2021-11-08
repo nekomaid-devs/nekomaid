@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext, Callback } from "../ts/base";
+import { GlobalContext, Callback, MemberMuteRemoveEventData } from "../ts/base";
 import { GuildEditType, GuildFetchType } from "../ts/mysql";
 import { TextChannel } from "discord.js-light";
 
@@ -25,7 +25,7 @@ export default {
         });
     },
 
-    async process(global_context: GlobalContext, event: any) {
+    async process(global_context: GlobalContext, event: MemberMuteRemoveEventData) {
         const server_config = await global_context.neko_modules_clients.db.fetch_server(event.member.guild.id, GuildFetchType.AUDIT, false, false);
         if (server_config === null) {
             return;
@@ -49,17 +49,17 @@ export default {
                 fields: [
                     {
                         name: "User:",
-                        value: event.member.user.toString(),
+                        value: event.member.toString(),
                         inline: true,
                     },
                     {
                         name: "Moderator:",
-                        value: event.moderationManager.toString(),
+                        value: event.moderator.toString(),
                         inline: true,
                     },
                     {
                         name: "Reason:",
-                        value: event.reason,
+                        value: event.reason === null ? "`None`" : event.reason,
                     },
                 ],
             };

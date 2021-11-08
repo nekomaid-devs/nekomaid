@@ -12,7 +12,8 @@ export async function fetch_data(connection: Connection, query: string, queryDat
             return null;
         }
 
-        result = await creatingFunc();
+        await creatingFunc();
+        result = await connection.execute(query, queryData);
         if (!is_valid(result)) {
             console.error(`Error executing creating function - '${query}'!`);
             return null;
@@ -120,5 +121,5 @@ export function guild_edit_type_to_query_data(item: GuildData, type: GuildEditTy
 }
 
 function is_valid(result: [RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]): result is [RowDataPacket[], FieldPacket[]] {
-    return Array.isArray(result[0]);
+    return Array.isArray(result[0]) && result[0].length > 0;
 }

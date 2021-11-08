@@ -1,5 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
+import { AudioPlayerStatus } from "@discordjs/voice";
 
 export default {
     name: "skip",
@@ -26,7 +27,7 @@ export default {
         }
 
         const title = connection.current.item.title;
-        connection.current.stream.destroy();
+        connection.player.stop();
         connection.current = null;
 
         command_data.msg.channel.send(`Skipped \`${title}\`. (\`${connection.queue.length}\` remaining)`).catch((e: Error) => {
@@ -35,7 +36,5 @@ export default {
         if (connection.mode === 0) {
             connection.persistent_queue.shift();
         }
-
-        command_data.global_context.neko_modules_clients.voiceManager.play_next_on_connection(command_data.global_context, command_data.msg);
     },
 } as Command;

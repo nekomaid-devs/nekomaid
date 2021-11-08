@@ -18,7 +18,7 @@ export default {
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
-    async execute(command_data: CommandData) {
+    execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
@@ -38,15 +38,8 @@ export default {
                 for (let i = 1; i <= 5; i += 1) {
                     if (connection.queue.length >= i) {
                         const voice_request = connection.queue[i - 1];
-                        const user = await command_data.global_context.bot.users.fetch(voice_request.request_user_ID).catch((e: Error) => {
-                            command_data.global_context.logger.api_error(e);
-                            return null;
-                        });
-
-                        if (user !== null) {
-                            const current_length = convert_string_to_time_data(convert_time(voice_request.item.duration));
-                            description_text += `${i}) [${voice_request.item.title}](${voice_request.item.url}) *(${current_length})* by *[${user.username}]*\n`;
-                        }
+                        const current_length = convert_string_to_time_data(convert_time(voice_request.item.duration));
+                        description_text += `${i}) [${voice_request.item.title}](${voice_request.item.url}) *(${current_length})* by *[<@${voice_request.user_ID}>]*\n`;
                     }
                 }
 
@@ -97,18 +90,10 @@ export default {
 
                 for (let i2 = start; i2 <= start + end; i2++) {
                     if (connection.persistent_queue.length > i2) {
-                        const i3 = i2 + 1;
-                        const voice_request_2 = connection.persistent_queue[i2];
-                        const user2 = await command_data.global_context.bot.users.fetch(voice_request_2.request_user_ID).catch((e: Error) => {
-                            command_data.global_context.logger.api_error(e);
-                        });
-
-                        if (user2 !== undefined) {
-                            // TODO: the position i3 is wrong (if i'm not dumb)
-                            const current_length = convert_string_to_time_data(convert_time(voice_request_2.item.duration));
-                            description_text += i2 === current_persistent_index ? `**${i3})** ` : `${i3}) `;
-                            description_text += `[${voice_request_2.item.title}](${voice_request_2.item.url}) *(${current_length})* - by [${user2.username}]\n`;
-                        }
+                        const voice_request = connection.persistent_queue[i2];
+                        const current_length = convert_string_to_time_data(convert_time(voice_request.item.duration));
+                        description_text += i2 === current_persistent_index ? `**${(i2 + 1)})** ` : `${(i2 + 1)}) `;
+                        description_text += `[${voice_request.item.title}](${voice_request.item.url}) *(${current_length})* - by [<@${voice_request.user_ID}>]\n`;
                     }
                 }
 

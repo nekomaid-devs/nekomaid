@@ -3,7 +3,7 @@ import { AudioPlayer, VoiceConnection } from "@discordjs/voice";
 
 export type VoiceConnectionData = {
     id: string;
-    init_message_channel_ID: string;
+    voice_channel_ID: string;
     channel_ID: string;
 
     connection: VoiceConnection;
@@ -21,11 +21,8 @@ export type VoiceConnectionData = {
 export type VoiceRequestData = {
     id: string;
     item: VoiceRequestItemData;
-    stream: any;
 
-    request_message_ID: string;
-    request_channel_ID: string;
-    request_user_ID: string;
+    user_ID: string;
 };
 
 export type VoiceRequestItemData = {

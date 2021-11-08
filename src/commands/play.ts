@@ -1,5 +1,6 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
+import { VoiceConnectionData } from "../ts/voice";
 import { Message, Permissions, VoiceChannel } from "discord.js-light";
 
 /* Node Imports */
@@ -40,20 +41,12 @@ export default {
             return;
         }
 
-        if (command_data.global_context.neko_modules_clients.voiceManager.connections.has(command_data.msg.guild.id) === false) {
-            command_data.global_context.neko_modules_clients.voiceManager.add_connection(command_data.global_context, command_data.msg.member.voice.channel, command_data.msg);
-
-            const embedJoin = {
-                author: {
-                    name: `🔊 Joined channel - ${command_data.msg.member.voice.channel.name}`,
-                },
-                color: 8388736,
-                description: `Joined \`${command_data.msg.member.voice.channel.name}\` in \`${command_data.msg.guild.name}\``,
-            };
-
-            command_data.msg.channel.send({ embeds: [embedJoin] }).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
-            });
+        let voice_connection: VoiceConnectionData | undefined | null = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
+        if (voice_connection === undefined) {
+            voice_connection = command_data.global_context.neko_modules_clients.voiceManager.add_connection(command_data.global_context, command_data.msg.member.voice.channel, command_data.msg);
+        }
+        if(voice_connection === null) { 
+            return;
         }
 
         if (command_data.args.length > 0) {
@@ -87,16 +80,12 @@ export default {
                 }
 
                 for (let i = 0; i < result.items.length; i++) {
-                    await command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, result.items[i].url, command_data.msg, false);
+                    await command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, voice_connection, command_data.msg.author.id, result.items[i].url, false);
                 }
 
-                const connection = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
-                if (connection === undefined) {
-                    return;
-                }
                 embedPlay.author.name = `🔊 Added ${result.items.length} songs to the queue!`;
                 embedPlay.description = undefined;
-                embedPlay.footer = { text: `Currently ${connection.queue.length} in queue` };
+                embedPlay.footer = { text: `Currently ${voice_connection.queue.length} in queue` };
 
                 await loading_message.delete().catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
@@ -106,7 +95,7 @@ export default {
                 });
             } else if (ytdl.validateURL(url) === true) {
                 url = url.startsWith("<") === true ? url.substring(1, url.length - 1) : url;
-                command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, url, command_data.msg, true);
+                command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, voice_connection, command_data.msg.author.id, url, true);
             } else {
                 const max = 5;
                 const infosByID = new Map();
@@ -146,13 +135,13 @@ export default {
                     max: 1,
                 });
                 collector.on("collect", (m) => {
-                    if (m.content.startsWith(`${command_data.server_config.prefix}play`) === true) {
+                    if (voice_connection === undefined || voice_connection === null || m.content.startsWith(`${command_data.server_config.prefix}play`) === true) {
                         collector.stop();
                         return;
                     }
 
                     const pos = parseInt(m.content);
-                    command_data.global_context.neko_modules_clients.voiceManager.play_request_on_connection(command_data.global_context, infosByID.get(pos), command_data.msg, false);
+                    command_data.global_context.neko_modules_clients.voiceManager.play_request_on_connection(command_data.global_context, voice_connection, infosByID.get(pos), false);
                 });
 
                 embedPlay.author.name = `🔊 Select a song to play (type 1-${max})`;

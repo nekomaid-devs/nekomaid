@@ -1,5 +1,5 @@
 /* Types */
-import { CommandData, Command } from "../ts/base";
+import { CommandData, Command, ServerMuteData } from "../ts/base";
 import { GuildEditType } from "../ts/mysql";
 import { Permissions } from "discord.js-light";
 
@@ -103,7 +103,6 @@ export default {
                 previous_mute = mute;
             }
         });
-
         // TODO: custom durations are bugged
         const mute_start = Date.now();
         let mute_end = -1;

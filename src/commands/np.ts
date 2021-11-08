@@ -18,7 +18,7 @@ export default {
     permissionsNeeded: [],
     nsfw: false,
     cooldown: 1500,
-    async execute(command_data: CommandData) {
+    execute(command_data: CommandData) {
         if (command_data.msg.guild === null) {
             return;
         }
@@ -33,23 +33,18 @@ export default {
         embedNP.setColor(8388736).setTitle(`Current playing for \`${command_data.msg.guild.name}\``).setFooter("Nekomaid");
 
         const currentLength = convert_time(connection.current.item.duration);
-        const user = await command_data.global_context.bot.users.fetch(connection.current.request_user_ID).catch((e: Error) => {
+        const descriptionText = `[${connection.current.item.title}](${connection.current.item.url}) *(${currentLength})*\n`;
+
+        let totalLength = convert_string_to_time_data(convert_time(connection.current.item.duration));
+        const elapsedLength = convert_string_to_time_data(convert_time(connection.elapsed_ms));
+        totalLength = sub_times(totalLength, elapsedLength);
+        totalLength = convert_time_inconsistent(totalLength);
+
+        embedNP.addField("Title", descriptionText);
+        embedNP.addField("Requested by", `<@${connection.current.user_ID}>`);
+        embedNP.addField("Remaining", `\`${convert_time_data_to_string(totalLength)}\``);
+        command_data.msg.channel.send({ embeds: [embedNP] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-        if (user !== undefined) {
-            const descriptionText = `[${connection.current.item.title}](${connection.current.item.url}) *(${currentLength})*\n`;
-
-            let totalLength = convert_string_to_time_data(convert_time(connection.current.item.duration));
-            const elapsedLength = convert_string_to_time_data(convert_time(connection.elapsed_ms));
-            totalLength = sub_times(totalLength, elapsedLength);
-            totalLength = convert_time_inconsistent(totalLength);
-
-            embedNP.addField("Title", descriptionText);
-            embedNP.addField("Requested by", `\`${user.tag}\``);
-            embedNP.addField("Remaining", `\`${convert_time_data_to_string(totalLength)}\``);
-            command_data.msg.channel.send({ embeds: [embedNP] }).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
-            });
-        }
     },
 } as Command;
