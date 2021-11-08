@@ -92,7 +92,7 @@ export default {
                     if (connection.persistent_queue.length > i2) {
                         const voice_request = connection.persistent_queue[i2];
                         const current_length = convert_string_to_time_data(convert_time(voice_request.item.duration));
-                        description_text += i2 === current_persistent_index ? `**${(i2 + 1)})** ` : `${(i2 + 1)}) `;
+                        description_text += i2 === current_persistent_index ? `**${i2 + 1})** ` : `${i2 + 1}) `;
                         description_text += `[${voice_request.item.title}](${voice_request.item.url}) *(${current_length})* - by [<@${voice_request.user_ID}>]\n`;
                     }
                 }

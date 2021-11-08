@@ -407,7 +407,7 @@ export type ClearWarnsEventData = {
     moderator: GuildMember;
     reason: string | null;
 
-    num_of_warnings: number; 
+    num_of_warnings: number;
 };
 
 export type MemberMuteExtensionEventData = {

@@ -67,7 +67,7 @@ class VoiceManager {
                         voice_connection.queue.push(voice_request);
                     });
                 }
-        
+
                 const item = voice_connection.queue.shift();
                 if (item !== undefined) {
                     this.play_request_on_connection(global_context, voice_connection, item, false);
@@ -145,7 +145,7 @@ class VoiceManager {
                 if (channel_i === null || !(channel_i instanceof TextChannel)) {
                     return;
                 }
-        
+
                 channel_i.send(`I left \`${channel.name}\`, because I was left alone.`).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
@@ -178,7 +178,7 @@ class VoiceManager {
              * let diff = (end.getTime() - start.getTime()) / 1000;
              * diff /= 60;
              * diff = Math.abs(Math.round(diff));
-             * 
+             *
              * if (diff >= 3600) {
              *  const embedError = {
              *      author: {
@@ -187,7 +187,7 @@ class VoiceManager {
              *      color: 8388736,
              *      description: `To play videos longer than \`3h\`, please upvote the bot on [here](https://top.gg/bot/${global_context.bot.user.id}/vote).`,
              *  };
-             * 
+             *
              *  await source_message.channel.send({ embeds: [embedError] }).catch((e: Error) => {
              *      global_context.logger.api_error(e);
              *  });
@@ -262,7 +262,7 @@ class VoiceManager {
                     title: title,
                     duration: duration * 1000,
                 },
-                user_ID: user_ID
+                user_ID: user_ID,
             };
 
             return this.play_request_on_connection(global_context, voice_connection, request, log);

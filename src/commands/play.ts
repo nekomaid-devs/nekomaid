@@ -45,7 +45,7 @@ export default {
         if (voice_connection === undefined) {
             voice_connection = command_data.global_context.neko_modules_clients.voiceManager.add_connection(command_data.global_context, command_data.msg.member.voice.channel, command_data.msg);
         }
-        if(voice_connection === null) { 
+        if (voice_connection === null) {
             return;
         }
 
