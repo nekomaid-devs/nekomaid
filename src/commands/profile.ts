@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import Argument from "../scripts/helpers/argument";
 import { format_number, get_level_XP } from "../scripts/utils/util_general";
 
 export default {
@@ -14,35 +14,35 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "Argument needs to be a mention.", "mention", false)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
+        if (command_data.message.guild === null || command_data.bot_data === null) {
             return;
         }
-        let married_text = command_data.tagged_user_config.married_ID;
+        let married_text = command_data.tagged_user_data.married_ID;
         if (married_text === null) {
             married_text = "Nobody";
         } else {
             const married_user = await command_data.global_context.bot.users.fetch(married_text).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
+                return null;
             });
-            if (married_user !== undefined && married_user !== null) {
+            if (married_user !== null) {
                 married_text = `${married_user.username}#${married_user.discriminator}`;
-                if (command_data.tagged_user_config.can_divorce === false) {
+                if (command_data.tagged_user_data.can_divorce === false) {
                     married_text += " (🔒)";
                 }
             }
         }
 
         const end = new Date();
-        const start = new Date(command_data.author_user_config.last_upvoted_time);
+        const start = new Date(command_data.user_data.last_upvoted_time);
         let diff = (end.getTime() - start.getTime()) / 1000;
         diff /= 60;
-        diff = Math.abs(Math.round(diff * command_data.global_context.bot_config.speed));
+        diff = Math.abs(Math.round(diff * command_data.bot_data.speed));
         const premium_text = diff < 1440 ? " (Premium ⭐)" : "";
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
@@ -55,22 +55,22 @@ export default {
             fields: [
                 {
                     name: "💵    Credits:",
-                    value: `$ ${format_number(command_data.tagged_user_config.credits)}`,
+                    value: `$ ${format_number(command_data.tagged_user_data.credits)}`,
                     inline: true,
                 },
                 {
                     name: "🏦    Bank:",
-                    value: `$ ${format_number(command_data.tagged_user_config.bank)}/${format_number(command_data.tagged_user_config.bank_limit)}`,
+                    value: `$ ${format_number(command_data.tagged_user_data.bank)}/${format_number(command_data.tagged_user_data.bank_limit)}`,
                     inline: true,
                 },
                 {
                     name: "⚡    Level:",
-                    value: `${command_data.tagged_user_config.level} (XP: ${Math.round(command_data.tagged_user_config.xp)}/${Math.round(get_level_XP(command_data.global_context.bot_config, command_data.tagged_user_config))})`,
+                    value: `${command_data.tagged_user_data.level} (XP: ${Math.round(command_data.tagged_user_data.xp)}/${Math.round(get_level_XP(command_data.bot_data))})`,
                     inline: true,
                 },
                 {
                     name: "🎖️    Reputation:",
-                    value: `${command_data.tagged_user_config.rep}`,
+                    value: `${command_data.tagged_user_data.rep}`,
                     inline: true,
                 },
                 {
@@ -82,10 +82,10 @@ export default {
                 url: url === null ? undefined : url,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`,
+                text: `Requested by ${command_data.message.author.tag} | Check out new ${command_data.guild_data.prefix}economyguide`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedProfile] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedProfile] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

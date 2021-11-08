@@ -10,23 +10,22 @@ export default {
     hidden: false,
     aliases: ["stop"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         // TODO: check for guild voice aswell
-        if (command_data.global_context.neko_modules_clients.voiceManager.connections.has(command_data.msg.guild.id) === false) {
-            command_data.msg.reply("I'm not in a voice channel.");
+        if (command_data.global_context.neko_modules_clients.voiceManager.connections.has(command_data.message.guild.id) === false) {
+            command_data.message.reply("I'm not in a voice channel.");
             return;
         }
 
-        command_data.global_context.neko_modules_clients.voiceManager.remove_connection(command_data.global_context, command_data.msg.guild.id, null);
-        command_data.msg.channel.send("Left the voice channel.").catch((e: Error) => {
+        command_data.global_context.neko_modules_clients.voiceManager.remove_connection(command_data.global_context, command_data.message.guild.id, null);
+        command_data.message.channel.send("Left the voice channel.").catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

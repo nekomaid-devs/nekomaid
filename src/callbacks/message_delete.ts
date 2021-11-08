@@ -1,6 +1,5 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildFetchType } from "../ts/mysql";
 import { Message, PartialMessage, TextChannel } from "discord.js-light";
 
 export default {
@@ -22,12 +21,12 @@ export default {
             return;
         }
 
-        const server_config = await global_context.neko_modules_clients.db.fetch_server(message.guild.id, GuildFetchType.AUDIT, false, false);
-        if (server_config === null) {
+        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(message.guild.id, false, false);
+        if (guild_data === null) {
             return;
         }
-        if (server_config.audit_deleted_messages === true && server_config.audit_channel !== null) {
-            const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
+        if (guild_data.audit_deleted_messages === true && guild_data.audit_channel !== null) {
+            const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });

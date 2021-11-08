@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import Argument from "../scripts/helpers/argument";
 import { format_number } from "../scripts/utils/util_general";
 
 export default {
@@ -14,13 +14,12 @@ export default {
     hidden: false,
     aliases: ["balance", "bank"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "Argument needs to be a mention.", "mention", false)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         // TODO: add position in top
@@ -35,12 +34,12 @@ export default {
             fields: [
                 {
                     name: "💵    Credits:",
-                    value: `$ ${format_number(command_data.tagged_user_config.credits)}`,
+                    value: `$ ${format_number(command_data.tagged_user_data.credits)}`,
                     inline: true,
                 },
                 {
                     name: "🏦    Bank:",
-                    value: `$ ${format_number(command_data.tagged_user_config.bank)}/${format_number(command_data.tagged_user_config.bank_limit)}`,
+                    value: `$ ${format_number(command_data.tagged_user_data.bank)}/${format_number(command_data.tagged_user_data.bank_limit)}`,
                     inline: true,
                 },
             ],
@@ -48,11 +47,11 @@ export default {
                 url: url === null ? undefined : url,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag} | Check out new ${command_data.server_config.prefix}economyguide`,
+                text: `Requested by ${command_data.message.author.tag} | Check out new ${command_data.guild_data.prefix}economyguide`,
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedBalance] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedBalance] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

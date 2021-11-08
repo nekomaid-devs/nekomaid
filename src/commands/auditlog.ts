@@ -1,10 +1,9 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
-import { GuildEditType } from "../ts/mysql";
 import { Permissions, TextChannel } from "discord.js-light";
 
 /* Local Imports */
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Permission from "../scripts/helpers/permission";
 import { get_error_embed } from "../scripts/utils/util_vars";
 
 export default {
@@ -24,13 +23,12 @@ export default {
             "`<subcommand_prefix> deleted_messages [true/false]` - Enables/Disables logging deleted messages\n\n" +
             "`<subcommand_prefix> audit_channel [channel_mention]` - Changes the channel for logging"
     ),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD), new NeededPermission("me", Permissions.FLAGS.VIEW_AUDIT_LOG)],
+    arguments: [],
+    permissions: [new Permission("author", Permissions.FLAGS.MANAGE_GUILD), new Permission("me", Permissions.FLAGS.VIEW_AUDIT_LOG)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || !(command_data.msg.channel instanceof TextChannel)) {
+        if (command_data.message.guild === null || !(command_data.message.channel instanceof TextChannel)) {
             return;
         }
 
@@ -39,10 +37,10 @@ export default {
          * TODO: check for wrong error embeds
          */
         if (command_data.args.length < 1) {
-            const channel = command_data.server_config.audit_channel === null ? "`None`" : `<#${command_data.server_config.audit_channel}>`;
+            const channel = command_data.guild_data.audit_channel === null ? "`None`" : `<#${command_data.guild_data.audit_channel}>`;
             const embedConfig = {
                 title: "Audit Logs",
-                description: `To set values see - \`${command_data.server_config.prefix}help auditlog set\``,
+                description: `To set values see - \`${command_data.guild_data.prefix}help auditlog set\``,
                 color: 8388736,
                 fields: [
                     {
@@ -51,38 +49,38 @@ export default {
                     },
                     {
                         name: "Bans:",
-                        value: `${command_data.server_config.audit_bans}`,
+                        value: `${command_data.guild_data.audit_bans}`,
                         inline: true,
                     },
                     {
                         name: "Kicks:",
-                        value: `${command_data.server_config.audit_kicks}`,
+                        value: `${command_data.guild_data.audit_kicks}`,
                         inline: true,
                     },
                     {
                         name: "Mutes:",
-                        value: `${command_data.server_config.audit_mutes}`,
+                        value: `${command_data.guild_data.audit_mutes}`,
                         inline: true,
                     },
                     {
                         name: "Warns:",
-                        value: `${command_data.server_config.audit_warns}`,
+                        value: `${command_data.guild_data.audit_warns}`,
                         inline: true,
                     },
                     {
                         name: "Nicknames:",
-                        value: `${command_data.server_config.audit_nicknames}`,
+                        value: `${command_data.guild_data.audit_nicknames}`,
                         inline: true,
                     },
                     {
                         name: "Deleted Messages:",
-                        value: `${command_data.server_config.audit_deleted_messages}`,
+                        value: `${command_data.guild_data.audit_deleted_messages}`,
                         inline: true,
                     },
                 ],
             };
 
-            command_data.msg.channel.send({ embeds: [embedConfig] }).catch((e: Error) => {
+            command_data.message.channel.send({ embeds: [embedConfig] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -92,14 +90,14 @@ export default {
         switch (action) {
             case "set": {
                 if (command_data.args.length < 2) {
-                    command_data.msg.channel
+                    command_data.message.channel
                         .send({
                             embeds: [
                                 get_error_embed(
-                                    command_data.msg,
-                                    command_data.server_config.prefix,
+                                    command_data.message,
+                                    command_data.guild_data.prefix,
                                     this,
-                                    `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`,
+                                    `You need to enter a \`property\` to set \`value\` to- (Check \`${command_data.guild_data.prefix}help auditlog set\` for help)`,
                                     "set bans true"
                                 ),
                             ],
@@ -112,9 +110,9 @@ export default {
                 const property = command_data.args[1];
 
                 if (command_data.args.length < 3) {
-                    command_data.msg.channel
+                    command_data.message.channel
                         .send({
-                            embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`)],
+                            embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, `You need to enter a new value for \`${property}\`-`, `set ${property} <new_value>`)],
                         })
                         .catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
@@ -127,9 +125,9 @@ export default {
                     case "bans": {
                         const bool = value === "true" ? true : value === "false" ? false : value;
                         if (typeof bool !== "boolean") {
-                            command_data.msg.channel
+                            command_data.message.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -137,8 +135,8 @@ export default {
                             return;
                         }
 
-                        command_data.server_config.audit_bans = bool;
-                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} logging of bans.`).catch((e: Error) => {
+                        command_data.guild_data.audit_bans = bool;
+                        command_data.message.channel.send(`${bool ? "Enabled" : "Disabled"} logging of bans.`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -147,9 +145,9 @@ export default {
                     case "kicks": {
                         const bool = value === "true" ? true : value === "false" ? false : value;
                         if (typeof bool !== "boolean") {
-                            command_data.msg.channel
+                            command_data.message.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -157,8 +155,8 @@ export default {
                             return;
                         }
 
-                        command_data.server_config.audit_kicks = bool;
-                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} logging of kicks.`).catch((e: Error) => {
+                        command_data.guild_data.audit_kicks = bool;
+                        command_data.message.channel.send(`${bool ? "Enabled" : "Disabled"} logging of kicks.`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -167,9 +165,9 @@ export default {
                     case "mutes": {
                         const bool = value === "true" ? true : value === "false" ? false : value;
                         if (typeof bool !== "boolean") {
-                            command_data.msg.channel
+                            command_data.message.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -177,8 +175,8 @@ export default {
                             return;
                         }
 
-                        command_data.server_config.audit_mutes = bool;
-                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} logging of mutes.`).catch((e: Error) => {
+                        command_data.guild_data.audit_mutes = bool;
+                        command_data.message.channel.send(`${bool ? "Enabled" : "Disabled"} logging of mutes.`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -187,9 +185,9 @@ export default {
                     case "nicknames": {
                         const bool = value === "true" ? true : value === "false" ? false : value;
                         if (typeof bool !== "boolean") {
-                            command_data.msg.channel
+                            command_data.message.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -197,8 +195,8 @@ export default {
                             return;
                         }
 
-                        command_data.server_config.audit_nicknames = bool;
-                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} logging of nickname changes.`).catch((e: Error) => {
+                        command_data.guild_data.audit_nicknames = bool;
+                        command_data.message.channel.send(`${bool ? "Enabled" : "Disabled"} logging of nickname changes.`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -207,9 +205,9 @@ export default {
                     case "deleted_messages": {
                         const bool = value === "true" ? true : value === "false" ? false : value;
                         if (typeof bool !== "boolean") {
-                            command_data.msg.channel
+                            command_data.message.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -217,8 +215,8 @@ export default {
                             return;
                         }
 
-                        command_data.server_config.audit_deleted_messages = bool;
-                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} logging of deleted messages.`).catch((e: Error) => {
+                        command_data.guild_data.audit_deleted_messages = bool;
+                        command_data.message.channel.send(`${bool ? "Enabled" : "Disabled"} logging of deleted messages.`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -227,9 +225,9 @@ export default {
                     case "edited_messages": {
                         const bool = value === "true" ? true : value === "false" ? false : value;
                         if (typeof bool !== "boolean") {
-                            command_data.msg.channel
+                            command_data.message.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -237,8 +235,8 @@ export default {
                             return;
                         }
 
-                        command_data.server_config.audit_edited_messages = bool;
-                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} logging of edited messages.`).catch((e: Error) => {
+                        command_data.guild_data.audit_edited_messages = bool;
+                        command_data.message.channel.send(`${bool ? "Enabled" : "Disabled"} logging of edited messages.`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -247,9 +245,9 @@ export default {
                     case "warns": {
                         const bool = value === "true" ? true : value === "false" ? false : value;
                         if (typeof bool !== "boolean") {
-                            command_data.msg.channel
+                            command_data.message.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
+                                    embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, `Invalid value to set for \`${property}\`. (true/false)`, `set ${property} true`)],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -257,8 +255,8 @@ export default {
                             return;
                         }
 
-                        command_data.server_config.audit_warns = bool;
-                        command_data.msg.channel.send(`${bool ? "Enabled" : "Disabled"} logging of warnings.`).catch((e: Error) => {
+                        command_data.guild_data.audit_warns = bool;
+                        command_data.message.channel.send(`${bool ? "Enabled" : "Disabled"} logging of warnings.`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
@@ -271,9 +269,11 @@ export default {
                             return null;
                         });
                         if (channel === null || !(channel instanceof TextChannel)) {
-                            command_data.msg.channel
+                            command_data.message.channel
                                 .send({
-                                    embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.msg.channel.name}`)],
+                                    embeds: [
+                                        get_error_embed(command_data.message, command_data.guild_data.prefix, this, `Invalid value to set for \`${property}\`. (channel mention)`, `set ${property} #${command_data.message.channel.name}`),
+                                    ],
                                 })
                                 .catch((e: Error) => {
                                     command_data.global_context.logger.api_error(e);
@@ -287,23 +287,21 @@ export default {
                         }
 
                         if (permissions.has(Permissions.FLAGS.VIEW_CHANNEL) === false || permissions.has(Permissions.FLAGS.SEND_MESSAGES) === false) {
-                            command_data.msg.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again.");
+                            command_data.message.reply("The bot doesn't have required permissions in this channel - `View Channel`, `Send Messages`\nPlease add required permissions for the bot in this channel and try again.");
                             return;
                         }
 
-                        command_data.server_config.audit_channel = value;
-                        command_data.msg.channel.send(`Set audit channel to <#${value}>.`).catch((e: Error) => {
+                        command_data.guild_data.audit_channel = value;
+                        command_data.message.channel.send(`Set audit channel to <#${value}>.`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                         break;
                     }
 
                     default: {
-                        command_data.msg.channel
+                        command_data.message.channel
                             .send({
-                                embeds: [
-                                    get_error_embed(command_data.msg, command_data.server_config.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.server_config.prefix}help auditlog set\` for help)`, "set bans true"),
-                                ],
+                                embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, `Invalid property for \`set\`- (Check \`${command_data.guild_data.prefix}help auditlog set\` for help)`, "set bans true")],
                             })
                             .catch((e: Error) => {
                                 command_data.global_context.logger.api_error(e);
@@ -312,12 +310,12 @@ export default {
                     }
                 }
 
-                command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
+                command_data.global_context.neko_modules_clients.db.edit_guild(command_data.guild_data);
                 break;
             }
 
             default: {
-                command_data.msg.channel.send({ embeds: [get_error_embed(command_data.msg, command_data.server_config.prefix, this, "Invalid action- (Actions: `set`)", "set bans true")] }).catch((e: Error) => {
+                command_data.message.channel.send({ embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, "Invalid action- (Actions: `set`)", "set bans true")] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 break;

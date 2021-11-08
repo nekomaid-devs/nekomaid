@@ -13,33 +13,32 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
-        const elapsed = new Date().getTime() - new Date(command_data.msg.guild.createdAt.toUTCString()).getTime();
+        const elapsed = new Date().getTime() - new Date(command_data.message.guild.createdAt.toUTCString()).getTime();
         const createdAgo = convert_time(elapsed);
 
-        const url = command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
+        const url = command_data.message.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
         if (url === null) {
             return;
         }
-        const owner = await command_data.msg.guild.fetchOwner();
+        const owner = await command_data.message.guild.fetchOwner();
         const embedServer = {
             color: 8388736,
             author: {
-                name: `Information about server ${command_data.msg.guild.name}`,
+                name: `Information about server ${command_data.message.guild.name}`,
                 icon_url: url,
             },
             fields: [
                 {
                     name: "❯ Server ID",
-                    value: `${command_data.msg.guild.id}`,
+                    value: `${command_data.message.guild.id}`,
                     inline: true,
                 },
                 {
@@ -54,22 +53,22 @@ export default {
                 },
                 {
                     name: "❯ Members",
-                    value: `${command_data.msg.guild.memberCount}`,
+                    value: `${command_data.message.guild.memberCount}`,
                     inline: true,
                 },
                 {
                     name: "❯ Channels",
-                    value: `${command_data.msg.guild.channels.cache.size}`,
+                    value: `${command_data.message.guild.channels.cache.size}`,
                     inline: true,
                 },
                 {
                     name: "❯ Roles",
-                    value: `${command_data.msg.guild.roles.cache.size}`,
+                    value: `${command_data.message.guild.roles.cache.size}`,
                     inline: true,
                 },
                 {
                     name: "❯ Created",
-                    value: `${createdAgo} (${command_data.msg.guild.createdAt.toUTCString()})`,
+                    value: `${createdAgo} (${command_data.message.guild.createdAt.toUTCString()})`,
                     inline: true,
                 },
             ],
@@ -77,10 +76,10 @@ export default {
                 url: url,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
+                text: `Requested by ${command_data.message.author.tag}`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedServer] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedServer] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

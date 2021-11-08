@@ -26,7 +26,7 @@ export async function refresh_status(global_context: GlobalContext) {
 
     const statuses = ["V2 live now!"];
     global_context.bot.user.setStatus("online");
-    global_context.bot.user.setActivity(`${pick_random(statuses)} | ${guild_count} servers`, { type: "PLAYING" });
+    global_context.bot.user.setActivity(`${pick_random(statuses)} | ${guild_count} guilds`, { type: "PLAYING" });
 }
 
 export function refresh_website(global_context: GlobalContext) {

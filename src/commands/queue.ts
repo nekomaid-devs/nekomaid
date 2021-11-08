@@ -13,18 +13,17 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
-        const connection = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.msg.guild.id);
+        const connection = command_data.global_context.neko_modules_clients.voiceManager.connections.get(command_data.message.guild.id);
         if (connection === undefined || connection.current === null) {
-            command_data.msg.reply("There's nothing on the queue!");
+            command_data.message.reply("There's nothing on the queue!");
             return;
         }
 
@@ -33,7 +32,7 @@ export default {
 
         switch (connection.mode) {
             case 0: {
-                embedQueue.setColor(8388736).setTitle(`Queue for \`${command_data.msg.guild.name}\` (${connection.queue.length} songs)`).setFooter("Nekomaid");
+                embedQueue.setColor(8388736).setTitle(`Queue for \`${command_data.message.guild.name}\` (${connection.queue.length} songs)`).setFooter("Nekomaid");
 
                 for (let i = 1; i <= 5; i += 1) {
                     if (connection.queue.length >= i) {
@@ -68,7 +67,7 @@ export default {
             }
 
             case 1: {
-                embedQueue.setColor(8388736).setTitle(`Queue for \`${command_data.msg.guild.name}\` (repeating ${connection.persistent_queue.length} songs)`).setFooter("Nekomaid");
+                embedQueue.setColor(8388736).setTitle(`Queue for \`${command_data.message.guild.name}\` (repeating ${connection.persistent_queue.length} songs)`).setFooter("Nekomaid");
 
                 let i0 = 0;
                 let current_persistent_index = 0;
@@ -123,7 +122,7 @@ export default {
             }
         }
 
-        command_data.msg.channel.send({ embeds: [embedQueue] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedQueue] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

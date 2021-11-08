@@ -3,9 +3,8 @@ import { CommandData, Command } from "../ts/base";
 import { Permissions } from "discord.js-light";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
-import NeededArgument from "../scripts/helpers/needed_argument";
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Argument from "../scripts/helpers/argument";
+import Permission from "../scripts/helpers/permission";
 import { convert_string_to_time_data, convert_time } from "../scripts/utils/util_time";
 
 export default {
@@ -17,13 +16,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a time format.", "none"), new RecommendedArgument(3, "Argument needs to be a reason.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS)],
+    arguments: [new Argument(1, "You need to mention somebody.", "mention", true), new Argument(2, "Argument needs to be a time format.", "none", false), new Argument(3, "Argument needs to be a reason.", "none", false)],
+    permissions: [new Permission("author", Permissions.FLAGS.BAN_MEMBERS), new Permission("me", Permissions.FLAGS.BAN_MEMBERS)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         /*
@@ -32,19 +30,19 @@ export default {
          */
         const time = command_data.args.length < 2 ? undefined : command_data.args[1] === "-1" ? -1 : convert_string_to_time_data(command_data.args[1]);
         if (time === undefined) {
-            command_data.msg.reply("You entered invalid time format! (ex. `1d2h3m4s` or `-1`)");
+            command_data.message.reply("You entered invalid time format! (ex. `1d2h3m4s` or `-1`)");
             return;
         }
         if (command_data.tagged_member.bannable === false) {
-            command_data.msg.reply(`Couldn't ban \`${command_data.tagged_user.tag}\`. (Try moving Nekomaid's permissions above the user you want to ban)`);
+            command_data.message.reply(`Couldn't ban \`${command_data.tagged_user.tag}\`. (Try moving Nekomaid's permissions above the user you want to ban)`);
             return;
         }
 
         let ban_reason = "None";
         if (command_data.args.length > 2) {
-            ban_reason = command_data.msg.content.substring(command_data.msg.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1);
+            ban_reason = command_data.message.content.substring(command_data.message.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1);
         }
-        const previous_ban = command_data.server_bans.find((e) => {
+        const previous_ban = command_data.guild_bans.find((e) => {
             return e.user_ID === command_data.tagged_user.id;
         });
 
@@ -56,15 +54,21 @@ export default {
         if (previous_ban === undefined) {
             ban_end = ban_start + extended_time;
             const ban_end_text = time === -1 ? "Forever" : convert_time(ban_end - ban_start);
-            command_data.msg.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\`. (Time: \`${ban_end_text}\`)`).catch((e: Error) => {
+            command_data.message.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\`. (Time: \`${ban_end_text}\`)`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         } else {
-            command_data.msg.reply(`\`${command_data.tagged_user.tag}\` is already banned.`);
+            command_data.message.reply(`\`${command_data.tagged_user.tag}\` is already banned.`);
             return;
         }
 
-        command_data.global_context.data.last_moderation_actions.set(command_data.msg.guild.id, { moderator: command_data.msg.author.id, duration: extended_time_text, start: ban_start, end: time === -1 ? -1 : ban_end, reason: ban_reason });
+        command_data.global_context.data.last_moderation_actions.set(command_data.message.guild.id, {
+            moderator: command_data.message.author.id,
+            duration: extended_time_text,
+            start: ban_start,
+            end: time === -1 ? -1 : ban_end,
+            reason: ban_reason,
+        });
         command_data.tagged_member.ban({ reason: ban_reason });
     },
 } as Command;

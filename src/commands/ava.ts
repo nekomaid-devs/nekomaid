@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import Argument from "../scripts/helpers/argument";
 
 export default {
     name: "ava",
@@ -13,13 +13,12 @@ export default {
     hidden: false,
     aliases: ["avatar"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "Argument needs to be a mention.", "mention", false)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
 
@@ -37,11 +36,11 @@ export default {
                 url: url === null ? undefined : url,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
+                text: `Requested by ${command_data.message.author.tag}`,
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedAvatar] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedAvatar] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

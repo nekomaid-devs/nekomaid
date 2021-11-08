@@ -10,13 +10,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot.user === null) {
+        if (command_data.message.guild === null || command_data.global_context.bot.user === null) {
             return;
         }
         const link = `https://discord.com/oauth2/authorize?client_id=${command_data.global_context.bot.user.id}&permissions=1547037910&scope=bot`;
@@ -31,7 +30,7 @@ export default {
             ],
         };
 
-        command_data.msg.channel.send({ embeds: [embedInvite] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedInvite] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

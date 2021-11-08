@@ -2,8 +2,8 @@
 import { CommandData, Command, ExtraPermission } from "../ts/base";
 
 /* Local Imports */
-import NeededPermission from "../scripts/helpers/needed_permission";
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Permission from "../scripts/helpers/permission";
+import Argument from "../scripts/helpers/argument";
 
 export default {
     name: "eval",
@@ -14,13 +14,12 @@ export default {
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in script to execute.", "none")],
-    argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", ExtraPermission.BOT_OWNER)],
+    arguments: [new Argument(1, "You need to type in script to execute.", "none", true)],
+    permissions: [new Permission("author", ExtraPermission.BOT_OWNER)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot.user === null) {
+        if (command_data.message.guild === null || command_data.global_context.bot.user === null) {
             return;
         }
         const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
@@ -32,7 +31,7 @@ export default {
             },
             footer: { text: "🕒 Took X ms..." },
         };
-        const message = await command_data.msg.channel.send({ embeds: [embedEvalLoading] }).catch((e: Error) => {
+        const message = await command_data.message.channel.send({ embeds: [embedEvalLoading] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });

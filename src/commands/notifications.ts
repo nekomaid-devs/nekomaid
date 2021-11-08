@@ -13,16 +13,15 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
-        let notifications_description = command_data.author_user_config.notifications
+        let notifications_description = command_data.user_data.notifications
             .sort((a, b) => {
                 return b.timestamp - a.timestamp;
             })
@@ -38,7 +37,7 @@ export default {
             notifications_description = "Empty";
         }
 
-        const url = command_data.msg.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
+        const url = command_data.message.author.avatarURL({ format: "png", dynamic: true, size: 1024 });
         const embedNotifications = {
             author: {
                 name: "Notifications",
@@ -48,7 +47,7 @@ export default {
             color: 8388736,
         };
 
-        command_data.msg.channel.send({ embeds: [embedNotifications] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedNotifications] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

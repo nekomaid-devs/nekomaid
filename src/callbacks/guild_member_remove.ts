@@ -1,6 +1,5 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildFetchType } from "../ts/mysql";
 import { GuildMember, PartialGuildMember, TextChannel, User } from "discord.js-light";
 
 export default {
@@ -23,17 +22,17 @@ export default {
         }
 
         const moderation_action = global_context.data.last_moderation_actions.get(member.guild.id);
-        const server_config = await global_context.neko_modules_clients.db.fetch_server(member.guild.id, GuildFetchType.AUDIT, false, false);
-        if (server_config === null) {
+        const guild_data = await global_context.neko_modules_clients.db.fetch_guild(member.guild.id, false, false);
+        if (guild_data === null) {
             return;
         }
 
-        if (server_config.leave_messages === true && server_config.leave_messages_channel !== null) {
-            let format = server_config.leave_messages_format;
+        if (guild_data.leave_messages === true && guild_data.leave_messages_channel !== null) {
+            let format = guild_data.leave_messages_format;
             const member_display_name = `**${member.user.tag}**`;
             format = format.replace("<user>", member_display_name);
 
-            const channel = await global_context.bot.channels.fetch(server_config.leave_messages_channel).catch((e: Error) => {
+            const channel = await global_context.bot.channels.fetch(guild_data.leave_messages_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });
@@ -45,8 +44,8 @@ export default {
             });
         }
 
-        if (server_config.audit_kicks === true && server_config.audit_channel !== null) {
-            const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
+        if (guild_data.audit_kicks === true && guild_data.audit_channel !== null) {
+            const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
             if (!(channel instanceof TextChannel)) {

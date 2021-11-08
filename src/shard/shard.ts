@@ -86,12 +86,11 @@ async function run() {
     // Create global context
     let global_context: GlobalContext = {
         config: config,
-        bot_config: null,
-
         bot: bot,
 
         commands: new Map(),
         command_aliases: new Map(),
+        user_cooldowns: new Map(),
 
         modules: {},
         modules_clients: {},
@@ -178,7 +177,7 @@ async function run() {
             refresh_website(global_context);
         }
     }, 2000);
-    setInterval(async () => {
+    setInterval(() => {
         if (global_context.bot.shard === null) {
             return;
         }
@@ -191,11 +190,6 @@ async function run() {
         }
         if (global_context.neko_modules_clients.buildingManager !== undefined && global_context.bot.shard.ids[0] === 0) {
             global_context.neko_modules_clients.buildingManager.update_all_buildings(global_context);
-        }
-
-        // TODO: this will need to get updated somewhere else
-        if (global_context.neko_modules_clients.db !== undefined) {
-            global_context.bot_config = await global_context.neko_modules_clients.db.fetch_config("default_config");
         }
     }, 10000);
     setInterval(() => {
@@ -227,25 +221,30 @@ async function run() {
             const economy_list = [];
             for (let i = 0; i < (top_items.length < 10 ? top_items.length : 10); i++) {
                 const neko_user = top_items[i];
-                const user = await global_context.bot.users.fetch(neko_user.user_ID);
-                economy_list.push({
-                    id: user.id,
-                    user: { id: user.id, username: user.username, avatar: user.avatarURL({ format: "png", dynamic: true, size: 1024 }) },
-                    neko_user: {
-                        credits: neko_user.credits + neko_user.bank,
-                        level: neko_user.level,
-                        b_city_hall: neko_user.b_city_hall,
-                        b_bank: neko_user.b_bank,
-                        b_lab: neko_user.b_lab,
-                        b_sanctuary: neko_user.b_sanctuary,
-                        b_pancakes: neko_user.b_pancakes,
-                        b_crime_den: neko_user.b_crime_den,
-                        b_lewd_services: neko_user.b_lewd_services,
-                        b_casino: neko_user.b_casino,
-                        b_scrapyard: neko_user.b_scrapyard,
-                        b_pawn_shop: neko_user.b_pawn_shop,
-                    },
+                const user = await global_context.bot.users.fetch(neko_user.id).catch((e: Error) => {
+                    global_context.logger.api_error(e);
+                    return null;
                 });
+                if (user !== null) {
+                    economy_list.push({
+                        id: user.id,
+                        user: { id: user.id, username: user.username, avatar: user.avatarURL({ format: "png", dynamic: true, size: 1024 }) },
+                        neko_user: {
+                            credits: neko_user.credits + neko_user.bank,
+                            level: neko_user.level,
+                            b_city_hall: neko_user.b_city_hall,
+                            b_bank: neko_user.b_bank,
+                            b_lab: neko_user.b_lab,
+                            b_sanctuary: neko_user.b_sanctuary,
+                            b_pancakes: neko_user.b_pancakes,
+                            b_crime_den: neko_user.b_crime_den,
+                            b_lewd_services: neko_user.b_lewd_services,
+                            b_casino: neko_user.b_casino,
+                            b_scrapyard: neko_user.b_scrapyard,
+                            b_pawn_shop: neko_user.b_pawn_shop,
+                        },
+                    });
+                }
             }
 
             global_context.data.economy_list = economy_list;
@@ -267,7 +266,6 @@ async function run() {
         global_context.logger.log("-".repeat(30));
         global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Channels: ${bot.channels.cache.size}] - [Users: ${bot.users.cache.size}]`);
 
-        global_context.bot_config = await global_context.neko_modules_clients.db.fetch_config("default_config");
         refresh_status(global_context);
         global_context.neko_modules_clients.reactionRolesManager.create_all_collectors(global_context);
 

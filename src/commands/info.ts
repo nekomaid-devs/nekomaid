@@ -13,13 +13,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot.user === null || command_data.global_context.bot.shard === null) {
+        if (command_data.message.guild === null || command_data.global_context.bot.user === null || command_data.global_context.bot.shard === null) {
             return;
         }
         const t = Date.now();
@@ -141,7 +140,7 @@ export default {
                     name: `Current Shard (shard#${command_data.global_context.bot.shard.ids[0]})`,
                     value: `
                     **Uptime:**\n${shard_elapsed_time}\n
-                    **Caching:**\n${shard_guilds} servers, ${shard_members} users\n
+                    **Caching:**\n${shard_guilds} guilds, ${shard_members} users\n
                     **Memory Usage:**\nTotal: ${memory_string_0} (Heap: ${memory_string_1}, Objects: ${memory_string_2})\n
                     **Command Performance:**\n${shard_commands} all time\n
                     **Voice connections:**\n${shard_vc}`,
@@ -151,7 +150,7 @@ export default {
                     name: `All Shards (${command_data.global_context.bot.shard.count})`,
                     value: `
                     **Uptime:**\n-\n
-                    **Caching:**\n${manager_guilds} servers, ${manager_members} users\n
+                    **Caching:**\n${manager_guilds} guilds, ${manager_members} users\n
                     **Memory Usage:**\nTotal: ${manager_memory_string_0} (Heap: ${manager_memory_string_1}, Objects: ${manager_memory_string_2})\n
                     **Command Performance:**\n${manager_commands} all time\n
                     **Voice connections:**\n${manager_vc}`,
@@ -177,7 +176,7 @@ export default {
                 text: `Update took ${sec_taken}s...`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedInfo] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedInfo] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

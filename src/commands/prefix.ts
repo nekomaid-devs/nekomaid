@@ -1,11 +1,10 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
-import { GuildEditType } from "../ts/mysql";
 import { Permissions } from "discord.js-light";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Argument from "../scripts/helpers/argument";
+import Permission from "../scripts/helpers/permission";
 
 export default {
     name: "prefix",
@@ -16,13 +15,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a new prefix.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
+    arguments: [new Argument(1, "Argument needs to be a new prefix.", "none", false)],
+    permissions: [new Permission("author", Permissions.FLAGS.MANAGE_GUILD)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         if (command_data.args.length < 1) {
@@ -32,24 +30,24 @@ export default {
                 fields: [
                     {
                         name: "Current prefix is ",
-                        value: command_data.server_config.prefix,
+                        value: command_data.guild_data.prefix,
                     },
                 ],
                 footer: {
-                    text: `to change the prefix type \`${command_data.server_config.prefix}prefix <newPrefix>\`)`,
+                    text: `to change the prefix type \`${command_data.guild_data.prefix}prefix <newPrefix>\`)`,
                 },
             };
-            command_data.msg.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {
+            command_data.message.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         } else {
             if (command_data.total_argument.length > 10) {
-                command_data.msg.reply("Prefix can't be longer than 10 characters!");
+                command_data.message.reply("Prefix can't be longer than 10 characters!");
                 return;
             }
 
-            command_data.server_config.prefix = command_data.total_argument;
-            command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
+            command_data.guild_data.prefix = command_data.total_argument;
+            command_data.global_context.neko_modules_clients.db.edit_guild(command_data.guild_data);
 
             const embedPrefix = {
                 title: "",
@@ -57,11 +55,11 @@ export default {
                 fields: [
                     {
                         name: "Set bot's prefix to",
-                        value: command_data.server_config.prefix,
+                        value: command_data.guild_data.prefix,
                     },
                 ],
             };
-            command_data.msg.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {
+            command_data.message.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

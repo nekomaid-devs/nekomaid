@@ -3,9 +3,8 @@ import { CommandData, Command } from "../ts/base";
 import { Message, Permissions, TextChannel } from "discord.js-light";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
-import NeededPermission from "../scripts/helpers/needed_permission";
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Permission from "../scripts/helpers/permission";
+import Argument from "../scripts/helpers/argument";
 
 export default {
     name: "clear",
@@ -16,26 +15,25 @@ export default {
     hidden: false,
     aliases: ["purge"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in number of messages.", "int>0")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_MESSAGES), new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES)],
+    arguments: [new Argument(1, "You need to type in number of messages.", "int>0", true), new Argument(2, "Argument needs to be a mention.", "mention", false)],
+    permissions: [new Permission("author", Permissions.FLAGS.MANAGE_MESSAGES), new Permission("me", Permissions.FLAGS.MANAGE_MESSAGES)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || !(command_data.msg.channel instanceof TextChannel)) {
+        if (command_data.message.guild === null || !(command_data.message.channel instanceof TextChannel)) {
             return;
         }
         // TODO: support swapping arguments (or improve the format)
         const num_messages = parseInt(command_data.args[0]);
         if (num_messages > 99) {
-            command_data.msg.reply("Cannot delete more than 99 messages.");
+            command_data.message.reply("Cannot delete more than 99 messages.");
             return;
         }
 
-        const target_user = command_data.msg.mentions.users.first();
+        const target_user = command_data.message.mentions.users.first();
         if (target_user !== undefined) {
             const messages = Array.from(
-                await command_data.msg.channel.messages.fetch({ limit: 99 }).catch((e: Error) => {
+                await command_data.message.channel.messages.fetch({ limit: 99 }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                     return new Map<string, Message>();
                 })
@@ -47,13 +45,13 @@ export default {
             });
             target_messages = target_messages.slice(target_messages.length - num_messages, target_messages.length + 1);
 
-            command_data.msg.channel.bulkDelete(1, true).catch((e: Error) => {
+            command_data.message.channel.bulkDelete(1, true).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
-            command_data.msg.channel
+            command_data.message.channel
                 .bulkDelete(target_messages, true)
                 .then((messages) => {
-                    command_data.msg.channel
+                    command_data.message.channel
                         .send(`Deleted \`${messages.size}\` messages from **${target_user.tag}**.`)
                         .then((message) => {
                             return setTimeout(() => {
@@ -70,11 +68,11 @@ export default {
                     command_data.global_context.logger.api_error(e);
                 });
         } else {
-            command_data.msg.channel
+            command_data.message.channel
                 .bulkDelete(num_messages + 1, true)
                 .then((messages) => {
                     const delete_messages_size = messages.size - 1;
-                    command_data.msg.channel
+                    command_data.message.channel
                         .send(`Deleted \`${delete_messages_size}\` messages.`)
                         .then((message) => {
                             return setTimeout(() => {

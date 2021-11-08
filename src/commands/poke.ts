@@ -2,9 +2,9 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Argument from "../scripts/helpers/argument";
 import { get_poke_gifs } from "../scripts/utils/util_vars";
-import { pick_random } from "../scripts/utils/util_general";
+import { format_users, pick_random } from "../scripts/utils/util_general";
 
 export default {
     name: "poke",
@@ -15,25 +15,24 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to mention somebody.", "mention")],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "You need to mention somebody.", "mention", true)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         const url = pick_random(get_poke_gifs());
         const embedPoke = {
-            title: `${command_data.msg.author.tag} pokes ${command_data.tagged_user_tags}!`,
+            title: `${command_data.message.author.tag} pokes ${format_users(command_data.tagged_users)}!`,
             color: 8388736,
             image: {
                 url: url,
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedPoke] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedPoke] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

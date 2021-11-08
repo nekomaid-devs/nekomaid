@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 import { Message, Permissions, VoiceChannel } from "discord.js-light";
 
 /* Local Imports */
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Permission from "../scripts/helpers/permission";
 import { shuffle_array, pick_random } from "../scripts/utils/util_general";
 
 async function play_next(command_data: CommandData, connection: any, game_data: any) {
@@ -59,10 +59,10 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
         title: "❓ New song is playing. Make a guess!",
         description: `1) ${final_options[0].source}\n2) ${final_options[1].source}\n3) ${final_options[2].source}\n4) ${final_options[3].source}\n`,
         footer: {
-            text: `You have 45 seconds to answer | or end the game with ${command_data.server_config.prefix}animetrivia end`,
+            text: `You have 45 seconds to answer | or end the game with ${command_data.guild_data.prefix}animetrivia end`,
         },
     };
-    command_data.msg.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
+    command_data.message.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
         command_data.global_context.logger.api_error(e);
     });
 
@@ -70,31 +70,31 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
         /* */
     }, 0);
     let answered = false;
-    const collector = command_data.msg.channel.createMessageCollector({
+    const collector = command_data.message.channel.createMessageCollector({
         filter: (m: Message) => {
             return m.author.bot === false && game_data.joined_IDs.includes(m.author.id);
         },
     });
     collector.on("collect", (m) => {
         if (answered === false) {
-            if (m.content.startsWith(`${command_data.server_config.prefix}animetrivia skip`)) {
+            if (m.content.startsWith(`${command_data.guild_data.prefix}animetrivia skip`)) {
                 if (m.author.id === game_data.moderationManager) {
                     answered = true;
                     dispatcher.end();
 
                     game_data.rounds += 1;
-                    command_data.msg.channel.send(`Skipped this opening. The anime was: \`${opening.source}\``).catch((e: Error) => {
+                    command_data.message.channel.send(`Skipped this opening. The anime was: \`${opening.source}\``).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
 
                     play_next(command_data, connection, game_data);
                     clearTimeout(timeout);
                 } else {
-                    command_data.msg.channel.send("Only the game moderator can do this!").catch((e: Error) => {
+                    command_data.message.channel.send("Only the game moderator can do this!").catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                 }
-            } else if (m.content.startsWith(`${command_data.server_config.prefix}animetrivia end`)) {
+            } else if (m.content.startsWith(`${command_data.guild_data.prefix}animetrivia end`)) {
                 if (m.author.id === game_data.moderationManager) {
                     answered = true;
                     connection.disconnect();
@@ -108,13 +108,13 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
                         footer: { text: "Hope you enjoyed the game!" },
                     };
 
-                    command_data.msg.channel.send({ embeds: [embedTriviaEnd] }).catch((e: Error) => {
+                    command_data.message.channel.send({ embeds: [embedTriviaEnd] }).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
 
                     clearTimeout(timeout);
                 } else {
-                    command_data.msg.channel.send("Only the game moderator can do this!").catch((e: Error) => {
+                    command_data.message.channel.send("Only the game moderator can do this!").catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                 }
@@ -132,7 +132,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
                                 lb_data.points += 1;
                             }
                         });
-                        command_data.msg.channel.send(`<@${m.author.id}> got it correct! The anime was: \`${opening.source}\`~`).catch((e: Error) => {
+                        command_data.message.channel.send(`<@${m.author.id}> got it correct! The anime was: \`${opening.source}\`~`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
 
@@ -140,7 +140,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
                         clearTimeout(timeout);
                     } else {
                         answered_IDs.push(m.author.id);
-                        command_data.msg.channel.send(`<@${m.author.id}> was wrong! The answer isn't ${guess}~`).catch((e: Error) => {
+                        command_data.message.channel.send(`<@${m.author.id}> was wrong! The answer isn't ${guess}~`).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
                     }
@@ -168,7 +168,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
         dispatcher.end();
 
         game_data.rounds += 1;
-        command_data.msg.channel.send(`Nobody got it correct. The anime was: \`${opening.source}\`~`).catch((e: Error) => {
+        command_data.message.channel.send(`Nobody got it correct. The anime was: \`${opening.source}\`~`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
         play_next(command_data, connection, game_data);
@@ -184,30 +184,29 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("me", Permissions.FLAGS.CONNECT), new NeededPermission("me", Permissions.FLAGS.SPEAK)],
+    arguments: [],
+    permissions: [new Permission("me", Permissions.FLAGS.CONNECT), new Permission("me", Permissions.FLAGS.SPEAK)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.msg.member === null || command_data.msg.guild.me === null) {
+        if (command_data.message.guild === null || command_data.message.member === null || command_data.message.guild.me === null) {
             return;
         }
         if (command_data.args.length > 0) {
             return;
         }
-        if (command_data.msg.guild.me.voice !== undefined) {
-            command_data.msg.channel.send("Please make sure there are no other running games or music playing and try again. (or make Nekomaid leave voice)").catch((e: Error) => {
+        if (command_data.message.guild.me.voice !== undefined) {
+            command_data.message.channel.send("Please make sure there are no other running games or music playing and try again. (or make Nekomaid leave voice)").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
         }
-        if (command_data.msg.member.voice.channel === null || !(command_data.msg.member.voice.channel instanceof VoiceChannel)) {
-            command_data.msg.reply("You need to join a voice channel.");
+        if (command_data.message.member.voice.channel === null || !(command_data.message.member.voice.channel instanceof VoiceChannel)) {
+            command_data.message.reply("You need to join a voice channel.");
             return;
         }
-        if (command_data.msg.member.voice.channel.joinable === false || command_data.msg.member.voice.channel.speakable === false) {
-            command_data.msg.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again.");
+        if (command_data.message.member.voice.channel.joinable === false || command_data.message.member.voice.channel.speakable === false) {
+            command_data.message.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again.");
             return;
         }
 
@@ -217,16 +216,16 @@ export default {
                 "You will be given an anime opening/ending and you'll have to guess which one it is from." +
                 "\n Once you decide, just type the number of the option in this channel~" +
                 "\n\nCommands: " +
-                `\n\`${command_data.server_config.prefix}animetrivia start\` - starts the game` +
-                `\n\`${command_data.server_config.prefix}animetrivia skip\` - skips the round` +
-                `\n\`${command_data.server_config.prefix}animetrivia end\` - ends the game` +
+                `\n\`${command_data.guild_data.prefix}animetrivia start\` - starts the game` +
+                `\n\`${command_data.guild_data.prefix}animetrivia skip\` - skips the round` +
+                `\n\`${command_data.guild_data.prefix}animetrivia end\` - ends the game` +
                 "\n\nJoin by reacting with `✅` (or leave with `❌`)",
             footer: {
-                text: `0 joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`,
+                text: `0 joined | Start the game by typing ${command_data.guild_data.prefix}animetrivia start`,
             },
         };
         const joined_IDs: string[] = [];
-        const message = await command_data.msg.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
+        const message = await command_data.message.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });
@@ -253,28 +252,28 @@ export default {
                 joined_IDs.splice(joined_IDs.indexOf(u.id), 1);
             }
 
-            embedSong.footer.text = `${joined_IDs.length} joined | Start the game by typing ${command_data.server_config.prefix}animetrivia start`;
+            embedSong.footer.text = `${joined_IDs.length} joined | Start the game by typing ${command_data.guild_data.prefix}animetrivia start`;
             await message.edit({ embeds: [embedSong] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         });
 
-        const collector = command_data.msg.channel.createMessageCollector({
+        const collector = command_data.message.channel.createMessageCollector({
             filter: (m) => {
                 return !m.author.bot;
             },
         });
         collector.on("collect", (m) => {
-            if (command_data.msg.member === null || command_data.msg.member.voice.channel === null) {
+            if (command_data.message.member === null || command_data.message.member.voice.channel === null) {
                 return;
             }
 
             if (joined_IDs.length < 1) {
-                command_data.msg.channel.send("Game couldn't start, because there aren't enough players. Try again.").catch((e: Error) => {
+                command_data.message.channel.send("Game couldn't start, because there aren't enough players. Try again.").catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 collector.stop();
-            } else if (m.content === `${command_data.server_config.prefix}animetrivia start`) {
+            } else if (m.content === `${command_data.guild_data.prefix}animetrivia start`) {
                 const connection = -1;
 
                 const leaderboard: object[] = [];
@@ -282,10 +281,10 @@ export default {
                     leaderboard.push({ user: id, points: 0 });
                 });
 
-                play_next(command_data, connection, { rounds: 0, rounds_correct: 0, joined_IDs: joined_IDs, leaderboard: leaderboard, moderator: command_data.msg.author.id });
+                play_next(command_data, connection, { rounds: 0, rounds_correct: 0, joined_IDs: joined_IDs, leaderboard: leaderboard, moderator: command_data.message.author.id });
                 collector.stop();
             } else {
-                command_data.msg.channel.send("Cancelled the game. Try again once you change your mind.").catch((e: Error) => {
+                command_data.message.channel.send("Cancelled the game. Try again once you change your mind.").catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 collector.stop();

@@ -10,13 +10,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         const obj = await command_data.global_context.modules.neko.sfw.meow();
@@ -27,11 +26,11 @@ export default {
                 url: obj.url,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
+                text: `Requested by ${command_data.message.author.tag}`,
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedCat] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedCat] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

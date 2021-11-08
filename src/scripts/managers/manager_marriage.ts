@@ -29,19 +29,19 @@ class MarriageManager {
     }
 
     async accept_marriage_proposal(global_context: GlobalContext, marriage_proposal: MarriageProposal, channel: TextChannel) {
-        const source_user_config = await global_context.neko_modules_clients.db.fetch_global_user(marriage_proposal.source_ID, false, false);
-        if (source_user_config === null) {
+        const source_user_data = await global_context.neko_modules_clients.db.fetch_user(marriage_proposal.source_ID, false, false);
+        if (source_user_data === null) {
             return;
         }
-        source_user_config.married_ID = marriage_proposal.target_ID;
-        global_context.neko_modules_clients.db.edit_global_user(source_user_config);
+        source_user_data.married_ID = marriage_proposal.target_ID;
+        global_context.neko_modules_clients.db.edit_user(source_user_data);
 
-        const target_user_config = await global_context.neko_modules_clients.db.fetch_global_user(marriage_proposal.target_ID, false, false);
-        if (target_user_config === null) {
+        const target_user_data = await global_context.neko_modules_clients.db.fetch_user(marriage_proposal.target_ID, false, false);
+        if (target_user_data === null) {
             return;
         }
-        target_user_config.married_ID = marriage_proposal.source_ID;
-        global_context.neko_modules_clients.db.edit_global_user(target_user_config);
+        target_user_data.married_ID = marriage_proposal.source_ID;
+        global_context.neko_modules_clients.db.edit_user(target_user_data);
 
         channel.send(`\`${marriage_proposal.source_tag}\` married \`${marriage_proposal.target_tag}\`!`).catch((e: Error) => {
             global_context.logger.api_error(e);

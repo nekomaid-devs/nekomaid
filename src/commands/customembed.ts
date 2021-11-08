@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Argument from "../scripts/helpers/argument";
 
 export default {
     name: "customembed",
@@ -13,13 +13,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a JSON string to construct embed from.", "none")],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "You need to type in a JSON string to construct embed from.", "none", true)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         let custom_embed;
@@ -31,14 +30,14 @@ export default {
                 description: `\`\`\`${e}\`\`\``,
             };
 
-            command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+            command_data.message.channel.send({ embeds: [embedError] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
         }
 
-        command_data.msg.channel.send({ embeds: [custom_embed] }).catch((e) => {
-            command_data.msg.channel.send(`Error when creating the embed!\n\`${e}\``).catch((err) => {
+        command_data.message.channel.send({ embeds: [custom_embed] }).catch((e) => {
+            command_data.message.channel.send(`Error when creating the embed!\n\`${e}\``).catch((err) => {
                 command_data.global_context.logger.api_error(err);
             });
         });

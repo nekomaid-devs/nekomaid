@@ -2,8 +2,8 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
-import { get_top_server_level } from "../scripts/utils/util_sort";
+import Argument from "../scripts/helpers/argument";
+import { get_top_guild_level } from "../scripts/utils/util_sort";
 import { get_level_XP } from "../scripts/utils/util_general";
 
 export default {
@@ -15,32 +15,31 @@ export default {
     hidden: false,
     aliases: ["lvl"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "Argument needs to be a mention.", "mention", false)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.tagged_user === undefined || command_data.global_context.bot_config === null) {
+        if (command_data.message.guild === null || command_data.tagged_user === undefined || command_data.bot_data === null) {
             return;
         }
-        if (command_data.server_config.module_level_enabled === false) {
-            command_data.msg.reply(`Leveling isn't enabled on this server. (see \`${command_data.server_config.prefix}leveling\` for help)`);
+        if (command_data.guild_data.module_level_enabled === false) {
+            command_data.message.reply(`Leveling isn't enabled on this server. (see \`${command_data.guild_data.prefix}leveling\` for help)`);
             return;
         }
 
-        const items = await get_top_server_level(command_data.global_context, command_data.server_config, command_data.msg.guild);
+        const items = await get_top_guild_level(command_data.global_context, command_data.guild_data, command_data.message.guild);
         let author_pos = -1;
-        let author_config = null;
+        let author_data = null;
         for (let i = 0; i < items.length; i += 1) {
             const user = items[i];
             if (user.user_ID === command_data.tagged_user.id) {
-                author_config = user;
+                author_data = user;
                 author_pos = i;
                 break;
             }
         }
-        if (author_config === null) {
+        if (author_data === null) {
             return;
         }
         author_pos += 1;
@@ -55,17 +54,17 @@ export default {
             fields: [
                 {
                     name: "⚡    Server Level:",
-                    value: `${author_config.level} (XP: ${Math.round(author_config.xp)}/${Math.round(get_level_XP(command_data.global_context.bot_config, command_data.author_user_config))})`,
+                    value: `${author_data.level} (XP: ${Math.round(author_data.xp)}/${Math.round(get_level_XP(command_data.bot_data))})`,
                 },
             ],
             thumbnail: {
                 url: url === null ? undefined : url,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
+                text: `Requested by ${command_data.message.author.tag}`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedLevel] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedLevel] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

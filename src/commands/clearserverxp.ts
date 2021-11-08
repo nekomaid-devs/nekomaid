@@ -1,9 +1,9 @@
 /* Types */
-import { CommandData, Command, ServerUserData } from "../ts/base";
-import { Permissions } from "discord.js-light";
+import { CommandData, Command, UserGuildData } from "../ts/base";
+import { Permissions, TextChannel } from "discord.js-light";
 
 /* Local Imports */
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Permission from "../scripts/helpers/permission";
 
 export default {
     name: "clearserverxp",
@@ -14,31 +14,30 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_GUILD)],
+    arguments: [],
+    permissions: [new Permission("author", Permissions.FLAGS.MANAGE_GUILD)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
-        if (command_data.server_config.module_level_enabled === false) {
-            command_data.msg.reply(`Leveling isn't enabled on this server. (see \`${command_data.server_config.prefix}leveling\` for help)`);
+        if (command_data.guild_data.module_level_enabled === false) {
+            command_data.message.reply(`Leveling isn't enabled on this server. (see \`${command_data.guild_data.prefix}leveling\` for help)`);
             return;
         }
 
-        const server_user_configs = await command_data.global_context.neko_modules_clients.db.fetch_server_users(command_data.msg.guild.id);
-        server_user_configs.forEach(async (server_user_config: ServerUserData) => {
-            if (command_data.msg.guild === null) {
+        const user_guild_datas = await command_data.global_context.neko_modules_clients.db.fetch_guild_users(command_data.message.guild.id);
+        user_guild_datas.forEach(async (user_guild_data: UserGuildData) => {
+            if (!(command_data.message.channel instanceof TextChannel) || command_data.message.guild === null || command_data.message.member === null) {
                 return;
             }
-            server_user_config.level = 1;
-            server_user_config.xp = 0;
+            user_guild_data.level = 1;
+            user_guild_data.xp = 0;
 
             // TODO: this won't work
-            if (command_data.msg.guild.members.cache.has(server_user_config.user_ID) === true) {
-                const member = await command_data.msg.guild.members.fetch(server_user_config.user_ID).catch((e: Error) => {
+            if (command_data.message.guild.members.cache.has(user_guild_data.user_ID) === true) {
+                const member = await command_data.message.guild.members.fetch(user_guild_data.user_ID).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                     return null;
                 });
@@ -46,13 +45,24 @@ export default {
                     return;
                 }
 
-                command_data.tagged_server_user_config = server_user_config;
+                command_data.tagged_user_guild_data = user_guild_data;
                 command_data.tagged_member = member;
-                command_data.global_context.neko_modules_clients.levelingManager.update_server_level(command_data, 0, false);
+                command_data.global_context.neko_modules_clients.levelingManager.update_guild_level({
+                    global_context: command_data.global_context,
+
+                    guild: command_data.message.guild,
+                    guild_data: command_data.guild_data,
+                    channel: command_data.message.channel,
+                    member: command_data.message.member,
+                    user_data: command_data.user_guild_data,
+
+                    log: false,
+                    xp: 0,
+                });
             }
         });
 
-        command_data.msg.channel.send(`Cleared XP of \`${server_user_configs.length}\` users.`).catch((e: Error) => {
+        command_data.message.channel.send(`Cleared XP of \`${user_guild_datas.length}\` users.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

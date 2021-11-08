@@ -1,15 +1,14 @@
 /* Types */
 import { CommandData, Command, GlobalContext, GuildData } from "../ts/base";
-import { GuildEditType } from "../ts/mysql";
 import { Message, Permissions } from "discord.js-light";
 
 /* Node Imports */
 import { randomBytes } from "crypto";
 
 /* Local Imports */
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Permission from "../scripts/helpers/permission";
 
-function continue_collecting(global_context: GlobalContext, server_config: GuildData, source_message: Message, msg: Message, role_messages: any, roles: any) {
+function continue_collecting(global_context: GlobalContext, guild_data: GuildData, source_message: Message, msg: Message, role_messages: any, roles: any) {
     let role_name: any;
     let role: any;
     const collector = msg.channel.createMessageCollector({
@@ -44,13 +43,13 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
 
                 const reactionRoleMenuInfo = {
                     id: randomBytes(16).toString("hex"),
-                    server_ID: msg.guild.id,
+                    guild_ID: msg.guild.id,
                     channel_ID: msg.channel.id,
                     message_ID: msg.id,
                     reaction_roles: roles_array,
                     reaction_role_emojis: roles_emojis_array,
                 };
-                global_context.neko_modules_clients.db.add_reaction_role(reactionRoleMenuInfo);
+                global_context.neko_modules_clients.db.add_guild_reaction_role(reactionRoleMenuInfo);
 
                 role_messages.forEach((rmsg: Message) => {
                     rmsg.delete().catch((e: Error) => {
@@ -78,7 +77,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                     global_context.logger.api_error(e);
                 });
 
-                global_context.neko_modules_clients.db.edit_server(server_config, GuildEditType.ALL);
+                global_context.neko_modules_clients.db.edit_guild(guild_data);
                 global_context.neko_modules_clients.reactionRolesManager.create_collector(global_context, msg.guild, reactionRoleMenuInfo);
                 break;
             }
@@ -90,7 +89,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                 });
                 if (role === undefined) {
                     msg.edit(`You typed invalid role name! Type in existing role name or \`stop\` to finish the menu! (${roles.size} roles so far)`);
-                    continue_collecting(global_context, server_config, source_message, msg, role_messages, roles);
+                    continue_collecting(global_context, guild_data, source_message, msg, role_messages, roles);
                     return;
                 }
 
@@ -108,7 +107,7 @@ function continue_collecting(global_context: GlobalContext, server_config: Guild
                     roles.set(role.id, r.emoji.id === null ? r.emoji.name : `<:${r.emoji.name}:${r.emoji.id}>`);
                     msg.edit(`Type in a role name or \`stop\` to finish the menu! (${roles.size} roles so far)`);
 
-                    continue_collecting(global_context, server_config, source_message, msg, role_messages, roles);
+                    continue_collecting(global_context, guild_data, source_message, msg, role_messages, roles);
                 });
                 break;
             }
@@ -125,16 +124,15 @@ export default {
     hidden: false,
     aliases: ["reactionroles"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_ROLES), new NeededPermission("me", Permissions.FLAGS.MANAGE_MESSAGES), new NeededPermission("me", Permissions.FLAGS.MANAGE_ROLES)],
+    arguments: [],
+    permissions: [new Permission("author", Permissions.FLAGS.MANAGE_ROLES), new Permission("me", Permissions.FLAGS.MANAGE_MESSAGES), new Permission("me", Permissions.FLAGS.MANAGE_ROLES)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
-        const msg = await command_data.msg.channel.send("Type in a role name or `stop` to finish the menu!").catch((e: Error) => {
+        const msg = await command_data.message.channel.send("Type in a role name or `stop` to finish the menu!").catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });
@@ -145,6 +143,6 @@ export default {
         const roles = new Map();
         const role_messages: any[] = [];
 
-        continue_collecting(command_data.global_context, command_data.server_config, command_data.msg, msg, role_messages, roles);
+        continue_collecting(command_data.global_context, command_data.guild_data, command_data.message, msg, role_messages, roles);
     },
 } as Command;

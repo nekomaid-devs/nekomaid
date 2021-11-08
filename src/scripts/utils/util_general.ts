@@ -1,5 +1,6 @@
 /* Types */
-import { BotData, GlobalUserData, GuildData, ServerUserData } from "../../ts/base";
+import { BotData, UserGuildData, MessageCreateGuildData } from "../../ts/base";
+import { User } from "discord.js-light";
 
 export function pick_random(array: any[]) {
     return array[Math.floor(Math.random() * array.length)];
@@ -26,17 +27,25 @@ export function format_number(n: number) {
     return n.toLocaleString("en-US", { maximumFractionDigits: 2 });
 }
 
-export function get_server_level_XP(server_config: GuildData, author_config: ServerUserData) {
-    let level_XP = server_config.module_level_level_exp;
-    for (let i = 1; i < author_config.level; i++) {
-        level_XP *= server_config.module_level_level_multiplier;
+export function format_users(users: User[]) {
+    return users
+        .reduce((acc, curr) => {
+            return `${acc}${curr.tag}, `;
+        }, "")
+        .slice(0, -2);
+}
+
+export function get_guild_level_XP(guild_data: MessageCreateGuildData, user_data: UserGuildData) {
+    let level_XP = guild_data.module_level_level_exp;
+    for (let i = 1; i < user_data.level; i++) {
+        level_XP *= guild_data.module_level_level_multiplier;
     }
 
     return level_XP;
 }
 
-export function get_level_XP(bot_config: BotData, author_config: GlobalUserData) {
-    return bot_config.level_XP;
+export function get_level_XP(bot_data: BotData) {
+    return bot_data.level_XP;
 }
 
 export function get_formatted_time() {

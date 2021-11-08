@@ -10,13 +10,12 @@ export default {
     hidden: false,
     aliases: ["vote"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot.user === null) {
+        if (command_data.message.guild === null || command_data.global_context.bot.user === null) {
             return;
         }
         const url = `https://cdn.discordapp.com/app-icons/${command_data.global_context.bot.user.id}/cd4710d92ec10005b17d942c51c722d2.png`;
@@ -37,7 +36,7 @@ export default {
                 text: "Thank you for voting 💖",
             },
         };
-        command_data.msg.channel.send({ embeds: [embedUpvote] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedUpvote] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

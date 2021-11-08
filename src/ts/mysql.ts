@@ -1,11 +1,11 @@
 /* Enums */
 export enum GuildFetchType {
-    ALL,
-    MINIMAL,
     AUDIT,
+    MESSAGE_CREATE,
+    ALL,
 }
 
 export enum GuildEditType {
-    ALL,
     AUDIT,
+    ALL,
 }

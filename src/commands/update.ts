@@ -2,7 +2,7 @@
 import { CommandData, Command, ExtraPermission } from "../ts/base";
 
 /* Local Imports */
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Permission from "../scripts/helpers/permission";
 import { refresh_bot_list, refresh_status } from "../scripts/utils/util_web";
 
 export default {
@@ -14,13 +14,12 @@ export default {
     hidden: true,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", ExtraPermission.BOT_OWNER)],
+    arguments: [],
+    permissions: [new Permission("author", ExtraPermission.BOT_OWNER)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         const embedUpdate = {
@@ -29,7 +28,7 @@ export default {
             footer: { text: `Version: Nekomaid ${command_data.global_context.config.version}` },
         };
 
-        command_data.msg.channel.send({ embeds: [embedUpdate] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedUpdate] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
 

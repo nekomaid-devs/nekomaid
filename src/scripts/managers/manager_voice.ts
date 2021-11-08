@@ -96,8 +96,8 @@ class VoiceManager {
         return voice_connection;
     }
 
-    async remove_connection(global_context: GlobalContext, guild_ID: string, error_message: string | null) {
-        const voice_connection = this.connections.get(guild_ID);
+    async remove_connection(global_context: GlobalContext, id: string, error_message: string | null) {
+        const voice_connection = this.connections.get(id);
         if (voice_connection === undefined) {
             return;
         }
@@ -169,12 +169,12 @@ class VoiceManager {
         const current_length = convert_string_to_time_data(convert_time(request.item.duration));
         if (current_length.hrs >= 3) {
             /*
-             * const user_config = await global_context.neko_modules_clients.db.fetch_global_user(source_message.member.id, false, false);
-             * if (user_config === null) {
+             * const user_data = await global_context.neko_modules_clients.db.fetch_global_user(source_message.member.id, false, false);
+             * if (user_data === null) {
              *  return;
              * }
              * const end = new Date();
-             * const start = new Date(user_config.last_upvoted_time);
+             * const start = new Date(user_data.last_upvoted_time);
              * let diff = (end.getTime() - start.getTime()) / 1000;
              * diff /= 60;
              * diff = Math.abs(Math.round(diff));

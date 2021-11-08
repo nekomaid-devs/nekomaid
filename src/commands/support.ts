@@ -10,13 +10,12 @@ export default {
     hidden: false,
     aliases: ["server"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         const link = `https://discord.com/invite/${command_data.global_context.config.invite_code}`;
@@ -31,7 +30,7 @@ export default {
             ],
         };
 
-        command_data.msg.channel.send({ embeds: [embedSupport] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedSupport] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

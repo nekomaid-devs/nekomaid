@@ -52,53 +52,54 @@ class UpvoteManager {
     }
 
     async process_upvote(global_context: GlobalContext, id: string, site_ID: string, is_double = false) {
-        if (global_context.bot_config === null) {
+        const bot_data = await global_context.neko_modules_clients.db.fetch_config("default_config");
+        if (bot_data === null) {
+            return;
+        }
+        const user_data = await global_context.neko_modules_clients.db.fetch_user(id, false, false);
+        if (user_data === null) {
             return;
         }
 
-        const user_config = await global_context.neko_modules_clients.db.fetch_global_user(id, false, false);
-        if (user_config === null) {
-            return;
-        }
         switch (site_ID) {
             case "0":
-                user_config.credits += Math.round(global_context.bot_config.upvote_credits * 0.75);
-                user_config.net_worth += Math.round(global_context.bot_config.upvote_credits * 0.75);
-                user_config.votes += 1.5;
+                user_data.credits += Math.round(bot_data.upvote_credits * 0.75);
+                user_data.net_worth += Math.round(bot_data.upvote_credits * 0.75);
+                user_data.votes += 1.5;
                 break;
 
             case "1":
-                user_config.credits += Math.round(global_context.bot_config.upvote_credits * 0.75);
-                user_config.net_worth += Math.round(global_context.bot_config.upvote_credits * 0.75);
-                user_config.votes += 1.5;
+                user_data.credits += Math.round(bot_data.upvote_credits * 0.75);
+                user_data.net_worth += Math.round(bot_data.upvote_credits * 0.75);
+                user_data.votes += 1.5;
                 break;
 
             case "2":
-                user_config.credits += Math.round(global_context.bot_config.upvote_credits / 2);
-                user_config.net_worth += Math.round(global_context.bot_config.upvote_credits / 2);
-                user_config.votes += 1;
+                user_data.credits += Math.round(bot_data.upvote_credits / 2);
+                user_data.net_worth += Math.round(bot_data.upvote_credits / 2);
+                user_data.votes += 1;
                 break;
 
             case "3":
-                user_config.credits += Math.round(global_context.bot_config.upvote_credits / 4);
-                user_config.net_worth += Math.round(global_context.bot_config.upvote_credits / 4);
-                user_config.votes += 0.5;
+                user_data.credits += Math.round(bot_data.upvote_credits / 4);
+                user_data.net_worth += Math.round(bot_data.upvote_credits / 4);
+                user_data.votes += 0.5;
                 break;
 
             case "4":
                 if (is_double === true) {
-                    user_config.credits += global_context.bot_config.upvote_credits * 2;
-                    user_config.net_worth += global_context.bot_config.upvote_credits * 2;
-                    user_config.votes += 4;
+                    user_data.credits += bot_data.upvote_credits * 2;
+                    user_data.net_worth += bot_data.upvote_credits * 2;
+                    user_data.votes += 4;
                 } else {
-                    user_config.credits += global_context.bot_config.upvote_credits;
-                    user_config.net_worth += global_context.bot_config.upvote_credits;
-                    user_config.votes += 2;
+                    user_data.credits += bot_data.upvote_credits;
+                    user_data.net_worth += bot_data.upvote_credits;
+                    user_data.votes += 2;
                 }
                 break;
         }
 
-        global_context.neko_modules_clients.db.edit_global_user(user_config);
+        global_context.neko_modules_clients.db.edit_user(user_data);
     }
 }
 

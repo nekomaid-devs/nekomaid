@@ -1,6 +1,5 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildFetchType } from "../ts/mysql";
 import { GuildChannel } from "discord.js-light";
 
 export default {
@@ -18,13 +17,13 @@ export default {
     },
 
     async process(global_context: GlobalContext, channel: GuildChannel) {
-        const server_config = await global_context.neko_modules_clients.db.fetch_server(channel.guild.id, GuildFetchType.AUDIT, false, false);
-        if (server_config === null) {
+        const guild_data = await global_context.neko_modules_clients.db.fetch_guild(channel.guild.id, false, false);
+        if (guild_data === null) {
             return;
         }
 
-        if (server_config.mute_role_ID !== null) {
-            const mute_role = await channel.guild.roles.fetch(server_config.mute_role_ID).catch((e: Error) => {
+        if (guild_data.mute_role_ID !== null) {
+            const mute_role = await channel.guild.roles.fetch(guild_data.mute_role_ID).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });

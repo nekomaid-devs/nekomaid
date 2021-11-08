@@ -5,17 +5,17 @@ import { Guild, TextChannel } from "discord.js-light";
 class ReactionRolesManager {
     async create_all_collectors(global_context: GlobalContext) {
         const reaction_roles = await global_context.neko_modules_clients.db.fetch_all_reaction_roles();
-        global_context.bot.guilds.cache.forEach((server) => {
-            const server_reaction_roles = reaction_roles.filter((e: ReactionRoleData) => {
-                return e.server_ID === server.id;
+        global_context.bot.guilds.cache.forEach((guild) => {
+            const guild_reaction_roles = reaction_roles.filter((e: ReactionRoleData) => {
+                return e.id === guild.id;
             });
-            server_reaction_roles.forEach((rr: ReactionRoleData) => {
-                global_context.neko_modules_clients.reactionRolesManager.create_collector(global_context, server, rr);
+            guild_reaction_roles.forEach((rr: ReactionRoleData) => {
+                global_context.neko_modules_clients.reactionRolesManager.create_collector(global_context, guild, rr);
             });
         });
     }
 
-    async create_collector(global_context: GlobalContext, server: Guild, rr: ReactionRoleData) {
+    async create_collector(global_context: GlobalContext, guild: Guild, rr: ReactionRoleData) {
         const channel = await global_context.bot.channels.fetch(rr.channel_ID).catch((e: Error) => {
             global_context.logger.api_error(e);
             return null;
@@ -40,13 +40,13 @@ class ReactionRolesManager {
             rr.reaction_roles.forEach((role_ID: string, i: number) => {
                 const emoji = rr.reaction_role_emojis[i];
                 if (emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === `<:${r.emoji.name}:${r.emoji.id}>`)) {
-                    const member = Array.from(server.members.cache.values()).find((e) => {
+                    const member = Array.from(guild.members.cache.values()).find((e) => {
                         return e.user.id === user.id;
                     });
                     if (member === undefined) {
                         return;
                     }
-                    const role = Array.from(server.roles.cache.values()).find((e) => {
+                    const role = Array.from(guild.roles.cache.values()).find((e) => {
                         return e.id === role_ID;
                     });
                     if (role === undefined) {
@@ -63,13 +63,13 @@ class ReactionRolesManager {
             rr.reaction_roles.forEach((role_ID: string, i: number) => {
                 const emoji = rr.reaction_role_emojis[i];
                 if (emoji === r.emoji.name || (r.emoji.id !== undefined && emoji === `<:${r.emoji.name}:${r.emoji.id}>`)) {
-                    const member = Array.from(server.members.cache.values()).find((e) => {
+                    const member = Array.from(guild.members.cache.values()).find((e) => {
                         return e.user.id === user.id;
                     });
                     if (member === undefined) {
                         return;
                     }
-                    const role = Array.from(server.roles.cache.values()).find((e) => {
+                    const role = Array.from(guild.roles.cache.values()).find((e) => {
                         return e.id === role_ID;
                     });
                     if (role === undefined) {

@@ -10,16 +10,15 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
-        const message = await command_data.msg.channel.send("Ping?").catch((e: Error) => {
+        const message = await command_data.message.channel.send("Ping?").catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });
@@ -32,7 +31,7 @@ export default {
             fields: [
                 {
                     name: "🏓 Ping",
-                    value: `${message.createdTimestamp - command_data.msg.createdTimestamp}ms`,
+                    value: `${message.createdTimestamp - command_data.message.createdTimestamp}ms`,
                 },
                 {
                     name: "🏠 API",

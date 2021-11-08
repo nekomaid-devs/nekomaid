@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Argument from "../scripts/helpers/argument";
 import { convert_time } from "../scripts/utils/util_time";
 
 export default {
@@ -14,24 +14,23 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a role name.", "none")],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "You need to type in a role name.", "none", true)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         let role;
-        if (command_data.msg.mentions.roles.size > 0) {
-            role = Array.from(command_data.msg.mentions.roles.values())[0];
+        if (command_data.message.mentions.roles.size > 0) {
+            role = Array.from(command_data.message.mentions.roles.values())[0];
         } else {
-            role = command_data.msg.guild.roles.cache.find((roleTemp) => {
+            role = command_data.message.guild.roles.cache.find((roleTemp) => {
                 return roleTemp.name === command_data.total_argument || roleTemp.id === command_data.total_argument;
             });
             if (role === undefined) {
-                command_data.msg.reply(`No role with name \`${command_data.total_argument}\` found!`);
+                command_data.message.reply(`No role with name \`${command_data.total_argument}\` found!`);
                 return;
             }
         }
@@ -93,10 +92,10 @@ export default {
                 },
             ],
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
+                text: `Requested by ${command_data.message.author.tag}`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedRole] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedRole] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

@@ -2,26 +2,25 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
-import { get_top, get_top_server } from "../scripts/utils/util_sort";
+import Argument from "../scripts/helpers/argument";
+import { get_top, get_top_guild } from "../scripts/utils/util_sort";
 import { format_number } from "../scripts/utils/util_general";
 
 export default {
     name: "top",
     category: "Profile",
-    description: "Displays the richest people from all servers (or current one if you type `-server` after the command).",
+    description: "Displays the richest people from all guilds (or current one if you type `-server` after the command).",
     helpUsage: "[?property] [?-server]` *(all arguments optional)*",
     exampleUsage: "credits -server",
     hidden: false,
     aliases: ["leaderboard", "lb"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a property.", "none")],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "Argument needs to be a property.", "none", false)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         let prop = "credits";
@@ -67,15 +66,15 @@ export default {
                 break;
 
             default:
-                command_data.msg.reply(`Property \`${prop}\` not found-`);
+                command_data.message.reply(`Property \`${prop}\` not found-`);
                 return;
         }
 
         let items = [];
         let top_text_2 = "";
         if (command_data.args.includes("-server") === true) {
-            top_text_2 = `in \`${command_data.msg.guild.name}\``;
-            items = await get_top_server(command_data.global_context, command_data.msg.guild, props);
+            top_text_2 = `in \`${command_data.message.guild.name}\``;
+            items = await get_top_guild(command_data.global_context, command_data.message.guild, props);
         } else {
             items = await get_top(command_data.global_context, props);
         }
@@ -83,35 +82,35 @@ export default {
         const embedTop = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`❯    Top - \`${top_text}\` ${top_text_2}`);
 
         let author_pos = -1;
-        let author_config = null;
+        let author_data = null;
         for (let i = 0; i < items.length; i += 1) {
             const user = items[i];
-            if (user.user_ID === command_data.msg.author.id) {
+            if (user.id === command_data.message.author.id) {
                 author_pos = i;
-                author_config = user;
+                author_data = user;
                 break;
             }
         }
-        if (author_config === null) {
+        if (author_data === null) {
             return;
         }
 
         const limit = items.length < 10 ? items.length : 10;
         for (let i = 0; i < limit; i += 1) {
-            let user_config = items[i];
+            let user_data = items[i];
             if (i === 8 && author_pos > 10) {
                 embedTop.addField("...", "...");
                 continue;
             } else if (i === 9 && author_pos > 10) {
-                user_config = author_config;
+                user_data = author_data;
                 i = author_pos;
             }
 
             const net = props.reduce((acc, curr) => {
-                acc += new Map(Object.entries(user_config)).get(curr) as number;
+                acc += new Map(Object.entries(user_data)).get(curr) as number;
                 return acc;
             }, 0);
-            const target_user = await command_data.global_context.bot.users.fetch(user_config.user_ID).catch((e: Error) => {
+            const target_user = await command_data.global_context.bot.users.fetch(user_data.id).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
                 return null;
             });
@@ -121,7 +120,7 @@ export default {
             embedTop.addField(`${i + 1}) ${target_user.tag}`, `${format_number(net)} ${top_user_text}`);
         }
 
-        command_data.msg.channel.send({ embeds: [embedTop] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedTop] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

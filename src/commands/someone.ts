@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 import { Permissions } from "discord.js-light";
 
 /* Local Imports */
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Permission from "../scripts/helpers/permission";
 import { pick_random } from "../scripts/utils/util_general";
 
 export default {
@@ -15,17 +15,16 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MENTION_EVERYONE)],
+    arguments: [],
+    permissions: [new Permission("author", Permissions.FLAGS.MENTION_EVERYONE)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
-        const user = pick_random(Array.from(command_data.msg.guild.members.cache.values()));
-        command_data.msg.channel.send(`Pinged ${user.toString()}.`).catch((e: Error) => {
+        const user = pick_random(Array.from(command_data.message.guild.members.cache.values()));
+        command_data.message.channel.send(`Pinged ${user.toString()}.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

@@ -2,7 +2,7 @@
 import { CommandData, Command, ItemData } from "../ts/base";
 
 /* Local Imports */
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Argument from "../scripts/helpers/argument";
 import { get_items } from "../scripts/utils/util_vars";
 
 export default {
@@ -14,13 +14,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an item name.", "none")],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "You need to type in an item name.", "none", true)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot_config === null) {
+        if (command_data.message.guild === null || command_data.bot_data === null) {
             return;
         }
 
@@ -31,12 +30,12 @@ export default {
             }
         });
         if (item_prefab === null) {
-            command_data.msg.reply(`No item with name \`${command_data.total_argument}\` exists.`);
+            command_data.message.reply(`No item with name \`${command_data.total_argument}\` exists.`);
             return;
         }
 
         let target_index: number | null = null;
-        command_data.author_user_config.inventory.forEach((item, index) => {
+        command_data.user_data.inventory.forEach((item, index) => {
             if (item_prefab === null) {
                 return;
             }
@@ -45,7 +44,7 @@ export default {
             }
         });
         if (target_index === null) {
-            command_data.msg.reply(`You don't have any item called \`${command_data.total_argument}\`.`);
+            command_data.message.reply(`You don't have any item called \`${command_data.total_argument}\`.`);
             return;
         }
 

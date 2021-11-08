@@ -5,17 +5,17 @@ import { Guild, VoiceChannel } from "discord.js-light";
 class CounterManager {
     async update_all_counters(global_context: GlobalContext) {
         const counters = await global_context.neko_modules_clients.db.fetch_all_counters();
-        global_context.bot.guilds.cache.forEach((server) => {
-            const server_counters = counters.filter((e: CounterData) => {
-                return e.server_ID === server.id;
+        global_context.bot.guilds.cache.forEach((guild) => {
+            const guild_counters = counters.filter((e: CounterData) => {
+                return e.id === guild.id;
             });
-            server_counters.forEach((counter: CounterData) => {
-                global_context.neko_modules_clients.counterManager.update_counter(global_context, server, counter);
+            guild_counters.forEach((counter: CounterData) => {
+                global_context.neko_modules_clients.counterManager.update_counter(global_context, guild, counter);
             });
         });
     }
 
-    async update_counter(global_context: GlobalContext, server: Guild, counter: CounterData, force_update = false) {
+    async update_counter(global_context: GlobalContext, guild: Guild, counter: CounterData, force_update = false) {
         if (global_context.bot.shard === null) {
             return;
         }
@@ -39,7 +39,7 @@ class CounterManager {
 
             switch (counter.type) {
                 case "all_members": {
-                    const member_count = Array.from(server.members.cache.values()).length;
+                    const member_count = Array.from(guild.members.cache.values()).length;
                     channel.setName(`All Members: ${member_count}`).catch((e: Error) => {
                         global_context.logger.api_error(e);
                     });
@@ -47,7 +47,7 @@ class CounterManager {
                 }
 
                 case "members": {
-                    const member_count = Array.from(server.members.cache.values()).filter((e) => {
+                    const member_count = Array.from(guild.members.cache.values()).filter((e) => {
                         return e.user.bot === false;
                     }).length;
                     channel.setName(`Members: ${member_count}`).catch((e: Error) => {
@@ -57,7 +57,7 @@ class CounterManager {
                 }
 
                 case "roles": {
-                    const roles_count = Array.from(server.members.cache.values()).length;
+                    const roles_count = Array.from(guild.members.cache.values()).length;
                     channel.setName(`Roles: ${roles_count}`).catch((e: Error) => {
                         global_context.logger.api_error(e);
                     });
@@ -65,7 +65,7 @@ class CounterManager {
                 }
 
                 case "channels": {
-                    const channels_count = Array.from(server.members.cache.values()).length;
+                    const channels_count = Array.from(guild.members.cache.values()).length;
                     channel.setName(`Channels: ${channels_count}`).catch((e) => {
                         global_context.logger.api_error(e);
                     });
@@ -73,7 +73,7 @@ class CounterManager {
                 }
 
                 case "bots": {
-                    const bot_count = Array.from(server.members.cache.values()).filter((e) => {
+                    const bot_count = Array.from(guild.members.cache.values()).filter((e) => {
                         return e.user.bot === false;
                     }).length;
                     channel.setName(`Bots: ${bot_count}`).catch((e: Error) => {
@@ -82,7 +82,7 @@ class CounterManager {
                     break;
                 }
 
-                case "bot_servers": {
+                case "bot_guilds": {
                     let guild_count = 0;
                     await global_context.bot.shard
                         .fetchClientValues("guilds.cache.size")
@@ -95,7 +95,7 @@ class CounterManager {
                             global_context.logger.error(e as Error);
                         });
 
-                    channel.setName(`Current Servers: ${guild_count}`).catch((e: Error) => {
+                    channel.setName(`Current guilds: ${guild_count}`).catch((e: Error) => {
                         global_context.logger.api_error(e);
                     });
                     break;
@@ -130,7 +130,7 @@ class CounterManager {
                 }
             }
 
-            global_context.neko_modules_clients.db.edit_counter(counter);
+            global_context.neko_modules_clients.db.edit_guild_counter(counter);
         }
     }
 }

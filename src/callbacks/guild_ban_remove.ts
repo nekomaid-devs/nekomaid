@@ -1,6 +1,5 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildEditType, GuildFetchType } from "../ts/mysql";
 import { GuildBan, TextChannel, User } from "discord.js-light";
 
 export default {
@@ -23,14 +22,14 @@ export default {
         }
 
         const moderation_action = global_context.data.last_moderation_actions.get(ban.guild.id);
-        const server_config = await global_context.neko_modules_clients.db.fetch_server(ban.guild.id, GuildFetchType.AUDIT, false, false);
-        if (server_config === null) {
+        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(ban.guild.id, false, false);
+        if (guild_data === null) {
             return;
         }
-        const server_bans = await global_context.neko_modules_clients.db.fetch_server_bans(ban.guild.id);
+        const guild_bans = await global_context.neko_modules_clients.db.fetch_guild_bans(ban.guild.id);
 
-        if (server_config.audit_bans === true && server_config.audit_channel !== null) {
-            const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
+        if (guild_data.audit_bans === true && guild_data.audit_channel !== null) {
+            const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });
@@ -69,7 +68,7 @@ export default {
                 const url = ban.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 const embedBan = {
                     author: {
-                        name: `Case ${server_config.case_ID}# | Unban | ${ban.user.tag}`,
+                        name: `Case ${guild_data.case_ID}# | Unban | ${ban.user.tag}`,
                         icon_url: url === null ? undefined : url,
                     },
                     fields: [
@@ -90,8 +89,8 @@ export default {
                     ],
                 };
 
-                server_config.case_ID += 1;
-                global_context.neko_modules_clients.db.edit_server(server_config, GuildEditType.AUDIT);
+                guild_data.case_ID += 1;
+                global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
 
                 channel.send({ embeds: [embedBan] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
@@ -99,11 +98,11 @@ export default {
             }
         }
 
-        const previous_ban = server_bans.find((e) => {
+        const previous_ban = guild_bans.find((e) => {
             return e.user_ID === ban.user.id;
         });
         if (previous_ban !== undefined) {
-            global_context.neko_modules_clients.db.remove_server_ban(previous_ban.id);
+            global_context.neko_modules_clients.db.remove_guild_ban(previous_ban.id);
         }
         global_context.data.last_moderation_actions.delete(ban.guild.id);
     },

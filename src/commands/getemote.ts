@@ -3,9 +3,8 @@ import { CommandData, Command } from "../ts/base";
 import { Permissions } from "discord.js-light";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
-import NeededPermission from "../scripts/helpers/needed_permission";
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Permission from "../scripts/helpers/permission";
+import Argument from "../scripts/helpers/argument";
 
 export default {
     name: "getemote",
@@ -16,19 +15,18 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an emote.", "none")],
-    argumentsRecommended: [new RecommendedArgument(2, "Argument needs to be a name.", "none")],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS), new NeededPermission("me", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS)],
+    arguments: [new Argument(1, "You need to type in an emote.", "none", true), new Argument(2, "Argument needs to be a name.", "none", false)],
+    permissions: [new Permission("author", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS), new Permission("me", Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS)],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         // TODO: check for required 2-32 emote name
         const text = command_data.total_argument;
         if (command_data.args.length < 2 && text.includes("https://") === true) {
-            command_data.msg.reply("You need to type in an emote name for links.");
+            command_data.message.reply("You need to type in an emote name for links.");
             return;
         }
 
@@ -39,17 +37,17 @@ export default {
         const emote_ID = text.substring(a, text.indexOf(">", a));
 
         if (text.includes("https://") === false && emote_ID.length !== 18) {
-            command_data.msg.reply(`Invalid emote_ID length! (${emote_ID}, ${emote_ID.length}/18)`);
+            command_data.message.reply(`Invalid emote_ID length! (${emote_ID}, ${emote_ID.length}/18)`);
             return;
         }
 
         try {
-            const emote = await command_data.msg.guild.emojis.create(link.includes("https://") === true ? link : `https://cdn.discordapp.com/emojis/${emote_ID}`, emote_name);
+            const emote = await command_data.message.guild.emojis.create(link.includes("https://") === true ? link : `https://cdn.discordapp.com/emojis/${emote_ID}`, emote_name);
             const embedEmote = {
                 color: 6732650,
                 description: `Created new emote \`${emote_name}\` - ${emote.toString()}`,
             };
-            command_data.msg.channel.send({ embeds: [embedEmote] }).catch((e: Error) => {
+            command_data.message.channel.send({ embeds: [embedEmote] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         } catch (e) {
@@ -58,7 +56,7 @@ export default {
                 description: link,
             };
 
-            command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
+            command_data.message.channel.send({ embeds: [embedError] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

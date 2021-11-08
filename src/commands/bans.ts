@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 import { Permissions } from "discord.js-light";
 
 /* Local Imports */
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Permission from "../scripts/helpers/permission";
 import { convert_time } from "../scripts/utils/util_time";
 
 export default {
@@ -15,13 +15,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [new NeededPermission("author", Permissions.FLAGS.BAN_MEMBERS), new NeededPermission("me", Permissions.FLAGS.BAN_MEMBERS)],
+    arguments: [],
+    permissions: [new Permission("author", Permissions.FLAGS.BAN_MEMBERS), new Permission("me", Permissions.FLAGS.BAN_MEMBERS)],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         /*
@@ -31,31 +30,31 @@ export default {
         const now = Date.now();
         const embedBans = new command_data.global_context.modules.Discord.MessageEmbed()
             .setColor(8388736)
-            .setAuthor(`❯ Bans (${command_data.server_bans.length})`, command_data.msg.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
+            .setAuthor(`❯ Bans (${command_data.guild_bans.length})`, command_data.message.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
 
-        if (command_data.server_bans.length < 1) {
-            command_data.msg.channel.send({ embeds: [embedBans] }).catch((e: Error) => {
+        if (command_data.guild_bans.length < 1) {
+            command_data.message.channel.send({ embeds: [embedBans] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
         }
 
-        command_data.msg.guild.bans
+        command_data.message.guild.bans
             .fetch()
-            .then((serverBansResult) => {
-                const serverBansByID = serverBansResult.reduce((acc, curr) => {
+            .then((guildBansResult) => {
+                const guildBansByID = guildBansResult.reduce((acc, curr) => {
                     acc.set(curr.user.id, curr);
                     return acc;
                 }, new Map());
-                command_data.server_bans.slice(-25).forEach((ban) => {
-                    const bannedMember = serverBansByID.get(ban.user_ID);
+                command_data.guild_bans.slice(-25).forEach((ban) => {
+                    const bannedMember = guildBansByID.get(ban.user_ID);
                     if (bannedMember !== undefined) {
                         const remainingText = ban.end === null ? "Forever" : convert_time(ban.end - now);
                         embedBans.addField(`Ban - ${bannedMember.user.tag}`, `Remaining: \`${remainingText}\``);
                     }
                 });
 
-                command_data.msg.channel.send({ embeds: [embedBans] }).catch((e: Error) => {
+                command_data.message.channel.send({ embeds: [embedBans] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             })

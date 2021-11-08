@@ -10,13 +10,12 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: true,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         const url = await command_data.global_context.modules.akaneko.nsfw.orgy().catch((e: Error) => {
@@ -33,7 +32,7 @@ export default {
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedOrgy] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedOrgy] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

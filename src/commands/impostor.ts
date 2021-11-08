@@ -5,7 +5,7 @@ import { CommandData, Command } from "../ts/base";
 import { loadFont, measureText, read } from "jimp";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import Argument from "../scripts/helpers/argument";
 import { pick_random } from "../scripts/utils/util_general";
 
 export default {
@@ -17,13 +17,12 @@ export default {
     hidden: false,
     aliases: ["imposter"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "Argument needs to be a mention.", "mention", false)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.tagged_user === undefined) {
+        if (command_data.message.guild === null || command_data.tagged_user === undefined) {
             return;
         }
         // TODO: make impostors change colors
@@ -36,9 +35,9 @@ export default {
                     .setTitle(`${command_data.tagged_user.tag} was ${impostor ? "" : "not "}the impostor!`)
                     .setColor(8388736)
                     .setImage("attachment://image.png")
-                    .setFooter(`Requested by ${command_data.msg.author.tag}`);
+                    .setFooter(`Requested by ${command_data.message.author.tag}`);
 
-                command_data.msg.channel.send({ embeds: [embedImage], files: [{ attachment: await image.getBufferAsync("image/png"), name: "image.png" }] }).catch((e: Error) => {
+                command_data.message.channel.send({ embeds: [embedImage], files: [{ attachment: await image.getBufferAsync("image/png"), name: "image.png" }] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             });

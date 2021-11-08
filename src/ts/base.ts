@@ -3,8 +3,7 @@ import { Client, GuildMember, Message, User } from "discord.js-light";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import NeededArgument from "../scripts/helpers/needed_argument";
-import NeededPermission from "../scripts/helpers/needed_permission";
+import Permission from "../scripts/helpers/permission";
 import Database from "../scripts/db/db";
 import MarriageManager from "../scripts/managers/manager_marriage";
 import VoiceManager from "../scripts/managers/manager_voice";
@@ -42,12 +41,11 @@ export enum ItemRarity {
 /* Global Context */
 export type GlobalContext = {
     config: Config;
-    bot_config: BotData | null;
-
     bot: Client;
 
     commands: Map<string, Command>;
     command_aliases: Map<string, string>;
+    user_cooldowns: Map<string, Map<string, number>>;
 
     modules: any;
     modules_clients: any;
@@ -76,28 +74,28 @@ export type GlobalContext = {
 /* Commands */
 export type CommandData = {
     global_context: GlobalContext;
-    msg: Message;
+    message: Message;
 
     args: string[];
     total_argument: string;
 
     tagged_users: User[];
     tagged_user: User;
-    tagged_user_tags: string;
-
     tagged_members: GuildMember[];
     tagged_member: GuildMember;
 
-    server_config: GuildData;
-    server_bans: ServerBanData[];
-    server_mutes: ServerMuteData[];
-    server_warns: ServerWarnData[];
+    bot_data: BotData;
 
-    author_user_config: GlobalUserData;
-    author_server_user_config: ServerUserData;
+    guild_data: GuildData;
+    guild_bans: GuildBanData[];
+    guild_mutes: GuildMuteData[];
+    guild_warns: GuildWarnData[];
 
-    tagged_user_config: GlobalUserData;
-    tagged_server_user_config: ServerUserData;
+    user_data: UserData;
+    user_guild_data: UserGuildData;
+
+    tagged_user_data: UserData;
+    tagged_user_guild_data: UserGuildData;
 };
 
 export type Command = {
@@ -112,9 +110,8 @@ export type Command = {
     aliases: string[];
     subcommandHelp: Map<string, string>;
 
-    argumentsNeeded: NeededArgument[];
-    argumentsRecommended: Argument[];
-    permissionsNeeded: NeededPermission[];
+    arguments: Argument[];
+    permissions: Permission[];
 
     nsfw: boolean;
     cooldown: number;
@@ -211,30 +208,27 @@ export type BotData = {
     b_pet_shelter_credits: number;
 };
 
-export type GuildData = {
-    server_ID: string;
+export type MinimalGuildData = {
+    id: string;
+};
 
-    prefix: string;
-    say_command: boolean;
+export type AuditGuildData = MinimalGuildData & {
+    audit_channel: string | null;
+    audit_bans: boolean;
+    audit_mutes: boolean;
+    audit_kicks: boolean;
+    audit_warns: boolean;
+    audit_nicknames: boolean;
+    audit_deleted_messages: boolean;
+    audit_edited_messages: boolean;
+
     case_ID: number;
-    mute_role_ID: string | null;
+};
+
+export type MessageCreateGuildData = MinimalGuildData & {
+    prefix: string;
     invites: boolean;
     banned_words: string[];
-
-    auto_roles: string[];
-
-    welcome_messages: boolean;
-    welcome_messages_channel: string | null;
-    welcome_messages_ping: boolean;
-    welcome_messages_format: string;
-
-    leave_messages: boolean;
-    leave_messages_channel: string | null;
-    leave_messages_format: string;
-
-    counters: CounterData[];
-
-    reaction_roles: ReactionRoleData[];
 
     module_level_enabled: boolean;
     module_level_message_exp: number;
@@ -246,19 +240,30 @@ export type GuildData = {
     module_level_levelup_messages_format: string;
     module_level_ignored_channels: string[];
     module_level_ranks: RankData[];
-
-    audit_channel: string | null;
-    audit_bans: boolean;
-    audit_mutes: boolean;
-    audit_kicks: boolean;
-    audit_warns: boolean;
-    audit_nicknames: boolean;
-    audit_deleted_messages: boolean;
-    audit_edited_messages: boolean;
 };
 
-export type GlobalUserData = {
-    user_ID: string;
+export type GuildData = AuditGuildData &
+    MessageCreateGuildData & {
+        say_command: boolean;
+        mute_role_ID: string | null;
+
+        auto_roles: string[];
+
+        welcome_messages: boolean;
+        welcome_messages_channel: string | null;
+        welcome_messages_ping: boolean;
+        welcome_messages_format: string;
+
+        leave_messages: boolean;
+        leave_messages_channel: string | null;
+        leave_messages_format: string;
+
+        counters: CounterData[];
+        reaction_roles: ReactionRoleData[];
+    };
+
+export type UserData = {
+    id: string;
 
     xp: number;
     level: number;
@@ -309,18 +314,18 @@ export type GlobalUserData = {
     b_lab_credits: number;
 };
 
-export type ServerUserData = {
+export type UserGuildData = {
     fast_find_ID: string;
+    guild_ID: string;
     user_ID: string;
-    server_ID: string;
 
     xp: number;
     level: number;
 };
 
-export type ServerBanData = {
+export type GuildBanData = {
     id: string;
-    server_ID: string;
+    guild_ID: string;
     user_ID: string;
 
     start: number;
@@ -328,9 +333,9 @@ export type ServerBanData = {
     reason: string | null;
 };
 
-export type ServerMuteData = {
+export type GuildMuteData = {
     id: string;
-    server_ID: string;
+    guild_ID: string;
     user_ID: string;
 
     start: number;
@@ -338,9 +343,9 @@ export type ServerMuteData = {
     reason: string | null;
 };
 
-export type ServerWarnData = {
+export type GuildWarnData = {
     id: string;
-    server_ID: string;
+    guild_ID: string;
     user_ID: string;
 
     start: number;
@@ -377,7 +382,7 @@ export type NotificationData = {
 
 export type CounterData = {
     id: string;
-    server_ID: string;
+    guild_ID: string;
     channel_ID: string;
 
     type: string;
@@ -386,7 +391,7 @@ export type CounterData = {
 
 export type ReactionRoleData = {
     id: string;
-    server_ID: string;
+    guild_ID: string;
     channel_ID: string;
     message_ID: string;
 
@@ -396,56 +401,9 @@ export type ReactionRoleData = {
 
 export type RankData = {
     id: string;
-    server_ID: string;
+    guild_ID: string;
     role_ID: string;
 
     level: number;
     name: string;
-};
-
-export type ClearWarnsEventData = {
-    member: GuildMember;
-    moderator: GuildMember;
-    reason: string | null;
-
-    num_of_warnings: number;
-};
-
-export type MemberMuteExtensionEventData = {
-    member: GuildMember;
-    moderator: GuildMember;
-    reason: string | null;
-
-    prev_duration: string;
-    next_duration: string;
-    mute_start: number;
-    time: number;
-    mute_end: number;
-};
-
-export type MemberMuteRemoveEventData = {
-    member: GuildMember;
-    moderator: GuildMember;
-    reason: string | null;
-
-    previous_mute: ServerMuteData;
-};
-
-export type MemberMuteEventData = {
-    member: GuildMember;
-    moderator: GuildMember;
-    reason: string | null;
-
-    duration: string;
-    mute_start: number;
-    time: number;
-    mute_end: number;
-};
-
-export type MemberWarnEventData = {
-    member: GuildMember;
-    moderator: GuildMember;
-    reason: string | null;
-
-    num_of_warnings: number;
 };

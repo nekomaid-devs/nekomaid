@@ -2,7 +2,7 @@
 import { CommandData, Command, UserItemData } from "../ts/base";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import Argument from "../scripts/helpers/argument";
 import { get_items } from "../scripts/utils/util_vars";
 
 export default {
@@ -14,16 +14,15 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "Argument needs to be a mention.", "mention", false)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.tagged_user === undefined) {
+        if (command_data.message.guild === null || command_data.tagged_user === undefined) {
             return;
         }
-        const inventory = command_data.tagged_user_config.inventory;
+        const inventory = command_data.tagged_user_data.inventory;
         let inventory_text = "";
         if (inventory.length < 1) {
             inventory_text = "Empty";
@@ -34,7 +33,7 @@ export default {
             });
 
             Array.from(inventory_map.keys()).forEach((id) => {
-                if (command_data.global_context.bot_config === null) {
+                if (command_data.bot_data === null) {
                     return;
                 }
                 const count = inventory_map.get(id);
@@ -58,10 +57,10 @@ export default {
             },
             description: inventory_text.length < 3072 ? inventory_text : `${inventory_text.substring(0, 3069)}...`,
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
+                text: `Requested by ${command_data.message.author.tag}`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedInventory] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedInventory] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

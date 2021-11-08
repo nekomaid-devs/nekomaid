@@ -14,25 +14,24 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         const url = pick_random(get_lewd_gifs());
         const embedLewd = {
-            title: `${command_data.msg.author.tag} thinks thats lewd!`,
+            title: `${command_data.message.author.tag} thinks thats lewd!`,
             color: 8388736,
             image: {
                 url: url,
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedLewd] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedLewd] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

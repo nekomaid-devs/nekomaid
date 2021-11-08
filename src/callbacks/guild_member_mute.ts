@@ -1,6 +1,6 @@
 /* Types */
-import { GlobalContext, Callback, MemberMuteEventData } from "../ts/base";
-import { GuildEditType, GuildFetchType } from "../ts/mysql";
+import { GlobalContext, Callback } from "../ts/base";
+import { MemberMuteEventData } from "../ts/callbacks";
 import { TextChannel } from "discord.js-light";
 
 /* Node Imports */
@@ -21,13 +21,13 @@ export default {
     },
 
     async process(global_context: GlobalContext, event: MemberMuteEventData) {
-        const server_config = await global_context.neko_modules_clients.db.fetch_server(event.member.guild.id, GuildFetchType.AUDIT, false, false);
-        if (server_config === null) {
+        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(event.member.guild.id, false, false);
+        if (guild_data === null) {
             return;
         }
 
-        if (server_config.audit_mutes === true && server_config.audit_channel !== null) {
-            const channel = await global_context.bot.channels.fetch(server_config.audit_channel).catch((e: Error) => {
+        if (guild_data.audit_mutes === true && guild_data.audit_channel !== null) {
+            const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });
@@ -38,7 +38,7 @@ export default {
             const url = event.member.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
             const embedMute = {
                 author: {
-                    name: `Case ${server_config.case_ID}# | Mute | ${event.member.user.tag}`,
+                    name: `Case ${guild_data.case_ID}# | Mute | ${event.member.user.tag}`,
                     icon_url: url === null ? undefined : url,
                 },
                 fields: [
@@ -63,23 +63,23 @@ export default {
                 ],
             };
 
-            server_config.case_ID += 1;
-            global_context.neko_modules_clients.db.edit_server(server_config, GuildEditType.AUDIT);
+            guild_data.case_ID += 1;
+            global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
 
             channel.send({ embeds: [embedMute] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
         }
 
-        const server_mute = {
+        const guild_mute = {
             id: randomBytes(16).toString("hex"),
-            server_ID: event.member.guild.id,
+            guild_ID: event.member.guild.id,
             user_ID: event.member.user.id,
             reason: event.reason,
             start: event.mute_start,
             end: event.time === -1 ? -1 : event.mute_end,
         };
 
-        global_context.neko_modules_clients.db.add_server_mute(server_mute);
+        global_context.neko_modules_clients.db.add_guild_mute(guild_mute);
     },
 } as Callback;

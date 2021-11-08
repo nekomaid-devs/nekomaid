@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import Argument from "../scripts/helpers/argument";
 import { convert_time } from "../scripts/utils/util_time";
 
 export default {
@@ -14,13 +14,12 @@ export default {
     hidden: false,
     aliases: ["memberinfo"],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a mention.", "mention")],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "Argument needs to be a mention.", "mention", false)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         const presence = "Online <:n_online:725010541352976414>";
@@ -39,14 +38,14 @@ export default {
             roles = "`None`";
         }
 
-        const join_score_array = Array.from(command_data.msg.guild.members.cache.values()).sort((a, b) => {
+        const join_score_array = Array.from(command_data.message.guild.members.cache.values()).sort((a, b) => {
             return (a.joinedTimestamp === null ? 0 : a.joinedTimestamp) - (b.joinedTimestamp === null ? 0 : b.joinedTimestamp);
         });
         const join_score =
             join_score_array.findIndex((member) => {
                 return member.user.id === command_data.tagged_member.user.id;
             }) + 1;
-        const join_score_max = command_data.msg.guild.members.cache.size;
+        const join_score_max = command_data.message.guild.members.cache.size;
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         const embedMember = {
@@ -92,11 +91,11 @@ export default {
                 url: url === null ? undefined : url,
             },
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}`,
+                text: `Requested by ${command_data.message.author.tag}`,
             },
         };
 
-        command_data.msg.channel.send({ embeds: [embedMember] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedMember] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

@@ -474,7 +474,7 @@ export function get_buildings_guide_embed(command_data: CommandData) {
             "`⭐ Neko's Quantum Pancakes` - Improves payouts from work for all players.\n" +
             "`⭐ Neko's Crime Monopoly` - Improves payouts from crime for all players.\n" +
             "`🧱 Neko's Pet Shelter` - Unlocks pets and improves the rate at which they're available for sale and rarity of them. All players will be able to buy pets from this.",
-        footer: { text: `You can view more detailed information about a building with - ${command_data.server_config.prefix}building "building_name"` },
+        footer: { text: `You can view more detailed information about a building with - ${command_data.guild_data.prefix}building "building_name"` },
     };
 
     return embed;
@@ -484,27 +484,27 @@ export function get_economy_guide_embed(command_data: CommandData) {
     const embed = {
         title: "Economy - General Guide",
         description:
-            `\`[❤️]\` Hey there ${command_data.msg.author}. You want to know more about the economy? Okay, let's get started!\n` +
-            `\`[🔎]\` First of all here are some basics. You can see all your profile information with \`${command_data.server_config.prefix}profile\` and your balance with \`${command_data.server_config.prefix}bal\`.\n` +
-            `If you want to see your items, you can do \`${command_data.server_config.prefix}inventory\` or use items with \`${command_data.server_config.prefix}use\`.\n` +
-            `You can also send money to other people with \`${command_data.server_config.prefix}transfer\` or give them reputation with \`${command_data.server_config.prefix}rep\`.\n` +
-            `Also you can marry them with \`${command_data.server_config.prefix}marry\` or divorce them \`${command_data.server_config.prefix}divorce\`, if they get really annoying.\n` +
-            `If you want to know who is the richest, you might want to check out \`${command_data.server_config.prefix}top\` or \`${command_data.server_config.prefix}top -server\`.\n\n` +
+            `\`[❤️]\` Hey there ${command_data.message.author}. You want to know more about the economy? Okay, let's get started!\n` +
+            `\`[🔎]\` First of all here are some basics. You can see all your profile information with \`${command_data.guild_data.prefix}profile\` and your balance with \`${command_data.guild_data.prefix}bal\`.\n` +
+            `If you want to see your items, you can do \`${command_data.guild_data.prefix}inventory\` or use items with \`${command_data.guild_data.prefix}use\`.\n` +
+            `You can also send money to other people with \`${command_data.guild_data.prefix}transfer\` or give them reputation with \`${command_data.guild_data.prefix}rep\`.\n` +
+            `Also you can marry them with \`${command_data.guild_data.prefix}marry\` or divorce them \`${command_data.guild_data.prefix}divorce\`, if they get really annoying.\n` +
+            `If you want to know who is the richest, you might want to check out \`${command_data.guild_data.prefix}top\` or \`${command_data.guild_data.prefix}top -server\`.\n\n` +
             "`[🪙]` Now then, how to make money? That's a good question! There are a few ways...\n" +
-            `You can work at your city's pancake shop with \`${command_data.server_config.prefix}work\` or help the nekos with their shady plans with \`${command_data.server_config.prefix}crime\`.\n` +
-            `If you're really down bad, you can also beg people for money with \`${command_data.server_config.prefix}beg\` or steal from somebody with \`${command_data.server_config.prefix}steal\`.\n` +
-            `Also vote with \`${command_data.server_config.prefix}vote\`, it gives you goodies aswell (>w<).\n` +
-            `Also, if you're feeling really lucky, you can gamble with \`${command_data.server_config.prefix}coinflip\`, \`${command_data.server_config.prefix}slots\` or \`${command_data.server_config.prefix}roll\`.\n\n` +
+            `You can work at your city's pancake shop with \`${command_data.guild_data.prefix}work\` or help the nekos with their shady plans with \`${command_data.guild_data.prefix}crime\`.\n` +
+            `If you're really down bad, you can also beg people for money with \`${command_data.guild_data.prefix}beg\` or steal from somebody with \`${command_data.guild_data.prefix}steal\`.\n` +
+            `Also vote with \`${command_data.guild_data.prefix}vote\`, it gives you goodies aswell (>w<).\n` +
+            `Also, if you're feeling really lucky, you can gamble with \`${command_data.guild_data.prefix}coinflip\`, \`${command_data.guild_data.prefix}slots\` or \`${command_data.guild_data.prefix}roll\`.\n\n` +
             "`[💵]` Now that you're rich and all, you might want to know how to get even richer! That's where you can get into expanding your own city.\n" +
             "All the time you are making pancakes or crimes, that's where your city comes to play. And improving your city also improves how much you make and unlocks cool perks and bonuses.\n" +
-            `You can see how big your city is with \`${command_data.server_config.prefix}buildings\` or look at individual building's progress with \`${command_data.server_config.prefix}build building_name\`.\n\n` +
-            `\`[🏗️]\` There is probably a lot of buildings and you don't know what to do first, but that's fine. You can see general description of all buildings with \`${command_data.server_config.prefix}buildingsguide\`.\n` +
-            `Once you decide what building you want to work on, progress with the construction with \`${command_data.server_config.prefix}build building_name amount_of_credits\`.\n` +
-            `If you have progressed enough (you can check with \`${command_data.server_config.prefix}build building_name\`, if you forgot), you can do \`${command_data.server_config.prefix}upgrade building_name\` to upgrade a building.\n` +
+            `You can see how big your city is with \`${command_data.guild_data.prefix}buildings\` or look at individual building's progress with \`${command_data.guild_data.prefix}build building_name\`.\n\n` +
+            `\`[🏗️]\` There is probably a lot of buildings and you don't know what to do first, but that's fine. You can see general description of all buildings with \`${command_data.guild_data.prefix}buildingsguide\`.\n` +
+            `Once you decide what building you want to work on, progress with the construction with \`${command_data.guild_data.prefix}build building_name amount_of_credits\`.\n` +
+            `If you have progressed enough (you can check with \`${command_data.guild_data.prefix}build building_name\`, if you forgot), you can do \`${command_data.guild_data.prefix}upgrade building_name\` to upgrade a building.\n` +
             "Now you're on your way to become the best pancake seller, criminal overlord or casino owner in the city!\n\n" +
             "`[👾]` If you would want to go even further, you can help everyone work on global buildings aswell. The concept is the very same, except that everyone can build and benefit from these!\n" +
             "You could also aim to be the mayor and decide on important decisions in the city. But that's for some other time...",
-        footer: { text: `If you have any questions, ask in the support server - ${command_data.server_config.prefix}support` },
+        footer: { text: `If you have any questions, ask in the support server - ${command_data.guild_data.prefix}support` },
     };
 
     return embed;

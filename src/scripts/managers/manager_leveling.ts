@@ -1,74 +1,65 @@
 /* Types */
-import { CommandData, RankData } from "../../ts/base";
+import { RankData } from "../../ts/base";
+import { GuildLevelingData, LevelingData } from "../../ts/leveling";
 import { Permissions, TextChannel } from "discord.js-light";
 
 /* Local Imports */
-import { get_server_level_XP } from "../utils/util_general";
+import { get_guild_level_XP } from "../utils/util_general";
 
 class LevelingManager {
-    async update_server_level(command_data: CommandData, xp: number, log: boolean) {
-        if (command_data.msg.guild === null) {
-            return;
-        }
-        if (command_data.server_config.module_level_ignored_channels.includes(command_data.msg.channel.id) === true) {
+    async update_guild_level(leveling_data: GuildLevelingData) {
+        if (leveling_data.guild_data.module_level_ignored_channels.includes(leveling_data.channel.id) === true) {
             return;
         }
 
-        let level_XP = get_server_level_XP(command_data.server_config, command_data.tagged_server_user_config);
-        command_data.tagged_server_user_config.xp += xp;
+        let level_XP = get_guild_level_XP(leveling_data.guild_data, leveling_data.user_data);
+        leveling_data.user_data.xp += leveling_data.xp;
 
-        if (command_data.tagged_server_user_config.xp < 0) {
-            command_data.tagged_server_user_config.xp = 0;
-            command_data.tagged_server_user_config.level = 1;
-        } else if (command_data.tagged_server_user_config.xp >= level_XP) {
-            while (command_data.tagged_server_user_config.xp >= level_XP) {
-                command_data.tagged_server_user_config.xp -= level_XP;
-                command_data.tagged_server_user_config.level += 1;
+        if (leveling_data.user_data.xp < 0) {
+            leveling_data.user_data.xp = 0;
+            leveling_data.user_data.level = 1;
+        } else if (leveling_data.user_data.xp >= level_XP) {
+            while (leveling_data.user_data.xp >= level_XP) {
+                leveling_data.user_data.xp -= level_XP;
+                leveling_data.user_data.level += 1;
 
-                level_XP = get_server_level_XP(command_data.server_config, command_data.tagged_server_user_config);
+                level_XP = get_guild_level_XP(leveling_data.guild_data, leveling_data.user_data);
             }
         }
 
-        command_data.tagged_server_user_config.xp = Number(command_data.tagged_server_user_config.xp.toFixed(2));
-        command_data.global_context.neko_modules_clients.db.edit_server_user(command_data.tagged_server_user_config);
-        if (command_data.server_config.module_level_ranks.length < 1) {
+        leveling_data.user_data.xp = Number(leveling_data.user_data.xp.toFixed(2));
+        leveling_data.global_context.neko_modules_clients.db.edit_guild_user(leveling_data.user_data);
+        if (leveling_data.guild_data.module_level_ranks.length < 1) {
             return;
         }
 
-        const rank_data = await this.process_ranks(command_data);
-        if (command_data.server_config.module_level_levelup_messages === true && log === true) {
-            let granted_roles_text = rank_data.granted_roles.reduce((acc, curr) => {
-                acc += `\`${curr.toString()}\`, `;
-                return acc;
-            }, "");
-            granted_roles_text = granted_roles_text.slice(0, granted_roles_text.length - 2);
-            if (granted_roles_text === "") {
-                granted_roles_text = "`None`";
-            }
-
-            let removed_roles_text = rank_data.removed_roles.reduce((acc, curr) => {
-                acc += `\`${curr.toString()}\`, `;
-                return acc;
-            }, "");
-            removed_roles_text = removed_roles_text.slice(0, removed_roles_text.length - 2);
-            if (removed_roles_text === "") {
-                removed_roles_text = "`None`";
-            }
+        const rank_data = await this.process_ranks(leveling_data);
+        if (leveling_data.guild_data.module_level_levelup_messages === true && leveling_data.log === true) {
+            const granted_roles_text = rank_data.granted_roles
+                .reduce((acc, curr) => {
+                    return `${acc}\`${curr.toString()}\`, `;
+                }, "")
+                .slice(0, -2);
+            const removed_roles_text = rank_data.removed_roles
+                .reduce((acc, curr) => {
+                    return `${acc}\`${curr.toString()}\`, `;
+                }, "")
+                .slice(0, -2);
 
             let rank_message = "\n";
-            if (granted_roles_text !== "`None`") {
+            if (granted_roles_text !== "") {
                 rank_message += `You've been granted role(s) \`${granted_roles_text}\`!\n`;
             }
-            if (removed_roles_text !== "`None`") {
+            if (removed_roles_text !== "") {
                 rank_message += `You've been removed role(s) \`${removed_roles_text}\`.\n`;
             }
 
-            let levelup_message = command_data.server_config.module_level_levelup_messages_format;
-            levelup_message = levelup_message.replace("<user>", command_data.server_config.module_level_levelup_messages_ping === true ? command_data.tagged_user.toString() : command_data.tagged_user.tag);
-            levelup_message = levelup_message.replace("<level>", command_data.tagged_server_user_config.level.toString());
+            let levelup_message = leveling_data.guild_data.module_level_levelup_messages_format;
+            levelup_message = levelup_message.replace("<user>", leveling_data.guild_data.module_level_levelup_messages_ping === true ? leveling_data.member.toString() : leveling_data.member.user.tag);
+            levelup_message = levelup_message.replace("<level>", leveling_data.user_data.level.toString());
 
-            const channel = await command_data.global_context.bot.channels.fetch(command_data.server_config.module_level_levelup_messages_channel).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
+            const channel = await leveling_data.global_context.bot.channels.fetch(leveling_data.guild_data.module_level_levelup_messages_channel).catch((e: Error) => {
+                leveling_data.global_context.logger.api_error(e);
                 return null;
             });
             if (channel === null || !(channel instanceof TextChannel)) {
@@ -76,26 +67,26 @@ class LevelingManager {
             }
 
             channel.send(levelup_message + rank_message).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
+                leveling_data.global_context.logger.api_error(e);
             });
         }
 
-        command_data.tagged_server_user_config.xp = Number(command_data.tagged_server_user_config.xp.toFixed(2));
-        command_data.global_context.neko_modules_clients.db.edit_server_user(command_data.tagged_server_user_config);
+        leveling_data.user_data.xp = Number(leveling_data.user_data.xp.toFixed(2));
+        leveling_data.global_context.neko_modules_clients.db.edit_guild_user(leveling_data.user_data);
     }
 
-    async process_ranks(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.msg.guild.me === null) {
+    async process_ranks(leveling_data: GuildLevelingData) {
+        if (leveling_data.guild.me === null) {
             return { granted_roles: [], removed_roles: [] };
         }
-        if (command_data.server_config.module_level_ranks.length > 0 && command_data.msg.guild.me.permissions.has(Permissions.FLAGS.MANAGE_ROLES) === false) {
-            const channel = await command_data.global_context.bot.channels.fetch(command_data.server_config.module_level_levelup_messages_channel).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
+        if (leveling_data.guild_data.module_level_ranks.length > 0 && leveling_data.guild.me.permissions.has(Permissions.FLAGS.MANAGE_ROLES) === false) {
+            const channel = await leveling_data.global_context.bot.channels.fetch(leveling_data.guild_data.module_level_levelup_messages_channel).catch((e: Error) => {
+                leveling_data.global_context.logger.api_error(e);
                 return null;
             });
             if (channel !== null && channel instanceof TextChannel) {
                 channel.send("Ranks are setup, but the bot doesn't have required permissions - `Manage Roles`\nPlease add required permissions and try again-").catch((e: Error) => {
-                    command_data.global_context.logger.api_error(e);
+                    leveling_data.global_context.logger.api_error(e);
                 });
             }
 
@@ -105,27 +96,24 @@ class LevelingManager {
         const processed_roles: string[] = [];
         const granted_roles: string[] = [];
         const removed_roles: string[] = [];
-        command_data.server_config.module_level_ranks.forEach((rank: RankData) => {
-            if (command_data.msg.guild === null) {
-                return;
-            }
-            const role = command_data.msg.guild.roles.cache.find((r) => {
+        leveling_data.guild_data.module_level_ranks.forEach((rank: RankData) => {
+            const role = leveling_data.guild.roles.cache.find((r) => {
                 return r.id === rank.role_ID;
             });
             if (role === undefined || processed_roles.includes(role.id)) {
                 return;
             }
 
-            if (rank.level <= command_data.tagged_server_user_config.level) {
-                command_data.tagged_member.roles.add(role).catch((e: Error) => {
-                    command_data.global_context.logger.api_error(e);
+            if (rank.level <= leveling_data.user_data.level) {
+                leveling_data.member.roles.add(role).catch((e: Error) => {
+                    leveling_data.global_context.logger.api_error(e);
                 });
                 granted_roles.push(role.name);
                 processed_roles.push(role.id);
             }
-            if (command_data.tagged_server_user_config.level < rank.level) {
-                command_data.tagged_member.roles.remove(role).catch((e: Error) => {
-                    command_data.global_context.logger.api_error(e);
+            if (leveling_data.user_data.level < rank.level) {
+                leveling_data.member.roles.remove(role).catch((e: Error) => {
+                    leveling_data.global_context.logger.api_error(e);
                 });
                 removed_roles.push(role.name);
                 processed_roles.push(role.id);
@@ -138,22 +126,18 @@ class LevelingManager {
         };
     }
 
-    update_global_level(command_data: CommandData) {
-        if (command_data.global_context.bot_config === null) {
-            return;
+    update_global_level(leveling_data: LevelingData) {
+        const message_XP = leveling_data.bot_data.message_XP;
+        const level_XP = leveling_data.bot_data.level_XP;
+
+        leveling_data.user_data.xp += message_XP;
+        if (leveling_data.user_data.xp > level_XP) {
+            leveling_data.user_data.xp -= level_XP;
+            leveling_data.user_data.level += 1;
         }
 
-        const message_XP = command_data.global_context.bot_config.message_XP;
-        const level_XP = command_data.global_context.bot_config.level_XP;
-
-        command_data.author_user_config.xp += message_XP;
-        if (command_data.author_user_config.xp > level_XP) {
-            command_data.author_user_config.xp -= level_XP;
-            command_data.author_user_config.level += 1;
-        }
-
-        command_data.author_user_config.xp = Number(command_data.author_user_config.xp.toFixed(2));
-        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
+        leveling_data.user_data.xp = Number(leveling_data.user_data.xp.toFixed(2));
+        leveling_data.global_context.neko_modules_clients.db.edit_user(leveling_data.user_data);
     }
 }
 

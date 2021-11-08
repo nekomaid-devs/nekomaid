@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Argument from "../scripts/helpers/argument";
 
 export default {
     name: "osuset",
@@ -13,17 +13,16 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in an osu! username.", "none")],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "You need to type in an osu! username.", "none", true)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         if (command_data.global_context.config.osu_enabled === false) {
-            command_data.msg.channel.send("The osu! module is disabled for this bot.").catch((e: Error) => {
+            command_data.message.channel.send("The osu! module is disabled for this bot.").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -33,14 +32,14 @@ export default {
             command_data.global_context.logger.api_error(e);
         });
         if (user.id === undefined) {
-            command_data.msg.reply(`Haven't found any osu! account with username \`${command_data.total_argument}\`!`);
+            command_data.message.reply(`Haven't found any osu! account with username \`${command_data.total_argument}\`!`);
             return;
         }
 
-        command_data.author_user_config.osu_username = command_data.total_argument;
-        command_data.global_context.neko_modules_clients.db.edit_global_user(command_data.author_user_config);
+        command_data.user_data.osu_username = command_data.total_argument;
+        command_data.global_context.neko_modules_clients.db.edit_user(command_data.user_data);
 
-        command_data.msg.channel.send(`Set osu! username to \`${command_data.total_argument}\`.`).catch((e: Error) => {
+        command_data.message.channel.send(`Set osu! username to \`${command_data.total_argument}\`.`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

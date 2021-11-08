@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Argument from "../scripts/helpers/argument";
 
 export default {
     name: "poll",
@@ -13,18 +13,17 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a question.", "none")],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "You need to type in a question.", "none", true)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         const a = (command_data.total_argument.match(/"/g) || []).length;
         if (a === 0 || a % 2 !== 0) {
-            command_data.msg.channel.send("Check your syntax before trying to create a poll again!").catch((e: Error) => {
+            command_data.message.channel.send("Check your syntax before trying to create a poll again!").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -41,7 +40,7 @@ export default {
         }
 
         if (parts.length > 11) {
-            command_data.msg.channel.send("Maximum number of answers is `10`!").catch((e: Error) => {
+            command_data.message.channel.send("Maximum number of answers is `10`!").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
@@ -59,7 +58,7 @@ export default {
             title: `<:n_poll:771902338646278174> Poll: ${question}`,
             description: description,
         };
-        const message = await command_data.msg.channel.send({ embeds: [embedPoll] }).catch((e: Error) => {
+        const message = await command_data.message.channel.send({ embeds: [embedPoll] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;
         });

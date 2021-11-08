@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 import { TextChannel } from "discord.js-light";
 
 /* Local Imports */
-import RecommendedArgument from "../scripts/helpers/recommended_argument";
+import Argument from "../scripts/helpers/argument";
 
 export default {
     name: "help",
@@ -14,19 +14,18 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [],
-    argumentsRecommended: [new RecommendedArgument(1, "Argument needs to be a command.", "none"), new RecommendedArgument(2, "Argument needs to be a subcommand.", "none")],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "Argument needs to be a command.", "none", false), new Argument(2, "Argument needs to be a subcommand.", "none", false)],
+    permissions: [],
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.msg.guild === null || command_data.global_context.bot.user === null || command_data.global_context.bot_config === null) {
+        if (command_data.message.guild === null || command_data.global_context.bot.user === null || command_data.bot_data === null) {
             return;
         }
         let show_hidden = false;
         if (command_data.args.includes("-h")) {
-            if (command_data.global_context.bot_config.bot_owners.includes(command_data.msg.author.id) === false) {
-                command_data.msg.reply("You aren't the bot owner!");
+            if (command_data.bot_data.bot_owners.includes(command_data.message.author.id) === false) {
+                command_data.message.reply("You aren't the bot owner!");
                 return;
             }
 
@@ -44,7 +43,7 @@ export default {
 
             const command = command_data.global_context.commands.get(target_command_name);
             if (command === undefined || (command.hidden === true && show_hidden === false)) {
-                command_data.msg.channel.send(`Command \`${target_command_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch((e: Error) => {
+                command_data.message.channel.send(`Command \`${target_command_name}\` not found - see \`${command_data.guild_data.prefix}help\` for help`).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
                 return;
@@ -53,7 +52,7 @@ export default {
             if (command_data.args.length > 1) {
                 const target_subcommand_name = command_data.args[1];
                 if (command.subcommandHelp.has(target_subcommand_name) === false) {
-                    command_data.msg.channel.send(`Sub-command \`${target_subcommand_name}\` not found - see \`${command_data.server_config.prefix}help\` for help`).catch((e: Error) => {
+                    command_data.message.channel.send(`Sub-command \`${target_subcommand_name}\` not found - see \`${command_data.guild_data.prefix}help\` for help`).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });
                     return;
@@ -63,13 +62,13 @@ export default {
                 const commands_text = `${command.name} ${target_subcommand_name}`;
                 let usage = command.subcommandHelp.get(target_subcommand_name);
                 if (usage !== undefined) {
-                    usage = usage.split("<subcommand_prefix>").join(command_data.server_config.prefix + commands_text);
+                    usage = usage.split("<subcommand_prefix>").join(command_data.guild_data.prefix + commands_text);
                 }
 
                 const embedHelp = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`Help for - \`${unhidden_text + commands_text}\``);
                 embedHelp.addField("Usage:", usage);
 
-                command_data.msg.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
+                command_data.message.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             } else {
@@ -84,18 +83,18 @@ export default {
                     .setColor(8388736)
                     .setTitle(`Help for - \`${unhidden_text + commands_text}\``)
                     .setDescription(command.description);
-                embedHelp.addField("Usage:", `\`${command_data.server_config.prefix}${commands_text} ${usage}`);
+                embedHelp.addField("Usage:", `\`${command_data.guild_data.prefix}${commands_text} ${usage}`);
 
                 if (command.subcommandHelp.size > 0) {
                     let commands_text_2 = "";
                     command.subcommandHelp.forEach((usage, subcommand) => {
-                        commands_text_2 += `Check \`${command_data.server_config.prefix}help ${command.name} ${subcommand}\` for help\n`;
+                        commands_text_2 += `Check \`${command_data.guild_data.prefix}help ${command.name} ${subcommand}\` for help\n`;
                     });
 
                     embedHelp.addField("Sub-commands:", commands_text_2);
                 }
 
-                command_data.msg.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
+                command_data.message.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });
             }
@@ -130,13 +129,13 @@ export default {
             const unhidden_text = show_hidden === true ? " (Unhidden)" : "";
             const embedHelp = new command_data.global_context.modules.Discord.MessageEmbed()
                 .setColor(8388736)
-                .setTitle(`❯     Prefix: \`${command_data.server_config.prefix}\` - Help ${unhidden_text}`)
-                .setDescription(`For help with a command, use \`${command_data.server_config.prefix}help [command] [subcommand?]\`.\nV2 now live! Have fun!~ \nAvailable commands, by category:`)
+                .setTitle(`❯     Prefix: \`${command_data.guild_data.prefix}\` - Help ${unhidden_text}`)
+                .setDescription(`For help with a command, use \`${command_data.guild_data.prefix}help [command] [subcommand?]\`.\nV2 now live! Have fun!~ \nAvailable commands, by category:`)
                 .setFooter(`NekoMaid ${command_data.global_context.config.version}`, `${url}`);
 
             const categories_keys = Array.from(categories.keys());
             categories_keys.forEach((category_key) => {
-                if (!(command_data.msg.channel instanceof TextChannel)) {
+                if (!(command_data.message.channel instanceof TextChannel)) {
                     return;
                 }
 
@@ -163,11 +162,11 @@ export default {
                 });
 
                 if (commands_string !== "") {
-                    embedHelp.addField(category.prefix + category_key, category.nsfw && command_data.msg.channel.nsfw === false ? "Hidden in SFW channel, try changing this channel to NSFW" : commands_string);
+                    embedHelp.addField(category.prefix + category_key, category.nsfw && command_data.message.channel.nsfw === false ? "Hidden in SFW channel, try changing this channel to NSFW" : commands_string);
                 }
             });
 
-            command_data.msg.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
+            command_data.message.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         }

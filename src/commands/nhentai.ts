@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import NeededArgument from "../scripts/helpers/needed_argument";
+import Argument from "../scripts/helpers/argument";
 import { nhentai_result } from "../scripts/apis/api_nhentai";
 
 export default {
@@ -14,23 +14,22 @@ export default {
     hidden: false,
     aliases: [],
     subcommandHelp: new Map(),
-    argumentsNeeded: [new NeededArgument(1, "You need to type in a sauce- (ex. `177013`)", "none")],
-    argumentsRecommended: [],
-    permissionsNeeded: [],
+    arguments: [new Argument(1, "You need to type in a sauce- (ex. `177013`)", "none", true)],
+    permissions: [],
     nsfw: true,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.msg.guild === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         const post_info = await nhentai_result(command_data.global_context, command_data.args);
         if (post_info === undefined) {
-            command_data.msg.reply("No results found...");
+            command_data.message.reply("No results found...");
             return;
         }
 
         if (post_info.tags.includes("lolicon") === true || post_info.tags.includes("shotacon") === true) {
-            command_data.msg.reply("Sorry, I cannot show this due to chance of violating the Discord TOS. (`loli`/`shota` content)");
+            command_data.message.reply("Sorry, I cannot show this due to chance of violating the Discord TOS. (`loli`/`shota` content)");
             return;
         }
 
@@ -79,10 +78,10 @@ export default {
                 },
             ],
             footer: {
-                text: `Requested by ${command_data.msg.author.tag}...`,
+                text: `Requested by ${command_data.message.author.tag}...`,
             },
         };
-        command_data.msg.channel.send({ embeds: [embedNHentai] }).catch((e: Error) => {
+        command_data.message.channel.send({ embeds: [embedNHentai] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

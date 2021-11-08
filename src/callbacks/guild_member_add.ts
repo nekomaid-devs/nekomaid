@@ -1,6 +1,5 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { GuildFetchType } from "../ts/mysql";
 import { GuildMember, TextChannel } from "discord.js-light";
 
 export default {
@@ -18,15 +17,15 @@ export default {
     },
 
     async process(global_context: GlobalContext, member: GuildMember) {
-        const server_config = await global_context.neko_modules_clients.db.fetch_server(member.guild.id, GuildFetchType.AUDIT, false, false);
-        if (server_config === null) {
+        const guild_data = await global_context.neko_modules_clients.db.fetch_guild(member.guild.id, false, false);
+        if (guild_data === null) {
             return;
         }
-        const server_mutes = await global_context.neko_modules_clients.db.fetch_server_mutes(member.guild.id);
+        const guild_mutes = await global_context.neko_modules_clients.db.fetch_guild_mutes(member.guild.id);
 
         member.guild.roles.cache
             .filter((e) => {
-                return server_config.auto_roles.includes(e.id);
+                return guild_data.auto_roles.includes(e.id);
             })
             .forEach((role) => {
                 member.roles.add(role).catch((e: Error) => {
@@ -34,8 +33,8 @@ export default {
                 });
             });
 
-        if (server_config.mute_role_ID !== null) {
-            const mute_role = await member.guild.roles.fetch(server_config.mute_role_ID).catch((e: Error) => {
+        if (guild_data.mute_role_ID !== null) {
+            const mute_role = await member.guild.roles.fetch(guild_data.mute_role_ID).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });
@@ -43,7 +42,7 @@ export default {
                 return;
             }
             if (
-                server_mutes.some((e) => {
+                guild_mutes.some((e) => {
                     return e.user_ID === member.user.id;
                 })
             ) {
@@ -53,12 +52,12 @@ export default {
             }
         }
 
-        if (server_config.welcome_messages == true && server_config.welcome_messages_channel !== null) {
-            let format = server_config.welcome_messages_format;
-            const member_display_name = server_config.welcome_messages_ping ? `${member.toString()}` : `**${member.user.tag}**`;
+        if (guild_data.welcome_messages === true && guild_data.welcome_messages_channel !== null) {
+            let format = guild_data.welcome_messages_format;
+            const member_display_name = guild_data.welcome_messages_ping ? `${member.toString()}` : `**${member.user.tag}**`;
             format = format.replace("<user>", member_display_name);
 
-            const channel = await global_context.bot.channels.fetch(server_config.welcome_messages_channel).catch((e: Error) => {
+            const channel = await global_context.bot.channels.fetch(guild_data.welcome_messages_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });

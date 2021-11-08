@@ -1,6 +1,5 @@
 /* Types */
 import { Callback, CommandData, GlobalContext } from "../ts/base";
-import { GuildFetchType } from "../ts/mysql";
 import { Message, Permissions, TextChannel } from "discord.js-light";
 
 /* Node Imports */
@@ -28,124 +27,71 @@ export default {
     },
 
     async process(global_context: GlobalContext, message: Message) {
-        if (message.channel.type === "DM" || message.guild === null || message.member === null || message.author.bot === true || global_context.bot.user === null) {
-            return;
-        }
-        // TODO: deal with this in other way, because there's shouldn't be a cache for channel overwrites
-        /*
-         *let can_send_messages = message.guild.me.permissionsIn(message.channel).has(Permissions.FLAGS.SEND_MESSAGES);
-         *if(can_send_messages === false) {
-         *  return;
-         *}
-         */
-
-        const taggedUser = message.mentions.users.first();
-        const taggedUsers = [...Array.from(message.mentions.users.values())];
-        const taggedMember = message.mentions.members === null ? undefined : message.mentions.members.first();
-        const taggedMembers = message.mentions.members === null ? undefined : [...Array.from(message.mentions.members.values())];
-
-        let tagged_user_tags = taggedUsers.reduce((acc, curr) => {
-            acc += `${curr.tag}, `;
-            return acc;
-        }, "");
-        tagged_user_tags = tagged_user_tags.slice(0, tagged_user_tags.length - 2);
-
-        // TODO: add support for tagging users with IDs
-        const server_config = await global_context.neko_modules_clients.db.fetch_server(message.guild.id, GuildFetchType.MINIMAL, false, false);
-        if (server_config === null) {
-            return;
-        }
-        const author_user_config = await global_context.neko_modules_clients.db.fetch_global_user(message.author.id, false, false);
-        if (author_user_config === null) {
-            return;
-        }
-        const author_server_user_config = await global_context.neko_modules_clients.db.fetch_server_user(message.guild.id, message.member.user.id);
-        if (author_server_user_config === null) {
-            return;
-        }
-        const tagged_user_config = taggedUser === undefined ? author_user_config : await global_context.neko_modules_clients.db.fetch_global_user(taggedUser.id, false, false);
-        if (tagged_user_config === null) {
-            return;
-        }
-        const tagged_server_user_config = taggedUser === undefined ? author_server_user_config : await global_context.neko_modules_clients.db.fetch_server_user(message.guild.id, taggedUser.id);
-        if (tagged_server_user_config === null) {
+        if (!(message.channel instanceof TextChannel) || message.guild === null || message.member === null || message.author.bot === true || global_context.bot.user === null) {
             return;
         }
 
-        const command_data: CommandData = {
-            global_context: global_context,
-            msg: message,
-
-            args: [],
-            total_argument: "",
-
-            tagged_users: taggedUsers !== undefined ? taggedUsers : [message.author],
-            tagged_user: taggedUser !== undefined ? taggedUser : message.author,
-            tagged_user_tags: tagged_user_tags,
-
-            tagged_members: taggedMembers !== undefined ? taggedMembers : [message.member],
-            tagged_member: taggedMember !== undefined ? taggedMember : message.member,
-
-            server_config: server_config,
-            server_bans: [],
-            server_mutes: [],
-            server_warns: [],
-
-            author_user_config: author_user_config,
-            author_server_user_config: author_server_user_config,
-
-            tagged_user_config: tagged_user_config,
-            tagged_server_user_config: tagged_server_user_config,
-        };
-        command_data.tagged_server_user_config = command_data.author_server_user_config;
-
-        // Check if user manages the guild
-        let manages_guild = false;
-        if (command_data.server_config.banned_words.length > 0 || command_data.server_config.invites === false) {
-            manages_guild = message.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD);
+        /* Fetch guild data */
+        const guild_data = await global_context.neko_modules_clients.db.fetch_message_create_guild(message.guild.id, false, false);
+        if (guild_data === null) {
+            return;
         }
 
-        // Process moderation settings
-        if (manages_guild === false) {
-            for (let i = 0; i < command_data.server_config.banned_words.length; i++) {
-                const banned_word = command_data.server_config.banned_words[i];
-                if (message.content.toLowerCase().includes(banned_word.toLowerCase()) === true) {
-                    message.reply("That word isn't allowed on here-");
+        /* Process moderation settings */
+        if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
+            guild_data.banned_words.forEach((bannedWord) => {
+                if (message.content.toLowerCase().includes(bannedWord.toLowerCase()) === true) {
+                    message.reply("That word isn't allowed on here.");
                     message.delete().catch((e: Error) => {
                         global_context.logger.api_error(e);
                     });
                     return;
                 }
-            }
+            });
 
-            if (command_data.server_config.invites === false) {
-                if (message.content.toLowerCase().includes("discord.gg") === true || message.content.toLowerCase().includes("discordapp.com/invite") === true || message.content.toLowerCase().includes("discord.com/invite") === true) {
-                    message.reply("Sending invites isn't allowed on here-");
+            ["discord.gg", "discordapp.com/invite", "discord.com/invite"].forEach((inviteWord) => {
+                if (message.content.toLowerCase().includes(inviteWord) === true) {
+                    message.reply("Sending invites isn't allowed on here.");
                     message.delete().catch((e: Error) => {
                         global_context.logger.api_error(e);
                     });
                     return;
                 }
-            }
+            });
         }
 
-        // Check marriage proposals
+        /* Process marriage proposals */
         global_context.neko_modules_clients.marriageManager.check_marriage_proposals(global_context, message);
 
-        // Process server levels
-        if (command_data.server_config.module_level_enabled === true) {
-            global_context.neko_modules_clients.levelingManager.update_server_level(command_data, command_data.server_config.module_level_message_exp, true);
+        /* Process leveling */
+        if (guild_data.module_level_enabled === true) {
+            const user_guild_data = await global_context.neko_modules_clients.db.fetch_guild_user(message.guild.id, message.member.user.id);
+            if (user_guild_data === null) {
+                return;
+            }
+            global_context.neko_modules_clients.levelingManager.update_guild_level({
+                global_context: global_context,
+
+                guild: message.guild,
+                guild_data: guild_data,
+                channel: message.channel,
+                member: message.member,
+                user_data: user_guild_data,
+
+                log: true,
+                xp: guild_data.module_level_message_exp,
+            });
         }
 
-        // Check for @Nekomaid
+        /* Check for @Nekomaid */
         if (message.content === `<@!${global_context.bot.user.id}>`) {
-            message.channel.send(`Prefix on this server is \`${command_data.server_config.prefix}\`.`).catch((e: Error) => {
+            message.channel.send(`Prefix on this server is \`${guild_data.prefix}\`.`).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
             return;
         }
 
-        // Check for auto-response
+        /* Check for auto-response */
         if (message.content.toLowerCase() === `thanks <@!${global_context.bot.user.id}>` || message.content.toLowerCase() === "thanks nekomaid" || message.content.toLowerCase() === "thanks neko") {
             const responses = ["You're welcome~ I guess- >~<", "W-What did I do?~", "No problem~ >//<", "You're welcome~ TwT"];
             const response = pick_random(responses);
@@ -156,12 +102,136 @@ export default {
             return;
         }
 
-        // Check if prefix matches
-        if (!message.content.toLowerCase().startsWith(command_data.server_config.prefix.toLowerCase())) {
+        /* Check if prefix matches */
+        if (!message.content.toLowerCase().startsWith(guild_data.prefix.toLowerCase())) {
             return;
         }
 
-        // Prepare sentry transaction
+        /* Get tagged users/members */
+        let tagged_user = message.mentions.users.first();
+        if (tagged_user === undefined) {
+            tagged_user = message.author;
+        }
+        const tagged_users = [...Array.from(message.mentions.users.values())];
+        let tagged_member = message.mentions.members === null ? undefined : message.mentions.members.first();
+        if (tagged_member === undefined) {
+            tagged_member = message.member;
+        }
+        const tagged_members = message.mentions.members === null ? [tagged_member] : [...Array.from(message.mentions.members.values())];
+
+        /* Get command either by it's name or alias */
+        const args = message.content.slice(guild_data.prefix.length).split(" ");
+
+        let command_name = args.shift();
+        if (command_name === undefined) {
+            return;
+        }
+        command_name = command_name.toLowerCase();
+        const aliased_name = global_context.command_aliases.get(command_name);
+        if (aliased_name !== undefined) {
+            command_name = aliased_name;
+        }
+
+        const command = global_context.commands.get(command_name);
+        if (command === undefined) {
+            return;
+        }
+
+        /* Check for command cooldowns */
+        let user_cooldown = global_context.user_cooldowns.get(message.author.id);
+        if (user_cooldown === undefined) {
+            user_cooldown = new Map();
+        }
+        let command_cooldown = user_cooldown.get(command.name);
+        if (command_cooldown === undefined) {
+            command_cooldown = 0;
+            user_cooldown.set(command.name, 0);
+        }
+        if (command_cooldown + command.cooldown > Date.now()) {
+            const time_left = command_cooldown + command.cooldown - Date.now();
+            message.channel.send(`You have to wait another \`${convert_time(time_left)}\`...`);
+            return;
+        }
+        user_cooldown.set(command.name, Date.now());
+        global_context.user_cooldowns.set(message.author.id, user_cooldown);
+
+        /* Fetch bot data */
+        const bot_data = await global_context.neko_modules_clients.db.fetch_config("default_config");
+        if (bot_data === null) {
+            return;
+        }
+
+        /* Check permissions, arguments and NSFW */
+        global_context.logger.log(`[${message.guild.name}] Called command: ${command.name}`);
+        for (let i = 0; i < command.permissions.length; i++) {
+            const perm = command.permissions[i];
+            if (perm.passes(global_context, message, bot_data) === false) {
+                return;
+            }
+        }
+        for (let i = 0; i < command.arguments.length; i++) {
+            const arg = command.arguments[i];
+            if (arg.passes(global_context, guild_data, message, args, command) === false) {
+                return;
+            }
+        }
+        if (command.nsfw === true && message.channel instanceof TextChannel && message.channel.nsfw === false) {
+            message.reply("Cannot use this command in SFW channel.");
+            return;
+        }
+
+        /* Fetch full guild data */
+        const guild_data_full = await global_context.neko_modules_clients.db.fetch_guild(message.guild.id, true, true);
+        if (guild_data_full === null) {
+            return;
+        }
+
+        /* Fetch all user data */
+        const user_data = await global_context.neko_modules_clients.db.fetch_user(message.author.id, false, false);
+        if (user_data === null) {
+            return;
+        }
+        const user_guild_data = await global_context.neko_modules_clients.db.fetch_guild_user(message.guild.id, message.member.user.id);
+        if (user_guild_data === null) {
+            return;
+        }
+        const tagged_user_data = tagged_user === undefined ? user_data : await global_context.neko_modules_clients.db.fetch_user(tagged_user.id, false, false);
+        if (tagged_user_data === null) {
+            return;
+        }
+        const tagged_user_guild_data = tagged_user === undefined ? user_guild_data : await global_context.neko_modules_clients.db.fetch_guild_user(message.guild.id, tagged_user.id);
+        if (tagged_user_guild_data === null) {
+            return;
+        }
+
+        /* Construct command data */
+        const command_data: CommandData = {
+            global_context: global_context,
+            message: message,
+
+            args: args,
+            total_argument: args.join(" "),
+
+            tagged_users: tagged_users,
+            tagged_user: tagged_user,
+            tagged_members: tagged_members,
+            tagged_member: tagged_member,
+
+            bot_data: bot_data,
+
+            guild_data: guild_data_full,
+            guild_bans: await global_context.neko_modules_clients.db.fetch_guild_bans(message.guild.id),
+            guild_mutes: await global_context.neko_modules_clients.db.fetch_guild_mutes(message.guild.id),
+            guild_warns: await global_context.neko_modules_clients.db.fetch_guild_warnings(message.guild.id),
+
+            user_data: user_data,
+            user_guild_data: user_guild_data,
+
+            tagged_user_data: tagged_user_data,
+            tagged_user_guild_data: tagged_user_guild_data,
+        };
+
+        /* Process sentry transaction */
         let transaction: Transaction | null = null;
         let transaction_prepare = null;
         let transaction_process = null;
@@ -176,100 +246,30 @@ export default {
             transaction_prepare = transaction.startChild({ op: "prepare_command" });
         }
 
-        const server_config_full = await global_context.neko_modules_clients.db.fetch_server(message.guild.id, GuildFetchType.ALL, true, true);
-        if (server_config_full === null) {
-            return;
-        }
-
-        /*
-         * Populate server data
-         * TODO: make this into an array of promises and Promise.all()
-         */
-        command_data.args = message.content.slice(command_data.server_config.prefix.length).split(" ");
-        command_data.server_config = server_config_full;
-        command_data.server_bans = await global_context.neko_modules_clients.db.fetch_server_bans(message.guild.id);
-        command_data.server_mutes = await global_context.neko_modules_clients.db.fetch_server_mutes(message.guild.id);
-        command_data.server_warns = await global_context.neko_modules_clients.db.fetch_server_warnings(message.guild.id);
-
-        // Get command either by it's name or alias
-        let command_name = command_data.args.shift();
-        if (command_name === undefined) {
-            return;
-        }
-
-        command_name.toLowerCase();
-        command_data.total_argument = command_data.args.join(" ");
-        const aliased_name = global_context.command_aliases.get(command_name);
-        if (aliased_name !== undefined) {
-            command_name = aliased_name;
-        }
-        const command = global_context.commands.get(command_name);
-        if (command === undefined) {
-            return;
-        }
-
-        // Check for command cooldowns
-        if (global_context.data.user_cooldowns.has(message.author.id) === false) {
-            global_context.data.user_cooldowns.set(message.author.id, new Map());
-        }
-        const command_cooldowns = global_context.data.user_cooldowns.get(message.author.id);
-        if (command_cooldowns.has(command.name) === false) {
-            command_cooldowns.set(command.name, 0);
-        }
-        const command_cooldown = command_cooldowns.get(command.name);
-        if (command_cooldown + command.cooldown > Date.now()) {
-            const time_left = command_cooldown + command.cooldown - Date.now();
-            message.channel.send(`You have to wait another \`${convert_time(time_left)}\`...`);
-            return;
-        }
-        command_cooldowns.set(command.name, Date.now());
-        global_context.data.user_cooldowns.set(message.author.id, command_cooldowns);
-
-        // Increase processed commands
+        /* Increase processed commands */
         if (transaction !== null) {
             transaction.setName(`[Command] ${command.name}`);
         }
         global_context.data.total_commands += 1;
         global_context.data.processed_commands += 1;
 
-        // Process global levels
-        global_context.neko_modules_clients.levelingManager.update_global_level(command_data);
+        /* Process global leveling */
+        global_context.neko_modules_clients.levelingManager.update_global_level({
+            global_context: global_context,
+            bot_data: bot_data,
+            user: message.author,
+            user_data: user_data,
+            xp: bot_data.message_XP,
+        });
 
-        // Permission, argument and NSFW checks
-        global_context.logger.log(`[${message.guild.name}] Called command: ${command.name}`);
-        for (let i = 0; i < command.permissionsNeeded.length; i++) {
-            const perm = command.permissionsNeeded[i];
-            if (perm.passes(command_data) === false) {
-                return;
-            }
-        }
-        for (let i = 0; i < command.argumentsNeeded.length; i++) {
-            const arg = command.argumentsNeeded[i];
-            if (arg.passes(command_data, command) === false) {
-                return;
-            }
-        }
-        for (let i = 0; i < command.argumentsRecommended.length; i++) {
-            const arg = command.argumentsRecommended[i];
-            if (arg.passes(command_data, command) === false) {
-                return;
-            }
-        }
-        if (command.nsfw === true && message.channel instanceof TextChannel && message.channel.nsfw === false) {
-            message.reply("Cannot use this command in SFW channel.");
-            return;
-        }
-
-        // Populate tagged_user_tags
-
-        // Execute command
+        /* Execute command */
         if (transaction !== null && transaction_prepare !== null) {
             transaction_prepare.finish();
             transaction_process = transaction.startChild({ op: "process_command" });
         }
         await command.execute(command_data);
 
-        // Finish sentry transaction
+        /* Finish sentry transaction */
         if (transaction !== null && transaction_process !== null) {
             transaction_process.finish();
             transaction.finish();
