@@ -2,21 +2,13 @@
 import { GlobalContext, Callback } from "../ts/base";
 import { Guild } from "discord.js-light";
 
-/* Node Imports */
-import * as Sentry from "@sentry/node";
-
 export default {
     hook(global_context: GlobalContext) {
         global_context.bot.on("guildCreate", async (guild) => {
             try {
                 await this.process(global_context, guild);
             } catch (e) {
-                if (global_context.config.sentry_enabled === true) {
-                    Sentry.captureException(e);
-                    global_context.logger.error("An exception occured and has been reported to Sentry");
-                } else {
-                    global_context.logger.error(e);
-                }
+                global_context.logger.error(e as Error);
             }
 
             global_context.data.total_events += 1;

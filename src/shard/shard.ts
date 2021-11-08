@@ -1,5 +1,5 @@
 /* Types */
-import { Callback, Command, GlobalContext } from "../ts/base";
+import { Callback, Command, Config, GlobalContext } from "../ts/base";
 import Discord from "discord.js-light";
 
 /* Node Imports */
@@ -11,6 +11,7 @@ import * as sql from "mysql2";
 import import_into_context from "./shard_importer";
 import * as bot_commands from "../commands";
 import * as bot_callbacks from "../callbacks";
+
 import VoiceManager from "../scripts/managers/manager_voice";
 import ModerationManager from "../scripts/managers/manager_moderation";
 import LevelingManager from "../scripts/managers/manager_leveling";
@@ -23,13 +24,13 @@ import SupportManager from "../scripts/managers/manager_support";
 import UpvoteManager from "../scripts/managers/manager_upvote";
 import MarriageManager from "../scripts/managers/manager_marriage";
 import Database from "../scripts/db/db";
+import Logger from "../scripts/helpers/logger";
 import { get_top } from "../scripts/utils/util_sort";
 import { refresh_bot_list, refresh_status, refresh_website } from "../scripts/utils/util_web";
-import { get_formatted_time } from "../scripts/utils/util_general";
 
 async function run() {
     // Load config
-    const config = JSON.parse(readFileSync(`${process.cwd()}/configs/default.json`).toString());
+    const config: Config = JSON.parse(readFileSync(`${process.cwd()}/configs/default.json`).toString());
 
     // Setup SQL connection
     const sql_connection = sql
@@ -42,7 +43,7 @@ async function run() {
         })
         .promise();
     await sql_connection.connect().catch((e: Error) => {
-        global_context.logger.error(e);
+        global_context.logger.error(e as Error);
     });
 
     // Setup Discord client
@@ -112,7 +113,7 @@ async function run() {
             moderationManager: new ModerationManager(),
         },
 
-        logger: {},
+        logger: new Logger(bot.shard, config.sentry_enabled),
         data: {},
     };
 
@@ -130,64 +131,6 @@ async function run() {
     global_context.neko_data.process_upvote = (id: string, site_ID: string, is_double: boolean) => {
         global_context.neko_modules_clients.upvoteManager.process_upvote(global_context, id, site_ID, is_double);
     };
-
-    // Create log colors
-    const log_colors = ["\x1b[32m", "\x1b[33m", "\x1b[34m", "\x1b[35m", "\x1b[36m", "\x1b[37m", "\x1b[90m", "\x1b[93m", "\x1b[95m", "\x1b[96m", "\x1b[97m"];
-    const log_color_shard = log_colors[Math.floor(Math.random() * log_colors.length)];
-    const log_color_message = "\x1b[92m";
-    const log_color_api_error = "\x1b[94m";
-    const log_color_error = "\x1b[31m";
-    const log_color_time = "\x1b[91m";
-
-    // Console setup
-    global_context.logger.log = () => {
-        /* */
-    };
-    global_context.logger.api_error = () => {
-        /* */
-    };
-    global_context.logger.neko_api_error = () => {
-        /* */
-    };
-    global_context.logger.error = () => {
-        /* */
-    };
-
-    if (global_context.config.logger_log_log === true) {
-        global_context.logger.log = (log_message: string) => {
-            if (global_context.bot.shard === null) {
-                return;
-            }
-            process.stdout.write(`${log_color_time}[${get_formatted_time()}] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_message}${log_message}\x1b[0m\n`);
-        };
-    }
-    if (global_context.config.logger_log_api_error === true) {
-        global_context.logger.api_error = (error: Error) => {
-            if (global_context.bot.shard === null) {
-                return;
-            }
-            const log_message = error.stack === undefined ? error : error.stack;
-            process.stdout.write(`${log_color_time}[${get_formatted_time()}] [API Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_api_error}${log_message}\x1b[0m\n`);
-        };
-    }
-    if (global_context.config.logger_log_neko_api_error === true) {
-        global_context.logger.neko_api_error = (error: Error) => {
-            if (global_context.bot.shard === null) {
-                return;
-            }
-            const log_message = error.stack === undefined ? error : error.stack;
-            process.stdout.write(`${log_color_time}[${get_formatted_time()}] [Nekomaid API Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_api_error}${log_message}\x1b[0m\n`);
-        };
-    }
-    if (global_context.config.logger_log_error === true) {
-        global_context.logger.error = (error: Error) => {
-            if (global_context.bot.shard === null) {
-                return;
-            }
-            const log_message = error.stack === undefined ? error : error.stack;
-            process.stdout.write(`${log_color_time}[${get_formatted_time()}] [Error] ${log_color_shard}[shard_${global_context.bot.shard.ids[0]}] ${log_color_error}${log_message}\x1b[0m\n`);
-        };
-    }
 
     global_context.logger.log("Started logging into the shard...");
     const t_loading_start = global_context.modules.performance.now();

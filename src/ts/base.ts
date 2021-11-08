@@ -17,6 +17,7 @@ import EventManager from "../scripts/managers/manager_event";
 import BuildingManager from "../scripts/managers/manager_building";
 import LevelingManager from "../scripts/managers/manager_leveling";
 import ModerationManager from "../scripts/managers/manager_moderation";
+import Logger from "../scripts/helpers/logger";
 
 /* Enums */
 export enum ShrineBonus {
@@ -68,7 +69,7 @@ export type GlobalContext = {
         moderationManager: ModerationManager;
     };
 
-    logger: any;
+    logger: Logger;
     data: any;
 };
 

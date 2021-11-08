@@ -25,10 +25,10 @@ export default {
         let custom_embed;
         try {
             custom_embed = JSON.parse(command_data.total_argument);
-        } catch (err) {
+        } catch (e: any) {
             const embedError = {
                 title: "<:n_error:771852301413384192> Error when parsing the JSON!",
-                description: `\`\`\`${err}\`\`\``,
+                description: `\`\`\`${e}\`\`\``,
             };
 
             command_data.msg.channel.send({ embeds: [embedError] }).catch((e: Error) => {
@@ -37,9 +37,9 @@ export default {
             return;
         }
 
-        command_data.msg.channel.send({ embeds: [custom_embed] }).catch((err) => {
-            command_data.msg.channel.send(`Error when creating the embed!\n\`${err}\``).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
+        command_data.msg.channel.send({ embeds: [custom_embed] }).catch((e) => {
+            command_data.msg.channel.send(`Error when creating the embed!\n\`${e}\``).catch((err) => {
+                command_data.global_context.logger.api_error(err);
             });
         });
     },

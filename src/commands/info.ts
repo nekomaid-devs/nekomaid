@@ -42,7 +42,7 @@ export default {
                 return process.memoryUsage();
             })
             .catch((e: Error) => {
-                command_data.global_context.logger.error(e);
+                command_data.global_context.logger.error(e as Error);
             });
         let manager_bytes0 = 0;
         let manager_bytes1 = 0;
@@ -72,7 +72,7 @@ export default {
                 }, 0);
             })
             .catch((e: Error) => {
-                command_data.global_context.logger.error(e);
+                command_data.global_context.logger.error(e as Error);
             });
 
         let shard_members = 0;
@@ -91,7 +91,7 @@ export default {
                 }, 0);
             })
             .catch((e: Error) => {
-                command_data.global_context.logger.error(e);
+                command_data.global_context.logger.error(e as Error);
             });
 
         const shard_commands = command_data.global_context.neko_data.total_commands;
@@ -107,7 +107,7 @@ export default {
          *      });
          *  })
          *  .catch((e: Error) => {
-         *      command_data.global_context.logger.error(e);
+         *      command_data.global_context.logger.error(e as Error);
          *  });
          */
 
@@ -124,7 +124,7 @@ export default {
          *      });
          *  })
          *  .catch((e: Error) => {
-         *      command_data.global_context.logger.error(e);
+         *      command_data.global_context.logger.error(e as Error);
          *  });
          */
 

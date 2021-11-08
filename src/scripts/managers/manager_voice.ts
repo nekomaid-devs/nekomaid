@@ -46,11 +46,11 @@ class VoiceManager {
             }
             this.remove_connection(global_context, message.guild.id, null);
         });
-        voice_connection.connection.on("error", (err: Error) => {
+        voice_connection.connection.on("error", (e) => {
             if (message.guild === null) {
                 return;
             }
-            this.remove_connection(global_context, message.guild.id, err.toString());
+            this.remove_connection(global_context, message.guild.id, e.toString());
         });
         voice_connection.player.on("stateChange", (oldState, newState) => {
             if (message.guild === null) {
@@ -74,11 +74,11 @@ class VoiceManager {
                 }
             }
         });
-        voice_connection.player.on("error", (err: Error) => {
+        voice_connection.player.on("error", (e) => {
             if (message.guild === null) {
                 return;
             }
-            this.remove_connection(global_context, message.guild.id, err.toString());
+            this.remove_connection(global_context, message.guild.id, e.toString());
         });
 
         const embedJoin = {
@@ -244,7 +244,7 @@ class VoiceManager {
     play_url_on_connection(global_context: GlobalContext, voice_connection: VoiceConnectionData, user_ID: string, url: string, log: boolean) {
         global_context.modules.ytinfo.retrieve(ytdl.getVideoID(url), (e: Error | null, raw_item: string) => {
             if (e) {
-                global_context.logger.error(e);
+                global_context.logger.error(e as Error);
                 return;
             }
             raw_item = JSON.stringify(raw_item);

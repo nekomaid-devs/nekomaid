@@ -3,21 +3,13 @@ import { GlobalContext, Callback } from "../ts/base";
 import { GuildEditType, GuildFetchType } from "../ts/mysql";
 import { GuildBan, TextChannel, User } from "discord.js-light";
 
-/* Node Imports */
-import * as Sentry from "@sentry/node";
-
 export default {
     hook(global_context: GlobalContext) {
         global_context.bot.on("guildBanRemove", async (ban) => {
             try {
                 await this.process(global_context, ban);
             } catch (e) {
-                if (global_context.config.sentry_enabled === true) {
-                    Sentry.captureException(e);
-                    global_context.logger.error("An exception occured and has been reported to Sentry");
-                } else {
-                    global_context.logger.error(e);
-                }
+                global_context.logger.error(e as Error);
             }
 
             global_context.data.total_events += 1;

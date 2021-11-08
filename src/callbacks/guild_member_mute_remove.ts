@@ -3,21 +3,13 @@ import { GlobalContext, Callback, MemberMuteRemoveEventData } from "../ts/base";
 import { GuildEditType, GuildFetchType } from "../ts/mysql";
 import { TextChannel } from "discord.js-light";
 
-/* Node Imports */
-import * as Sentry from "@sentry/node";
-
 export default {
     hook(global_context: GlobalContext) {
         global_context.bot.on("guildMemberMuteRemove", async (event) => {
             try {
                 await this.process(global_context, event);
             } catch (e) {
-                if (global_context.config.sentry_enabled === true) {
-                    Sentry.captureException(e);
-                    global_context.logger.error("An exception occured and has been reported to Sentry");
-                } else {
-                    global_context.logger.error(e);
-                }
+                global_context.logger.error(e as Error);
             }
 
             global_context.data.total_events += 1;

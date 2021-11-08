@@ -92,7 +92,7 @@ class CounterManager {
                             }, 0);
                         })
                         .catch((e: Error) => {
-                            global_context.logger.error(e);
+                            global_context.logger.error(e as Error);
                         });
 
                     channel.setName(`Current Servers: ${guild_count}`).catch((e: Error) => {
@@ -115,7 +115,7 @@ class CounterManager {
                             }, 0);
                         })
                         .catch((e: Error) => {
-                            global_context.logger.error(e);
+                            global_context.logger.error(e as Error);
                         });
 
                     channel.setName(`Current Users: ${member_count}`).catch((e: Error) => {

@@ -56,9 +56,9 @@ function create_mute_role_and_mute(command_data: CommandData) {
                     command_data.server_config.mute_role_ID = mute_role.id;
                     command_data.global_context.neko_modules_clients.db.edit_server(command_data.server_config, GuildEditType.ALL);
                 })
-                .catch((err) => {
-                    command_data.global_context.logger.error(err);
+                .catch((e) => {
                     command_data.msg.reply(`Couldn't mute \`${command_data.tagged_member.user.tag}\`! (Try moving Nekomaid's permissions above the user you want to mute)`);
+                    command_data.global_context.logger.error(e);
                 });
         });
 }

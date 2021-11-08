@@ -69,11 +69,11 @@ export default {
             }
 
             if (validateID(url) === true) {
-                const result = await ytpl(url).catch((err: Error) => {
-                    command_data.global_context.logger.error(err);
-                    command_data.msg.channel.send("Failed to get video results...").catch((e: Error) => {
-                        command_data.global_context.logger.api_error(e);
+                const result = await ytpl(url).catch((e) => {
+                    command_data.msg.channel.send("Failed to get video results...").catch((err) => {
+                        command_data.global_context.logger.api_error(err);
                     });
+                    command_data.global_context.logger.error(e);
                 });
                 if (result === undefined || result.items === undefined) {
                     return;
@@ -100,7 +100,7 @@ export default {
                 const max = 5;
                 const infosByID = new Map();
                 const result = await ytsr(command_data.total_argument, { limit: 5 }).catch((e: Error) => {
-                    command_data.global_context.logger.error(e);
+                    command_data.global_context.logger.error(e as Error);
                     command_data.msg.channel.send("Failed to get video results...").catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                     });

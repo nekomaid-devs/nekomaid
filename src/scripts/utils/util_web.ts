@@ -21,7 +21,7 @@ export async function refresh_status(global_context: GlobalContext) {
             }, 0);
         })
         .catch((e: Error) => {
-            global_context.logger.error(e);
+            global_context.logger.error(e as Error);
         });
 
     const statuses = ["V2 live now!"];
@@ -50,7 +50,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      *
      *await global_context.bot.shard
@@ -63,7 +63,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
@@ -75,7 +75,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      * // TODO: maybe change this, since we don't cache channels?
      *await global_context.bot.shard
@@ -88,7 +88,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      *
      *await global_context.bot.shard
@@ -101,7 +101,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
@@ -113,7 +113,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
@@ -125,7 +125,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
@@ -146,7 +146,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
@@ -158,7 +158,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      *
      *await global_context.bot.shard
@@ -171,7 +171,7 @@ export function refresh_website(global_context: GlobalContext) {
      *      });
      *  })
      *  .catch((e: Error) => {
-     *      global_context.logger.error(e);
+     *      global_context.logger.error(e as Error);
      *  });
      */
 
@@ -228,7 +228,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             }, 0);
         })
         .catch((e: Error) => {
-            global_context.logger.error(e);
+            global_context.logger.error(e as Error);
         });
     await global_context.bot.shard
         .broadcastEval((client) => {
@@ -242,7 +242,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             }, 0);
         })
         .catch((e: Error) => {
-            global_context.logger.error(e);
+            global_context.logger.error(e as Error);
         });
 
     const data_1 = {

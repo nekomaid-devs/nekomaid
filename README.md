@@ -14,11 +14,6 @@
 	"shard_count": 1,
 	"dev_mode": true,
 
-	"logger_log_log": true,
-	"logger_log_api_error": true,
-	"logger_log_neko_api_error": true,
-	"logger_log_error": true,
-
 	"sql_host": "xxx",
 	"sql_user": "xxx",
 	"sql_password": "xxx",
@@ -39,6 +34,9 @@
 	"nekomaid_API_update_stats": false,
 	"nekomaid_API_key": "xxx",
 	"nekomaid_API_endpoint": "xxx",
+
+	"event_enabled": false,
+	"events_channel_ID": "xxx",
 
 	"invite_code": "xxx",
 	"owner_id": "xxx",
