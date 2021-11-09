@@ -1,5 +1,5 @@
 /* Types */
-import { Callback, CommandData, GlobalContext } from "../ts/base";
+import { BotData, Callback, CommandData, GlobalContext, GuildBanData, GuildData, GuildMuteData, GuildWarnData, UserData, UserGuildData } from "../ts/base";
 import { Message, Permissions, TextChannel } from "discord.js-light";
 
 /* Node Imports */
@@ -155,8 +155,19 @@ export default {
         user_cooldown.set(command.name, Date.now());
         global_context.user_cooldowns.set(message.author.id, user_cooldown);
 
-        /* Fetch bot data */
-        const bot_data = await global_context.neko_modules_clients.db.fetch_config("default_config");
+        /* Fetch full bot, guild and user data */
+        let bot_data: Promise<BotData | null> | BotData | null = global_context.neko_modules_clients.db.fetch_config("default_config");
+        let guild_data_full: Promise<GuildData | null> | GuildData | null = global_context.neko_modules_clients.db.fetch_guild(message.guild.id, true, true);
+        let guild_bans: Promise<GuildBanData[]> | GuildBanData[] = global_context.neko_modules_clients.db.fetch_guild_bans(message.guild.id);
+        let guild_mutes: Promise<GuildMuteData[]> | GuildMuteData[] = global_context.neko_modules_clients.db.fetch_guild_mutes(message.guild.id);
+        let guild_warns: Promise<GuildWarnData[]> | GuildWarnData[] = global_context.neko_modules_clients.db.fetch_guild_warnings(message.guild.id);
+        let user_data: Promise<UserData | null> | UserData | null = global_context.neko_modules_clients.db.fetch_user(message.author.id, false, false);
+        let user_guild_data: Promise<UserGuildData | null> | UserGuildData | null = global_context.neko_modules_clients.db.fetch_guild_user(message.guild.id, message.member.user.id);
+        let tagged_user_data: Promise<UserData | null> | UserData | null = tagged_user === undefined ? null : global_context.neko_modules_clients.db.fetch_user(tagged_user.id, false, false);
+        let tagged_user_guild_data: Promise<UserGuildData | null> | UserGuildData | null = tagged_user === undefined ? null : global_context.neko_modules_clients.db.fetch_guild_user(message.guild.id, tagged_user.id);
+
+        /* Await bot data */
+        bot_data = await bot_data;
         if (bot_data === null) {
             return;
         }
@@ -180,28 +191,29 @@ export default {
             return;
         }
 
-        /* Fetch full guild data */
-        const guild_data_full = await global_context.neko_modules_clients.db.fetch_guild(message.guild.id, true, true);
+        /* Await all remaining promises */
+        guild_data_full = await guild_data_full;
         if (guild_data_full === null) {
             return;
         }
-
-        /* Fetch all user data */
-        const user_data = await global_context.neko_modules_clients.db.fetch_user(message.author.id, false, false);
+        guild_bans = await guild_bans;
+        guild_mutes = await guild_mutes;
+        guild_warns = await guild_warns;
+        user_data = await user_data;
         if (user_data === null) {
             return;
         }
-        const user_guild_data = await global_context.neko_modules_clients.db.fetch_guild_user(message.guild.id, message.member.user.id);
+        user_guild_data = await user_guild_data;
         if (user_guild_data === null) {
             return;
         }
-        const tagged_user_data = tagged_user === undefined ? user_data : await global_context.neko_modules_clients.db.fetch_user(tagged_user.id, false, false);
+        tagged_user_data = await tagged_user_data;
         if (tagged_user_data === null) {
-            return;
+            tagged_user_data = user_data;
         }
-        const tagged_user_guild_data = tagged_user === undefined ? user_guild_data : await global_context.neko_modules_clients.db.fetch_guild_user(message.guild.id, tagged_user.id);
+        tagged_user_guild_data = await tagged_user_guild_data;
         if (tagged_user_guild_data === null) {
-            return;
+            tagged_user_guild_data = user_guild_data;
         }
 
         /* Construct command data */
@@ -220,9 +232,9 @@ export default {
             bot_data: bot_data,
 
             guild_data: guild_data_full,
-            guild_bans: await global_context.neko_modules_clients.db.fetch_guild_bans(message.guild.id),
-            guild_mutes: await global_context.neko_modules_clients.db.fetch_guild_mutes(message.guild.id),
-            guild_warns: await global_context.neko_modules_clients.db.fetch_guild_warnings(message.guild.id),
+            guild_bans: guild_bans,
+            guild_mutes: guild_mutes,
+            guild_warns: guild_warns,
 
             user_data: user_data,
             user_guild_data: user_guild_data,
@@ -231,12 +243,15 @@ export default {
             tagged_user_guild_data: tagged_user_guild_data,
         };
 
-        /* Process sentry transaction */
+        /* Prepare sentry transaction */
         let transaction: Transaction | null = null;
         let transaction_prepare = null;
         let transaction_process = null;
+
+        /* Process sentry transaction */
         if (global_context.config.sentry_enabled === true) {
             transaction = Sentry.startTransaction({ op: "execute_command", name: "[Command] Unknown" });
+            transaction.setName(`[Command] ${command.name}`);
             Sentry.configureScope((scope) => {
                 if (transaction !== null) {
                     scope.setSpan(transaction);
@@ -247,9 +262,6 @@ export default {
         }
 
         /* Increase processed commands */
-        if (transaction !== null) {
-            transaction.setName(`[Command] ${command.name}`);
-        }
         global_context.data.total_commands += 1;
         global_context.data.processed_commands += 1;
 
@@ -262,11 +274,13 @@ export default {
             xp: bot_data.message_XP,
         });
 
-        /* Execute command */
+        /* Start sentry transaction */
         if (transaction !== null && transaction_prepare !== null) {
             transaction_prepare.finish();
             transaction_process = transaction.startChild({ op: "process_command" });
         }
+
+        /* Execute command */
         await command.execute(command_data);
 
         /* Finish sentry transaction */
