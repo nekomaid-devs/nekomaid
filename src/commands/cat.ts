@@ -1,6 +1,9 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
 
+/* Local Imports */
+import NekoClient from "nekos.life";
+
 export default {
     name: "cat",
     category: "Fun",
@@ -18,7 +21,7 @@ export default {
         if (command_data.message.guild === null) {
             return;
         }
-        const obj = await command_data.global_context.modules.neko.sfw.meow();
+        const obj = await new NekoClient().sfw.meow();
         const embedCat = {
             title: "Here's a cat, just for you~",
             color: 8388736,

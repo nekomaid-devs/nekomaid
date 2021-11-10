@@ -44,7 +44,7 @@ manager.on("shardCreate", (shard) => {
     /*
      *manager
      *  .broadcastEval((client: Client) => {
-     *      client.neko_data.shards_ready = spawned_shards >= config.shard_count ? "true" : "false";
+     *      client.data.shards_ready = spawned_shards >= config.shard_count ? "true" : "false";
      *  })
      *  .catch((e: Error) => {
      *      console.error(e);
@@ -94,14 +94,14 @@ if (config.dev_mode === false) {
                             /*
                              *manager
                              *  .broadcastEval((client: Client) => {
-                             *      client.neko_data.send_upvote_message("${id}", "${post.site_ID}", is_double);
+                             *      client.data.send_upvote_message("${id}", "${post.site_ID}", is_double);
                              *  })
                              *  .catch((e: Error) => {
                              *      console.error(e);
                              *  });
                              *manager
                              *  .broadcastEval((client: Client) => {
-                             *      client.neko_data.process_upvote("${id}", "${post.site_ID}", is_double);
+                             *      client.data.process_upvote("${id}", "${post.site_ID}", is_double);
                              *  })
                              *  .catch((e: Error) => {
                              *      console.error(e);

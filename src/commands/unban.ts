@@ -51,7 +51,7 @@ export default {
                 } else if (usernames.length < 1) {
                     command_data.message.reply(`\`${tagged_user_display_name}\` isn't banned-`);
                 } else {
-                    command_data.global_context.data.last_moderation_actions.set(command_data.message.guild.id, { moderator: command_data.message.author.id });
+                    command_data.global_context.data.last_moderation_actions.set(command_data.message.guild.id, command_data.message.author.id);
                     command_data.message.guild.members.unban(ban_info.user, unban_reason).catch((e: Error) => {
                         command_data.global_context.logger.api_error(e);
                         command_data.message.reply(`Couldn't unban \`${ban_info.user.tag}\`! (Try moving Nekomaid's permissions above the user you want to unban)`);

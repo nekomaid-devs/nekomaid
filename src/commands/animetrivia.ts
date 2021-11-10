@@ -81,7 +81,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
     collector.on("collect", (m) => {
         if (answered === false) {
             if (m.content.startsWith(`${command_data.guild_data.prefix}animetrivia skip`)) {
-                if (m.author.id === game_data.moderationManager) {
+                if (m.author.id === game_data.moderator) {
                     answered = true;
                     dispatcher.end();
 
@@ -98,7 +98,7 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
                     });
                 }
             } else if (m.content.startsWith(`${command_data.guild_data.prefix}animetrivia end`)) {
-                if (m.author.id === game_data.moderationManager) {
+                if (m.author.id === game_data.moderator) {
                     answered = true;
                     connection.disconnect();
 

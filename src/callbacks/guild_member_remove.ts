@@ -66,7 +66,7 @@ export default {
             if (last_audit.action === "MEMBER_KICK" && last_audit.target.id === member.user.id) {
                 let executor;
                 if (last_audit.executor.id === global_context.bot.user.id) {
-                    executor = await member.guild.members.fetch(moderation_action.moderationManager).catch((e: Error) => {
+                    executor = await member.guild.members.fetch(moderation_action.moderator).catch((e: Error) => {
                         global_context.logger.api_error(e);
                         return null;
                     });

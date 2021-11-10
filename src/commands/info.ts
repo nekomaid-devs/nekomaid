@@ -93,12 +93,12 @@ export default {
                 command_data.global_context.logger.error(e as Error);
             });
 
-        const shard_commands = command_data.global_context.neko_data.total_commands;
+        const shard_commands = command_data.global_context.data.total_commands;
         const manager_commands = 0;
         /*
          *await command_data.global_context.bot.shard
          *  .broadcastEval((client) => {
-         *      return client.neko_data.total_commands;
+         *      return client.data.total_commands;
          *  })
          *  .then((results) => {
          *      results.forEach((result) => {
@@ -110,12 +110,12 @@ export default {
          *  });
          */
 
-        const shard_vc = command_data.global_context.neko_data.voiceManager_connections;
+        const shard_vc = command_data.global_context.data.voice_connections;
         const manager_vc = 0;
         /*
          *await command_data.global_context.bot.shard
          *  .broadcastEval((client) => {
-         *      return client.neko_data.voiceManager_connections;
+         *      return client.data.voiceManager_connections;
          *  })
          *  .then((results) => {
          *      results.forEach((result) => {

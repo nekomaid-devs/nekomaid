@@ -28,16 +28,8 @@ export default {
          * TODO: add pagination
          */
         const now = Date.now();
-        const embedBans = new command_data.global_context.modules.Discord.MessageEmbed()
-            .setColor(8388736)
-            .setAuthor(`❯ Bans (${command_data.guild_bans.length})`, command_data.message.guild.iconURL({ format: "png", dynamic: true, size: 1024 }));
-
-        if (command_data.guild_bans.length < 1) {
-            command_data.message.channel.send({ embeds: [embedBans] }).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
-            });
-            return;
-        }
+        const url = command_data.message.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
+        const fields: any[] = [];
 
         command_data.message.guild.bans
             .fetch()
@@ -50,10 +42,18 @@ export default {
                     const bannedMember = guildBansByID.get(ban.user_ID);
                     if (bannedMember !== undefined) {
                         const remainingText = ban.end === null ? "Forever" : convert_time(ban.end - now);
-                        embedBans.addField(`Ban - ${bannedMember.user.tag}`, `Remaining: \`${remainingText}\``);
+                        fields.push({ name: `Ban - ${bannedMember.user.tag}`, value: `Remaining: \`${remainingText}\`` });
                     }
                 });
 
+                const embedBans = {
+                    color: 8388736,
+                    author: {
+                        name: `❯ Bans (${command_data.guild_bans.length})`,
+                        icon_url: url === null ? undefined : url,
+                    },
+                    fields: [],
+                };
                 command_data.message.channel.send({ embeds: [embedBans] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                 });

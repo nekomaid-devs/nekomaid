@@ -22,7 +22,12 @@ export default {
             return;
         }
         // TODO: add pagination
-        const embedShop = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle("NekoMaid - Shop").setFooter(`Requested by ${command_data.message.author.tag}`);
+        const embedShop = {
+            color: 8388736,
+            title: "NekoMaid - Shop",
+            description: "None",
+            footer: { text: `Requested by ${command_data.message.author.tag}` },
+        };
 
         /*
          *let items = command_data.bot_data.shopItems;
@@ -34,7 +39,6 @@ export default {
          *  })
          *});
          */
-        embedShop.setDescription("None");
 
         command_data.message.channel.send({ embeds: [embedShop] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);

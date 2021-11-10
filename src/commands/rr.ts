@@ -60,8 +60,6 @@ function continue_collecting(global_context: GlobalContext, guild_data: GuildDat
                     global_context.logger.api_error(e);
                 });
 
-                const reactionRoleEmbed = new global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`Roles (${roles.size})`);
-
                 let menu_description = "";
                 Array.from(roles.keys()).forEach((role_ID) => {
                     const emoji = roles.get(role_ID);
@@ -72,7 +70,11 @@ function continue_collecting(global_context: GlobalContext, guild_data: GuildDat
                     menu_description += `${emoji} - <@&${role_ID}>\n`;
                 });
 
-                reactionRoleEmbed.setDescription(menu_description);
+                const reactionRoleEmbed = {
+                    color: 8388736,
+                    title: `Roles (${roles.size})`,
+                    description: menu_description,
+                };
                 msg.edit({ embeds: [reactionRoleEmbed] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });

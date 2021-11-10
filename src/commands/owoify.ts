@@ -5,6 +5,7 @@ import { Permissions } from "discord.js-light";
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
 import Permission from "../scripts/helpers/permission";
+import NekoClient from "nekos.life";
 
 export default {
     name: "owoify",
@@ -35,7 +36,7 @@ export default {
             return;
         }
 
-        const owoified_text = await command_data.global_context.modules.neko.sfw.OwOify({ text: command_data.total_argument });
+        const owoified_text = await new NekoClient().sfw.OwOify({ text: command_data.total_argument });
         command_data.message.channel.send(owoified_text.owo).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });

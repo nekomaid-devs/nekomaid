@@ -18,6 +18,9 @@ import LevelingManager from "../scripts/managers/manager_leveling";
 import ModerationManager from "../scripts/managers/manager_moderation";
 import Logger from "../scripts/helpers/logger";
 
+/* Node Imports */
+import { AxiosRequestHeaders } from "axios";
+
 /* Enums */
 export enum ShrineBonus {
     DAILY,
@@ -47,10 +50,11 @@ export type GlobalContext = {
     command_aliases: Map<string, string>;
     user_cooldowns: Map<string, Map<string, number>>;
 
-    modules: any;
+    modules: {
+        ytinfo: any;
+    };
     modules_clients: any;
 
-    neko_data: any;
     neko_modules: any;
     neko_modules_clients: {
         db: Database;
@@ -68,7 +72,24 @@ export type GlobalContext = {
     };
 
     logger: Logger;
-    data: any;
+    data: {
+        uptime_start: number;
+        shards_ready: boolean;
+
+        total_events: number;
+        processed_events: number;
+        total_messages: number;
+        processed_messages: number;
+        total_commands: number;
+        processed_commands: number;
+        voice_connections: number;
+
+        user_cooldowns: Map<string, Map<string, number>>;
+        economy_list: any[];
+        last_moderation_actions: Map<string, any>;
+        openings: any;
+        default_headers: AxiosRequestHeaders;
+    };
 };
 
 /* Commands */

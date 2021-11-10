@@ -40,9 +40,9 @@ export default {
         }
 
         try {
-            const t_start = command_data.global_context.modules.performance.now();
+            const t_start = performance.now();
             const result = await eval(command_data.total_argument);
-            const t_end = command_data.global_context.modules.performance.now();
+            const t_end = performance.now();
 
             const embedEval = {
                 author: {

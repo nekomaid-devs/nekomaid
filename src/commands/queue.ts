@@ -27,12 +27,12 @@ export default {
             return;
         }
 
-        const embedQueue = new command_data.global_context.modules.Discord.MessageEmbed();
+        let title_text = "";
         let description_text = "";
-
+        const fields: any[] = [];
         switch (connection.mode) {
             case 0: {
-                embedQueue.setColor(8388736).setTitle(`Queue for \`${command_data.message.guild.name}\` (${connection.queue.length} songs)`).setFooter("Nekomaid");
+                title_text = `Queue for \`${command_data.message.guild.name}\` (${connection.queue.length} songs)`;
 
                 for (let i = 1; i <= 5; i += 1) {
                     if (connection.queue.length >= i) {
@@ -47,8 +47,6 @@ export default {
                     description_text += `** and \`${additional_length}\` more...**`;
                 }
 
-                embedQueue.setDescription(description_text);
-
                 let total_length = convert_string_to_time_data(convert_time(connection.current.item.duration));
                 const elapsedLength = convert_string_to_time_data(convert_time(connection.elapsed_ms));
                 total_length = sub_times(total_length, elapsedLength);
@@ -61,13 +59,13 @@ export default {
                 const total_length_2 = convert_time_data_to_string(total_length);
 
                 const current_length = convert_string_to_time_data(convert_time(connection.current.item.duration));
-                embedQueue.addField("Currenly playing", `[${connection.current.item.title}](${connection.current.item.url}) *(${current_length})*`, false);
-                embedQueue.addField("Total queue time", `\`${total_length_2}\``, true);
+                fields.push({ name: "Currenly playing", value: `[${connection.current.item.title}](${connection.current.item.url}) *(${current_length})*`, inline: false });
+                fields.push({ name: "Total queue time", value: `\`${total_length_2}\``, inline: true });
                 break;
             }
 
             case 1: {
-                embedQueue.setColor(8388736).setTitle(`Queue for \`${command_data.message.guild.name}\` (repeating ${connection.persistent_queue.length} songs)`).setFooter("Nekomaid");
+                title_text = `Queue for \`${command_data.message.guild.name}\` (repeating ${connection.persistent_queue.length} songs)`;
 
                 let i0 = 0;
                 let current_persistent_index = 0;
@@ -101,8 +99,6 @@ export default {
                     description_text += `** and \`${additional_length}\` more...**`;
                 }
 
-                embedQueue.setDescription(description_text);
-
                 let total_length_2_b = convert_string_to_time_data(convert_time(connection.current.item.duration));
 
                 const elapsedLength2b = convert_string_to_time_data(convert_time(connection.elapsed_ms));
@@ -116,12 +112,23 @@ export default {
                 const total_length_2_c = convert_time_data_to_string(total_length_2_b);
 
                 const current_length_b = convert_string_to_time_data(convert_time(connection.persistent_queue[current_persistent_index].item.duration));
-                embedQueue.addField("Currenly playing", `[${connection.persistent_queue[current_persistent_index].item.title}](${connection.persistent_queue[current_persistent_index].item.url}) *(${current_length_b})*`, false);
-                embedQueue.addField("Total queue time", `\`${total_length_2_c}\``, true);
+                fields.push({
+                    name: "Currenly playing",
+                    value: `[${connection.persistent_queue[current_persistent_index].item.title}](${connection.persistent_queue[current_persistent_index].item.url}) *(${current_length_b})*`,
+                    inline: false,
+                });
+                fields.push({ name: "Total queue time", value: `\`${total_length_2_c}\``, inline: true });
                 break;
             }
         }
 
+        const embedQueue = {
+            color: 8388736,
+            title: title_text,
+            description: description_text,
+            fields: fields,
+            footer: { text: "Nekomaid" },
+        };
         command_data.message.channel.send({ embeds: [embedQueue] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });

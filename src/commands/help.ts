@@ -63,10 +63,15 @@ export default {
                 let usage = command.subcommandHelp.get(target_subcommand_name);
                 if (usage !== undefined) {
                     usage = usage.split("<subcommand_prefix>").join(command_data.guild_data.prefix + commands_text);
+                } else {
+                    return;
                 }
 
-                const embedHelp = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`Help for - \`${unhidden_text + commands_text}\``);
-                embedHelp.addField("Usage:", usage);
+                const embedHelp = {
+                    color: 8388736,
+                    title: `Help for - \`${unhidden_text + commands_text}\``,
+                    fields: [{ name: "Usage: ", value: usage }],
+                };
 
                 command_data.message.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
@@ -79,11 +84,12 @@ export default {
                     commands_text += `/${alias}`;
                 });
 
-                const embedHelp = new command_data.global_context.modules.Discord.MessageEmbed()
-                    .setColor(8388736)
-                    .setTitle(`Help for - \`${unhidden_text + commands_text}\``)
-                    .setDescription(command.description);
-                embedHelp.addField("Usage:", `\`${command_data.guild_data.prefix}${commands_text} ${usage}`);
+                const embedHelp = {
+                    color: 8388736,
+                    title: `Help for - \`${unhidden_text + commands_text}\``,
+                    description: command.description,
+                    fields: [{ name: "Usage: ", value: `\`${command_data.guild_data.prefix}${commands_text} ${usage}` }],
+                };
 
                 if (command.subcommandHelp.size > 0) {
                     let commands_text_2 = "";
@@ -91,7 +97,7 @@ export default {
                         commands_text_2 += `Check \`${command_data.guild_data.prefix}help ${command.name} ${subcommand}\` for help\n`;
                     });
 
-                    embedHelp.addField("Sub-commands:", commands_text_2);
+                    embedHelp.fields.push({ name: "Sub-commands:", value: commands_text_2 });
                 }
 
                 command_data.message.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
@@ -125,13 +131,9 @@ export default {
                     }
                 });
 
+            const fields: any[] = [];
             const url = command_data.global_context.bot.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
             const unhidden_text = show_hidden === true ? " (Unhidden)" : "";
-            const embedHelp = new command_data.global_context.modules.Discord.MessageEmbed()
-                .setColor(8388736)
-                .setTitle(`❯     Prefix: \`${command_data.guild_data.prefix}\` - Help ${unhidden_text}`)
-                .setDescription(`For help with a command, use \`${command_data.guild_data.prefix}help [command] [subcommand?]\`.\nV2 now live! Have fun!~ \nAvailable commands, by category:`)
-                .setFooter(`NekoMaid ${command_data.global_context.config.version}`, `${url}`);
 
             const categories_keys = Array.from(categories.keys());
             categories_keys.forEach((category_key) => {
@@ -162,10 +164,17 @@ export default {
                 });
 
                 if (commands_string !== "") {
-                    embedHelp.addField(category.prefix + category_key, category.nsfw && command_data.message.channel.nsfw === false ? "Hidden in SFW channel, try changing this channel to NSFW" : commands_string);
+                    fields.push({ name: category.prefix + category_key, value: category.nsfw && command_data.message.channel.nsfw === false ? "Hidden in SFW channel, try changing this channel to NSFW" : commands_string });
                 }
             });
 
+            const embedHelp = {
+                color: 8388736,
+                title: `❯     Prefix: \`${command_data.guild_data.prefix}\` - Help ${unhidden_text}`,
+                description: `For help with a command, use \`${command_data.guild_data.prefix}help [command] [subcommand?]\`.\nV2 now live! Have fun!~ \nAvailable commands, by category:`,
+                footer: { text: `NekoMaid ${command_data.global_context.config.version}`, url: `${url}` },
+                fields: fields,
+            };
             command_data.message.channel.send({ embeds: [embedHelp] }).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });

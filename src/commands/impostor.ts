@@ -31,11 +31,12 @@ export default {
             loadFont("./configs/data/among_us_font.fnt").then(async (font) => {
                 image.print(font, 325 - measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
 
-                const embedImage = new command_data.global_context.modules.Discord.MessageEmbed()
-                    .setTitle(`${command_data.tagged_user.tag} was ${impostor ? "" : "not "}the impostor!`)
-                    .setColor(8388736)
-                    .setImage("attachment://image.png")
-                    .setFooter(`Requested by ${command_data.message.author.tag}`);
+                const embedImage = {
+                    color: 8388736,
+                    title: `${command_data.tagged_user.tag} was ${impostor ? "" : "not "}the impostor!`,
+                    image: { url: "attachment://image.png" },
+                    footer: { text: `Requested by ${command_data.message.author.tag}` },
+                };
 
                 command_data.message.channel.send({ embeds: [embedImage], files: [{ attachment: await image.getBufferAsync("image/png"), name: "image.png" }] }).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);

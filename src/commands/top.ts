@@ -79,8 +79,7 @@ export default {
             items = await get_top(command_data.global_context, props);
         }
 
-        const embedTop = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`❯    Top - \`${top_text}\` ${top_text_2}`);
-
+        const fields: any = [];
         let author_pos = -1;
         let author_data = null;
         for (let i = 0; i < items.length; i += 1) {
@@ -99,7 +98,7 @@ export default {
         for (let i = 0; i < limit; i += 1) {
             let user_data = items[i];
             if (i === 8 && author_pos > 10) {
-                embedTop.addField("...", "...");
+                fields.push({ name: "...", value: "..." });
                 continue;
             } else if (i === 9 && author_pos > 10) {
                 user_data = author_data;
@@ -117,9 +116,14 @@ export default {
             if (target_user === null) {
                 return;
             }
-            embedTop.addField(`${i + 1}) ${target_user.tag}`, `${format_number(net)} ${top_user_text}`);
+            fields.push({ name: `${i + 1}) ${target_user.tag}`, value: `${format_number(net)} ${top_user_text}` });
         }
 
+        const embedTop = {
+            color: 8388736,
+            title: `❯    Top - \`${top_text}\` ${top_text_2}`,
+            fields: fields,
+        };
         command_data.message.channel.send({ embeds: [embedTop] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });

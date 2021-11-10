@@ -29,8 +29,8 @@ export default {
 
         const top_text = "⚡ Server Level";
         const items = await get_top_guild_level(command_data.global_context, command_data.guild_data, command_data.message.guild);
-        const embedTop = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`❯    Top - \`${top_text}\``);
 
+        const fields: any[] = [];
         let author_pos = -1;
         let author_data = null;
         for (let i = 0; i < items.length; i += 1) {
@@ -50,7 +50,7 @@ export default {
             let user_data = items[i];
             const net = user_data.level;
             if (i === 8 && author_pos > 10) {
-                embedTop.addField("...", "...");
+                fields.push({ name: "...", value: "..." });
                 continue;
             } else if (i === 9 && author_pos > 10) {
                 user_data = author_data;
@@ -65,9 +65,14 @@ export default {
             if (target_user === null) {
                 return;
             }
-            embedTop.addField(`${i + 1}) ${target_user.tag}`, `Level ${net} (${Math.round(net_2)} %)`);
+            fields.push({ name: `${i + 1}) ${target_user.tag}`, value: `Level ${net} (${Math.round(net_2)} %)` });
         }
 
+        const embedTop = {
+            color: 8388736,
+            title: `❯    Top - \`${top_text}\``,
+            fields: [],
+        };
         command_data.message.channel.send({ embeds: [embedTop] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });

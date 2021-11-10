@@ -28,9 +28,6 @@ export default {
             return;
         }
 
-        const embedNP = new command_data.global_context.modules.Discord.MessageEmbed();
-        embedNP.setColor(8388736).setTitle(`Current playing for \`${command_data.message.guild.name}\``).setFooter("Nekomaid");
-
         const currentLength = convert_time(connection.current.item.duration);
         const descriptionText = `[${connection.current.item.title}](${connection.current.item.url}) *(${currentLength})*\n`;
 
@@ -39,9 +36,16 @@ export default {
         totalLength = sub_times(totalLength, elapsedLength);
         totalLength = convert_time_inconsistent(totalLength);
 
-        embedNP.addField("Title", descriptionText);
-        embedNP.addField("Requested by", `<@${connection.current.user_ID}>`);
-        embedNP.addField("Remaining", `\`${convert_time_data_to_string(totalLength)}\``);
+        const embedNP = {
+            color: 8388736,
+            title: `Current playing for \`${command_data.message.guild.name}\``,
+            footer: { text: "Nekomaid" },
+            fields: [
+                { name: "Title", value: descriptionText },
+                { name: "Requested by", value: `<@${connection.current.user_ID}>` },
+                { name: "Remaining", value: `\`${convert_time_data_to_string(totalLength)}\`` },
+            ],
+        };
         command_data.message.channel.send({ embeds: [embedNP] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });

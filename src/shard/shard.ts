@@ -4,11 +4,12 @@ import Discord from "discord.js-light";
 
 /* Node Imports */
 import { readFileSync } from "fs";
-import performance from "perf_hooks";
+import { performance } from "perf_hooks";
 import * as sql from "mysql2";
+import * as osu from "node-osu";
+import * as Sentry from "@sentry/node";
 
 /* Local Imports */
-import import_into_context from "./shard_importer";
 import * as bot_commands from "../commands";
 import * as bot_callbacks from "../callbacks";
 
@@ -84,7 +85,7 @@ async function run() {
     });
 
     // Create global context
-    let global_context: GlobalContext = {
+    const global_context: GlobalContext = {
         config: config,
         bot: bot,
 
@@ -92,10 +93,9 @@ async function run() {
         command_aliases: new Map(),
         user_cooldowns: new Map(),
 
-        modules: {},
+        modules: { ytinfo: require("youtube.get-video-info") },
         modules_clients: {},
 
-        neko_data: {},
         neko_modules: {},
         neko_modules_clients: {
             db: new Database(sql_connection),
@@ -113,26 +113,57 @@ async function run() {
         },
 
         logger: new Logger(bot.shard, config.sentry_enabled),
-        data: {},
+        data: {
+            uptime_start: new Date().getTime(),
+            shards_ready: false,
+
+            total_events: 0,
+            processed_events: 0,
+            total_messages: 0,
+            processed_messages: 0,
+            total_commands: 0,
+            processed_commands: 0,
+            voice_connections: 0,
+
+            user_cooldowns: new Map(),
+            economy_list: [],
+            last_moderation_actions: new Map(),
+            openings: JSON.parse(readFileSync(`${process.cwd()}/configs/data/openings.json`).toString()),
+            default_headers: {
+                "Content-Type": "application/json",
+                Authorization: config.nekomaid_API_key,
+                Origin: config.nekomaid_API_endpoint,
+            },
+        },
     };
 
-    // Import modules
-    global_context.modules.Discord = Discord;
-    global_context.modules.performance = performance.performance;
+    /* Setup optional */
+    if (global_context.config.sentry_enabled === true) {
+        Sentry.init({
+            dsn: global_context.config.sentry_dns,
+            integrations: [new Sentry.Integrations.Http({ tracing: true })],
+
+            tracesSampleRate: 1.0,
+        });
+    }
+    if (global_context.config.osu_enabled === true) {
+        global_context.modules_clients.osu = new osu.Api(global_context.config.osu_API_key, { notFoundAsError: false, completeScores: true });
+    }
 
     // Setup utils
     global_context.bot = bot;
-    global_context.neko_data = {};
-    global_context.neko_data.shards_ready = false;
-    global_context.neko_data.send_upvote_message = (id: string, site_ID: string, is_double: boolean) => {
-        global_context.neko_modules_clients.upvoteManager.send_upvote_message(global_context, id, site_ID, is_double);
-    };
-    global_context.neko_data.process_upvote = (id: string, site_ID: string, is_double: boolean) => {
-        global_context.neko_modules_clients.upvoteManager.process_upvote(global_context, id, site_ID, is_double);
-    };
+    global_context.data.shards_ready = false;
+    /*
+     *global_context.data.send_upvote_message = (id: string, site_ID: string, is_double: boolean) => {
+     *  global_context.neko_modules_clients.upvoteManager.send_upvote_message(global_context, id, site_ID, is_double);
+     *};
+     *global_context.data.process_upvote = (id: string, site_ID: string, is_double: boolean) => {
+     *  global_context.neko_modules_clients.upvoteManager.process_upvote(global_context, id, site_ID, is_double);
+     *};
+     */
 
     global_context.logger.log("Started logging into the shard...");
-    const t_loading_start = global_context.modules.performance.now();
+    const t_loading_start = performance.now();
 
     // Setup commands
     const commands = Object.values(bot_commands);
@@ -154,14 +185,14 @@ async function run() {
 
     let last_timestamp = Date.now();
     setInterval(() => {
-        global_context.neko_data.processed_events = global_context.data.processed_events;
-        global_context.neko_data.total_events = global_context.data.total_events;
-        global_context.neko_data.processed_messages = global_context.data.processed_messages;
-        global_context.neko_data.total_messages = global_context.data.total_messages;
-        global_context.neko_data.processed_commands = global_context.data.processed_commands;
-        global_context.neko_data.total_commands = global_context.data.total_commands;
+        global_context.data.processed_events = global_context.data.processed_events;
+        global_context.data.total_events = global_context.data.total_events;
+        global_context.data.processed_messages = global_context.data.processed_messages;
+        global_context.data.total_messages = global_context.data.total_messages;
+        global_context.data.processed_commands = global_context.data.processed_commands;
+        global_context.data.total_commands = global_context.data.total_commands;
         if (global_context.neko_modules_clients.voiceManager !== undefined) {
-            global_context.neko_data.voiceManager_connections = global_context.neko_modules_clients.voiceManager.connections.size;
+            global_context.data.voice_connections = global_context.neko_modules_clients.voiceManager.connections.size;
             global_context.neko_modules_clients.voiceManager.tick_connections(global_context);
         }
 
@@ -251,18 +282,9 @@ async function run() {
         }
     }, 60000);
 
-    bot.on("ready", async () => {
-        const t_logging_end = global_context.modules.performance.now();
+    bot.on("ready", () => {
+        const t_logging_end = performance.now();
         global_context.logger.log(`Finished logging into the shard (took ${(t_logging_end - t_loading_start).toFixed(1)}ms)...`);
-        global_context.logger.log("-".repeat(30));
-
-        // Stuff the bot with goods uwu :pleading_emoji:
-        global_context.logger.log("Started loading the shard...");
-        global_context = await import_into_context(global_context);
-        global_context.neko_data.uptime_start = global_context.data.uptime_start;
-
-        const t_loading_end = global_context.modules.performance.now();
-        global_context.logger.log(`Finished loading shard (took ${(t_loading_end - t_logging_end).toFixed(1)}ms)...`);
         global_context.logger.log("-".repeat(30));
         global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Channels: ${bot.channels.cache.size}] - [Users: ${bot.users.cache.size}]`);
 

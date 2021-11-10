@@ -51,7 +51,7 @@ export default {
             if (last_audit.action === "MEMBER_BAN_REMOVE" && last_audit.target.id === ban.user.id) {
                 let executor;
                 if (last_audit.executor.id === global_context.bot.user.id) {
-                    executor = await global_context.bot.users.fetch(moderation_action.moderationManager).catch((e: Error) => {
+                    executor = await global_context.bot.users.fetch(moderation_action.moderator).catch((e: Error) => {
                         global_context.logger.api_error(e);
                         return null;
                     });

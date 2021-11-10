@@ -1,6 +1,9 @@
 /* Types */
 import { CommandData, Command } from "../ts/base";
 
+/* Local Imports */
+import akaneko from "akaneko";
+
 export default {
     name: "foxgirl",
     category: "Fun",
@@ -18,9 +21,7 @@ export default {
         if (command_data.message.guild === null) {
             return;
         }
-        const url = await command_data.global_context.modules.akaneko.foxgirl().catch((e: Error) => {
-            command_data.global_context.logger.api_error(e);
-        });
+        const url = await akaneko.foxgirl();
         const embedFoxgirl = {
             title: "Here's a foxgirl, just for you~",
             color: 8388736,

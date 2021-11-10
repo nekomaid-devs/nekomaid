@@ -28,23 +28,23 @@ export default {
         const warns = command_data.guild_warns.filter((warn) => {
             return warn.user_ID === command_data.tagged_user.id;
         });
-        const embedWarns = new command_data.global_context.modules.Discord.MessageEmbed()
-            .setColor(8388736)
-            .setAuthor(`❯ Warnings for ${command_data.tagged_user.tag} (${warns.length})`, command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 }));
 
-        if (warns.length < 1) {
-            command_data.message.channel.send({ embeds: [embedWarns] }).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
-            });
-            return;
-        }
-
+        const fields: any = [];
         warns.slice(-3).forEach((warn, index) => {
             const end = Date.now();
             const elapsedTime = convert_time(end - warn.start);
-            embedWarns.addField(`Warn #${warns.length - index}`, `Warned for - ${warn.reason} (${elapsedTime} ago)`);
+            fields.push({ name: `Warn #${warns.length - index}`, value: `Warned for - ${warn.reason} (${elapsedTime} ago)` });
         });
 
+        const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
+        const embedWarns = {
+            color: 8388736,
+            author: {
+                name: `❯ Warnings for ${command_data.tagged_user.tag} (${warns.length})`,
+                icon_url: url === null ? undefined : url,
+            },
+            fields: [],
+        };
         command_data.message.channel.send({ embeds: [embedWarns] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });

@@ -9,7 +9,7 @@ import axios from "axios";
 import { pick_random } from "../../scripts/utils/util_general";
 
 export async function refresh_status(global_context: GlobalContext) {
-    if (global_context.neko_data.shards_ready === false || global_context.bot.shard === null || global_context.bot.user === null) {
+    if (global_context.data.shards_ready === false || global_context.bot.shard === null || global_context.bot.user === null) {
         return;
     }
 
@@ -33,7 +33,7 @@ export async function refresh_status(global_context: GlobalContext) {
 }
 
 export function refresh_website(global_context: GlobalContext) {
-    if (global_context.neko_data.shards_ready === false || global_context.config.nekomaid_API_update_stats === false || global_context.bot.shard === null) {
+    if (global_context.data.shards_ready === false || global_context.config.nekomaid_API_update_stats === false || global_context.bot.shard === null) {
         return;
     }
 
@@ -45,7 +45,7 @@ export function refresh_website(global_context: GlobalContext) {
     /*
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
-     *      return client.neko_data.uptime_start;
+     *      return client.data.uptime_start;
      *  })
      *  .then((results) => {
      *      results.forEach((start, i) => {
@@ -96,7 +96,7 @@ export function refresh_website(global_context: GlobalContext) {
      *
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
-     *      return client.neko_data.processed_events;
+     *      return client.data.processed_events;
      *  })
      *  .then((results) => {
      *      results.forEach((processed_events, i) => {
@@ -108,7 +108,7 @@ export function refresh_website(global_context: GlobalContext) {
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
-     *      return client.neko_data.total_events;
+     *      return client.data.total_events;
      *  })
      *  .then((results) => {
      *      results.forEach((total_events, i) => {
@@ -120,7 +120,7 @@ export function refresh_website(global_context: GlobalContext) {
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
-     *      return client.neko_data.processed_messages;
+     *      return client.data.processed_messages;
      *  })
      *  .then((results) => {
      *      results.forEach((processed_messages, i) => {
@@ -132,7 +132,7 @@ export function refresh_website(global_context: GlobalContext) {
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
-     *      return client.neko_data.total_messages;
+     *      return client.data.total_messages;
      *  })
      *  .then((results) => {
      *      results.forEach((total_messages, i) => {
@@ -141,7 +141,7 @@ export function refresh_website(global_context: GlobalContext) {
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
-     *      return client.neko_data.processed_commands;
+     *      return client.data.processed_commands;
      *  })
      *  .then((results) => {
      *      results.forEach((processed_commands, i) => {
@@ -153,7 +153,7 @@ export function refresh_website(global_context: GlobalContext) {
      *  });
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
-     *      return client.neko_data.total_commands;
+     *      return client.data.total_commands;
      *  })
      *  .then((results) => {
      *      results.forEach((total_commands, i) => {
@@ -166,7 +166,7 @@ export function refresh_website(global_context: GlobalContext) {
      *
      *await global_context.bot.shard
      *  .broadcastEval((client) => {
-     *      return client.neko_data.voiceManager_connections;
+     *      return client.data.voiceManager_connections;
      *  })
      *  .then((results) => {
      *      results.forEach((voice_connections, i) => {

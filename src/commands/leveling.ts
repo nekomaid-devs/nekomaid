@@ -127,17 +127,21 @@ export default {
                 switch (property) {
                     case "ranks": {
                         const ranks = command_data.guild_data.module_level_ranks;
-                        const embedRanks = new command_data.global_context.modules.Discord.MessageEmbed().setColor(8388736).setTitle(`❯ Ranks (${ranks.length})`);
-
+                        const fields: any[] = [];
                         for (let i = 0; i < ranks.length; i++) {
                             const rank = ranks[i];
                             const role = await command_data.message.guild.roles.fetch(rank.role_ID).catch((e: Error) => {
                                 command_data.global_context.logger.api_error(e);
                                 return null;
                             });
-                            embedRanks.addField(`Rank#${rank.name} - ${rank.level}`, `Role - \`${role === null ? "Unknown" : role.name}\``);
+                            fields.push({ name: `Rank#${rank.name} - ${rank.level}`, value: `Role - \`${role === null ? "Unknown" : role.name}\`` });
                         }
 
+                        const embedRanks = {
+                            color: 8388736,
+                            title: `❯ Ranks (${ranks.length})`,
+                            fields: fields,
+                        };
                         command_data.message.channel.send({ embeds: [embedRanks] }).catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);
                         });
