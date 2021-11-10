@@ -2,6 +2,9 @@
 import { GlobalContext } from "../../ts/base";
 import { Client } from "discord.js-light";
 
+/* Node Imports */
+import axios from "axios";
+
 /* Local Imports */
 import { pick_random } from "../../scripts/utils/util_general";
 
@@ -198,7 +201,7 @@ export function refresh_website(global_context: GlobalContext) {
         command_list: command_list,
     };
 
-    global_context.modules.axios
+    axios
         .post(
             `${global_context.config.nekomaid_API_endpoint}/v1/stats/post`,
             { stats: stats },
@@ -280,7 +283,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
         Authorization: global_context.config.top_gg_API_key,
     };
 
-    global_context.modules.axios
+    axios
         .post(`https://discordbotlist.com/api/v1/bots/${global_context.bot.user.id}/stats`, data_1, {
             headers: headers_POST_1,
         })
@@ -288,7 +291,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             global_context.logger.error(`[Discord Botlist] ${e}`);
         });
 
-    global_context.modules.axios
+    axios
         .post(`https://discord.bots.gg/api/v1/bots/${global_context.bot.user.id}/stats`, data_2, {
             headers: headers_POST_2,
         })
@@ -296,7 +299,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             global_context.logger.error(`[Discord Bots] ${e}`);
         });
 
-    global_context.modules.axios
+    axios
         .post(`https://discord.boats/api/bot/${global_context.bot.user.id}`, data_3, {
             headers: headers_POST_3,
         })
@@ -304,7 +307,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             global_context.logger.error(`[Discord Boats] ${e}`);
         });
 
-    global_context.modules.axios
+    axios
         .post(`https://botsfordiscord.com/api/bot/${global_context.bot.user.id}`, data_3, {
             headers: headers_POST_4,
         })
@@ -312,7 +315,7 @@ export async function refresh_bot_list(global_context: GlobalContext) {
             global_context.logger.error(`[Bots For Discord] ${e}`);
         });
 
-    global_context.modules.axios
+    axios
         .post(`https://top.gg/api/bots/${global_context.bot.user.id}/stats`, data_3, {
             headers: headers_POST_5,
         })

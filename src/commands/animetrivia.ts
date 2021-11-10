@@ -2,6 +2,9 @@
 import { CommandData, Command } from "../ts/base";
 import { Message, Permissions, VoiceChannel } from "discord.js-light";
 
+/* Node Imports */
+import axios from "axios";
+
 /* Local Imports */
 import Permission from "../scripts/helpers/permission";
 import { shuffle_array, pick_random } from "../scripts/utils/util_general";
@@ -36,12 +39,12 @@ async function play_next(command_data: CommandData, connection: any, game_data: 
 
     let check_a = true;
     let check_b = true;
-    await command_data.global_context.modules.axios.get(`https://openings.moe/video/${final_file_a}`, { maxContentLength: 248 }).catch((e: any) => {
+    await axios.get(`https://openings.moe/video/${final_file_a}`, { maxContentLength: 248 }).catch((e: any) => {
         if (e.response && e.response.status === 404) {
             check_a = false;
         }
     });
-    await command_data.global_context.modules.axios.get(`https://openings.moe/video/${final_file_b}`, { maxContentLength: 248 }).catch((e: any) => {
+    await axios.get(`https://openings.moe/video/${final_file_b}`, { maxContentLength: 248 }).catch((e: any) => {
         if (e.response && e.response.status === 404) {
             check_b = false;
         }

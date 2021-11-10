@@ -23,7 +23,7 @@ export default {
             return;
         }
         const post_info = await nhentai_result(command_data.global_context, command_data.args);
-        if (post_info === undefined) {
+        if (post_info === null) {
             command_data.message.reply("No results found...");
             return;
         }

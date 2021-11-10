@@ -1,16 +1,20 @@
 /* Types */
 import { GlobalContext } from "../../ts/base";
 
+/* Node Imports */
+import axios from "axios";
+
 /* Local Imports */
 import { pick_random } from "../../scripts/utils/util_general";
 
 export async function e621_result(global_context: GlobalContext, args: string[]) {
     const site_url_pages = `https://e621.net/posts?tags=${args.length > 0 ? args.join("+") : ""}&limit=1`;
-    const result_pages = await global_context.modules.axios.get(site_url_pages, { headers: { Cookie: "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
+    const result_pages = await axios.get(site_url_pages, { headers: { Cookie: "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
         global_context.logger.neko_api_error(e);
+        return null;
     });
-    if (result_pages.data === undefined) {
-        return undefined;
+    if (result_pages === null || result_pages.data === undefined) {
+        return null;
     }
 
     const pages_navigator = result_pages.data.lastIndexOf('a href="/posts?limit=1');
@@ -21,11 +25,12 @@ export async function e621_result(global_context: GlobalContext, args: string[])
     }
 
     const site_url_main = `https://e621.net/posts?page=${page_index}&tags=${args.length > 0 ? args.join("+") : ""}&limit=1`;
-    const result_main = await global_context.modules.axios.get(site_url_main, { headers: { Cookie: "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
+    const result_main = await axios.get(site_url_main, { headers: { Cookie: "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
         global_context.logger.neko_api_error(e);
+        return null;
     });
-    if (result_main === undefined || result_main.data === undefined) {
-        return undefined;
+    if (result_main === null || result_main.data === undefined) {
+        return null;
     }
 
     const posts = [];
@@ -40,11 +45,12 @@ export async function e621_result(global_context: GlobalContext, args: string[])
 
     const post_ID = pick_random(posts);
     const site_url_post = `https://e621.net/posts/${post_ID}.json`;
-    const result_post = await global_context.modules.axios.get(site_url_post, { headers: { Cookie: "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
+    const result_post = await axios.get(site_url_post, { headers: { Cookie: "gw=seen;", "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
         global_context.logger.neko_api_error(e);
+        return null;
     });
-    if (result_post === undefined || result_post.data === undefined) {
-        return undefined;
+    if (result_post === null || result_post.data === undefined) {
+        return null;
     }
 
     const post_info = {

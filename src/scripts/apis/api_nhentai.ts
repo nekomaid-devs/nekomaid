@@ -3,17 +3,22 @@ import { GlobalContext } from "../../ts/base";
 
 /* Node Imports */
 import { load } from "cheerio";
+import axios from "axios";
 
 export async function nhentai_result(global_context: GlobalContext, args: string[]) {
     const site_url_main = `https://nhentai.net/g/${args}`;
-    const result_main = await global_context.modules.axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
+    const result_main = await axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
         global_context.logger.neko_api_error(e);
+        return null;
     });
+    if (result_main === null || result_main.data === undefined) {
+        return null;
+    }
     const $0 = await load(result_main.data);
 
     const result_html = $0("#info").html();
     if (result_html === null) {
-        return;
+        return null;
     }
     const title = result_html.substring(result_html.indexOf('<span class="pretty">') + '<span class="pretty">'.length, result_html.indexOf("</span>", result_html.indexOf('<span class="pretty">')));
     const num_of_pages = result_html.substring(result_html.indexOf('<span class="name">', result_html.indexOf("Pages:")) + '<span class="name">'.length, result_html.indexOf("</span>", result_html.indexOf("Pages:")));

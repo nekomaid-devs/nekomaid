@@ -2,7 +2,6 @@
 import { GlobalContext } from "../ts/base";
 
 /* Node Imports */
-import * as axios from "axios";
 import * as NekoClient from "nekos.life";
 import * as akaneko from "akaneko";
 import * as osu from "node-osu";
@@ -11,9 +10,6 @@ import { readFileSync } from "fs";
 
 export default function import_into_context(global_context: GlobalContext) {
     const t_start = global_context.modules.performance.now();
-
-    // Import fetch modules
-    global_context.modules.axios = axios;
 
     // Import Youtube modules
     global_context.modules.ytinfo = require("youtube.get-video-info");

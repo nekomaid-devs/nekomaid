@@ -3,17 +3,19 @@ import { GlobalContext } from "../../ts/base";
 
 /* Node Imports */
 import { load } from "cheerio";
+import axios from "axios";
 
 /* Local Imports */
 import { pick_random } from "../../scripts/utils/util_general";
 
 export async function rule34_result(global_context: GlobalContext, args: string[]) {
     const site_url_main = `https://rule34.xxx/index.php?page=post&s=list${args.length > 0 ? `&tags=${args.join("+")}` : ""}`;
-    const result_main = await global_context.modules.axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
+    const result_main = await axios.get(site_url_main, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
         global_context.logger.neko_api_error(e);
+        return null;
     });
-    if (result_main === undefined || result_main.data === undefined) {
-        return undefined;
+    if (result_main === null || result_main.data === undefined) {
+        return null;
     }
     const $0 = await load(result_main.data);
 
@@ -38,7 +40,7 @@ export async function rule34_result(global_context: GlobalContext, args: string[
     });
 
     if (next_page === null || last_page === null) {
-        return undefined;
+        return null;
     }
 
     let current_ID = 0;
@@ -55,11 +57,12 @@ export async function rule34_result(global_context: GlobalContext, args: string[
         const page = pick_random(pages);
 
         const site_url_posts = `https://rule34.xxx/index.php${page}`;
-        const result_posts = await global_context.modules.axios.get(site_url_posts, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
+        const result_posts = await axios.get(site_url_posts, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
             global_context.logger.neko_api_error(e);
+            return null;
         });
-        if (result_posts === undefined || result_posts.data === undefined) {
-            return undefined;
+        if (result_posts === null || result_posts.data === undefined) {
+            return null;
         }
         const $1 = await load(result_posts.data);
 
@@ -78,11 +81,12 @@ export async function rule34_result(global_context: GlobalContext, args: string[
 
         if (post_links.length > 1) {
             const site_url_post = pick_random(post_links);
-            const result_post = await global_context.modules.axios.get(site_url_post, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
+            const result_post = await axios.get(site_url_post, { headers: { "User-Agent": "Nekomaid/2.0" } }).catch((e: Error) => {
                 global_context.logger.neko_api_error(e);
+                return null;
             });
-            if (result_post === undefined || result_post.data === undefined) {
-                return undefined;
+            if (result_post === null || result_post.data === undefined) {
+                return null;
             }
             const $2 = await load(result_post.data);
 
@@ -109,5 +113,5 @@ export async function rule34_result(global_context: GlobalContext, args: string[
         current_tries += 1;
     }
 
-    return undefined;
+    return null;
 }
