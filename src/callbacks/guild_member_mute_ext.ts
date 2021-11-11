@@ -26,6 +26,19 @@ export default {
             return;
         }
 
+        /* Add mute */
+        const guild_mute = {
+            id: randomBytes(16).toString("hex"),
+            guild_ID: event.member.guild.id,
+            user_ID: event.member.user.id,
+            reason: event.reason,
+            start: event.mute_start,
+            end: event.time === -1 ? -1 : event.mute_end,
+        };
+
+        global_context.neko_modules_clients.db.add_guild_mute(guild_mute);
+
+        /* Process audit loggging */
         if (guild_data.audit_mutes === true && guild_data.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
@@ -62,24 +75,12 @@ export default {
                     },
                 ],
             };
-
-            guild_data.case_ID += 1;
-            global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
-
             channel.send({ embeds: [embedMute] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
+
+            guild_data.case_ID += 1;
+            global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
         }
-
-        const guild_mute = {
-            id: randomBytes(16).toString("hex"),
-            guild_ID: event.member.guild.id,
-            user_ID: event.member.user.id,
-            reason: event.reason,
-            start: event.mute_start,
-            end: event.time === -1 ? -1 : event.mute_end,
-        };
-
-        global_context.neko_modules_clients.db.add_guild_mute(guild_mute);
     },
 } as Callback;

@@ -17,7 +17,7 @@ export default {
     },
 
     async process(global_context: GlobalContext, member: GuildMember | PartialGuildMember) {
-        if (member.user === null || global_context.bot.user === null) {
+        if (global_context.bot.user === null) {
             return;
         }
 
@@ -27,23 +27,21 @@ export default {
             return;
         }
 
+        /* Process leave messages */
         if (guild_data.leave_messages === true && guild_data.leave_messages_channel !== null) {
-            let format = guild_data.leave_messages_format;
-            const member_display_name = `**${member.user.tag}**`;
-            format = format.replace("<user>", member_display_name);
-
+            const format = guild_data.leave_messages_format.replace("<user>", `**${member.user.tag}**`);
             const channel = await global_context.bot.channels.fetch(guild_data.leave_messages_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });
-            if (channel === null || !(channel instanceof TextChannel)) {
-                return;
+            if (channel instanceof TextChannel) {
+                channel.send(format).catch((e: Error) => {
+                    global_context.logger.api_error(e);
+                });
             }
-            channel.send(format).catch((e: Error) => {
-                global_context.logger.api_error(e);
-            });
         }
 
+        /* Process audit logging */
         if (guild_data.audit_kicks === true && guild_data.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
@@ -51,56 +49,40 @@ export default {
             if (!(channel instanceof TextChannel)) {
                 return;
             }
-            const audit = await member.guild.fetchAuditLogs().catch((e: Error) => {
+            const audits = await member.guild.fetchAuditLogs({ limit: 1 }).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });
-            if (audit === null) {
+            if (audits === null) {
                 return;
             }
-            const last_audit = audit.entries.first();
-            if (last_audit === undefined || !(last_audit.target instanceof User) || last_audit.executor === null) {
+            const audit = audits.entries.first();
+            if (audit === undefined || !(audit.target instanceof User) || audit.executor === null) {
                 return;
             }
 
-            if (last_audit.action === "MEMBER_KICK" && last_audit.target.id === member.user.id) {
-                let executor;
-                if (last_audit.executor.id === global_context.bot.user.id) {
-                    executor = await member.guild.members.fetch(moderation_action.moderator).catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                        return null;
-                    });
-                    global_context.data.last_moderation_actions.delete(member.guild.id);
-                } else {
-                    executor = await member.guild.members.fetch(last_audit.executor.id).catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                        return null;
-                    });
-                }
-                if (executor === null) {
-                    return;
-                }
-
-                const url = last_audit.target.avatarURL({ format: "png", dynamic: true, size: 1024 });
+            if (audit.action === "MEMBER_KICK" && audit.target.id === member.user.id) {
+                const executor = audit.executor.id === global_context.bot.user.id ? moderation_action.moderator : audit.executor.id;
+                const url = audit.target.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 const embedKick = {
                     author: {
-                        name: `Kick | ${last_audit.target.tag}`,
+                        name: `Kick | ${audit.target.tag}`,
                         icon_url: url === null ? undefined : url,
                     },
                     fields: [
                         {
                             name: "User:",
-                            value: last_audit.target.tag,
+                            value: audit.target.tag,
                             inline: true,
                         },
                         {
                             name: "Moderator:",
-                            value: executor.toString(),
+                            value: `<@${executor}>`,
                             inline: true,
                         },
                         {
                             name: "Reason:",
-                            value: last_audit.reason === null ? "None" : last_audit.reason,
+                            value: audit.reason === null ? "None" : audit.reason,
                         },
                     ],
                 };

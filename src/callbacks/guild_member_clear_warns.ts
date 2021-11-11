@@ -23,6 +23,10 @@ export default {
             return;
         }
 
+        /* Remove warnings */
+        global_context.neko_modules_clients.db.remove_guild_warnings_from_user(event.member.guild.id, event.member.user.id);
+
+        /* Process audit loggging */
         if (guild_data.audit_warns === true && guild_data.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
@@ -59,15 +63,12 @@ export default {
                     },
                 ],
             };
-
-            guild_data.case_ID += 1;
-            global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
-
             channel.send({ embeds: [embedClearWarns] }).catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
-        }
 
-        global_context.neko_modules_clients.db.remove_guild_warnings_from_user(event.member.guild.id, event.member.user.id);
+            guild_data.case_ID += 1;
+            global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
+        }
     },
 } as Callback;

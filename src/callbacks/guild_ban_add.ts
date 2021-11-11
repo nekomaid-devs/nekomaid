@@ -30,42 +30,40 @@ export default {
             return;
         }
 
+        /* Add a ban */
+        const guild_ban = {
+            id: randomBytes(16).toString("hex"),
+            guild_ID: ban.guild.id,
+            user_ID: ban.user.id,
+            start: moderation_action !== undefined ? moderation_action.start : Date.now(),
+            reason: moderation_action !== undefined ? moderation_action.reason : "None",
+            end: moderation_action !== undefined ? moderation_action.end : -1,
+        };
+        global_context.neko_modules_clients.db.add_guild_ban(guild_ban);
+
+        /* Process audit logging */
         if (guild_data.audit_bans === true && guild_data.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
+                return null;
             });
             if (!(channel instanceof TextChannel)) {
                 return;
             }
-            const audit = await ban.guild.fetchAuditLogs().catch((e: Error) => {
+            const audits = await ban.guild.fetchAuditLogs({ limit: 1 }).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });
-            if (audit === null) {
+            if (audits === null) {
                 return;
             }
-            const last_audit = audit.entries.first();
-            if (last_audit === undefined || !(last_audit.target instanceof User) || last_audit.executor === null) {
+            const audit = audits.entries.first();
+            if (audit === undefined || !(audit.target instanceof User) || audit.executor === null) {
                 return;
             }
 
-            if (last_audit.action === "MEMBER_BAN_ADD" && last_audit.target.id === ban.user.id) {
-                let executor;
-                if (last_audit.executor.id === global_context.bot.user.id) {
-                    executor = await global_context.bot.users.fetch(moderation_action.moderator).catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                        return null;
-                    });
-                } else {
-                    executor = await global_context.bot.users.fetch(last_audit.executor.id).catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                        return null;
-                    });
-                }
-                if (executor === null) {
-                    return;
-                }
-
+            if (audit.action === "MEMBER_BAN_ADD" && audit.target.id === ban.user.id) {
+                const executor = audit.executor.id === global_context.bot.user.id ? moderation_action.moderator : audit.executor.id;
                 const url = ban.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 const embedBan = {
                     author: {
@@ -80,12 +78,12 @@ export default {
                         },
                         {
                             name: "Moderator:",
-                            value: executor.toString(),
+                            value: `<@${executor}>`,
                             inline: true,
                         },
                         {
                             name: "Reason:",
-                            value: last_audit.reason === null ? "None" : last_audit.reason,
+                            value: audit.reason === null ? "None" : audit.reason,
                         },
                         {
                             name: "Duration:",
@@ -94,25 +92,13 @@ export default {
                         },
                     ],
                 };
-
-                guild_data.case_ID += 1;
-                global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
-
                 channel.send({ embeds: [embedBan] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
+
+                guild_data.case_ID += 1;
+                global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
             }
         }
-
-        const guild_ban = {
-            id: randomBytes(16).toString("hex"),
-            guild_ID: ban.guild.id,
-            user_ID: ban.user.id,
-            start: moderation_action !== undefined ? moderation_action.start : Date.now(),
-            reason: moderation_action !== undefined ? moderation_action.reason : "None",
-            end: moderation_action !== undefined ? moderation_action.end : -1,
-        };
-        global_context.neko_modules_clients.db.add_guild_ban(guild_ban);
-        global_context.data.last_moderation_actions.delete(ban.guild.id);
     },
 } as Callback;

@@ -31,7 +31,6 @@ export default {
             return;
         }
 
-        /* Fetch guild data */
         const guild_data = await global_context.neko_modules_clients.db.fetch_message_create_guild(message.guild.id, false, false);
         if (guild_data === null) {
             return;
@@ -49,15 +48,17 @@ export default {
                 }
             });
 
-            ["discord.gg", "discordapp.com/invite", "discord.com/invite"].forEach((inviteWord) => {
-                if (message.content.toLowerCase().includes(inviteWord) === true) {
-                    message.reply("Sending invites isn't allowed on here.");
-                    message.delete().catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                    });
-                    return;
-                }
-            });
+            if (guild_data.invites === false) {
+                ["discord.gg", "discordapp.com/invite", "discord.com/invite"].forEach((inviteWord) => {
+                    if (message.content.toLowerCase().includes(inviteWord) === true) {
+                        message.reply("Sending invites isn't allowed on here.");
+                        message.delete().catch((e: Error) => {
+                            global_context.logger.api_error(e);
+                        });
+                        return;
+                    }
+                });
+            }
         }
 
         /* Process marriage proposals */
@@ -135,6 +136,23 @@ export default {
         const command = global_context.commands.get(command_name);
         if (command === undefined) {
             return;
+        }
+
+        /* Prepare sentry transaction */
+        let transaction: Transaction | null = null;
+        let transaction_prepare = null;
+        let transaction_process = null;
+
+        /* Process sentry transaction */
+        if (global_context.config.sentry_enabled === true) {
+            transaction = Sentry.startTransaction({ op: "execute_command", name: `[Command] ${command.name}` });
+            Sentry.configureScope((scope) => {
+                if (transaction !== null) {
+                    scope.setSpan(transaction);
+                }
+            });
+            Sentry.setUser({ id: message.author.id, username: message.author.username });
+            transaction_prepare = transaction.startChild({ op: "prepare_command" });
         }
 
         /* Check for command cooldowns */
@@ -216,6 +234,19 @@ export default {
             tagged_user_guild_data = user_guild_data;
         }
 
+        /* Increase processed commands */
+        global_context.data.total_commands += 1;
+        global_context.data.processed_commands += 1;
+
+        /* Process global leveling */
+        global_context.neko_modules_clients.levelingManager.update_global_level({
+            global_context: global_context,
+            bot_data: bot_data,
+            user: message.author,
+            user_data: user_data,
+            xp: bot_data.message_XP,
+        });
+
         /* Construct command data */
         const command_data: CommandData = {
             global_context: global_context,
@@ -242,37 +273,6 @@ export default {
             tagged_user_data: tagged_user_data,
             tagged_user_guild_data: tagged_user_guild_data,
         };
-
-        /* Prepare sentry transaction */
-        let transaction: Transaction | null = null;
-        let transaction_prepare = null;
-        let transaction_process = null;
-
-        /* Process sentry transaction */
-        if (global_context.config.sentry_enabled === true) {
-            transaction = Sentry.startTransaction({ op: "execute_command", name: "[Command] Unknown" });
-            transaction.setName(`[Command] ${command.name}`);
-            Sentry.configureScope((scope) => {
-                if (transaction !== null) {
-                    scope.setSpan(transaction);
-                }
-            });
-            Sentry.setUser({ id: message.author.id, username: message.author.username });
-            transaction_prepare = transaction.startChild({ op: "prepare_command" });
-        }
-
-        /* Increase processed commands */
-        global_context.data.total_commands += 1;
-        global_context.data.processed_commands += 1;
-
-        /* Process global leveling */
-        global_context.neko_modules_clients.levelingManager.update_global_level({
-            global_context: global_context,
-            bot_data: bot_data,
-            user: message.author,
-            user_data: user_data,
-            xp: bot_data.message_XP,
-        });
 
         /* Start sentry transaction */
         if (transaction !== null && transaction_prepare !== null) {

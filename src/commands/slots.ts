@@ -61,7 +61,7 @@ export default {
             footer: { text: "Rolling..." },
         };
 
-        const options: any[] = [];
+        const options: string[] = [];
         if (pick_random([true, false])) {
             options.push(...["<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>", "<:n_slots_1:865743549005037578>"]);
         } else {

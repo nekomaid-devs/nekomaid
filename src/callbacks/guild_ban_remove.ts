@@ -1,5 +1,5 @@
 /* Types */
-import { GlobalContext, Callback } from "../ts/base";
+import { GlobalContext, Callback, AuditGuildData, GuildBanData } from "../ts/base";
 import { GuildBan, TextChannel, User } from "discord.js-light";
 
 export default {
@@ -22,12 +22,23 @@ export default {
         }
 
         const moderation_action = global_context.data.last_moderation_actions.get(ban.guild.id);
-        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(ban.guild.id, false, false);
+        let guild_data: Promise<AuditGuildData | null> | AuditGuildData | null = global_context.neko_modules_clients.db.fetch_audit_guild(ban.guild.id, false, false);
+        let guild_bans: Promise<GuildBanData[]> | GuildBanData[] = global_context.neko_modules_clients.db.fetch_guild_bans(ban.guild.id);
+        guild_data = await guild_data;
+        guild_bans = await guild_bans;
         if (guild_data === null) {
             return;
         }
-        const guild_bans = await global_context.neko_modules_clients.db.fetch_guild_bans(ban.guild.id);
 
+        /* Remove ban */
+        const previous_ban = guild_bans.find((e) => {
+            return e.user_ID === ban.user.id;
+        });
+        if (previous_ban !== undefined) {
+            global_context.neko_modules_clients.db.remove_guild_ban(previous_ban.id);
+        }
+
+        /* Process audit logging */
         if (guild_data.audit_bans === true && guild_data.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
@@ -36,35 +47,20 @@ export default {
             if (!(channel instanceof TextChannel)) {
                 return;
             }
-            const audit = await ban.guild.fetchAuditLogs().catch((e: Error) => {
+            const audits = await ban.guild.fetchAuditLogs({ limit: 1 }).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;
             });
-            if (audit === null) {
+            if (audits === null) {
                 return;
             }
-            const last_audit = audit.entries.first();
-            if (last_audit === undefined || !(last_audit.target instanceof User) || last_audit.executor === null) {
+            const audit = audits.entries.first();
+            if (audit === undefined || !(audit.target instanceof User) || audit.executor === null) {
                 return;
             }
 
-            if (last_audit.action === "MEMBER_BAN_REMOVE" && last_audit.target.id === ban.user.id) {
-                let executor;
-                if (last_audit.executor.id === global_context.bot.user.id) {
-                    executor = await global_context.bot.users.fetch(moderation_action.moderator).catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                        return null;
-                    });
-                } else {
-                    executor = await global_context.bot.users.fetch(last_audit.executor.id).catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                        return null;
-                    });
-                }
-                if (executor === null) {
-                    return;
-                }
-
+            if (audit.action === "MEMBER_BAN_REMOVE" && audit.target.id === ban.user.id) {
+                const executor = audit.executor.id === global_context.bot.user.id ? moderation_action.moderator : audit.executor.id;
                 const url = ban.user.avatarURL({ format: "png", dynamic: true, size: 1024 });
                 const embedBan = {
                     author: {
@@ -79,31 +75,22 @@ export default {
                         },
                         {
                             name: "Moderator:",
-                            value: executor.toString(),
+                            value: `<@${executor}>`,
                             inline: true,
                         },
                         {
                             name: "Reason:",
-                            value: last_audit.reason === null ? "None" : last_audit.reason,
+                            value: audit.reason === null ? "None" : audit.reason,
                         },
                     ],
                 };
-
-                guild_data.case_ID += 1;
-                global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
-
                 channel.send({ embeds: [embedBan] }).catch((e: Error) => {
                     global_context.logger.api_error(e);
                 });
+
+                guild_data.case_ID += 1;
+                global_context.neko_modules_clients.db.edit_audit_guild(guild_data);
             }
         }
-
-        const previous_ban = guild_bans.find((e) => {
-            return e.user_ID === ban.user.id;
-        });
-        if (previous_ban !== undefined) {
-            global_context.neko_modules_clients.db.remove_guild_ban(previous_ban.id);
-        }
-        global_context.data.last_moderation_actions.delete(ban.guild.id);
     },
 } as Callback;

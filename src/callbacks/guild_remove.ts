@@ -17,6 +17,6 @@ export default {
     },
 
     process(global_context: GlobalContext, guild: Guild) {
-        global_context.logger.log(`Removed from a Guild! [Name: ${guild.name}] - [ID: ${guild.id}] - [Members: ${guild.memberCount}]`);
+        global_context.logger.log(`Removed from a Guild... [Name: ${guild.name}] - [ID: ${guild.id}] - [Members: ${guild.memberCount}]`);
     },
 } as Callback;

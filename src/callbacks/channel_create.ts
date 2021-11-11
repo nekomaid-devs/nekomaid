@@ -22,6 +22,7 @@ export default {
             return;
         }
 
+        /* Create overwrite for mute role on a channel */
         if (guild_data.mute_role_ID !== null) {
             const mute_role = await channel.guild.roles.fetch(guild_data.mute_role_ID).catch((e: Error) => {
                 global_context.logger.api_error(e);
@@ -31,24 +32,28 @@ export default {
                 return;
             }
 
-            if (channel.type === "GUILD_TEXT") {
-                channel.permissionOverwrites
-                    .create(mute_role, {
-                        SEND_MESSAGES: false,
-                        ADD_REACTIONS: false,
-                    })
-                    .catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                    });
-            } else if (channel.type === "GUILD_VOICE") {
-                channel.permissionOverwrites
-                    .create(mute_role, {
-                        CONNECT: false,
-                        SPEAK: false,
-                    })
-                    .catch((e: Error) => {
-                        global_context.logger.api_error(e);
-                    });
+            switch (channel.type) {
+                case "GUILD_TEXT":
+                    channel.permissionOverwrites
+                        .create(mute_role, {
+                            SEND_MESSAGES: false,
+                            ADD_REACTIONS: false,
+                        })
+                        .catch((e: Error) => {
+                            global_context.logger.api_error(e);
+                        });
+                    break;
+
+                case "GUILD_VOICE":
+                    channel.permissionOverwrites
+                        .create(mute_role, {
+                            CONNECT: false,
+                            SPEAK: false,
+                        })
+                        .catch((e: Error) => {
+                            global_context.logger.api_error(e);
+                        });
+                    break;
             }
         }
     },

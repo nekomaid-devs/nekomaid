@@ -25,6 +25,19 @@ export default {
         if (guild_data === null) {
             return;
         }
+
+        /* Add warning */
+        const guild_warning = {
+            id: randomBytes(16).toString("hex"),
+            guild_ID: event.member.guild.id,
+            user_ID: event.member.user.id,
+            start: Date.now(),
+            reason: event.reason,
+        };
+
+        global_context.neko_modules_clients.db.add_guild_warning(guild_warning);
+
+        /* Process audit logging */
         if (guild_data.audit_warns === true && guild_data.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
@@ -69,15 +82,5 @@ export default {
                 global_context.logger.api_error(e);
             });
         }
-
-        const guild_warning = {
-            id: randomBytes(16).toString("hex"),
-            guild_ID: event.member.guild.id,
-            user_ID: event.member.user.id,
-            start: Date.now(),
-            reason: event.reason,
-        };
-
-        global_context.neko_modules_clients.db.add_guild_warning(guild_warning);
     },
 } as Callback;

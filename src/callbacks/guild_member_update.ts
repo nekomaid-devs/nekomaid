@@ -17,9 +17,6 @@ export default {
     },
 
     process(global_context: GlobalContext, old_member: GuildMember | PartialGuildMember, new_member: GuildMember) {
-        if (old_member === null) {
-            return;
-        }
         if (old_member.nickname !== new_member.nickname) {
             global_context.bot.emit("guildMemberNicknameChange", old_member, new_member);
         }

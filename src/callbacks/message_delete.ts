@@ -25,6 +25,8 @@ export default {
         if (guild_data === null) {
             return;
         }
+
+        /* Process audit logging */
         if (guild_data.audit_deleted_messages === true && guild_data.audit_channel !== null) {
             const channel = await global_context.bot.channels.fetch(guild_data.audit_channel).catch((e: Error) => {
                 global_context.logger.api_error(e);
