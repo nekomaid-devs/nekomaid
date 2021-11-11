@@ -39,7 +39,7 @@ export default {
             if (item_prefab === null) {
                 return;
             }
-            if (item.item_ID === item_prefab.item_ID) {
+            if (item.item_ID === item_prefab.id) {
                 target_index = index;
             }
         });

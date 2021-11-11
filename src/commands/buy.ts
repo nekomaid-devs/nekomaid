@@ -36,7 +36,7 @@ export default {
         }
 
         const target_shop_item = Array.from(get_shop_items().values()).find((e) => {
-            return e.item_ID === target_item.item_ID;
+            return e.item_ID === target_item.id;
         });
         if (target_shop_item === undefined) {
             command_data.message.reply(`Item \`${target_item.display_name}\` isn't for sale.`);

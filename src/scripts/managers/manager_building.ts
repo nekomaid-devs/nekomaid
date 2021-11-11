@@ -10,15 +10,17 @@ import { pick_random, format_number } from "../../scripts/utils/util_general";
 
 class BuildingManager {
     async update_all_buildings(global_context: GlobalContext) {
-        const bot_data = await global_context.neko_modules_clients.db.fetch_config("default_config");
+        let bot_data: Promise<BotData | null> | BotData | null = await global_context.neko_modules_clients.db.fetch_config("default_config");
+        let all_users: Promise<UserData[]> | UserData[] = await global_context.neko_modules_clients.db.fetch_all_users_with_buildings(false, false);
+        bot_data = await bot_data;
+        all_users = await all_users;
         if (bot_data === null) {
             return;
         }
 
-        const all_users = await global_context.neko_modules_clients.db.fetch_all_users_with_buildings(false, false);
-        all_users.forEach((user: UserData) => {
-            global_context.neko_modules_clients.buildingManager.update_buildings(global_context, bot_data, user);
-        });
+        for (let i = 0; i < all_users.length; i++) {
+            global_context.neko_modules_clients.buildingManager.update_buildings(global_context, bot_data, all_users[i]);
+        }
     }
 
     update_buildings(global_context: GlobalContext, bot_data: BotData, user: UserData) {
@@ -38,6 +40,8 @@ class BuildingManager {
 
             user.b_lewd_services_last_update = end.getTime();
             user.credits += credits_amount;
+            global_context.neko_modules_clients.db.edit_user(user);
+
             const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: user.id,
@@ -45,8 +49,6 @@ class BuildingManager {
                 description: `<time_ago> \`❤️ Neko's Lewd Services\` generated \`${format_number(credits_amount)} 💵\`.`,
             };
             global_context.neko_modules_clients.db.add_notification(notification);
-
-            global_context.neko_modules_clients.db.edit_user(user);
         }
 
         start = new Date(user.b_casino_last_update);
@@ -60,6 +62,8 @@ class BuildingManager {
 
             user.b_casino_last_update = end.getTime();
             user.credits += credits_amount;
+            global_context.neko_modules_clients.db.edit_user(user);
+
             const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: user.id,
@@ -67,8 +71,6 @@ class BuildingManager {
                 description: `<time_ago> \`🎰 Neko's Casino\` generated \`${format_number(credits_amount)} 💵\`.`,
             };
             global_context.neko_modules_clients.db.add_notification(notification);
-
-            global_context.neko_modules_clients.db.edit_user(user);
         }
 
         start = new Date(user.b_scrapyard_last_update);
@@ -77,6 +79,7 @@ class BuildingManager {
         diff = Math.abs(Math.round(diff * bot_data.speed));
         if (user.b_scrapyard > 0 && diff >= [0, 60 * 6, 60 * 4, 60 * 6, 60 * 4, 60 * 6, 60 * 4, 60 * 3, 60 * 3, 60 * 3, 60 * 3][user.b_scrapyard]) {
             user.b_scrapyard_last_update = end.getTime();
+            global_context.neko_modules_clients.db.edit_user(user);
 
             let items = [];
             if (user.b_scrapyard >= 5) {
@@ -99,6 +102,7 @@ class BuildingManager {
 
             const item = pick_random(items);
             global_context.neko_modules_clients.db.add_inventory_item(item);
+
             const notification = {
                 id: randomBytes(16).toString("hex"),
                 user_ID: user.id,
@@ -106,8 +110,6 @@ class BuildingManager {
                 description: `<time_ago> Neko at \`⛏️ Neko's Scrapyard\` found \`1x ${rarity_names[item.rarity]} ${item.display_name}\`.`,
             };
             global_context.neko_modules_clients.db.add_notification(notification);
-
-            global_context.neko_modules_clients.db.edit_user(user);
         }
 
         start = new Date(user.b_pawn_shop_last_update);
@@ -157,7 +159,10 @@ class BuildingManager {
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
+                    global_context.neko_modules_clients.db.edit_user(user);
+
                     global_context.neko_modules_clients.db.remove_inventory_item(sold_items[0].id);
+
                     const notification = {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.id,
@@ -165,8 +170,6 @@ class BuildingManager {
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${format_number(credits_amount)} 💵\`.`,
                     };
                     global_context.neko_modules_clients.db.add_notification(notification);
-
-                    global_context.neko_modules_clients.db.edit_user(user);
                 }
             } else if (user.b_pawn_shop >= 4 && r_items.length > 0) {
                 if (diff >= [0, 0, 0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 3][user.b_pawn_shop]) {
@@ -181,7 +184,10 @@ class BuildingManager {
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
+                    global_context.neko_modules_clients.db.edit_user(user);
+
                     global_context.neko_modules_clients.db.remove_inventory_item(sold_items[0].id);
+
                     const notification = {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.id,
@@ -189,8 +195,6 @@ class BuildingManager {
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${format_number(credits_amount)} 💵\`.`,
                     };
                     global_context.neko_modules_clients.db.add_notification(notification);
-
-                    global_context.neko_modules_clients.db.edit_user(user);
                 }
             } else if (user.b_pawn_shop >= 2 && u_items.length > 0) {
                 if (diff >= [0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 2][user.b_pawn_shop]) {
@@ -205,7 +209,10 @@ class BuildingManager {
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
+                    global_context.neko_modules_clients.db.edit_user(user);
+
                     global_context.neko_modules_clients.db.remove_inventory_item(sold_items[0].id);
+
                     const notification = {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.id,
@@ -213,8 +220,6 @@ class BuildingManager {
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${format_number(credits_amount)} 💵\`.`,
                     };
                     global_context.neko_modules_clients.db.add_notification(notification);
-
-                    global_context.neko_modules_clients.db.edit_user(user);
                 }
             } else if (c_items.length > 0) {
                 if (diff >= [0, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 1, 60 * 1, 60 * 1][user.b_pawn_shop]) {
@@ -229,7 +234,10 @@ class BuildingManager {
                     credits_amount = Math.round(credits_amount);
 
                     user.credits += credits_amount;
+                    global_context.neko_modules_clients.db.edit_user(user);
+
                     global_context.neko_modules_clients.db.remove_inventory_item(sold_items[0].id);
+
                     const notification = {
                         id: randomBytes(16).toString("hex"),
                         user_ID: user.id,
@@ -237,8 +245,6 @@ class BuildingManager {
                         description: `<time_ago> Neko at \`🎟️ Neko's Pawn Shop\` sold \`1x ${rarity_names[sold_item.rarity]} ${sold_item.display_name}\` for \`${format_number(credits_amount)} 💵\`.`,
                     };
                     global_context.neko_modules_clients.db.add_notification(notification);
-
-                    global_context.neko_modules_clients.db.edit_user(user);
                 }
             }
         }

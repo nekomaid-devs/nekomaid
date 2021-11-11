@@ -15,7 +15,7 @@ class UpvoteManager {
             global_context.logger.api_error(e);
             return null;
         });
-        if (channel === null || !(channel instanceof TextChannel)) {
+        if (!(channel instanceof TextChannel)) {
             return;
         }
 

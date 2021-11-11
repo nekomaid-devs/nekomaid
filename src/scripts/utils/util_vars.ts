@@ -1,5 +1,5 @@
 /* Types */
-import { Command, CommandData } from "../../ts/base";
+import { Command, CommandData, ItemData, ItemRarity } from "../../ts/base";
 import { Message } from "discord.js-light";
 
 export function get_8ball_answers() {
@@ -541,96 +541,138 @@ export function get_global_building_field(building_name: string) {
 }
 
 export function get_items() {
-    const items = new Map();
-    items.set("1", { id: "0", type: "box", display_name: "Common Box", box_payouts: [50, 100, 150], description: "A common lootbox with a cash prize inside~", rarity: "common" });
-    items.set("2", { id: "1", type: "box", display_name: "Uncommon Box", box_payouts: [100, 150, 200, 300], description: "An uncommon lootbox with a cash prize inside~", rarity: "uncommon" });
-    items.set("0", { id: "2", type: "box", display_name: "Rare Box", box_payouts: [300, 500, 750], description: "A rare lootbox with a cash prize inside~", rarity: "rare" });
-    items.set("3", { id: "3", type: "box", display_name: "Legendary Box", box_payouts: [1500, 1700, 1900, 2250], description: "A legendary lootbox with a cash prize inside~", rarity: "legendary" });
-    items.set("4", { id: "4", type: "cash", display_name: "Cash Stack", cash_payout: 500, description: "A cash stack you can use to get cash~", rarity: "common" });
-    items.set("5", { id: "5", type: "cash_others", display_name: "Mystery Cash Stack", cash_payout: 500, description: "A cash stack you can use on somebody else to give them cash~", rarity: "common" });
+    const items = new Map<string, ItemData>();
+    items.set("1", { id: "0", type: "box", rarity: ItemRarity.COMMON, display_name: "Common Box", description: "A common lootbox with a cash prize inside~", data: { box_payouts: [50, 100, 150] }, can_be_scavanged: false });
+    items.set("2", { id: "1", type: "box", rarity: ItemRarity.UNCOMMON, display_name: "Uncommon Box", description: "An uncommon lootbox with a cash prize inside~", data: { box_payouts: [100, 150, 200, 300] }, can_be_scavanged: false });
+    items.set("0", { id: "2", type: "box", rarity: ItemRarity.RARE, display_name: "Rare Box", description: "A rare lootbox with a cash prize inside~", data: { box_payouts: [300, 500, 750] }, can_be_scavanged: false });
+    items.set("3", {
+        id: "3",
+        type: "box",
+        rarity: ItemRarity.LEGENDARY,
+        display_name: "Legendary Box",
+        description: "A legendary lootbox with a cash prize inside~",
+        data: { box_payouts: [1500, 1700, 1900, 2250] },
+        can_be_scavanged: false,
+    });
+    items.set("4", { id: "4", type: "cash", rarity: ItemRarity.COMMON, display_name: "Cash Stack", description: "A cash stack you can use to get cash~", data: { cash_payout: 500 }, can_be_scavanged: false });
+    items.set("5", {
+        id: "5",
+        type: "cash_others",
+        rarity: ItemRarity.COMMON,
+        display_name: "Mystery Cash Stack",
+        description: "A cash stack you can use on somebody else to give them cash~",
+        data: { cash_payout: 500 },
+        can_be_scavanged: false,
+    });
     items.set("8", {
         id: "8",
         type: "party_popper",
+        rarity: ItemRarity.COMMON,
         display_name: "Small Party Popper",
-        cash_payout: 250,
-        users: 3,
         description: "A party popper you can use to start a party~ 3 random people will have the chance to get a cash reward~",
-        rarity: "common",
+        data: {
+            cash_payout: 250,
+            users: 3,
+        },
+        can_be_scavanged: false,
     });
     items.set("9", {
         id: "9",
         type: "party_popper",
+        rarity: ItemRarity.UNCOMMON,
         display_name: "Medium Party Popper",
-        cash_payout: 500,
-        users: 3,
         description: "A party popper you can use to start a party~ 3 random people will have the chance to get a cash reward~",
-        rarity: "uncommon",
+        data: {
+            cash_payout: 500,
+            users: 3,
+        },
+        can_be_scavanged: false,
     });
     items.set("10", {
         id: "10",
         type: "party_popper",
+        rarity: ItemRarity.RARE,
         display_name: "Large Party Popper",
-        cash_payout: 500,
-        users: 5,
         description: "A party popper you can use to start a party~ 5 random people will have the chance to get a cash reward~",
-        rarity: "rare",
+        data: {
+            cash_payout: 500,
+            users: 5,
+        },
+        can_be_scavanged: false,
     });
     items.set("11", {
         id: "11",
         type: "confetti_ball",
+        rarity: ItemRarity.COMMON,
         display_name: "Small Confetti Ball",
-        cash_payout: 250,
-        users: 3,
         description: "A confetti ball you can open and give 3 random people in the server a cash reward~",
-        rarity: "common",
+        data: {
+            cash_payout: 250,
+            users: 3,
+        },
+        can_be_scavanged: false,
     });
     items.set("12", {
         id: "12",
         type: "confetti_ball",
+        rarity: ItemRarity.UNCOMMON,
         display_name: "Medium Confetti Ball",
-        cash_payout: 500,
-        users: 3,
         description: "A confetti ball you can open and give 3 random people in the server a cash reward~",
-        rarity: "uncommon",
+        data: {
+            cash_payout: 500,
+            users: 3,
+        },
+        can_be_scavanged: false,
     });
     items.set("13", {
         id: "13",
         type: "confetti_ball",
+        rarity: ItemRarity.RARE,
         display_name: "Large Confetti Ball",
-        cash_payout: 500,
-        users: 5,
         description: "A confetti ball you can open and give 5 random people in the server a cash reward~",
-        rarity: "rare",
+        data: {
+            cash_payout: 500,
+            users: 5,
+        },
+        can_be_scavanged: false,
     });
-    items.set("14", { id: "14", type: "shield", display_name: "Shield", description: "A single-use shield that protects you from thieves~", rarity: "common" });
-    items.set("15", { id: "15", type: "book_red", display_name: "Red Book", description: "A red book~", can_be_scavanged: true, rarity: "common" });
-    items.set("16", { id: "16", type: "book_blue", display_name: "Blue Book", description: "A blue book~", can_be_scavanged: true, rarity: "uncommon" });
-    items.set("17", { id: "17", type: "book_orange", display_name: "Orange Book", description: "A orange book~", can_be_scavanged: true, rarity: "uncommon" });
-    items.set("18", { id: "18", type: "book_yellow", display_name: "Yellow Book", description: "A yellow book~", can_be_scavanged: true, rarity: "legendary" });
-    items.set("19", { id: "19", type: "book_purple", display_name: "Purple Book", description: "A purple book~", can_be_scavanged: true, rarity: "rare" });
-    items.set("20", { id: "20", type: "bomb", display_name: "Bomb", description: "A bomb~", can_be_scavanged: true, rarity: "uncommon" });
-    items.set("21", { id: "21", type: "crystal_ball", display_name: "Crystal Ball", description: "A crystal ball~", can_be_scavanged: true, rarity: "common" });
-    items.set("22", { id: "22", type: "balloon", display_name: "Balloon", description: "A balloon~", can_be_scavanged: true, rarity: "common" });
-    items.set("23", { id: "23", type: "magic_wand", display_name: "Magic Wand", description: "A magic wand~", can_be_scavanged: true, rarity: "uncommon" });
-    items.set("24", { id: "24", type: "teddy_bear", display_name: "Teddy Bear", description: "A teddy bear~", can_be_scavanged: true, rarity: "common" });
-    items.set("25", { id: "25", type: "pinata", display_name: "Piñata", description: "A piñata~", can_be_scavanged: true, rarity: "uncommon" });
-    items.set("26", { id: "26", type: "yarn", display_name: "Yarn", description: "A yarn~", can_be_scavanged: true, rarity: "uncommon" });
-    items.set("27", { id: "27", type: "laptop", display_name: "Laptop", description: "A laptop~", can_be_scavanged: true, rarity: "legendary" });
-    items.set("28", { id: "28", type: "floppy", display_name: "Floppy Disk", description: "A floppy~", can_be_scavanged: true, rarity: "common" });
-    items.set("29", { id: "29", type: "flashlight", display_name: "Flashlight", description: "A flashlight~", can_be_scavanged: true, rarity: "common" });
-    items.set("30", { id: "30", type: "scroll", display_name: "Scroll", description: "A scroll~", can_be_scavanged: true, rarity: "uncommon" });
-    items.set("31", { id: "31", type: "credit_card", display_name: "Credit Card", description: "A credit card~", can_be_scavanged: true, rarity: "rare" });
-    items.set("32", { id: "32", type: "key", display_name: "Key", description: "A key~", can_be_scavanged: true, rarity: "rare" });
-    items.set("33", { id: "33", type: "bread", display_name: "Bread", description: "A bread~", can_be_scavanged: true, rarity: "common" });
-    items.set("34", { id: "34", type: "pizza", display_name: "Pizza", description: "A pizza~", can_be_scavanged: true, rarity: "common" });
-    items.set("35", { id: "35", type: "fish", display_name: "Fish", description: "A fish~", can_be_scavanged: true, rarity: "common" });
-    items.set("36", { id: "36", type: "cookie", display_name: "Cookie", description: "A cookie~", can_be_scavanged: true, rarity: "common" });
-    items.set("37", { id: "37", type: "medal", display_name: "Medal", description: "A medal~", can_be_scavanged: true, rarity: "rare" });
-    items.set("38", { id: "38", type: "trophy", display_name: "Trophy", description: "A trophy~", can_be_scavanged: true, rarity: "rare" });
-    items.set("39", { id: "39", type: "lewd_object", display_name: "Pink Lewd Object", description: "A pink lewd obejct~", can_be_scavanged: true, rarity: "common" });
-    items.set("40", { id: "40", type: "lollipop", display_name: "Lollipop", description: "A lollipop~", can_be_scavanged: true, rarity: "common" });
-    items.set("41", { id: "41", type: "lewd_object", display_name: "Black Lewd Object", description: "A black lewd object~", can_be_scavanged: true, rarity: "legendary" });
-    items.set("42", { id: "42", type: "lewd_object", display_name: "Red Lewd Object", description: "A red lewd object~", can_be_scavanged: true, rarity: "rare" });
+    items.set("14", {
+        id: "14",
+        type: "shield",
+        rarity: ItemRarity.COMMON,
+        display_name: "Shield",
+        description: "A single-use shield that protects you from thieves~",
+        data: {},
+        can_be_scavanged: false,
+    });
+    items.set("15", { id: "15", type: "book_red", rarity: ItemRarity.COMMON, display_name: "Red Book", description: "A red book~", data: {}, can_be_scavanged: true });
+    items.set("16", { id: "16", type: "book_blue", rarity: ItemRarity.UNCOMMON, display_name: "Blue Book", description: "A blue book~", data: {}, can_be_scavanged: true });
+    items.set("17", { id: "17", type: "book_orange", rarity: ItemRarity.UNCOMMON, display_name: "Orange Book", description: "A orange book~", data: {}, can_be_scavanged: true });
+    items.set("18", { id: "18", type: "book_yellow", rarity: ItemRarity.LEGENDARY, display_name: "Yellow Book", description: "A yellow book~", data: {}, can_be_scavanged: true });
+    items.set("19", { id: "19", type: "book_purple", rarity: ItemRarity.RARE, display_name: "Purple Book", description: "A purple book~", data: {}, can_be_scavanged: true });
+    items.set("20", { id: "20", type: "bomb", rarity: ItemRarity.UNCOMMON, display_name: "Bomb", description: "A bomb~", data: {}, can_be_scavanged: true });
+    items.set("21", { id: "21", type: "crystal_ball", rarity: ItemRarity.COMMON, display_name: "Crystal Ball", description: "A crystal ball~", data: {}, can_be_scavanged: true });
+    items.set("22", { id: "22", type: "balloon", rarity: ItemRarity.COMMON, display_name: "Balloon", description: "A balloon~", data: {}, can_be_scavanged: true });
+    items.set("23", { id: "23", type: "magic_wand", rarity: ItemRarity.UNCOMMON, display_name: "Magic Wand", description: "A magic wand~", data: {}, can_be_scavanged: true });
+    items.set("24", { id: "24", type: "teddy_bear", rarity: ItemRarity.COMMON, display_name: "Teddy Bear", description: "A teddy bear~", data: {}, can_be_scavanged: true });
+    items.set("25", { id: "25", type: "pinata", rarity: ItemRarity.UNCOMMON, display_name: "Piñata", description: "A piñata~", data: {}, can_be_scavanged: true });
+    items.set("26", { id: "26", type: "yarn", rarity: ItemRarity.UNCOMMON, display_name: "Yarn", description: "A yarn~", data: {}, can_be_scavanged: true });
+    items.set("27", { id: "27", type: "laptop", rarity: ItemRarity.LEGENDARY, display_name: "Laptop", description: "A laptop~", data: {}, can_be_scavanged: true });
+    items.set("28", { id: "28", type: "floppy", rarity: ItemRarity.COMMON, display_name: "Floppy Disk", description: "A floppy~", data: {}, can_be_scavanged: true });
+    items.set("29", { id: "29", type: "flashlight", rarity: ItemRarity.COMMON, display_name: "Flashlight", description: "A flashlight~", data: {}, can_be_scavanged: true });
+    items.set("30", { id: "30", type: "scroll", rarity: ItemRarity.UNCOMMON, display_name: "Scroll", description: "A scroll~", data: {}, can_be_scavanged: true });
+    items.set("31", { id: "31", type: "credit_card", rarity: ItemRarity.RARE, display_name: "Credit Card", description: "A credit card~", data: {}, can_be_scavanged: true });
+    items.set("32", { id: "32", type: "key", rarity: ItemRarity.RARE, display_name: "Key", description: "A key~", data: {}, can_be_scavanged: true });
+    items.set("33", { id: "33", type: "bread", rarity: ItemRarity.COMMON, display_name: "Bread", description: "A bread~", data: {}, can_be_scavanged: true });
+    items.set("34", { id: "34", type: "pizza", rarity: ItemRarity.COMMON, display_name: "Pizza", description: "A pizza~", data: {}, can_be_scavanged: true });
+    items.set("35", { id: "35", type: "fish", rarity: ItemRarity.COMMON, display_name: "Fish", description: "A fish~", data: {}, can_be_scavanged: true });
+    items.set("36", { id: "36", type: "cookie", rarity: ItemRarity.COMMON, display_name: "Cookie", description: "A cookie~", data: {}, can_be_scavanged: true });
+    items.set("37", { id: "37", type: "medal", rarity: ItemRarity.RARE, display_name: "Medal", description: "A medal~", data: {}, can_be_scavanged: true });
+    items.set("38", { id: "38", type: "trophy", rarity: ItemRarity.RARE, display_name: "Trophy", description: "A trophy~", data: {}, can_be_scavanged: true });
+    items.set("39", { id: "39", type: "lewd_object", rarity: ItemRarity.COMMON, display_name: "Pink Lewd Object", description: "A pink lewd obejct~", data: {}, can_be_scavanged: true });
+    items.set("40", { id: "40", type: "lollipop", rarity: ItemRarity.COMMON, display_name: "Lollipop", description: "A lollipop~", data: {}, can_be_scavanged: true });
+    items.set("41", { id: "41", type: "lewd_object", rarity: ItemRarity.LEGENDARY, display_name: "Black Lewd Object", description: "A black lewd object~", data: {}, can_be_scavanged: true });
+    items.set("42", { id: "42", type: "lewd_object", rarity: ItemRarity.RARE, display_name: "Red Lewd Object", description: "A red lewd object~", data: {}, can_be_scavanged: true });
 
     return items;
 }

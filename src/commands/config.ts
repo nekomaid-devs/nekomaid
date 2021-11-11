@@ -227,7 +227,7 @@ export default {
                             if (command_data.message.guild === null) {
                                 return;
                             }
-                            command_data.global_context.neko_modules_clients.counterManager.update_counter(command_data.global_context, command_data.message.guild, counter, true);
+                            command_data.global_context.neko_modules_clients.counterManager.update_counter(command_data.global_context, counter, true);
                         }, 5000);
                         command_data.message.channel.send("Added new counter, wait for it to load.").catch((e: Error) => {
                             command_data.global_context.logger.api_error(e);

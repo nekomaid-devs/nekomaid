@@ -80,7 +80,7 @@ function continue_collecting(global_context: GlobalContext, guild_data: GuildDat
                 });
 
                 global_context.neko_modules_clients.db.edit_guild(guild_data);
-                global_context.neko_modules_clients.reactionRolesManager.create_collector(global_context, msg.guild, reactionRoleMenuInfo);
+                global_context.neko_modules_clients.reactionRolesManager.create_collector(global_context, reactionRoleMenuInfo);
                 break;
             }
 

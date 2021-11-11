@@ -1,21 +1,16 @@
 /* Types */
 import { CounterData, GlobalContext } from "../../ts/base";
-import { Guild, VoiceChannel } from "discord.js-light";
+import { VoiceChannel } from "discord.js-light";
 
 class CounterManager {
     async update_all_counters(global_context: GlobalContext) {
-        const counters = await global_context.neko_modules_clients.db.fetch_all_counters();
-        global_context.bot.guilds.cache.forEach((guild) => {
-            const guild_counters = counters.filter((e: CounterData) => {
-                return e.id === guild.id;
-            });
-            guild_counters.forEach((counter: CounterData) => {
-                global_context.neko_modules_clients.counterManager.update_counter(global_context, guild, counter);
-            });
+        const all_counters = await global_context.neko_modules_clients.db.fetch_all_counters();
+        all_counters.forEach((counter) => {
+            global_context.neko_modules_clients.counterManager.update_counter(global_context, counter);
         });
     }
 
-    async update_counter(global_context: GlobalContext, guild: Guild, counter: CounterData, force_update = false) {
+    async update_counter(global_context: GlobalContext, counter: CounterData, force_update = false) {
         if (global_context.bot.shard === null) {
             return;
         }
@@ -29,6 +24,7 @@ class CounterManager {
         if (diff >= 5 || force_update === true) {
             counter.last_update = end.getTime();
 
+            const guild = await global_context.bot.guilds.fetch(counter.guild_ID);
             const channel = await global_context.bot.channels.fetch(counter.channel_ID).catch((e: Error) => {
                 global_context.logger.api_error(e);
                 return null;

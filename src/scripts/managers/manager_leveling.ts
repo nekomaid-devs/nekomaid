@@ -29,9 +29,6 @@ class LevelingManager {
 
         leveling_data.user_data.xp = Number(leveling_data.user_data.xp.toFixed(2));
         leveling_data.global_context.neko_modules_clients.db.edit_guild_user(leveling_data.user_data);
-        if (leveling_data.guild_data.module_level_ranks.length < 1) {
-            return;
-        }
 
         const rank_data = await this.process_ranks(leveling_data);
         if (leveling_data.guild_data.module_level_levelup_messages === true && leveling_data.log === true) {
@@ -62,13 +59,11 @@ class LevelingManager {
                 leveling_data.global_context.logger.api_error(e);
                 return null;
             });
-            if (channel === null || !(channel instanceof TextChannel)) {
-                return;
+            if (channel instanceof TextChannel) {
+                channel.send(levelup_message + rank_message).catch((e: Error) => {
+                    leveling_data.global_context.logger.api_error(e);
+                });
             }
-
-            channel.send(levelup_message + rank_message).catch((e: Error) => {
-                leveling_data.global_context.logger.api_error(e);
-            });
         }
 
         leveling_data.user_data.xp = Number(leveling_data.user_data.xp.toFixed(2));

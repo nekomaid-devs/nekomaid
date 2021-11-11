@@ -8,11 +8,9 @@ import Database from "../scripts/db/db";
 import MarriageManager from "../scripts/managers/manager_marriage";
 import VoiceManager from "../scripts/managers/manager_voice";
 import UpvoteManager from "../scripts/managers/manager_upvote";
-import SupportManager from "../scripts/managers/manager_support";
 import CounterManager from "../scripts/managers/manager_counter";
 import ReactionRolesManager from "../scripts/managers/manager_reaction_roles";
 import InventoryManager from "../scripts/managers/manager_inventory";
-import EventManager from "../scripts/managers/manager_event";
 import BuildingManager from "../scripts/managers/manager_building";
 import LevelingManager from "../scripts/managers/manager_leveling";
 import ModerationManager from "../scripts/managers/manager_moderation";
@@ -63,11 +61,9 @@ export type GlobalContext = {
         marriageManager: MarriageManager;
         voiceManager: VoiceManager;
         upvoteManager: UpvoteManager;
-        supportManager: SupportManager;
         counterManager: CounterManager;
         reactionRolesManager: ReactionRolesManager;
         inventoryManager: InventoryManager;
-        eventManager: EventManager;
         buildingManager: BuildingManager;
         levelingManager: LevelingManager;
         moderationManager: ModerationManager;
@@ -376,10 +372,13 @@ export type GuildWarnData = {
 };
 
 export type ItemData = {
-    item_ID: string;
-
-    display_name: string;
+    id: string;
+    type: string;
     rarity: ItemRarity;
+    display_name: string;
+    description: string;
+
+    data: any;
     can_be_scavanged: boolean;
 };
 

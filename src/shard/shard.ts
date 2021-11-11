@@ -17,11 +17,9 @@ import VoiceManager from "../scripts/managers/manager_voice";
 import ModerationManager from "../scripts/managers/manager_moderation";
 import LevelingManager from "../scripts/managers/manager_leveling";
 import BuildingManager from "../scripts/managers/manager_building";
-import EventManager from "../scripts/managers/manager_event";
 import InventoryManager from "../scripts/managers/manager_inventory";
 import ReactionRolesManager from "../scripts/managers/manager_reaction_roles";
 import CounterManager from "../scripts/managers/manager_counter";
-import SupportManager from "../scripts/managers/manager_support";
 import UpvoteManager from "../scripts/managers/manager_upvote";
 import MarriageManager from "../scripts/managers/manager_marriage";
 import Database from "../scripts/db/db";
@@ -105,11 +103,9 @@ async function run() {
             marriageManager: new MarriageManager(),
             voiceManager: new VoiceManager(),
             upvoteManager: new UpvoteManager(),
-            supportManager: new SupportManager(),
             counterManager: new CounterManager(),
             reactionRolesManager: new ReactionRolesManager(),
             inventoryManager: new InventoryManager(),
-            eventManager: new EventManager(),
             buildingManager: new BuildingManager(),
             levelingManager: new LevelingManager(),
             moderationManager: new ModerationManager(),
@@ -186,7 +182,7 @@ async function run() {
     // Log into Discord
     bot.login(global_context.config.token);
 
-    let last_timestamp = Date.now();
+    /* Setup cron jobs */
     setInterval(() => {
         global_context.data.processed_events = global_context.data.processed_events;
         global_context.data.total_events = global_context.data.total_events;
@@ -194,63 +190,34 @@ async function run() {
         global_context.data.total_messages = global_context.data.total_messages;
         global_context.data.processed_commands = global_context.data.processed_commands;
         global_context.data.total_commands = global_context.data.total_commands;
-        if (global_context.neko_modules_clients.voiceManager !== undefined) {
-            global_context.data.voice_connections = global_context.neko_modules_clients.voiceManager.connections.size;
-            global_context.neko_modules_clients.voiceManager.tick_connections(global_context);
-        }
+        global_context.data.voice_connections = global_context.neko_modules_clients.voiceManager.connections.size;
+        global_context.neko_modules_clients.voiceManager.tick_connections(global_context);
 
         global_context.data.processed_events = 0;
         global_context.data.processed_messages = 0;
         global_context.data.processed_commands = 0;
     }, 1000);
     setInterval(() => {
-        if (global_context.bot.shard === null) {
-            return;
-        }
-        if (global_context.bot.shard.ids[0] === 0) {
-            refresh_website(global_context);
-        }
-    }, 2000);
-    setInterval(() => {
-        if (global_context.bot.shard === null) {
-            return;
-        }
-        if (global_context.neko_modules_clients.eventManager !== undefined && global_context.bot.shard.ids[0] === 0) {
-            const date = new Date();
-            if (date.getHours() % 2 === 0 && date.getMinutes() === 0 && Date.now() > last_timestamp + 1000 * 60) {
-                global_context.neko_modules_clients.eventManager.spawn_event(global_context, global_context.config.events_channel_ID, -1);
-                last_timestamp = Date.now();
-            }
-        }
-        if (global_context.neko_modules_clients.buildingManager !== undefined && global_context.bot.shard.ids[0] === 0) {
-            global_context.neko_modules_clients.buildingManager.update_all_buildings(global_context);
-        }
-    }, 10000);
-    setInterval(() => {
-        if (global_context.neko_modules_clients.moderationManager !== undefined) {
-            global_context.neko_modules_clients.moderationManager.timeout_all_bans(global_context);
-            global_context.neko_modules_clients.moderationManager.timeout_all_mutes(global_context);
-        }
-    }, 10000);
-    setInterval(() => {
-        if (global_context.bot.shard === null) {
-            return;
-        }
-        if (global_context.bot.shard.ids[0] === 0) {
-            refresh_bot_list(global_context);
-        }
-        if (global_context.neko_modules_clients.counterManager !== undefined) {
-            global_context.neko_modules_clients.counterManager.update_all_counters(global_context);
-        }
-    }, 60000);
-    setInterval(() => {
         refresh_status(global_context);
     }, 60000);
-    setInterval(async () => {
-        if (global_context.bot.shard === null) {
-            return;
-        }
-        if (global_context.bot.shard.ids[0] === 0) {
+
+    /* Setup cron jobs (1st shard only) */
+    if (global_context.bot.shard !== null && global_context.bot.shard.ids[0] === 0) {
+        setInterval(() => {
+            refresh_website(global_context);
+        }, 2000);
+        setInterval(() => {
+            global_context.neko_modules_clients.buildingManager.update_all_buildings(global_context);
+        }, 10000);
+        setInterval(() => {
+            global_context.neko_modules_clients.moderationManager.timeout_all_bans(global_context);
+            global_context.neko_modules_clients.moderationManager.timeout_all_mutes(global_context);
+        }, 10000);
+        setInterval(() => {
+            refresh_bot_list(global_context);
+            global_context.neko_modules_clients.counterManager.update_all_counters(global_context);
+        }, 60000);
+        setInterval(async () => {
             const top_items = await get_top(global_context, ["credits", "bank"]);
             const economy_list = [];
             for (let i = 0; i < (top_items.length < 10 ? top_items.length : 10); i++) {
@@ -282,8 +249,8 @@ async function run() {
             }
 
             global_context.data.economy_list = economy_list;
-        }
-    }, 60000);
+        }, 60000);
+    }
 
     bot.on("ready", () => {
         const t_logging_end = performance.now();
