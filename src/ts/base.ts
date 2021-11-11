@@ -20,6 +20,7 @@ import Logger from "../scripts/helpers/logger";
 
 /* Node Imports */
 import { AxiosRequestHeaders } from "axios";
+import * as osu from "node-osu";
 
 /* Enums */
 export enum ShrineBonus {
@@ -53,9 +54,10 @@ export type GlobalContext = {
     modules: {
         ytinfo: any;
     };
-    modules_clients: any;
+    modules_clients: {
+        osu: osu.Api | null;
+    };
 
-    neko_modules: any;
     neko_modules_clients: {
         db: Database;
         marriageManager: MarriageManager;

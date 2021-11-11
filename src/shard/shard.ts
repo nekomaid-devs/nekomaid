@@ -93,10 +93,13 @@ async function run() {
         command_aliases: new Map(),
         user_cooldowns: new Map(),
 
-        modules: { ytinfo: require("youtube.get-video-info") },
-        modules_clients: {},
+        modules: {
+            ytinfo: require("youtube.get-video-info"),
+        },
+        modules_clients: {
+            osu: null,
+        },
 
-        neko_modules: {},
         neko_modules_clients: {
             db: new Database(sql_connection),
             marriageManager: new MarriageManager(),

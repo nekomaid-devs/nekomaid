@@ -18,7 +18,7 @@ export default {
         if (command_data.message.guild === null) {
             return;
         }
-        if (command_data.global_context.config.osu_enabled === false) {
+        if (command_data.global_context.modules_clients.osu === null) {
             command_data.message.channel.send("The osu! module is disabled for this bot.").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
@@ -33,8 +33,9 @@ export default {
 
         const user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.tagged_user_data.osu_username }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
+            return null;
         });
-        if (user.id === undefined) {
+        if (user === null) {
             command_data.message.channel.send(`No osu! profile found! (You can set one with \`${command_data.guild_data.prefix}osuset <username>\`)`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
@@ -52,7 +53,7 @@ export default {
                 `**▸ Rank:** #${user.pp.rank} (${user.country} #${user.pp.countryRank})\n` +
                 `**▸ Level:** ${Math.floor(user.level)} (${((user.level - Math.floor(user.level)) * 100).toFixed(2)}%)\n` +
                 `**▸ Total PP:** ${user.pp.raw}\n` +
-                `**▸ Accuracy:** ${parseFloat(user.accuracy).toFixed(2)}%\n` +
+                `**▸ Accuracy:** ${user.accuracy.toFixed(2)}%\n` +
                 `**▸ Playcount:** ${user.counts.plays}`,
             thumbnail: {
                 url: `http://s.ppy.sh/a/${user.id}`,

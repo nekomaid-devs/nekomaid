@@ -21,7 +21,7 @@ export default {
         if (command_data.message.guild === null) {
             return;
         }
-        if (command_data.global_context.config.osu_enabled === false) {
+        if (command_data.global_context.modules_clients.osu === null) {
             command_data.message.channel.send("The osu! module is disabled for this bot.").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
@@ -36,8 +36,9 @@ export default {
 
         const user = await command_data.global_context.modules_clients.osu.getUser({ u: command_data.tagged_user_data.osu_username }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
+            return null;
         });
-        if (user.id === undefined) {
+        if (user === null) {
             command_data.message.channel.send(`No osu! profile found! (You can set one with \`${command_data.guild_data.prefix}osuset <username>\`)`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
@@ -46,8 +47,9 @@ export default {
 
         const last = await command_data.global_context.modules_clients.osu.getUserRecent({ u: command_data.tagged_user_data.osu_username }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
+            return null;
         });
-        if (last.length === undefined || last.length < 1) {
+        if (last === null || last.length < 1) {
             command_data.message.reply("No play in the last 24 hours.");
             return;
         }
@@ -56,7 +58,7 @@ export default {
         let plays_description = "";
         if (last.length > 0) {
             const play = last[0];
-            const elapsed = start.getTime() - play.date;
+            const elapsed = start.getTime() - new Date(play.date).getTime();
             const ago = convert_time(elapsed);
 
             let mods = "";
@@ -83,8 +85,8 @@ export default {
             rank = play.rank === "D" ? "<:n_D:725012762316636200>" : rank;
             rank = play.rank === "F" ? "<:n_F:725012761465061531>" : rank;
 
-            plays_description += `**[${play.beatmap.title}](https://osu.ppy.sh/beatmaps/${play.beatmap.id}) ${mods}** [${parseFloat(play.beatmap.difficulty.rating).toFixed(2)}★]\n`;
-            plays_description += `**▸ ${rank} ▸ ${play.pp === null ? "??" : play.pp}pp ▸** ${(play.accuracy * 100).toFixed(2)}%\n`;
+            plays_description += `**[${play.beatmap.title}](https://osu.ppy.sh/beatmaps/${play.beatmap.id}) ${mods}** [${play.beatmap.difficulty.rating.toFixed(2)}★]\n`;
+            plays_description += `**▸ ${rank} ▸ ${play.pp === null ? "??" : play.pp}pp ▸** ${play.accuracy === undefined ? "??" : (parseFloat(play.accuracy.toString()) * 100).toFixed(2)}%\n`;
             plays_description += `▸ ${play.score} ▸ ${play.maxCombo}/${play.beatmap.maxCombo}x ▸ [${play.counts["300"]}/${play.counts["100"]}/${play.counts["50"]}/${play.counts.miss}]\n`;
             plays_description += `▸ ${ago} ago\n`;
         } else {
