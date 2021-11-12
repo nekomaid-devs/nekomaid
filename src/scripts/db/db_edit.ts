@@ -110,7 +110,7 @@ export async function _edit_guild_counter(connection: Connection, item: CounterD
 export async function _edit_user(connection: Connection, item: UserData) {
     const query = `UPDATE users SET
     credits=?, bank=?, level=?, xp=?, rep=?, net_worth=?, votes=?, married_ID=?, can_divorce=?,
-    last_daily_time=?, last_upvoted_time=?, last_beg_time=?, last_rep_time=?,last_work_time=?, last_steal_time=?, last_crime_time=?,
+    last_daily_time=?, last_upvoted_time=?, last_beg_time=?, last_rep_time=?, last_work_time=?, last_steal_time=?, last_crime_time=?,
     osu_username=?,
     b_city_hall=?, b_city_hall_credits=?, b_bank=?, b_bank_credits=?, b_pancakes=?, b_pancakes_credits=?, b_crime_den=?, b_crime_den_credits=?,
     b_pawn_shop=?, b_pawn_shop_credits=?, b_pawn_shop_last_update=?, b_scrapyard=?, b_scrapyard_credits=?, b_scrapyard_last_update=?, b_casino=?, b_casino_credits=?, b_casino_last_update=?,
@@ -127,13 +127,13 @@ export async function _edit_user(connection: Connection, item: UserData) {
         item.married_ID,
         item.can_divorce,
 
-        item.last_work_time,
-        item.last_crime_time,
         item.last_daily_time,
-        item.last_steal_time,
-        item.last_rep_time,
         item.last_upvoted_time,
         item.last_beg_time,
+        item.last_rep_time,
+        item.last_work_time,
+        item.last_steal_time,
+        item.last_crime_time,
 
         item.osu_username,
 
