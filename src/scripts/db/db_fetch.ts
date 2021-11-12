@@ -49,7 +49,13 @@ async function format_config(connection: Connection, item: any, flags: number) {
 }
 
 export async function _fetch_all_items(connection: Connection) {
-    return await fetch_multiple_data(connection, "SELECT * FROM items", [], null);
+    return await fetch_multiple_data(connection, "SELECT * FROM items", [], format_item);
+}
+
+function format_item(item: any) {
+    item.data = JSON.parse(item.data);
+
+    return item;
 }
 
 export async function _fetch_guild(connection: Connection, id: string, type: GuildFetchType, flags: number) {
