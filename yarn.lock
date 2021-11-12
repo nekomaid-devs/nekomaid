@@ -218,10 +218,10 @@
     "@discordjs/node-pre-gyp" "^0.4.1"
     node-addon-api "^4.0.0"
 
-"@discordjs/voice@^0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@discordjs/voice/-/voice-0.7.3.tgz#e722322b698b5634776eb592fa331f99a0069208"
-  integrity sha512-QOgSsYJSgGgeR6D+oREI2shP8uGCJwUGhA5eSF3KNxc4y3+QR+QMnICOBd2x8QPz/QDuXfUtj2HQdrnTkFVbmQ==
+"@discordjs/voice@^0.7.5":
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/@discordjs/voice/-/voice-0.7.5.tgz#c95bd4ecf73905f51990827df5209eb26472dbd5"
+  integrity sha512-lUk+CmIXNKslT6DkC9IF9rpsqhzlTiedauUCPBzepjd4XWxwBZiyVIzR6QpbAirxkAwCoAbbje+3Ho71PGLEAw==
   dependencies:
     "@types/ws" "^8.2.0"
     discord-api-types "^0.24.0"

@@ -31,7 +31,7 @@
     },
     "dependencies": {
         "@discordjs/opus": "^0.6.0",
-        "@discordjs/voice": "^0.7.3",
+        "@discordjs/voice": "^0.7.5",
         "@sentry/node": "^6.14.3",
         "@sentry/tracing": "^6.14.3",
         "akaneko": "^5.2.2",
