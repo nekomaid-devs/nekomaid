@@ -109,7 +109,7 @@ export async function _fetch_guild_bans(connection: Connection, id: string) {
 }
 
 export async function _fetch_all_expired_bans(connection: Connection) {
-    return await fetch_multiple_data(connection, "SELECT * FROM guild_bans WHERE end <> -1 AND end < ?", [Date.now()], null);
+    return await fetch_multiple_data(connection, "SELECT * FROM guild_bans WHERE end <> NULL AND end < ?", [Date.now()], null);
 }
 
 export async function _fetch_guild_mutes(connection: Connection, id: string) {
@@ -117,7 +117,7 @@ export async function _fetch_guild_mutes(connection: Connection, id: string) {
 }
 
 export async function _fetch_all_expired_mutes(connection: Connection) {
-    return await fetch_multiple_data(connection, "SELECT * FROM guild_mutes WHERE end <> -1 AND end < ?", [Date.now()], null);
+    return await fetch_multiple_data(connection, "SELECT * FROM guild_mutes WHERE end <> NULL AND end < ?", [Date.now()], null);
 }
 
 export async function _fetch_guild_warnings(connection: Connection, id: string) {
