@@ -104,20 +104,20 @@ class Database {
         return await _edit_user(this.connection, item);
     }
 
-    async fetch_config(id: string): Promise<BotData | null> {
-        return await _fetch_config(this.connection, id);
+    async fetch_config(id: string, flags: number): Promise<BotData | null> {
+        return await _fetch_config(this.connection, id, flags);
     }
 
-    async fetch_audit_guild(id: string, contains_extra: boolean, contains_ranks: boolean): Promise<AuditGuildData | null> {
-        return await _fetch_guild(this.connection, id, GuildFetchType.AUDIT, contains_extra, contains_ranks);
+    async fetch_audit_guild(id: string): Promise<AuditGuildData | null> {
+        return await _fetch_guild(this.connection, id, GuildFetchType.AUDIT, 0);
     }
 
-    async fetch_message_create_guild(id: string, contains_extra: boolean, contains_ranks: boolean): Promise<MessageCreateGuildData | null> {
-        return await _fetch_guild(this.connection, id, GuildFetchType.MESSAGE_CREATE, contains_extra, contains_ranks);
+    async fetch_message_create_guild(id: string): Promise<MessageCreateGuildData | null> {
+        return await _fetch_guild(this.connection, id, GuildFetchType.MESSAGE_CREATE, 0);
     }
 
-    async fetch_guild(id: string, contains_extra: boolean, contains_ranks: boolean): Promise<GuildData | null> {
-        return await _fetch_guild(this.connection, id, GuildFetchType.ALL, contains_extra, contains_ranks);
+    async fetch_guild(id: string, flags: number): Promise<GuildData | null> {
+        return await _fetch_guild(this.connection, id, GuildFetchType.ALL, flags);
     }
 
     async fetch_guild_bans(id: string): Promise<GuildBanData[]> {

@@ -19,7 +19,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.message.guild === null || command_data.bot_data === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         let married_text = command_data.tagged_user_data.married_ID;

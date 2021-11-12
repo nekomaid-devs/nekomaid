@@ -19,7 +19,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.message.guild === null || command_data.global_context.bot.user === null || command_data.bot_data === null) {
+        if (command_data.message.guild === null || command_data.global_context.bot.user === null) {
             return;
         }
         const building_name = command_data.total_argument;

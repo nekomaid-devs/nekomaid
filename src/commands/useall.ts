@@ -3,7 +3,6 @@ import { CommandData, Command, ItemData } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { get_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "useall",
@@ -19,27 +18,22 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.message.guild === null || command_data.bot_data === null) {
+        if (command_data.message.guild === null || command_data.bot_data.items === null || command_data.user_data.inventory === null) {
             return;
         }
+        const item_name = command_data.total_argument;
 
-        let item_prefab: ItemData | null = null;
-        get_items().forEach((item) => {
-            if (item.display_name.toLowerCase() === command_data.total_argument.toLowerCase()) {
-                item_prefab = item;
-            }
+        const target_item = command_data.bot_data.items.find((e) => {
+            return e.display_name === item_name;
         });
-        if (item_prefab === null) {
-            command_data.message.reply(`No item with name \`${command_data.total_argument}\` exists.`);
+        if (target_item === undefined) {
+            command_data.message.reply(`Haven't found any item with name \`${item_name}\`.`);
             return;
         }
 
         const target_indexes: number[] = [];
         command_data.user_data.inventory.forEach((item, index) => {
-            if (item_prefab === null) {
-                return;
-            }
-            if (item.item_ID === item_prefab.id) {
+            if (item.item_ID === target_item.id) {
                 target_indexes.push(index);
             }
         });
@@ -49,6 +43,6 @@ export default {
             return;
         }
 
-        command_data.global_context.neko_modules_clients.inventoryManager.use_item(command_data, item_prefab, target_indexes);
+        command_data.global_context.neko_modules_clients.inventoryManager.use_item(command_data, target_item, target_indexes);
     },
 } as Command;

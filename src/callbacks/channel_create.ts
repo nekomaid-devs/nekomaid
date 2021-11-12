@@ -17,7 +17,7 @@ export default {
     },
 
     async process(global_context: GlobalContext, channel: GuildChannel) {
-        const guild_data = await global_context.neko_modules_clients.db.fetch_guild(channel.guild.id, false, false);
+        const guild_data = await global_context.neko_modules_clients.db.fetch_guild(channel.guild.id, 0);
         if (guild_data === null) {
             return;
         }

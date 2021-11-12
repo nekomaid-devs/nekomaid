@@ -225,6 +225,8 @@ export type BotData = {
     b_crime_monopoly_credits: number;
     b_pet_shelter: number;
     b_pet_shelter_credits: number;
+
+    items: ItemData[] | null;
 };
 
 export type MinimalGuildData = {
@@ -258,7 +260,7 @@ export type MessageCreateGuildData = MinimalGuildData & {
     module_level_levelup_messages_ping: boolean;
     module_level_levelup_messages_format: string;
     module_level_ignored_channels: string[];
-    module_level_ranks: RankData[];
+    module_level_ranks: RankData[] | null;
 };
 
 export type GuildData = AuditGuildData &
@@ -277,8 +279,8 @@ export type GuildData = AuditGuildData &
         leave_messages_channel: string | null;
         leave_messages_format: string;
 
-        counters: CounterData[];
-        reaction_roles: ReactionRoleData[];
+        counters: CounterData[] | null;
+        reaction_roles: ReactionRoleData[] | null;
     };
 
 export type UserData = {
@@ -292,8 +294,8 @@ export type UserData = {
     bank_limit: number;
     net_worth: number;
     votes: number;
-    inventory: UserItemData[];
-    notifications: NotificationData[];
+    inventory: UserItemData[] | null;
+    notifications: NotificationData[] | null;
     married_ID: string | null;
     can_divorce: boolean;
 
@@ -380,6 +382,7 @@ export type ItemData = {
 
     data: any;
     can_be_scavanged: boolean;
+    price: number;
 };
 
 export type UserItemData = {

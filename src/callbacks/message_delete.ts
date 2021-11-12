@@ -21,7 +21,7 @@ export default {
             return;
         }
 
-        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(message.guild.id, false, false);
+        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(message.guild.id);
         if (guild_data === null) {
             return;
         }

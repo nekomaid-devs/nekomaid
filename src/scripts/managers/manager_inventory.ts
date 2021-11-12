@@ -6,6 +6,9 @@ import { pick_random, format_number } from "../utils/util_general";
 
 class InventoryManager {
     use_item(command_data: CommandData, item: ItemData, target_indexes: number[]) {
+        if (command_data.user_data.inventory === null) {
+            return;
+        }
         switch (item.type) {
             case "box": {
                 let payout_amount = 0;
@@ -74,6 +77,9 @@ class InventoryManager {
         }
 
         target_indexes.forEach((index) => {
+            if (command_data.user_data.inventory === null) {
+                return;
+            }
             const item = command_data.user_data.inventory.splice(index, 1)[0];
             command_data.global_context.neko_modules_clients.db.remove_inventory_item(item.id);
         });

@@ -20,7 +20,7 @@ class ModerationManager {
     async timeout_mute(global_context: GlobalContext, mute: GuildMuteData) {
         global_context.neko_modules_clients.db.remove_guild_mute(mute.id);
 
-        const guild_data = await global_context.neko_modules_clients.db.fetch_guild(mute.guild_ID, false, false);
+        const guild_data = await global_context.neko_modules_clients.db.fetch_guild(mute.guild_ID, 0);
         if (guild_data === null || guild_data.mute_role_ID === null) {
             return;
         }

@@ -21,7 +21,7 @@ export default {
     },
 
     async process(global_context: GlobalContext, event: MemberMuteEventData) {
-        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(event.member.guild.id, false, false);
+        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(event.member.guild.id);
         if (guild_data === null) {
             return;
         }

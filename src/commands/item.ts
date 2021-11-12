@@ -3,7 +3,6 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { get_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "item",
@@ -19,13 +18,13 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.message.guild === null || command_data.bot_data === null) {
+        if (command_data.message.guild === null || command_data.bot_data.items === null) {
             return;
         }
         // TODO: maybe add some more cool information
         const item_name = command_data.total_argument;
 
-        const target_item = Array.from(get_items().values()).find((e) => {
+        const target_item = command_data.bot_data.items.find((e) => {
             return e.display_name === item_name;
         });
         if (target_item === undefined) {

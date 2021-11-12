@@ -3,7 +3,6 @@ import { CommandData, Command, UserItemData } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { get_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "inventory",
@@ -19,21 +18,21 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.message.guild === null || command_data.tagged_user === undefined) {
+        if (command_data.message.guild === null || command_data.tagged_user_data.inventory === null) {
             return;
         }
-        const inventory = command_data.tagged_user_data.inventory;
+
         let inventory_text = "";
-        if (inventory.length < 1) {
+        if (command_data.tagged_user_data.inventory.length < 1) {
             inventory_text = "Empty";
         } else {
             const inventory_map = new Map();
-            inventory.forEach((item: UserItemData) => {
+            command_data.tagged_user_data.inventory.forEach((item: UserItemData) => {
                 inventory_map.set(item.item_ID, inventory_map.has(item.item_ID) === true ? inventory_map.get(item.item_ID) + 1 : 1);
             });
 
             Array.from(inventory_map.keys()).forEach((id) => {
-                if (command_data.bot_data === null) {
+                if (command_data.bot_data.items === null) {
                     return;
                 }
                 const count = inventory_map.get(id);
@@ -41,7 +40,9 @@ export default {
                 if (inventory_text !== "") {
                     inventory_text += ", ";
                 }
-                const item = get_items().get(id);
+                const item = command_data.bot_data.items.find((e) => {
+                    return e.id === id;
+                });
                 if (item !== undefined) {
                     inventory_text += `\`${count}x ${item.display_name}\``;
                 }
@@ -52,7 +53,7 @@ export default {
         const embedInventory = {
             color: 8388736,
             author: {
-                name: `${command_data.tagged_user.tag}'s Inventory (${inventory.length} items)`,
+                name: `${command_data.tagged_user.tag}'s Inventory (${command_data.tagged_user_data.inventory.length} items)`,
                 icon_url: url === null ? undefined : url,
             },
             description: inventory_text.length < 3072 ? inventory_text : `${inventory_text.substring(0, 3069)}...`,

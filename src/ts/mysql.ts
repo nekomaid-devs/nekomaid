@@ -9,3 +9,14 @@ export enum GuildEditType {
     AUDIT,
     ALL,
 }
+
+/* Flags */
+export enum ConfigFetchFlags {
+    ITEMS = 1,
+}
+
+export enum GuildFetchFlags {
+    COUNTERS = 1,
+    REACTION_ROLES = 2,
+    RANKS = 4,
+}

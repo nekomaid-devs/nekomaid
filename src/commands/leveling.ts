@@ -37,7 +37,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.message.guild === null || command_data.message.guild.me === null || !(command_data.message.channel instanceof TextChannel)) {
+        if (command_data.guild_data.module_level_ranks === null || command_data.message.guild === null || command_data.message.guild.me === null || !(command_data.message.channel instanceof TextChannel)) {
             return;
         }
         /*

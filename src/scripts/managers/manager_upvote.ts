@@ -1,6 +1,7 @@
 /* Types */
 import { GlobalContext } from "../../ts/base";
 import { TextChannel } from "discord.js-light";
+import { ConfigFetchFlags } from "../../ts/mysql";
 
 class UpvoteManager {
     async send_upvote_message(global_context: GlobalContext, id: string, site_ID: string, is_double = false) {
@@ -52,7 +53,7 @@ class UpvoteManager {
     }
 
     async process_upvote(global_context: GlobalContext, id: string, site_ID: string, is_double = false) {
-        const bot_data = await global_context.neko_modules_clients.db.fetch_config("default_config");
+        const bot_data = await global_context.neko_modules_clients.db.fetch_config("default_config", ConfigFetchFlags.ITEMS);
         if (bot_data === null) {
             return;
         }

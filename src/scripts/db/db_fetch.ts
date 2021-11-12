@@ -1,5 +1,5 @@
 /* Types */
-import { GuildFetchType } from "../../ts/mysql";
+import { GuildFetchFlags, ConfigFetchFlags, GuildFetchType } from "../../ts/mysql";
 
 /* Node Imports */
 import { Connection } from "mysql2/promise";
@@ -8,13 +8,21 @@ import { Connection } from "mysql2/promise";
 import { fetch_data, fetch_multiple_data, guild_fetch_type_to_selector } from "../utils/util_mysql";
 import { _add_user, _add_guild, _add_guild_user } from "./db_add";
 
-export async function _fetch_config(connection: Connection, id: string) {
-    return await fetch_data(connection, "SELECT * FROM configs WHERE id=?", [id], format_config, () => {
-        return;
-    });
+export async function _fetch_config(connection: Connection, id: string, flags: number) {
+    return await fetch_data(
+        connection,
+        "SELECT * FROM configs WHERE id=?",
+        [id],
+        async (e: any) => {
+            return await format_config(connection, e, flags);
+        },
+        () => {
+            return;
+        }
+    );
 }
 
-function format_config(item: any) {
+async function format_config(connection: Connection, item: any, flags: number) {
     item.bot_owners = item.bot_owners.split(",").filter((e: string) => {
         return e.length > 0;
     });
@@ -33,17 +41,24 @@ function format_config(item: any) {
     item.crime_failed_answers = item.crime_failed_answers.split("\r\n").filter((e: string) => {
         return e.length > 0;
     });
+    if (flags & ConfigFetchFlags.ITEMS) {
+        item.items = await _fetch_all_items(connection);
+    }
 
     return item;
 }
 
-export async function _fetch_guild(connection: Connection, id: string, type: GuildFetchType, contains_extra: boolean, contains_ranks: boolean) {
+export async function _fetch_all_items(connection: Connection) {
+    return await fetch_multiple_data(connection, "SELECT * FROM items", [], null);
+}
+
+export async function _fetch_guild(connection: Connection, id: string, type: GuildFetchType, flags: number) {
     return await fetch_data(
         connection,
         `SELECT ${guild_fetch_type_to_selector(type)} FROM guilds WHERE id=?`,
         [id],
         async (e: any) => {
-            return await format_guild(connection, e, contains_extra, contains_ranks);
+            return await format_guild(connection, e, flags);
         },
         async () => {
             return await _add_guild(connection, id);
@@ -51,7 +66,7 @@ export async function _fetch_guild(connection: Connection, id: string, type: Gui
     );
 }
 
-async function format_guild(connection: Connection, item: any, contains_extra: boolean, contains_ranks: boolean) {
+async function format_guild(connection: Connection, item: any, flags: number) {
     item.banned_words =
         item.banned_words === null
             ? item.banned_words
@@ -70,11 +85,13 @@ async function format_guild(connection: Connection, item: any, contains_extra: b
             : item.module_level_ignored_channels.split(",").filter((e: string) => {
                   return e.length > 0;
               });
-    if (contains_extra === true) {
+    if (flags & GuildFetchFlags.COUNTERS) {
         item.counters = await _fetch_guild_counters(connection, item.id);
+    }
+    if (flags & GuildFetchFlags.REACTION_ROLES) {
         item.reaction_roles = await _fetch_guild_reaction_roles(connection, item.id);
     }
-    if (contains_extra === true || contains_ranks === true) {
+    if (flags & GuildFetchFlags.RANKS) {
         item.module_level_ranks = await _fetch_guild_ranks(connection, item.id);
     }
 

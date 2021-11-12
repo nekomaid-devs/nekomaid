@@ -15,7 +15,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     async execute(command_data: CommandData) {
-        if (command_data.message.guild === null || command_data.bot_data === null) {
+        if (command_data.message.guild === null) {
             return;
         }
         if (command_data.user_data.married_ID === null) {

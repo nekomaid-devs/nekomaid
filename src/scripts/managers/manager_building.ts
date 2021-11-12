@@ -5,12 +5,12 @@ import { GlobalContext, UserData, ItemRarity, ShrineBonus, UserItemData, BotData
 import { randomBytes } from "crypto";
 
 /* Local Imports */
-import { get_items } from "../utils/util_vars";
 import { pick_random, format_number } from "../../scripts/utils/util_general";
+import { ConfigFetchFlags } from "../../ts/mysql";
 
 class BuildingManager {
     async update_all_buildings(global_context: GlobalContext) {
-        let bot_data: Promise<BotData | null> | BotData | null = await global_context.neko_modules_clients.db.fetch_config("default_config");
+        let bot_data: Promise<BotData | null> | BotData | null = await global_context.neko_modules_clients.db.fetch_config("default_config", ConfigFetchFlags.ITEMS);
         let all_users: Promise<UserData[]> | UserData[] = await global_context.neko_modules_clients.db.fetch_all_users_with_buildings(false, false);
         bot_data = await bot_data;
         all_users = await all_users;
@@ -24,6 +24,9 @@ class BuildingManager {
     }
 
     update_buildings(global_context: GlobalContext, bot_data: BotData, user: UserData) {
+        if (user.inventory === null || bot_data.items === null) {
+            return;
+        }
         const rarity_names: Record<string, string> = { common: "Common", uncommon: "Uncommon", rare: "Rare", legendary: "Legendary" };
         const end = new Date();
         let start = new Date();
@@ -87,15 +90,15 @@ class BuildingManager {
                 const chance_needed = [0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 15][user.b_scrapyard];
 
                 const rarity = chance <= chance_needed ? ItemRarity.LEGENDARY : ItemRarity.RARE;
-                items = Array.from(get_items().values()).filter((e) => {
+                items = bot_data.items.filter((e) => {
                     return e.rarity === rarity && e.can_be_scavanged === true;
                 });
             } else if (user.b_scrapyard >= 3) {
-                items = Array.from(get_items().values()).filter((e) => {
+                items = bot_data.items.filter((e) => {
                     return e.rarity === ItemRarity.UNCOMMON && e.can_be_scavanged === true;
                 });
             } else {
-                items = Array.from(get_items().values()).filter((e) => {
+                items = bot_data.items.filter((e) => {
                     return e.rarity === ItemRarity.COMMON && e.can_be_scavanged === true;
                 });
             }
@@ -118,38 +121,48 @@ class BuildingManager {
         diff = Math.abs(Math.round(diff * bot_data.speed));
         if (user.b_pawn_shop > 0) {
             const l_items = user.inventory.filter((e: UserItemData) => {
-                if (bot_data === null) {
+                if (bot_data.items === null) {
                     return false;
                 }
-                const item = get_items().get(e.item_ID);
+                const item = bot_data.items.find((i) => {
+                    return i.id === e.item_ID;
+                });
                 return item !== undefined && item.rarity === ItemRarity.LEGENDARY && item.can_be_scavanged === true;
             });
             const r_items = user.inventory.filter((e: UserItemData) => {
-                if (bot_data === null) {
+                if (bot_data.items === null) {
                     return false;
                 }
-                const item = get_items().get(e.item_ID);
+                const item = bot_data.items.find((i) => {
+                    return i.id === e.item_ID;
+                });
                 return item !== undefined && item.rarity === ItemRarity.RARE && item.can_be_scavanged === true;
             });
             const u_items = user.inventory.filter((e: UserItemData) => {
-                if (bot_data === null) {
+                if (bot_data.items === null) {
                     return false;
                 }
-                const item = get_items().get(e.item_ID);
+                const item = bot_data.items.find((i) => {
+                    return i.id === e.item_ID;
+                });
                 return item !== undefined && item.rarity === ItemRarity.UNCOMMON && item.can_be_scavanged === true;
             });
             const c_items = user.inventory.filter((e: UserItemData) => {
-                if (bot_data === null) {
+                if (bot_data.items === null) {
                     return false;
                 }
-                const item = get_items().get(e.item_ID);
+                const item = bot_data.items.find((i) => {
+                    return i.id === e.item_ID;
+                });
                 return item !== undefined && item.rarity === ItemRarity.COMMON && item.can_be_scavanged === true;
             });
 
             if (user.b_pawn_shop >= 8 && l_items.length > 0) {
                 if (diff >= [0, 0, 0, 0, 0, 0, 0, 0, 60 * 6, 60 * 6, 60 * 6][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(l_items[0]), 1);
-                    const sold_item = get_items().get(sold_items[0].item_ID);
+                    const sold_item = bot_data.items.find((i) => {
+                        return i.id === sold_items[0].item_ID;
+                    });
                     if (sold_item === undefined) {
                         return;
                     }
@@ -174,7 +187,9 @@ class BuildingManager {
             } else if (user.b_pawn_shop >= 4 && r_items.length > 0) {
                 if (diff >= [0, 0, 0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 3][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(r_items[0]), 1);
-                    const sold_item = get_items().get(sold_items[0].item_ID);
+                    const sold_item = bot_data.items.find((i) => {
+                        return i.id === sold_items[0].item_ID;
+                    });
                     if (sold_item === undefined) {
                         return;
                     }
@@ -199,7 +214,9 @@ class BuildingManager {
             } else if (user.b_pawn_shop >= 2 && u_items.length > 0) {
                 if (diff >= [0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 2][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(u_items[0]), 1);
-                    const sold_item = get_items().get(sold_items[0].item_ID);
+                    const sold_item = bot_data.items.find((i) => {
+                        return i.id === sold_items[0].item_ID;
+                    });
                     if (sold_item === undefined) {
                         return;
                     }
@@ -224,7 +241,9 @@ class BuildingManager {
             } else if (c_items.length > 0) {
                 if (diff >= [0, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 1, 60 * 1, 60 * 1][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(c_items[0]), 1);
-                    const sold_item = get_items().get(sold_items[0].item_ID);
+                    const sold_item = bot_data.items.find((i) => {
+                        return i.id === sold_items[0].item_ID;
+                    });
                     if (sold_item === undefined) {
                         return;
                     }

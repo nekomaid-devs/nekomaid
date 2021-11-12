@@ -22,7 +22,7 @@ export default {
         }
 
         const moderation_action = global_context.data.last_moderation_actions.get(member.guild.id);
-        const guild_data = await global_context.neko_modules_clients.db.fetch_guild(member.guild.id, false, false);
+        const guild_data = await global_context.neko_modules_clients.db.fetch_guild(member.guild.id, 0);
         if (guild_data === null) {
             return;
         }

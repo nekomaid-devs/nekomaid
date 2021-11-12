@@ -7,7 +7,6 @@ import { randomBytes } from "crypto";
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
 import Permission from "../scripts/helpers/permission";
-import { get_items } from "../scripts/utils/util_vars";
 
 export default {
     name: "d_giveinserver",
@@ -23,15 +22,15 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.message.guild === null || command_data.bot_data === null) {
+        if (command_data.message.guild === null || command_data.bot_data.items === null) {
             return;
         }
         const amount = parseInt(command_data.args[0]);
         const item_ID = command_data.args[1];
-        const target_item = Array.from(get_items().values()).find((e) => {
+
+        const target_item = command_data.bot_data.items.find((e) => {
             return e.id === item_ID;
         });
-
         if (target_item === undefined) {
             command_data.message.reply(`There isn't any item with id \`${item_ID}\`.`);
             return;

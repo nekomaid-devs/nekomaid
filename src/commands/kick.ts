@@ -20,7 +20,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.message.guild === null || command_data.tagged_user === undefined) {
+        if (command_data.message.guild === null) {
             return;
         }
         if (command_data.tagged_member.kickable === false) {

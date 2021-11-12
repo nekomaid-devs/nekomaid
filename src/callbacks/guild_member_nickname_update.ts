@@ -17,7 +17,7 @@ export default {
     },
 
     async process(global_context: GlobalContext, old_member: GuildMember, new_member: GuildMember) {
-        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(new_member.guild.id, false, false);
+        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(new_member.guild.id);
         if (guild_data === null) {
             return;
         }

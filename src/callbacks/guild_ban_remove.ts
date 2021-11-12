@@ -22,7 +22,7 @@ export default {
         }
 
         const moderation_action = global_context.data.last_moderation_actions.get(ban.guild.id);
-        let guild_data: Promise<AuditGuildData | null> | AuditGuildData | null = global_context.neko_modules_clients.db.fetch_audit_guild(ban.guild.id, false, false);
+        let guild_data: Promise<AuditGuildData | null> | AuditGuildData | null = global_context.neko_modules_clients.db.fetch_audit_guild(ban.guild.id);
         let guild_bans: Promise<GuildBanData[]> | GuildBanData[] = global_context.neko_modules_clients.db.fetch_guild_bans(ban.guild.id);
         guild_data = await guild_data;
         guild_bans = await guild_bans;

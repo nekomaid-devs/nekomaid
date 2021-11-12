@@ -25,7 +25,7 @@ export default {
         }
 
         const moderation_action = global_context.data.last_moderation_actions.get(ban.guild.id);
-        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(ban.guild.id, false, false);
+        const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(ban.guild.id);
         if (guild_data === null) {
             return;
         }

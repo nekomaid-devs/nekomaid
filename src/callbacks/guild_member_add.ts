@@ -17,7 +17,7 @@ export default {
     },
 
     async process(global_context: GlobalContext, member: GuildMember) {
-        let guild_data: Promise<GuildData | null> | GuildData | null = global_context.neko_modules_clients.db.fetch_guild(member.guild.id, false, false);
+        let guild_data: Promise<GuildData | null> | GuildData | null = global_context.neko_modules_clients.db.fetch_guild(member.guild.id, 0);
         let guild_mutes: Promise<GuildMuteData[]> | GuildMuteData[] = global_context.neko_modules_clients.db.fetch_guild_mutes(member.guild.id);
         guild_data = await guild_data;
         guild_mutes = await guild_mutes;

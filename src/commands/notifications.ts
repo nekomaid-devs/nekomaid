@@ -18,7 +18,7 @@ export default {
     nsfw: false,
     cooldown: 1500,
     execute(command_data: CommandData) {
-        if (command_data.message.guild === null) {
+        if (command_data.message.guild === null || command_data.user_data.notifications === null) {
             return;
         }
         let notifications_description = command_data.user_data.notifications

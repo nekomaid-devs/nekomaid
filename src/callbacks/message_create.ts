@@ -9,6 +9,7 @@ import { convert_time } from "../scripts/utils/util_time";
 
 /* Local Imports */
 import { pick_random } from "../scripts/utils/util_general";
+import { ConfigFetchFlags, GuildFetchFlags } from "../ts/mysql";
 
 export default {
     hook(global_context: GlobalContext) {
@@ -31,7 +32,7 @@ export default {
             return;
         }
 
-        const guild_data = await global_context.neko_modules_clients.db.fetch_message_create_guild(message.guild.id, false, false);
+        const guild_data = await global_context.neko_modules_clients.db.fetch_message_create_guild(message.guild.id);
         if (guild_data === null) {
             return;
         }
@@ -174,8 +175,8 @@ export default {
         global_context.user_cooldowns.set(message.author.id, user_cooldown);
 
         /* Fetch full bot, guild and user data */
-        let bot_data: Promise<BotData | null> | BotData | null = global_context.neko_modules_clients.db.fetch_config("default_config");
-        let guild_data_full: Promise<GuildData | null> | GuildData | null = global_context.neko_modules_clients.db.fetch_guild(message.guild.id, true, true);
+        let bot_data: Promise<BotData | null> | BotData | null = global_context.neko_modules_clients.db.fetch_config("default_config", ConfigFetchFlags.ITEMS);
+        let guild_data_full: Promise<GuildData | null> | GuildData | null = global_context.neko_modules_clients.db.fetch_guild(message.guild.id, GuildFetchFlags.COUNTERS | GuildFetchFlags.REACTION_ROLES | GuildFetchFlags.RANKS);
         let guild_bans: Promise<GuildBanData[]> | GuildBanData[] = global_context.neko_modules_clients.db.fetch_guild_bans(message.guild.id);
         let guild_mutes: Promise<GuildMuteData[]> | GuildMuteData[] = global_context.neko_modules_clients.db.fetch_guild_mutes(message.guild.id);
         let guild_warns: Promise<GuildWarnData[]> | GuildWarnData[] = global_context.neko_modules_clients.db.fetch_guild_warnings(message.guild.id);
@@ -204,7 +205,7 @@ export default {
                 return;
             }
         }
-        if (command.nsfw === true && message.channel instanceof TextChannel && message.channel.nsfw === false) {
+        if (command.nsfw === true && message.channel.nsfw === false) {
             message.reply("Cannot use this command in SFW channel.");
             return;
         }

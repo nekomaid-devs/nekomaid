@@ -71,7 +71,7 @@ class LevelingManager {
     }
 
     async process_ranks(leveling_data: GuildLevelingData) {
-        if (leveling_data.guild.me === null) {
+        if (leveling_data.guild_data.module_level_ranks === null || leveling_data.guild.me === null) {
             return { granted_roles: [], removed_roles: [] };
         }
         if (leveling_data.guild_data.module_level_ranks.length > 0 && leveling_data.guild.me.permissions.has(Permissions.FLAGS.MANAGE_ROLES) === false) {
