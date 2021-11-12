@@ -24,9 +24,20 @@ class ModerationManager {
         if (guild_data === null || guild_data.mute_role_ID === null) {
             return;
         }
-
-        const guild = await global_context.bot.guilds.fetch(mute.guild_ID);
-        const member = await guild.members.fetch(mute.user_ID);
+        const guild = await global_context.bot.guilds.fetch(mute.guild_ID).catch((e: Error) => {
+            global_context.logger.api_error(e);
+            return null;
+        });
+        if (guild === null) {
+            return;
+        }
+        const member = await guild.members.fetch(mute.user_ID).catch((e: Error) => {
+            global_context.logger.api_error(e);
+            return null;
+        });
+        if (member === null) {
+            return;
+        }
 
         member.roles.remove(guild_data.mute_role_ID).catch((e: Error) => {
             global_context.logger.api_error(e);
@@ -37,7 +48,13 @@ class ModerationManager {
     async timeout_ban(global_context: GlobalContext, ban: GuildBanData) {
         global_context.neko_modules_clients.db.remove_guild_ban(ban.id);
 
-        const guild = await global_context.bot.guilds.fetch(ban.guild_ID);
+        const guild = await global_context.bot.guilds.fetch(ban.guild_ID).catch((e: Error) => {
+            global_context.logger.api_error(e);
+            return null;
+        });
+        if (guild === null) {
+            return;
+        }
 
         guild.members.unban(ban.user_ID).catch((e: Error) => {
             global_context.logger.api_error(e);
