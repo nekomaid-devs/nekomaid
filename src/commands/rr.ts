@@ -17,7 +17,7 @@ function continue_collecting(global_context: GlobalContext, guild_data: GuildDat
         },
         max: 1,
     });
-    collector.on("collect", (message) => {
+    collector.on("collect", async (message) => {
         if (msg.guild === null) {
             return;
         }
@@ -86,7 +86,7 @@ function continue_collecting(global_context: GlobalContext, guild_data: GuildDat
 
             default: {
                 role_name = message.content;
-                role = msg.guild.roles.cache.find((roleTemp) => {
+                role = Array.from((await msg.guild.roles.fetch()).values()).find((roleTemp) => {
                     return roleTemp.name === role_name || roleTemp.id === role_name;
                 });
                 if (role === undefined) {

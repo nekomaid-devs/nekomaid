@@ -40,9 +40,10 @@ export async function get_top(global_context: GlobalContext, props: string[]) {
 }
 
 export async function get_top_guild(global_context: GlobalContext, guild: Guild, props: string[]) {
+    const members = await guild.members.fetch();
     let items = await global_context.neko_modules_clients.db.fetch_all_users(false, false);
     items = items.filter((val: UserData) => {
-        return guild.members.cache.has(val.id);
+        return members.has(val.id);
     });
     items.sort(create_comparator(props));
 

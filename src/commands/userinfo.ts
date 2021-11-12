@@ -18,7 +18,7 @@ export default {
     permissions: [],
     nsfw: false,
     cooldown: 1500,
-    execute(command_data: CommandData) {
+    async execute(command_data: CommandData) {
         if (command_data.message.guild === null) {
             return;
         }
@@ -38,14 +38,13 @@ export default {
             roles = "`None`";
         }
 
-        const join_score_array = Array.from(command_data.message.guild.members.cache.values()).sort((a, b) => {
+        const join_score_array = Array.from((await command_data.message.guild.members.fetch()).values()).sort((a, b) => {
             return (a.joinedTimestamp === null ? 0 : a.joinedTimestamp) - (b.joinedTimestamp === null ? 0 : b.joinedTimestamp);
         });
         const join_score =
             join_score_array.findIndex((member) => {
                 return member.user.id === command_data.tagged_member.user.id;
             }) + 1;
-        const join_score_max = command_data.message.guild.members.cache.size;
 
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         const embedMember = {
@@ -80,10 +79,10 @@ export default {
                 },
                 {
                     name: "❯ Join Score",
-                    value: `${join_score} (${join_score} out of ${join_score_max})`,
+                    value: `${join_score} (${join_score} out of ${join_score_array.length})`,
                 },
                 {
-                    name: `❯ Roles [${command_data.tagged_member.roles.cache.size}]`,
+                    name: `❯ Roles [${"??"}]`,
                     value: `${roles}`,
                 },
             ],

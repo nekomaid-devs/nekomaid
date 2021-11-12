@@ -18,7 +18,7 @@ export default {
     permissions: [],
     nsfw: false,
     cooldown: 1500,
-    execute(command_data: CommandData) {
+    async execute(command_data: CommandData) {
         if (command_data.message.guild === null) {
             return;
         }
@@ -26,7 +26,7 @@ export default {
         if (command_data.message.mentions.roles.size > 0) {
             role = Array.from(command_data.message.mentions.roles.values())[0];
         } else {
-            role = command_data.message.guild.roles.cache.find((roleTemp) => {
+            role = Array.from((await command_data.message.guild.roles.fetch()).values()).find((roleTemp) => {
                 return roleTemp.name === command_data.total_argument || roleTemp.id === command_data.total_argument;
             });
             if (role === undefined) {

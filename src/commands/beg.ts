@@ -21,7 +21,7 @@ export default {
     permissions: [],
     nsfw: false,
     cooldown: 1500,
-    execute(command_data: CommandData) {
+    async execute(command_data: CommandData) {
         if (command_data.message.guild === null) {
             return;
         }
@@ -72,7 +72,7 @@ export default {
         let answer = pick_random(answers);
         answer = answer.replace("<credits_amount>", `\`${format_number(credits_amount)}💵\``);
 
-        const member = pick_random(Array.from(command_data.message.guild.members.cache.values()));
+        const member = pick_random(Array.from((await command_data.message.guild.members.fetch()).values()));
         answer = answer.replace("<user>", `\`${member.user.tag}\``);
 
         command_data.user_data.credits += credits_amount;

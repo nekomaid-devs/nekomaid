@@ -50,15 +50,7 @@ export default {
             let auto_roles_text = "";
             for (let i = 0; i < command_data.guild_data.auto_roles.length; i++) {
                 const role_ID = command_data.guild_data.auto_roles[i];
-                const role = await command_data.message.guild.roles.fetch(role_ID).catch((e: Error) => {
-                    command_data.global_context.logger.api_error(e);
-                    return null;
-                });
-                if (role === null) {
-                    auto_roles_text += `\`${role_ID}\``;
-                } else {
-                    auto_roles_text += `\`${role.name}\``;
-                }
+                auto_roles_text += `<@&${role_ID}>`;
 
                 if (command_data.guild_data.auto_roles.length - 1 > i) {
                     auto_roles_text += ", ";
@@ -131,7 +123,7 @@ export default {
                             return;
                         }
                         const role_name = command_data.message.content.substring(command_data.message.content.indexOf(command_data.args[2], command_data.message.content.indexOf(command_data.args[1]) + command_data.args[1].length));
-                        const role = command_data.message.guild.roles.cache.find((role_temp) => {
+                        const role = Array.from((await command_data.message.guild.roles.fetch()).values()).find((role_temp) => {
                             return role_temp.name === role_name;
                         });
                         if (role === undefined) {
@@ -302,7 +294,7 @@ export default {
                             return;
                         }
                         const role_name = command_data.message.content.substring(command_data.message.content.indexOf(command_data.args[2], command_data.message.content.indexOf(command_data.args[1]) + command_data.args[1].length));
-                        const role = command_data.message.guild.roles.cache.find((role_temp) => {
+                        const role = Array.from((await command_data.message.guild.roles.fetch()).values()).find((role_temp) => {
                             return role_temp.name === role_name;
                         });
                         if (role === undefined) {

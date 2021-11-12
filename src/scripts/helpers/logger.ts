@@ -1,5 +1,5 @@
 /* Types */
-import { ShardClientUtil } from "discord.js";
+import { ShardClientUtil } from "discord.js-light";
 
 /* Node Imports */
 import * as Sentry from "@sentry/node";

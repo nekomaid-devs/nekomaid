@@ -58,12 +58,12 @@ export default {
                 },
                 {
                     name: "❯ Channels",
-                    value: `${command_data.message.guild.channels.cache.size}`,
+                    value: `${"??"}`,
                     inline: true,
                 },
                 {
                     name: "❯ Roles",
-                    value: `${command_data.message.guild.roles.cache.size}`,
+                    value: `${"??"}`,
                     inline: true,
                 },
                 {

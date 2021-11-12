@@ -50,9 +50,9 @@ async function run() {
         makeCache: Discord.Options.cacheWithLimits({
             ApplicationCommandManager: { maxSize: 0 },
             BaseGuildEmojiManager: { maxSize: 0 },
-            ChannelManager: { maxSize: 256 },
-            GuildManager: { maxSize: 256 },
-            GuildChannelManager: { maxSize: 256 },
+            ChannelManager: { maxSize: Infinity },
+            GuildManager: { maxSize: Infinity },
+            GuildChannelManager: { maxSize: Infinity },
             GuildEmojiManager: { maxSize: 0 },
             GuildMemberManager: { maxSize: 0 },
             GuildBanManager: { maxSize: 0 },
@@ -60,10 +60,10 @@ async function run() {
             GuildStickerManager: { maxSize: 0 },
             MessageManager: { maxSize: 0 },
             PresenceManager: { maxSize: 0 },
-            PermissionOverwriteManager: { maxSize: 256 },
+            PermissionOverwriteManager: { maxSize: Infinity },
             ReactionManager: { maxSize: 0 },
             ReactionUserManager: { maxSize: 0 },
-            RoleManager: { maxSize: 256 },
+            RoleManager: { maxSize: Infinity },
             StageInstanceManager: { maxSize: 0 },
             ThreadManager: { maxSize: 0 },
             ThreadMemberManager: { maxSize: 0 },
@@ -256,7 +256,7 @@ async function run() {
         const t_logging_end = performance.now();
         global_context.logger.log(`Finished logging into the shard (took ${(t_logging_end - t_loading_start).toFixed(1)}ms)...`);
         global_context.logger.log("-".repeat(30));
-        global_context.logger.log(`[Guilds: ${bot.guilds.cache.size}] - [Channels: ${bot.channels.cache.size}] - [Users: ${bot.users.cache.size}]`);
+        global_context.logger.log(`[Guilds: ??] - [Channels: ??] - [Users: ??]`);
 
         refresh_status(global_context);
         global_context.neko_modules_clients.reactionRolesManager.create_all_collectors(global_context);

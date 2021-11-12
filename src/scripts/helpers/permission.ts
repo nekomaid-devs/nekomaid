@@ -1,5 +1,5 @@
 /* Types */
-import { Message } from "discord.js";
+import { Message } from "discord.js-light";
 import { BotData, ExtraPermission, GlobalContext } from "../../ts/base";
 
 class Permission {

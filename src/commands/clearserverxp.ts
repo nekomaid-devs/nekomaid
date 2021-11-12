@@ -36,7 +36,7 @@ export default {
             user_guild_data.xp = 0;
 
             // TODO: this won't work
-            if (command_data.message.guild.members.cache.has(user_guild_data.user_ID) === true) {
+            if ((await command_data.message.guild.members.fetch()).has(user_guild_data.user_ID) === true) {
                 const member = await command_data.message.guild.members.fetch(user_guild_data.user_ID).catch((e: Error) => {
                     command_data.global_context.logger.api_error(e);
                     return null;

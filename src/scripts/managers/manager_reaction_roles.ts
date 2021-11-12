@@ -40,10 +40,10 @@ class ReactionRolesManager {
             dispose: true,
         });
         collector.on("collect", (r, u) => {
-            rr.reaction_roles.forEach((role_ID: string, i: number) => {
+            rr.reaction_roles.forEach(async (role_ID: string, i: number) => {
                 const emoji = rr.reaction_role_emojis[i];
                 if (emoji === r.emoji.name || (r.emoji.id !== null && emoji === `<:${r.emoji.name}:${r.emoji.id}>`)) {
-                    const member = Array.from(guild.members.cache.values()).find((e) => {
+                    const member = Array.from((await guild.members.fetch()).values()).find((e) => {
                         return e.user.id === u.id;
                     });
                     if (member === undefined) {
@@ -56,10 +56,10 @@ class ReactionRolesManager {
             });
         });
         collector.on("remove", (r, u) => {
-            rr.reaction_roles.forEach((role_ID: string, i: number) => {
+            rr.reaction_roles.forEach(async (role_ID: string, i: number) => {
                 const emoji = rr.reaction_role_emojis[i];
                 if (emoji === r.emoji.name || (r.emoji.id !== null && emoji === `<:${r.emoji.name}:${r.emoji.id}>`)) {
-                    const member = Array.from(guild.members.cache.values()).find((e) => {
+                    const member = Array.from((await guild.members.fetch()).values()).find((e) => {
                         return e.user.id === u.id;
                     });
                     if (member === undefined) {

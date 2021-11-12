@@ -253,7 +253,7 @@ export default {
                             return;
                         }
                         const role_name = command_data.message.content.substring(command_data.message.content.indexOf(command_data.args[4], command_data.message.content.indexOf(command_data.args[3]) + command_data.args[3].length));
-                        const role = command_data.message.guild.roles.cache.find((roleTemp) => {
+                        const role = Array.from((await command_data.message.guild.roles.fetch()).values()).find((roleTemp) => {
                             return roleTemp.name === role_name;
                         });
                         if (role === undefined) {
@@ -296,8 +296,7 @@ export default {
                         }
                         let channel = command_data.args[2];
                         channel = channel.includes("<#") ? channel.replace("<#", "").replace(">", "") : channel;
-                        // TODO: this won't work
-                        if (command_data.message.guild.channels.cache.has(channel) === false) {
+                        if ((await command_data.message.guild.channels.fetch()).has(channel) === false) {
                             command_data.message.channel
                                 .send({
                                     embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, "Invalid value for `channel_mention` (channel mention)", `add ignored_channel #${command_data.message.channel.name}`)],
@@ -422,8 +421,7 @@ export default {
                         }
                         let channel = command_data.args[2];
                         channel = channel.includes("<#") ? channel.replace("<#", "").replace(">", "") : channel;
-                        // TODO: this won't work
-                        if (command_data.message.guild.channels.cache.has(channel) === false) {
+                        if ((await command_data.message.guild.channels.fetch()).has(channel) === false) {
                             command_data.message.channel
                                 .send({
                                     embeds: [get_error_embed(command_data.message, command_data.guild_data.prefix, this, "Invalid value for `channel_mention` (channel mention)", `add ignored_channel #${command_data.message.channel.name}`)],

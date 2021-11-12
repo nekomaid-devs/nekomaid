@@ -20,12 +20,12 @@ function create_mute_role_and_mute(command_data: CommandData) {
             mentionable: false,
             permissions: [],
         })
-        .then((mute_role) => {
+        .then(async (mute_role) => {
             if (command_data.message.guild === null) {
                 return;
             }
 
-            command_data.message.guild.channels.cache.forEach((channel) => {
+            (await command_data.message.guild.channels.fetch()).forEach((channel) => {
                 if (channel.type === "GUILD_TEXT") {
                     channel.permissionOverwrites
                         .create(mute_role, {

@@ -21,7 +21,7 @@ export default {
     permissions: [new Permission("author", ExtraPermission.BOT_OWNER)],
     nsfw: false,
     cooldown: 1500,
-    execute(command_data: CommandData) {
+    async execute(command_data: CommandData) {
         if (command_data.message.guild === null || command_data.bot_data.items === null) {
             return;
         }
@@ -36,12 +36,12 @@ export default {
             return;
         }
 
-        command_data.message.guild.members.cache.forEach((member) => {
+        Array.from((await command_data.message.guild.members.fetch()).values()).forEach((member) => {
             const item = { id: randomBytes(16).toString("hex"), user_ID: member.user.id, item_ID: item_ID };
             command_data.global_context.neko_modules_clients.db.add_inventory_item(item);
         });
 
-        command_data.message.channel.send(`Added \`${amount}x ${target_item.display_name}\` to \`${command_data.message.guild.members.cache.size}\` members!`).catch((e: Error) => {
+        command_data.message.channel.send(`Added \`${amount}x ${target_item.display_name}\` to \`??\` members!`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
     },

@@ -35,7 +35,7 @@ class CounterManager {
 
             switch (counter.type) {
                 case "all_members": {
-                    const member_count = Array.from(guild.members.cache.values()).length;
+                    const member_count = Array.from((await guild.members.fetch()).values()).length;
                     channel.setName(`All Members: ${member_count}`).catch((e: Error) => {
                         global_context.logger.api_error(e);
                     });
@@ -43,7 +43,7 @@ class CounterManager {
                 }
 
                 case "members": {
-                    const member_count = Array.from(guild.members.cache.values()).filter((e) => {
+                    const member_count = Array.from((await guild.members.fetch()).values()).filter((e) => {
                         return e.user.bot === false;
                     }).length;
                     channel.setName(`Members: ${member_count}`).catch((e: Error) => {
@@ -53,7 +53,7 @@ class CounterManager {
                 }
 
                 case "roles": {
-                    const roles_count = Array.from(guild.members.cache.values()).length;
+                    const roles_count = Array.from((await guild.members.fetch()).values()).length;
                     channel.setName(`Roles: ${roles_count}`).catch((e: Error) => {
                         global_context.logger.api_error(e);
                     });
@@ -61,7 +61,7 @@ class CounterManager {
                 }
 
                 case "channels": {
-                    const channels_count = Array.from(guild.members.cache.values()).length;
+                    const channels_count = Array.from((await guild.members.fetch()).values()).length;
                     channel.setName(`Channels: ${channels_count}`).catch((e) => {
                         global_context.logger.api_error(e);
                     });
@@ -69,7 +69,7 @@ class CounterManager {
                 }
 
                 case "bots": {
-                    const bot_count = Array.from(guild.members.cache.values()).filter((e) => {
+                    const bot_count = Array.from((await guild.members.fetch()).values()).filter((e) => {
                         return e.user.bot === false;
                     }).length;
                     channel.setName(`Bots: ${bot_count}`).catch((e: Error) => {

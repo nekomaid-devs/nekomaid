@@ -34,12 +34,12 @@ class LevelingManager {
         if (leveling_data.guild_data.module_level_levelup_messages === true && leveling_data.log === true) {
             const granted_roles_text = rank_data.granted_roles
                 .reduce((acc, curr) => {
-                    return `${acc}\`${curr.toString()}\`, `;
+                    return `${acc}<@&${curr}>, `;
                 }, "")
                 .slice(0, -2);
             const removed_roles_text = rank_data.removed_roles
                 .reduce((acc, curr) => {
-                    return `${acc}\`${curr.toString()}\`, `;
+                    return `${acc}<@&${curr}>, `;
                 }, "")
                 .slice(0, -2);
 
@@ -92,26 +92,23 @@ class LevelingManager {
         const granted_roles: string[] = [];
         const removed_roles: string[] = [];
         leveling_data.guild_data.module_level_ranks.forEach((rank: RankData) => {
-            const role = leveling_data.guild.roles.cache.find((r) => {
-                return r.id === rank.role_ID;
-            });
-            if (role === undefined || processed_roles.includes(role.id)) {
+            if (processed_roles.includes(rank.role_ID)) {
                 return;
             }
 
             if (rank.level <= leveling_data.user_data.level) {
-                leveling_data.member.roles.add(role).catch((e: Error) => {
+                leveling_data.member.roles.add(rank.role_ID).catch((e: Error) => {
                     leveling_data.global_context.logger.api_error(e);
                 });
-                granted_roles.push(role.name);
-                processed_roles.push(role.id);
+                granted_roles.push(rank.role_ID);
+                processed_roles.push(rank.role_ID);
             }
             if (leveling_data.user_data.level < rank.level) {
-                leveling_data.member.roles.remove(role).catch((e: Error) => {
+                leveling_data.member.roles.remove(rank.role_ID).catch((e: Error) => {
                     leveling_data.global_context.logger.api_error(e);
                 });
-                removed_roles.push(role.name);
-                processed_roles.push(role.id);
+                removed_roles.push(rank.role_ID);
+                processed_roles.push(rank.role_ID);
             }
         });
 
