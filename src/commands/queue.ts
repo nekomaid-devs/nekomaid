@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { convert_string_to_time_data, convert_time, convert_time_data_to_string, convert_time_inconsistent, convert_youtube_string_to_time_data, sub_times, sum_times } from "../scripts/utils/util_time";
+import { ms_to_string_yt } from "../scripts/utils/util_time";
 
 export default {
     name: "queue",
@@ -37,8 +37,7 @@ export default {
                 for (let i = 1; i <= 5; i += 1) {
                     if (connection.queue.length >= i) {
                         const voice_request = connection.queue[i - 1];
-                        const current_length = convert_string_to_time_data(convert_time(voice_request.item.duration));
-                        description_text += `${i}) [${voice_request.item.title}](${voice_request.item.url}) *(${current_length})* by *[<@${voice_request.user_ID}>]*\n`;
+                        description_text += `${i}) [${voice_request.item.title}](${voice_request.item.url}) *(${ms_to_string_yt(voice_request.item.duration)})* by *[<@${voice_request.user_ID}>]*\n`;
                     }
                 }
 
@@ -47,20 +46,13 @@ export default {
                     description_text += `** and \`${additional_length}\` more...**`;
                 }
 
-                let total_length = convert_string_to_time_data(convert_time(connection.current.item.duration));
-                const elapsedLength = convert_string_to_time_data(convert_time(connection.elapsed_ms));
-                total_length = sub_times(total_length, elapsedLength);
-
+                let total_length = connection.current.item.duration - connection.elapsed_ms;
                 connection.queue.forEach((voice_request: any) => {
-                    const current_length = convert_youtube_string_to_time_data(voice_request.info.duration);
-                    total_length = sum_times(total_length, current_length);
+                    total_length += voice_request.info.duration;
                 });
-                total_length = convert_time_inconsistent(total_length);
-                const total_length_2 = convert_time_data_to_string(total_length);
 
-                const current_length = convert_string_to_time_data(convert_time(connection.current.item.duration));
-                fields.push({ name: "Currenly playing", value: `[${connection.current.item.title}](${connection.current.item.url}) *(${current_length})*`, inline: false });
-                fields.push({ name: "Total queue time", value: `\`${total_length_2}\``, inline: true });
+                fields.push({ name: "Currenly playing", value: `[${connection.current.item.title}](${connection.current.item.url}) *(${ms_to_string_yt(connection.current.item.duration)})*`, inline: false });
+                fields.push({ name: "Total queue time", value: `\`${ms_to_string_yt(total_length)}\``, inline: true });
                 break;
             }
 
@@ -88,9 +80,8 @@ export default {
                 for (let i2 = start; i2 <= start + end; i2++) {
                     if (connection.persistent_queue.length > i2) {
                         const voice_request = connection.persistent_queue[i2];
-                        const current_length = convert_string_to_time_data(convert_time(voice_request.item.duration));
                         description_text += i2 === current_persistent_index ? `**${i2 + 1})** ` : `${i2 + 1}) `;
-                        description_text += `[${voice_request.item.title}](${voice_request.item.url}) *(${current_length})* - by [<@${voice_request.user_ID}>]\n`;
+                        description_text += `[${voice_request.item.title}](${voice_request.item.url}) *(${ms_to_string_yt(voice_request.item.duration)})* - by [<@${voice_request.user_ID}>]\n`;
                     }
                 }
 
@@ -99,25 +90,17 @@ export default {
                     description_text += `** and \`${additional_length}\` more...**`;
                 }
 
-                let total_length_2_b = convert_string_to_time_data(convert_time(connection.current.item.duration));
-
-                const elapsedLength2b = convert_string_to_time_data(convert_time(connection.elapsed_ms));
-                total_length_2_b = sub_times(total_length_2_b, elapsedLength2b);
-
-                connection.persistent_queue.forEach((voice_request: any) => {
-                    const current_length = convert_youtube_string_to_time_data(voice_request.info.duration);
-                    total_length_2_b = sum_times(total_length_2_b, current_length);
+                let total_length = connection.current.item.duration - connection.elapsed_ms;
+                connection.queue.forEach((voice_request: any) => {
+                    total_length += voice_request.info.duration;
                 });
-                total_length_2_b = convert_time_inconsistent(total_length_2_b);
-                const total_length_2_c = convert_time_data_to_string(total_length_2_b);
 
-                const current_length_b = convert_string_to_time_data(convert_time(connection.persistent_queue[current_persistent_index].item.duration));
                 fields.push({
                     name: "Currenly playing",
-                    value: `[${connection.persistent_queue[current_persistent_index].item.title}](${connection.persistent_queue[current_persistent_index].item.url}) *(${current_length_b})*`,
+                    value: `[${connection.persistent_queue[current_persistent_index].item.title}](${connection.persistent_queue[current_persistent_index].item.url}) *(${ms_to_string_yt(connection.current.item.duration)})*`,
                     inline: false,
                 });
-                fields.push({ name: "Total queue time", value: `\`${total_length_2_c}\``, inline: true });
+                fields.push({ name: "Total queue time", value: `\`${ms_to_string_yt(total_length)}\``, inline: true });
                 break;
             }
         }

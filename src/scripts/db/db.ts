@@ -168,16 +168,16 @@ class Database {
         return await _fetch_guild_users(this.connection, id);
     }
 
-    async fetch_user(id: string, contains_inventory: boolean, contains_notifications: boolean): Promise<UserData | null> {
-        return await _fetch_user(this.connection, id, contains_inventory, contains_notifications);
+    async fetch_user(id: string, flags: number): Promise<UserData | null> {
+        return await _fetch_user(this.connection, id, flags);
     }
 
-    async fetch_all_users(contains_inventory: boolean, contains_notifications: boolean): Promise<UserData[]> {
-        return await _fetch_all_users(this.connection, contains_inventory, contains_notifications);
+    async fetch_all_users(flags: number): Promise<UserData[]> {
+        return await _fetch_all_users(this.connection, flags);
     }
 
-    async fetch_all_users_with_buildings(contains_inventory: boolean, contains_notifications: boolean): Promise<UserData[]> {
-        return await _fetch_all_users_with_buildings(this.connection, contains_inventory, contains_notifications);
+    async fetch_all_users_with_buildings(flags: number): Promise<UserData[]> {
+        return await _fetch_all_users_with_buildings(this.connection, flags);
     }
 
     async fetch_inventory_items(id: string): Promise<UserItemData[]> {

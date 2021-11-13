@@ -23,6 +23,7 @@ export default {
             return;
         }
         const options = ["heads", "tails"];
+        const result = pick_random(options);
 
         if (command_data.args.length > 0) {
             const bet_result = command_data.args.length > 1 ? command_data.args[1].toLowerCase() : "heads";
@@ -70,18 +71,17 @@ export default {
             }
 
             setTimeout(() => {
-                const result = pick_random(options);
                 let result_text = "";
                 if (result === bet_result) {
                     const won_amount = Math.floor(credits_amount * 0.75);
-                    const won_amount_text = format_number(credits_amount + won_amount);
+                    const won_amount_text = `You won ${format_number(credits_amount + won_amount)} credits!`;
 
                     command_data.user_data.credits += won_amount;
                     command_data.user_data.net_worth += won_amount;
                     command_data.global_context.neko_modules_clients.db.edit_user(command_data.user_data);
                     result_text = won_amount_text;
                 } else {
-                    const lost_amount_text = format_number(credits_amount);
+                    const lost_amount_text = `You lost ${format_number(credits_amount)} credits...`;
 
                     command_data.user_data.credits -= credits_amount;
                     command_data.user_data.net_worth -= credits_amount;
@@ -105,8 +105,6 @@ export default {
                 });
             }, 750);
         } else {
-            const result = pick_random(options);
-
             const embedCoinflip = {
                 title: `${command_data.message.author.tag} flipped ${result}!`,
                 color: 8388736,

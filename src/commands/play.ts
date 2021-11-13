@@ -12,7 +12,6 @@ import ytdl from "ytdl-core";
 import Permission from "../scripts/helpers/permission";
 import Argument from "../scripts/helpers/argument";
 import { create_comparator } from "../scripts/utils/util_sort";
-import { convert_time_data_to_string, convert_youtube_string_to_time_data } from "../scripts/utils/util_time";
 
 export default {
     name: "play",
@@ -97,7 +96,7 @@ export default {
                 command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, voice_connection, command_data.message.author.id, url, true);
             } else {
                 const max = 5;
-                const infosByID = new Map();
+                const urls: string[] = [];
                 const result = await ytsr(command_data.total_argument, { limit: 5 }).catch((e: Error) => {
                     command_data.global_context.logger.error(e as Error);
                     command_data.message.channel.send("Failed to get video results...").catch((e: Error) => {
@@ -112,35 +111,30 @@ export default {
 
                 let description_text = "";
                 for (let i = 1; i <= result.items.length; i++) {
-                    const videoItem = result.items[i];
-                    if (videoItem.type !== "video" || videoItem.duration === null) {
+                    const item = result.items[i];
+                    if (item.type !== "video" || item.duration === null) {
                         continue;
                     }
-                    const item = {
-                        title: videoItem.title,
-                        url: videoItem.url,
-                        duration: videoItem.duration,
-                    };
-                    infosByID.set(i, item);
+                    urls.push(item.url);
 
-                    description_text += `**${i})** ${item.title} *(${convert_time_data_to_string(convert_youtube_string_to_time_data(item.duration))})*\n`;
+                    description_text += `**${i})** ${item.title} *(${item.duration})*\n`;
                 }
 
                 const collector = command_data.message.channel.createMessageCollector({
                     filter: (m: Message) => {
-                        return (parseInt(m.content) <= 5 && parseInt(m.content) >= 1 && infosByID.has(parseInt(m.content))) || m.content.startsWith(`${command_data.guild_data.prefix}play`);
+                        return (parseInt(m.content) <= 5 && parseInt(m.content) >= 1 && urls.length >= parseInt(m.content)) || m.content.startsWith(`${command_data.guild_data.prefix}play`);
                     },
                     time: 15000,
                     max: 1,
                 });
                 collector.on("collect", (m) => {
-                    if (voice_connection === undefined || voice_connection === null || m.content.startsWith(`${command_data.guild_data.prefix}play`) === true) {
+                    if (voice_connection === null || voice_connection === undefined || m.content.startsWith(`${command_data.guild_data.prefix}play`) === true) {
                         collector.stop();
                         return;
                     }
 
                     const pos = parseInt(m.content);
-                    command_data.global_context.neko_modules_clients.voiceManager.play_request_on_connection(command_data.global_context, voice_connection, infosByID.get(pos), false);
+                    command_data.global_context.neko_modules_clients.voiceManager.play_url_on_connection(command_data.global_context, voice_connection, m.author.id, urls[pos], true);
                 });
 
                 embedPlay.author.name = `🔊 Select a song to play (type 1-${max})`;

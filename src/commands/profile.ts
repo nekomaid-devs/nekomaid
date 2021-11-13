@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { format_number, get_level_XP } from "../scripts/utils/util_general";
+import { format_number, get_level_XP, get_user_bank_limit } from "../scripts/utils/util_general";
 
 export default {
     name: "profile",
@@ -60,7 +60,7 @@ export default {
                 },
                 {
                     name: "🏦    Bank:",
-                    value: `$ ${format_number(command_data.tagged_user_data.bank)}/${format_number(command_data.tagged_user_data.bank_limit)}`,
+                    value: `$ ${format_number(command_data.tagged_user_data.bank)}/${format_number(get_user_bank_limit(command_data.tagged_user_data))}`,
                     inline: true,
                 },
                 {

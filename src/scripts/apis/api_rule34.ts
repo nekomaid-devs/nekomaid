@@ -24,7 +24,7 @@ export async function rule34_result(global_context: GlobalContext, args: string[
     let last_page: any = null;
 
     const navigation_elements = $0(".pagination").children();
-    navigation_elements.each(function (this: any) {
+    navigation_elements.each(function (this) {
         const child = $0(this);
         const alt = child.attr("alt");
 
@@ -71,10 +71,6 @@ export async function rule34_result(global_context: GlobalContext, args: string[
             const preview = $1(this);
             const parent = preview.parent();
             const href = parent.attr("href");
-            /*
-             *let tags_attr = preview.attr("alt");
-             *let tags = tags_attr.split(" ");
-             */
 
             post_links.push(`https://rule34.xxx/${href}`);
         });

@@ -34,6 +34,6 @@ export default {
         command_data.message.channel.send(`Warned \`${command_data.tagged_user.tag}\`. (Reason: \`${warn_reason}\`, Strikes: \`${num_of_warnings}\` => \`${num_of_warnings + 1}\`)`).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
         });
-        command_data.global_context.bot.emit("guildMemberWarn", { member: command_data.tagged_member, moderator: command_data.message.author, reason: warn_reason, num_of_warnings: num_of_warnings });
+        command_data.global_context.bot.emit("guildMemberWarnAdd", { member: command_data.tagged_member, moderator: command_data.message.author, reason: warn_reason, num_of_warnings: num_of_warnings });
     },
 } as Command;

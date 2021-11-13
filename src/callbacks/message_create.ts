@@ -5,11 +5,11 @@ import { Message, Permissions, TextChannel } from "discord.js-light";
 /* Node Imports */
 import * as Sentry from "@sentry/node";
 import { Transaction } from "@sentry/types";
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 /* Local Imports */
 import { pick_random } from "../scripts/utils/util_general";
-import { ConfigFetchFlags, GuildFetchFlags } from "../ts/mysql";
+import { ConfigFetchFlags, GuildFetchFlags, UserFetchFlags } from "../ts/mysql";
 
 export default {
     hook(global_context: GlobalContext) {
@@ -168,7 +168,7 @@ export default {
         }
         if (command_cooldown + command.cooldown > Date.now()) {
             const time_left = command_cooldown + command.cooldown - Date.now();
-            message.channel.send(`You have to wait another \`${convert_time(time_left)}\`...`);
+            message.channel.send(`You have to wait another \`${ms_to_string(time_left)}\`...`);
             return;
         }
         user_cooldown.set(command.name, Date.now());
@@ -180,9 +180,9 @@ export default {
         let guild_bans: Promise<GuildBanData[]> | GuildBanData[] = global_context.neko_modules_clients.db.fetch_guild_bans(message.guild.id);
         let guild_mutes: Promise<GuildMuteData[]> | GuildMuteData[] = global_context.neko_modules_clients.db.fetch_guild_mutes(message.guild.id);
         let guild_warns: Promise<GuildWarnData[]> | GuildWarnData[] = global_context.neko_modules_clients.db.fetch_guild_warnings(message.guild.id);
-        let user_data: Promise<UserData | null> | UserData | null = global_context.neko_modules_clients.db.fetch_user(message.author.id, false, false);
+        let user_data: Promise<UserData | null> | UserData | null = global_context.neko_modules_clients.db.fetch_user(message.author.id, UserFetchFlags.INVENTORY | UserFetchFlags.NOTIFICATIONS);
         let user_guild_data: Promise<UserGuildData | null> | UserGuildData | null = global_context.neko_modules_clients.db.fetch_guild_user(message.guild.id, message.member.user.id);
-        let tagged_user_data: Promise<UserData | null> | UserData | null = tagged_user === undefined ? null : global_context.neko_modules_clients.db.fetch_user(tagged_user.id, false, false);
+        let tagged_user_data: Promise<UserData | null> | UserData | null = tagged_user === undefined ? null : global_context.neko_modules_clients.db.fetch_user(tagged_user.id, UserFetchFlags.INVENTORY | UserFetchFlags.NOTIFICATIONS);
         let tagged_user_guild_data: Promise<UserGuildData | null> | UserGuildData | null = tagged_user === undefined ? null : global_context.neko_modules_clients.db.fetch_guild_user(message.guild.id, tagged_user.id);
 
         /* Await bot data */

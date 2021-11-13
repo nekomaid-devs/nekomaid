@@ -198,21 +198,26 @@ export default {
         if (command_data.args.length > 0) {
             return;
         }
-        if (command_data.message.guild.me.voice !== undefined) {
+        if (command_data.message.guild.me.voice.channel !== null) {
             command_data.message.channel.send("Please make sure there are no other running games or music playing and try again. (or make Nekomaid leave voice)").catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;
         }
-        if (command_data.message.member.voice.channel === null || !(command_data.message.member.voice.channel instanceof VoiceChannel)) {
-            command_data.message.reply("You need to join a voice channel.");
+        if (!(command_data.message.member.voice.channel instanceof VoiceChannel)) {
+            command_data.message.reply("You need to join a voice channel.").catch((e: Error) => {
+                command_data.global_context.logger.api_error(e);
+            });
             return;
         }
         if (command_data.message.member.voice.channel.joinable === false || command_data.message.member.voice.channel.speakable === false) {
-            command_data.message.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again.");
+            command_data.message.reply("The bot doesn't have required permissions in this channel - `Connect`, `Speak`\nPlease add required permissions for the bot in this channel and try again.").catch((e: Error) => {
+                command_data.global_context.logger.api_error(e);
+            });
             return;
         }
 
+        const joined_IDs: string[] = [];
         const embedSong = {
             title: "<:n_poll:771902338646278174> How to play?",
             description:
@@ -224,10 +229,9 @@ export default {
                 `\n\`${command_data.guild_data.prefix}animetrivia end\` - ends the game` +
                 "\n\nJoin by reacting with `✅` (or leave with `❌`)",
             footer: {
-                text: `0 joined | Start the game by typing ${command_data.guild_data.prefix}animetrivia start`,
+                text: `${joined_IDs.length} joined | Start the game by typing ${command_data.guild_data.prefix}animetrivia start`,
             },
         };
-        const joined_IDs: string[] = [];
         const message = await command_data.message.channel.send({ embeds: [embedSong] }).catch((e: Error) => {
             command_data.global_context.logger.api_error(e);
             return null;

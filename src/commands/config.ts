@@ -213,7 +213,7 @@ export default {
                             }
                         }
 
-                        const counter = { id: randomBytes(16).toString("hex"), type: counter_type, guild_ID: command_data.message.guild.id, channel_ID: channel.id, last_update: new Date().getTime() };
+                        const counter = { id: randomBytes(16).toString("hex"), type: counter_type, guild_ID: command_data.message.guild.id, channel_ID: channel.id, last_update: Date.now() };
                         command_data.global_context.neko_modules_clients.db.add_guild_counter(counter);
                         setTimeout(() => {
                             if (command_data.message.guild === null) {

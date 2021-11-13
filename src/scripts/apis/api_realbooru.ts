@@ -73,15 +73,6 @@ export async function realbooru_result(global_context: GlobalContext, args: stri
             preview.children().each(function (this) {
                 href = $1(this).attr("href");
             });
-            /*
-             *let tags_attr = -1;
-             *preview.children().each(function() {
-             *  $1(this).children().each(function() {
-             *      tags_attr = $1(this).attr("title");
-             *  });
-             *});
-             *let tags = tags_attr.split(", ");
-             */
 
             post_links.push(href);
         });

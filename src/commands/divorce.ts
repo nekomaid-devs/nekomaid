@@ -31,7 +31,7 @@ export default {
         if (married_user === null) {
             return;
         }
-        const user_data = await command_data.global_context.neko_modules_clients.db.fetch_user(married_user.id, false, false);
+        const user_data = await command_data.global_context.neko_modules_clients.db.fetch_user(married_user.id, 0);
         if (user_data === null) {
             return;
         }

@@ -5,7 +5,7 @@ import { Permissions } from "discord.js-light";
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
 import Permission from "../scripts/helpers/permission";
-import { convert_string_to_time_data, convert_time } from "../scripts/utils/util_time";
+import { convert_string_to_ms } from "../scripts/utils/util_time";
 
 function create_mute_role_and_mute(command_data: CommandData) {
     if (command_data.message.guild === null) {
@@ -80,81 +80,51 @@ export default {
         }
 
         // TODO: previous mutes don't get removed btw
-        const time = command_data.args.length < 2 ? -1 : command_data.args[1] === "-1" ? -1 : convert_string_to_time_data(command_data.args[1]);
-        if (time === undefined) {
-            command_data.message.reply("You entered invalid time format! (ex. `1d2h3m4s` or `-1`)");
-            return;
+        const time = command_data.args.length < 2 ? null : convert_string_to_ms(command_data.args[1]);
+        const time_text = time === null ? "Forever" : time;
+        let reason = "None";
+        if (command_data.args.length > 2) {
+            reason = command_data.message.content.substring(command_data.message.content.indexOf(command_data.args[2]));
         }
+
         if (command_data.tagged_member.bannable === false) {
             command_data.message.reply(`Couldn't mute \`${command_data.tagged_user.tag}\`! (Try moving Nekomaid's permissions above the user you want to mute)`);
             return;
         }
 
-        let mute_reason = "None";
-        if (command_data.args.length > 2) {
-            mute_reason = command_data.message.content.substring(command_data.message.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1);
-        }
-        let previous_mute: any;
-        command_data.guild_mutes.forEach((mute) => {
-            if (mute.user_ID === command_data.tagged_user.id) {
-                previous_mute = mute;
-            }
+        const previous_mute = command_data.guild_mutes.find((e) => {
+            return e.user_ID === command_data.tagged_user.id;
         });
-        // TODO: custom durations are bugged
-        const mute_start = Date.now();
-        let mute_end = -1;
-        const extended_time = time === -1 ? -1 : time.days * 86400000 + time.hrs * 3600000 + time.mins * 60000 + time.secs * 1000;
-        const extended_time_text = time === -1 ? "Forever" : convert_time(extended_time);
-
-        if (previous_mute === -1) {
-            mute_end = mute_start + extended_time;
-            const mute_end_text = time === -1 ? "Forever" : convert_time(mute_end - mute_start);
-
-            command_data.message.channel.send(`Muted \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch((e: Error) => {
+        if (previous_mute === undefined) {
+            command_data.message.channel.send(`Muted \`${command_data.tagged_user.tag}\` for \`${time_text}\`. (Reason: \`${reason}\`)`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
-            command_data.global_context.bot.emit("guildMemberMute", {
+            command_data.global_context.bot.emit("guildMemberMuteAdd", {
                 member: command_data.tagged_member,
                 moderator: command_data.message.author,
-                reason: mute_reason,
-                duration: mute_end_text,
-                mute_start: mute_start,
-                mute_end: mute_end,
+                reason: reason,
+                mute_start: Date.now(),
+                mute_end: time === null ? null : Date.now() + time,
                 time: time,
             });
         } else {
-            mute_end = previous_mute.end + extended_time;
-            const prev_mute_end_text = previous_mute.end === -1 ? "Forever" : convert_time(previous_mute.end - mute_start);
-            const mute_end_text = time === -1 ? "Forever" : convert_time(mute_end - mute_start);
-
-            command_data.message.channel.send(`Extended mute of \`${command_data.tagged_user.tag}\` by \`${extended_time_text}\` (Reason: \`${mute_reason}\`, Time: \`${mute_end_text}\`)-`).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
-            });
-            command_data.global_context.bot.emit("guildMemberMuteExt", {
-                member: command_data.tagged_member,
-                moderator: command_data.message.author,
-                reason: mute_reason,
-                prev_duration: prev_mute_end_text,
-                next_duration: mute_end_text,
-                mute_start: mute_start,
-                mute_end: mute_end,
-                time: time,
-            });
-        }
-
-        if (command_data.guild_data.mute_role_ID === null) {
-            create_mute_role_and_mute(command_data);
+            command_data.message.reply(`\`${command_data.tagged_user.tag}\` is already muted.`);
             return;
         }
 
-        const mute_role = await command_data.message.guild.roles.fetch(command_data.guild_data.mute_role_ID).catch((e: Error) => {
-            command_data.global_context.logger.api_error(e);
-            return null;
-        });
-        if (mute_role === null) {
-            create_mute_role_and_mute(command_data);
-        } else {
+        if (command_data.guild_data.mute_role_ID !== null) {
+            const mute_role = await command_data.message.guild.roles.fetch(command_data.guild_data.mute_role_ID).catch((e: Error) => {
+                command_data.global_context.logger.api_error(e);
+                return null;
+            });
+            if (mute_role === null) {
+                create_mute_role_and_mute(command_data);
+                return;
+            }
+
             command_data.tagged_member.roles.add(mute_role);
+        } else {
+            create_mute_role_and_mute(command_data);
         }
     },
 } as Command;

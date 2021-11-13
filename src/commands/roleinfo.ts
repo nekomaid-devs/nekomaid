@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     name: "roleinfo",
@@ -35,8 +35,8 @@ export default {
             }
         }
 
-        const elapsed = new Date().getTime() - new Date(role.createdAt.toUTCString()).getTime();
-        const createdAgo = convert_time(elapsed);
+        const elapsed = Date.now() - new Date(role.createdAt.toUTCString()).getTime();
+        const createdAgo = ms_to_string(elapsed);
         let permissions = role.permissions.toArray().reduce((acc, curr) => {
             acc += `\`${curr}\`, `;
             return acc;

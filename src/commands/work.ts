@@ -5,7 +5,7 @@ import { CommandData, Command, ShrineBonus } from "../ts/base";
 import { randomBytes } from "crypto";
 
 /* Local Imports */
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 import { pick_random, format_number } from "../scripts/utils/util_general";
 
 export default {
@@ -41,7 +41,7 @@ export default {
         if (diff < 180) {
             const end_needed = new Date(start.getTime() + 3600000 * 3);
             const time_left = (end_needed.getTime() - end.getTime()) / command_data.bot_data.speed;
-            command_data.message.channel.send(`You need to wait more \`${convert_time(time_left)}\` before doing this.`).catch((e: Error) => {
+            command_data.message.channel.send(`You need to wait more \`${ms_to_string(time_left)}\` before doing this.`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
             return;

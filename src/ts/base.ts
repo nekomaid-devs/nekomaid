@@ -291,7 +291,6 @@ export type UserData = {
     rep: number;
     credits: number;
     bank: number;
-    bank_limit: number;
     net_worth: number;
     votes: number;
     inventory: UserItemData[] | null;

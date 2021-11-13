@@ -113,7 +113,7 @@ async function run() {
 
         logger: new Logger(bot.shard, config.sentry_enabled),
         data: {
-            uptime_start: new Date().getTime(),
+            uptime_start: Date.now(),
             shards_ready: false,
 
             total_events: 0,

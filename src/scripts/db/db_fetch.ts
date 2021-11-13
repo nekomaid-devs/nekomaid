@@ -1,5 +1,5 @@
 /* Types */
-import { GuildFetchFlags, ConfigFetchFlags, GuildFetchType } from "../../ts/mysql";
+import { GuildFetchFlags, ConfigFetchFlags, GuildFetchType, UserFetchFlags } from "../../ts/mysql";
 
 /* Node Imports */
 import { Connection } from "mysql2/promise";
@@ -165,13 +165,13 @@ export async function _fetch_guild_users(connection: Connection, id: string) {
     return await fetch_multiple_data(connection, "SELECT * FROM guild_users WHERE id=?", [id], null);
 }
 
-export async function _fetch_user(connection: Connection, id: string, contains_inventory: boolean, contains_notifications: boolean) {
+export async function _fetch_user(connection: Connection, id: string, flags: number) {
     return await fetch_data(
         connection,
         "SELECT * FROM users WHERE id=?",
         [id],
         async (e: any) => {
-            return await format_user(connection, e, contains_inventory, contains_notifications);
+            return await format_user(connection, e, flags);
         },
         async () => {
             return await _add_user(connection, id);
@@ -179,26 +179,25 @@ export async function _fetch_user(connection: Connection, id: string, contains_i
     );
 }
 
-export async function _fetch_all_users(connection: Connection, contains_inventory: boolean, contains_notifications: boolean) {
+export async function _fetch_all_users(connection: Connection, flags: number) {
     return await fetch_multiple_data(connection, "SELECT * FROM users", [], async (e: any) => {
-        return await format_user(connection, e, contains_inventory, contains_notifications);
+        return await format_user(connection, e, flags);
     });
 }
 
-export async function _fetch_all_users_with_buildings(connection: Connection, contains_inventory: boolean, contains_notifications: boolean) {
+export async function _fetch_all_users_with_buildings(connection: Connection, flags: number) {
     return await fetch_multiple_data(connection, "SELECT * FROM users WHERE b_lewd_services > 0 AND b_casino > 0 AND b_scrapyard > 0 AND b_pawn_shop > 0", [], async (e: any) => {
-        return await format_user(connection, e, contains_inventory, contains_notifications);
+        return await format_user(connection, e, flags);
     });
 }
 
-async function format_user(connection: Connection, item: any, contains_inventory: boolean, contains_notifications: boolean) {
-    if (contains_inventory === true) {
+async function format_user(connection: Connection, item: any, flags: number) {
+    if (flags & UserFetchFlags.INVENTORY) {
         item.inventory = await _fetch_inventory_items(connection, item.id);
     }
-    if (contains_notifications === true) {
+    if (flags & UserFetchFlags.NOTIFICATIONS) {
         item.notifications = await _fetch_notifications(connection, item.id);
     }
-    item.bank_limit = [0, 10000, 15000, 20000, 30000, 45000, 60000, 75000, 10000, 200000, 350000][item.b_bank];
 
     return item;
 }

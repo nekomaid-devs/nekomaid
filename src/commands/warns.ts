@@ -5,7 +5,7 @@ import { Permissions } from "discord.js-light";
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
 import Permission from "../scripts/helpers/permission";
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     name: "warns",
@@ -32,7 +32,7 @@ export default {
         const fields: any = [];
         warns.slice(-3).forEach((warn, index) => {
             const end = Date.now();
-            const elapsedTime = convert_time(end - warn.start);
+            const elapsedTime = ms_to_string(end - warn.start);
             fields.push({ name: `Warn #${warns.length - index}`, value: `Warned for - ${warn.reason} (${elapsedTime} ago)` });
         });
 

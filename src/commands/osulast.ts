@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     name: "osulast",
@@ -59,7 +59,7 @@ export default {
         if (last.length > 0) {
             const play = last[0];
             const elapsed = start.getTime() - new Date(play.date).getTime();
-            const ago = convert_time(elapsed);
+            const ago = ms_to_string(elapsed);
 
             let mods = "";
             /* eslint no-bitwise: 0*/

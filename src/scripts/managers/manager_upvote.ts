@@ -57,7 +57,7 @@ class UpvoteManager {
         if (bot_data === null) {
             return;
         }
-        const user_data = await global_context.neko_modules_clients.db.fetch_user(id, false, false);
+        const user_data = await global_context.neko_modules_clients.db.fetch_user(id, 0);
         if (user_data === null) {
             return;
         }

@@ -4,7 +4,7 @@ import { Permissions } from "discord.js-light";
 
 /* Local Imports */
 import Permission from "../scripts/helpers/permission";
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     name: "mutes",
@@ -33,15 +33,9 @@ export default {
         const fields: any[] = [];
         let loadedMutes = 0;
         const expectedMutes = command_data.guild_mutes.length < 25 ? command_data.guild_mutes.length : 25;
-        command_data.guild_mutes.slice(command_data.guild_mutes.length - 25).forEach(async (mute) => {
-            const mutedUser = await command_data.global_context.bot.users.fetch(mute.user_ID).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
-                return null;
-            });
-            if (mutedUser !== null) {
-                const remainingText = mute.end === null ? "Forever" : convert_time(mute.end - now);
-                fields.push({ name: `Mute - ${mutedUser.tag}`, value: `Remaining: \`${remainingText}\`` });
-            }
+        command_data.guild_mutes.slice(command_data.guild_mutes.length - 25).forEach((mute) => {
+            const remaining_text = mute.end === null ? "Forever" : ms_to_string(mute.end - now);
+            fields.push({ name: `Mute - <@${mute.user_ID}>`, value: `Remaining: \`${remaining_text}\`` });
 
             loadedMutes += 1;
             if (loadedMutes >= expectedMutes) {

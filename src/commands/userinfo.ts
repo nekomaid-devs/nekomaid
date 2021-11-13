@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     name: "userinfo",
@@ -23,11 +23,11 @@ export default {
             return;
         }
         const presence = "Online <:n_online:725010541352976414>";
-        const elapsedCreated = new Date().getTime() - command_data.tagged_user.createdAt.getTime();
-        const createdAgo = convert_time(elapsedCreated);
+        const elapsedCreated = Date.now() - command_data.tagged_user.createdAt.getTime();
+        const createdAgo = ms_to_string(elapsedCreated);
 
-        const elapsedJoined = command_data.tagged_member.joinedAt === null ? 0 : new Date().getTime() - command_data.tagged_member.joinedAt.getTime();
-        const joinedAgo = convert_time(elapsedJoined);
+        const elapsedJoined = command_data.tagged_member.joinedAt === null ? 0 : Date.now() - command_data.tagged_member.joinedAt.getTime();
+        const joinedAgo = ms_to_string(elapsedJoined);
 
         let roles = Array.from(command_data.tagged_member.roles.cache.values()).reduce((acc, curr) => {
             acc += `${curr.toString()}, `;

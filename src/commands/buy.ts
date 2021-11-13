@@ -25,9 +25,10 @@ export default {
         if (command_data.message.guild === null || command_data.bot_data.items === null) {
             return;
         }
-        const item_name = command_data.total_argument;
+        const item_name = command_data.total_argument.toLowerCase();
+
         const target_item = command_data.bot_data.items.find((e) => {
-            return e.display_name.toLowerCase() === item_name.toLowerCase();
+            return e.display_name.toLowerCase() === item_name;
         });
         if (target_item === undefined) {
             command_data.message.reply(`Haven't found any item with name \`${item_name}\`.`);

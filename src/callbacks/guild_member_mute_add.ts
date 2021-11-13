@@ -1,14 +1,15 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { MemberMuteEventData } from "../ts/callbacks";
+import { MemberMuteAddEventData } from "../ts/callbacks";
 import { TextChannel } from "discord.js-light";
 
 /* Node Imports */
 import { randomBytes } from "crypto";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     hook(global_context: GlobalContext) {
-        global_context.bot.on("guildMemberMute", async (event) => {
+        global_context.bot.on("guildMemberMuteAdd", async (event) => {
             try {
                 await this.process(global_context, event);
             } catch (e) {
@@ -20,7 +21,7 @@ export default {
         });
     },
 
-    async process(global_context: GlobalContext, event: MemberMuteEventData) {
+    async process(global_context: GlobalContext, event: MemberMuteAddEventData) {
         const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(event.member.guild.id);
         if (guild_data === null) {
             return;
@@ -32,8 +33,8 @@ export default {
             guild_ID: event.member.guild.id,
             user_ID: event.member.user.id,
             reason: event.reason,
-            start: event.mute_start,
-            end: event.time === -1 ? -1 : event.mute_end,
+            start: event.start,
+            end: event.duration === -1 ? -1 : event.end,
         };
 
         global_context.neko_modules_clients.db.add_guild_mute(guild_mute);
@@ -71,7 +72,7 @@ export default {
                     },
                     {
                         name: "Duration:",
-                        value: event.duration,
+                        value: ms_to_string(event.duration),
                     },
                 ],
             };

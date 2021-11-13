@@ -1,6 +1,6 @@
 /* Types */
 import { GlobalContext, Callback } from "../ts/base";
-import { MemberWarnEventData } from "../ts/callbacks";
+import { MemberWarnAddEventData } from "../ts/callbacks";
 import { TextChannel } from "discord.js-light";
 
 /* Node Imports */
@@ -8,7 +8,7 @@ import { randomBytes } from "crypto";
 
 export default {
     hook(global_context: GlobalContext) {
-        global_context.bot.on("guildMemberWarn", async (event) => {
+        global_context.bot.on("guildMemberWarnAdd", async (event) => {
             try {
                 await this.process(global_context, event);
             } catch (e) {
@@ -20,7 +20,7 @@ export default {
         });
     },
 
-    async process(global_context: GlobalContext, event: MemberWarnEventData) {
+    async process(global_context: GlobalContext, event: MemberWarnAddEventData) {
         const guild_data = await global_context.neko_modules_clients.db.fetch_audit_guild(event.member.guild.id);
         if (guild_data === null) {
             return;
@@ -31,7 +31,7 @@ export default {
             id: randomBytes(16).toString("hex"),
             guild_ID: event.member.guild.id,
             user_ID: event.member.user.id,
-            start: Date.now(),
+            start: event.start,
             reason: event.reason,
         };
 

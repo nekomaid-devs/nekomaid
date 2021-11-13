@@ -2,24 +2,14 @@
 import { GuildMuteData } from "./base";
 import { GuildMember } from "discord.js-light";
 
-export type ClearWarnsEventData = {
+export type MemberMuteAddEventData = {
     member: GuildMember;
     moderator: GuildMember;
     reason: string | null;
 
-    num_of_warnings: number;
-};
-
-export type MemberMuteExtensionEventData = {
-    member: GuildMember;
-    moderator: GuildMember;
-    reason: string | null;
-
-    prev_duration: string;
-    next_duration: string;
-    mute_start: number;
-    time: number;
-    mute_end: number;
+    start: number;
+    duration: number;
+    end: number;
 };
 
 export type MemberMuteRemoveEventData = {
@@ -30,18 +20,16 @@ export type MemberMuteRemoveEventData = {
     previous_mute: GuildMuteData;
 };
 
-export type MemberMuteEventData = {
+export type MemberWarnAddEventData = {
     member: GuildMember;
     moderator: GuildMember;
     reason: string | null;
 
-    duration: string;
-    mute_start: number;
-    time: number;
-    mute_end: number;
+    start: number;
+    num_of_warnings: number;
 };
 
-export type MemberWarnEventData = {
+export type ClearWarnsEventData = {
     member: GuildMember;
     moderator: GuildMember;
     reason: string | null;

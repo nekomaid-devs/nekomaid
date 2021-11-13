@@ -20,3 +20,8 @@ export enum GuildFetchFlags {
     REACTION_ROLES = 2,
     RANKS = 4,
 }
+
+export enum UserFetchFlags {
+    INVENTORY = 1,
+    NOTIFICATIONS = 2,
+}

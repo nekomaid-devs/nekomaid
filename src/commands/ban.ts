@@ -5,7 +5,7 @@ import { Permissions } from "discord.js-light";
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
 import Permission from "../scripts/helpers/permission";
-import { convert_string_to_time_data, convert_time } from "../scripts/utils/util_time";
+import { convert_string_to_ms } from "../scripts/utils/util_time";
 
 export default {
     name: "ban",
@@ -24,37 +24,23 @@ export default {
         if (command_data.message.guild === null) {
             return;
         }
-        /*
-         * TODO: support swapping arguments (or improve the format)
-         * TODO: this should clear all messages from them aswell
-         */
-        const time = command_data.args.length < 2 ? undefined : command_data.args[1] === "-1" ? -1 : convert_string_to_time_data(command_data.args[1]);
-        if (time === undefined) {
-            command_data.message.reply("You entered invalid time format! (ex. `1d2h3m4s` or `-1`)");
-            return;
+        const time = command_data.args.length < 2 ? null : command_data.args[1].toLowerCase() === "forever" ? null : convert_string_to_ms(command_data.args[1]);
+        const time_text = time === null ? "Forever" : time;
+        let reason = "None";
+        if (command_data.args.length > 2) {
+            reason = command_data.message.content.substring(command_data.message.content.indexOf(command_data.args[2]));
         }
+
         if (command_data.tagged_member.bannable === false) {
             command_data.message.reply(`Couldn't ban \`${command_data.tagged_user.tag}\`. (Try moving Nekomaid's permissions above the user you want to ban)`);
             return;
         }
 
-        let ban_reason = "None";
-        if (command_data.args.length > 2) {
-            ban_reason = command_data.message.content.substring(command_data.message.content.indexOf(command_data.args[1]) + command_data.args[1].length + 1);
-        }
         const previous_ban = command_data.guild_bans.find((e) => {
             return e.user_ID === command_data.tagged_user.id;
         });
-
-        const ban_start = Date.now();
-        let ban_end = -1;
-        const extended_time = time === -1 ? -1 : time.days * 86400000 + time.hrs * 3600000 + time.mins * 60000 + time.secs * 1000;
-        const extended_time_text = time === -1 ? "Forever" : convert_time(extended_time);
-
         if (previous_ban === undefined) {
-            ban_end = ban_start + extended_time;
-            const ban_end_text = time === -1 ? "Forever" : convert_time(ban_end - ban_start);
-            command_data.message.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${extended_time_text}\`. (Time: \`${ban_end_text}\`)`).catch((e: Error) => {
+            command_data.message.channel.send(`Banned \`${command_data.tagged_user.tag}\` for \`${time_text}\`.`).catch((e: Error) => {
                 command_data.global_context.logger.api_error(e);
             });
         } else {
@@ -64,11 +50,11 @@ export default {
 
         command_data.global_context.data.last_moderation_actions.set(command_data.message.guild.id, {
             moderator: command_data.message.author.id,
-            duration: extended_time_text,
-            start: ban_start,
-            end: time === -1 ? -1 : ban_end,
-            reason: ban_reason,
+            duration: time_text,
+            start: Date.now(),
+            end: time === null ? null : Date.now() + time,
+            reason: reason,
         });
-        command_data.tagged_member.ban({ reason: ban_reason });
+        command_data.tagged_member.ban({ reason: reason });
     },
 } as Command;

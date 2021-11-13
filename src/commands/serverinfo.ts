@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     name: "serverinfo",
@@ -21,8 +21,8 @@ export default {
         if (command_data.message.guild === null) {
             return;
         }
-        const elapsed = new Date().getTime() - new Date(command_data.message.guild.createdAt.toUTCString()).getTime();
-        const createdAgo = convert_time(elapsed);
+        const elapsed = Date.now() - command_data.message.guild.createdAt.getTime();
+        const createdAgo = ms_to_string(elapsed);
 
         const url = command_data.message.guild.iconURL({ format: "png", dynamic: true, size: 1024 });
         if (url === null) {
@@ -39,11 +39,6 @@ export default {
                 {
                     name: "❯ Server ID",
                     value: `${command_data.message.guild.id}`,
-                    inline: true,
-                },
-                {
-                    name: "❯ Region",
-                    value: "xx",
                     inline: true,
                 },
                 {

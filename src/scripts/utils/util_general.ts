@@ -1,5 +1,5 @@
 /* Types */
-import { BotData, UserGuildData, MessageCreateGuildData } from "../../ts/base";
+import { BotData, UserGuildData, MessageCreateGuildData, UserData } from "../../ts/base";
 import { User } from "discord.js-light";
 
 export function pick_random(array: any[]) {
@@ -53,4 +53,8 @@ export function get_formatted_time() {
     const h = date.getHours();
     const m = date.getMinutes();
     return `${h < 10 ? `0${h.toString()}` : h.toString()}:${m < 10 ? `0${m.toString()}` : m.toString()}`;
+}
+
+export function get_user_bank_limit(user: UserData) {
+    return [0, 10000, 15000, 20000, 30000, 45000, 60000, 75000, 10000, 200000, 350000][user.b_bank];
 }

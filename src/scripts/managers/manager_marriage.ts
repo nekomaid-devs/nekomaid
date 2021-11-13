@@ -29,14 +29,14 @@ class MarriageManager {
     }
 
     async accept_marriage_proposal(global_context: GlobalContext, marriage_proposal: MarriageProposal, channel: TextChannel) {
-        const source_user_data = await global_context.neko_modules_clients.db.fetch_user(marriage_proposal.source_ID, false, false);
+        const source_user_data = await global_context.neko_modules_clients.db.fetch_user(marriage_proposal.source_ID, 0);
         if (source_user_data === null) {
             return;
         }
         source_user_data.married_ID = marriage_proposal.target_ID;
         global_context.neko_modules_clients.db.edit_user(source_user_data);
 
-        const target_user_data = await global_context.neko_modules_clients.db.fetch_user(marriage_proposal.target_ID, false, false);
+        const target_user_data = await global_context.neko_modules_clients.db.fetch_user(marriage_proposal.target_ID, 0);
         if (target_user_data === null) {
             return;
         }
@@ -53,10 +53,7 @@ class MarriageManager {
 
     add_marriage_proposal(global_context: GlobalContext, source_user: User, target_user: User, channel: TextChannel) {
         const marriage_proposal = this.marriage_proposals.get(target_user.id);
-        if (marriage_proposal === undefined) {
-            return;
-        }
-        if (marriage_proposal.source_ID === source_user.id) {
+        if (marriage_proposal !== undefined && marriage_proposal.source_ID === source_user.id) {
             channel.send("You've already proposed to this user.").catch((e: Error) => {
                 global_context.logger.api_error(e);
             });
@@ -81,7 +78,7 @@ class MarriageManager {
         this.marriage_proposals.set(target_user.id, new_marriage_proposal);
         this.timeout_marriage_proposal(global_context, new_marriage_proposal, channel);
 
-        return marriage_proposal;
+        return new_marriage_proposal;
     }
 
     timeout_marriage_proposal(global_context: GlobalContext, marriage_proposal: MarriageProposal, channel: TextChannel) {

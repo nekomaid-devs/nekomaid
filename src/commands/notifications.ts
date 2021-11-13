@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     name: "notifications",
@@ -28,7 +28,7 @@ export default {
             .slice(0, 10)
             .reduce((acc, curr) => {
                 const time_ago = Date.now() - curr.timestamp;
-                acc += `${curr.description.replace("<time_ago>", `**[${convert_time(time_ago)}]** - `)}\n`;
+                acc += `${curr.description.replace("<time_ago>", `**[${ms_to_string(time_ago)}]** - `)}\n`;
 
                 return acc;
             }, "");

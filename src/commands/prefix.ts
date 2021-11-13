@@ -34,7 +34,7 @@ export default {
                     },
                 ],
                 footer: {
-                    text: `to change the prefix type \`${command_data.guild_data.prefix}prefix <newPrefix>\`)`,
+                    text: `to change the prefix type ${command_data.guild_data.prefix}prefix <newPrefix>`,
                 },
             };
             command_data.message.channel.send({ embeds: [embedPrefix] }).catch((e: Error) => {

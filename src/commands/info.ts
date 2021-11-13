@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     name: "info",
@@ -60,7 +60,7 @@ export default {
         const m_i_2 = Math.floor(Math.log(manager_bytes2) / Math.log(k));
         const manager_memory_string_2 = `${parseFloat((manager_bytes2 / k ** m_i_2).toFixed(2))} ${sizes[m_i_2]}`;
 
-        const shard_elapsed_time = convert_time(Date.now() - command_data.global_context.data.uptime_start);
+        const shard_elapsed_time = ms_to_string(Date.now() - command_data.global_context.data.uptime_start);
 
         const shard_guilds = command_data.global_context.bot.guilds.cache.size;
         const manager_guilds = await command_data.global_context.bot.shard

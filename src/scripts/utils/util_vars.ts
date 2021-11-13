@@ -1,5 +1,5 @@
 /* Types */
-import { Command, CommandData, ItemData, ItemRarity } from "../../ts/base";
+import { Command, CommandData } from "../../ts/base";
 import { Message } from "discord.js-light";
 
 export function get_8ball_answers() {

@@ -9,7 +9,7 @@ import ytdl from "ytdl-core";
 import { randomBytes } from "crypto";
 
 /* Local Imports */
-import { convert_string_to_time_data, convert_time, convert_time_data_to_string } from "../utils/util_time";
+import { ms_to_string_yt } from "../utils/util_time";
 
 class VoiceManager {
     connections: Map<string, VoiceConnectionData>;
@@ -166,8 +166,7 @@ class VoiceManager {
             return;
         }
 
-        const current_length = convert_string_to_time_data(convert_time(request.item.duration));
-        if (current_length.hrs >= 3) {
+        if (request.item.duration >= 1000 * 60 * 60 * 3) {
             /*
              * const user_data = await global_context.neko_modules_clients.db.fetch_global_user(source_message.member.id, false, false);
              * if (user_data === null) {
@@ -210,7 +209,7 @@ class VoiceManager {
                         name: `🔊 Playing - ${request.item.title}`,
                     },
                     color: 8388736,
-                    description: `Length: \`${convert_time_data_to_string(current_length)}\`\nLink: ${request.item.url}\nAdded by: <@${request.user_ID}>`,
+                    description: `Length: \`${ms_to_string_yt(request.item.duration)}\`\nLink: ${request.item.url}\nAdded by: <@${request.user_ID}>`,
                     footer: {
                         text: `Currently ${voice_connection.queue.length} in queue`,
                     },
@@ -229,7 +228,7 @@ class VoiceManager {
                         name: `🔊 Added to queue - ${request.item.title}`,
                     },
                     color: 8388736,
-                    description: `Length: \`${convert_time_data_to_string(current_length)}\`\nLink: ${request.item.url}\nAdded by: <@${request.user_ID}>`,
+                    description: `Length: \`${ms_to_string_yt(request.item.duration)}\`\nLink: ${request.item.url}\nAdded by: <@${request.user_ID}>`,
                     footer: {
                         text: `Currently ${voice_connection.queue.length} in queue`,
                     },

@@ -6,7 +6,7 @@ import { randomBytes } from "crypto";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 
 export default {
     name: "rep",
@@ -39,7 +39,7 @@ export default {
         if (diff < 180) {
             const end_needed = new Date(start.getTime() + 3600000 * 3);
             const time_left = (end_needed.getTime() - end.getTime()) / command_data.bot_data.speed;
-            command_data.message.reply(`You need to wait more \`${convert_time(time_left)}\` before doing this.`);
+            command_data.message.reply(`You need to wait more \`${ms_to_string(time_left)}\` before doing this.`);
             return;
         }
 

@@ -6,12 +6,12 @@ import { randomBytes } from "crypto";
 
 /* Local Imports */
 import { pick_random, format_number } from "../../scripts/utils/util_general";
-import { ConfigFetchFlags } from "../../ts/mysql";
+import { ConfigFetchFlags, UserFetchFlags } from "../../ts/mysql";
 
 class BuildingManager {
     async update_all_buildings(global_context: GlobalContext) {
         let bot_data: Promise<BotData | null> | BotData | null = await global_context.neko_modules_clients.db.fetch_config("default_config", ConfigFetchFlags.ITEMS);
-        let all_users: Promise<UserData[]> | UserData[] = await global_context.neko_modules_clients.db.fetch_all_users_with_buildings(false, false);
+        let all_users: Promise<UserData[]> | UserData[] = await global_context.neko_modules_clients.db.fetch_all_users_with_buildings(UserFetchFlags.INVENTORY | UserFetchFlags.NOTIFICATIONS);
         bot_data = await bot_data;
         all_users = await all_users;
         if (bot_data === null) {

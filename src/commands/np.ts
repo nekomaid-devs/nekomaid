@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { convert_string_to_time_data, convert_time, convert_time_data_to_string, convert_time_inconsistent, sub_times } from "../scripts/utils/util_time";
+import { ms_to_string_yt } from "../scripts/utils/util_time";
 
 export default {
     name: "np",
@@ -28,22 +28,16 @@ export default {
             return;
         }
 
-        const currentLength = convert_time(connection.current.item.duration);
-        const descriptionText = `[${connection.current.item.title}](${connection.current.item.url}) *(${currentLength})*\n`;
-
-        let totalLength = convert_string_to_time_data(convert_time(connection.current.item.duration));
-        const elapsedLength = convert_string_to_time_data(convert_time(connection.elapsed_ms));
-        totalLength = sub_times(totalLength, elapsedLength);
-        totalLength = convert_time_inconsistent(totalLength);
-
+        const description_text = `[${connection.current.item.title}](${connection.current.item.url}) *(${ms_to_string_yt(connection.current.item.duration)})*\n`;
+        const total_length = connection.current.item.duration - connection.elapsed_ms;
         const embedNP = {
             color: 8388736,
             title: `Current playing for \`${command_data.message.guild.name}\``,
             footer: { text: "Nekomaid" },
             fields: [
-                { name: "Title", value: descriptionText },
+                { name: "Title", value: description_text },
                 { name: "Requested by", value: `<@${connection.current.user_ID}>` },
-                { name: "Remaining", value: `\`${convert_time_data_to_string(totalLength)}\`` },
+                { name: "Remaining", value: `\`${ms_to_string_yt(total_length)}\`` },
             ],
         };
         command_data.message.channel.send({ embeds: [embedNP] }).catch((e: Error) => {

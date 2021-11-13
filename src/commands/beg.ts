@@ -5,7 +5,7 @@ import { CommandData, Command } from "../ts/base";
 import { randomBytes } from "crypto";
 
 /* Local Imports */
-import { convert_time } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/util_time";
 import { pick_random, format_number } from "../scripts/utils/util_general";
 
 export default {
@@ -34,7 +34,7 @@ export default {
         if (diff < 60) {
             const end_needed = new Date(start.getTime() + 3600000 * 1);
             const time_left = (end_needed.getTime() - end.getTime()) / command_data.bot_data.speed;
-            command_data.message.reply(`You need to wait more \`${convert_time(time_left)}\` before doing this.`);
+            command_data.message.reply(`You need to wait more \`${ms_to_string(time_left)}\` before doing this.`);
             return;
         }
 
