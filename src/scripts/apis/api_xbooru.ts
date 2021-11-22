@@ -6,7 +6,7 @@ import { load } from "cheerio";
 import axios from "axios";
 
 /* Local Imports */
-import { pick_random } from "../../scripts/utils/util_general";
+import { pick_random } from "../utils/general";
 
 export async function xbooru_result(global_context: GlobalContext, args: string[]) {
     const site_url_main = `https://xbooru.com/index.php?page=post&s=list${args.length > 0 ? `&tags=${args.join("+")}` : ""}`;

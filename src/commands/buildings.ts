@@ -3,8 +3,8 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { get_building_price } from "../scripts/utils/util_vars";
-import { format_number } from "../scripts/utils/util_general";
+import { get_building_price } from "../scripts/utils/vars";
+import { format_number } from "../scripts/utils/general";
 
 export default {
     name: "buildings",

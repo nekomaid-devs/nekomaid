@@ -4,7 +4,7 @@ import { Permissions } from "discord.js-light";
 
 /* Local Imports */
 import Permission from "../scripts/helpers/permission";
-import { ms_to_string } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/time";
 
 export default {
     name: "bans",

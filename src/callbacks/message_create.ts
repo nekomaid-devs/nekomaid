@@ -5,10 +5,10 @@ import { Message, Permissions, TextChannel } from "discord.js-light";
 /* Node Imports */
 import * as Sentry from "@sentry/node";
 import { Transaction } from "@sentry/types";
-import { ms_to_string } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/time";
 
 /* Local Imports */
-import { pick_random } from "../scripts/utils/util_general";
+import { pick_random } from "../scripts/utils/general";
 import { ConfigFetchFlags, GuildFetchFlags, UserFetchFlags } from "../ts/mysql";
 
 export default {

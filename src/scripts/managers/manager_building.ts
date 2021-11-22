@@ -5,8 +5,9 @@ import { GlobalContext, UserData, ItemRarity, ShrineBonus, UserItemData, BotData
 import { randomBytes } from "crypto";
 
 /* Local Imports */
-import { pick_random, format_number } from "../../scripts/utils/util_general";
+import { pick_random, format_number } from "../utils/general";
 import { ConfigFetchFlags, UserFetchFlags } from "../../ts/mysql";
+import { get_time_difference } from "../utils/time";
 
 class BuildingManager {
     async update_all_buildings(global_context: GlobalContext) {
@@ -28,20 +29,15 @@ class BuildingManager {
             return;
         }
         const rarity_names: Record<string, string> = { common: "Common", uncommon: "Uncommon", rare: "Rare", legendary: "Legendary" };
-        const end = new Date();
-        let start = new Date();
         let diff;
 
-        start = new Date(user.b_lewd_services_last_update);
-        diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff * bot_data.speed));
-        if (user.b_lewd_services > 0 && diff >= 60) {
+        diff = get_time_difference(user.b_lewd_services_last_update, 60, bot_data.speed);
+        if (user.b_lewd_services > 0 && diff.diff >= 60) {
             let credits_amount = [0, 30, 35, 40, 50, 70, 100, 140, 200, 300, 500][user.b_lewd_services];
             credits_amount *= bot_data.shrine_bonus === ShrineBonus.HOURLY ? [1, 1, 1, 1, 1.01, 1.02, 1.03, 1.05, 1.05, 1.07, 1.1][bot_data.b_shrine] : 1;
             credits_amount = Math.round(credits_amount);
 
-            user.b_lewd_services_last_update = end.getTime();
+            user.b_lewd_services_last_update = Date.now();
             user.credits += credits_amount;
             global_context.neko_modules_clients.db.edit_user(user);
 
@@ -54,16 +50,13 @@ class BuildingManager {
             global_context.neko_modules_clients.db.add_notification(notification);
         }
 
-        start = new Date(user.b_casino_last_update);
-        diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff * bot_data.speed));
-        if (user.b_casino > 0 && diff >= 60) {
+        diff = get_time_difference(user.b_casino_last_update, 60, bot_data.speed);
+        if (user.b_casino > 0 && diff.diff >= 60) {
             let credits_amount = [0, 45, 50, 60, 90, 125, 160, 225, 275, 500, 750][user.b_casino];
             credits_amount *= bot_data.shrine_bonus === ShrineBonus.HOURLY ? [1, 1, 1, 1, 1.01, 1.02, 1.03, 1.05, 1.05, 1.07, 1.1][bot_data.b_shrine] : 1;
             credits_amount = Math.round(credits_amount);
 
-            user.b_casino_last_update = end.getTime();
+            user.b_casino_last_update = Date.now();
             user.credits += credits_amount;
             global_context.neko_modules_clients.db.edit_user(user);
 
@@ -76,12 +69,9 @@ class BuildingManager {
             global_context.neko_modules_clients.db.add_notification(notification);
         }
 
-        start = new Date(user.b_scrapyard_last_update);
-        diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff * bot_data.speed));
-        if (user.b_scrapyard > 0 && diff >= [0, 60 * 6, 60 * 4, 60 * 6, 60 * 4, 60 * 6, 60 * 4, 60 * 3, 60 * 3, 60 * 3, 60 * 3][user.b_scrapyard]) {
-            user.b_scrapyard_last_update = end.getTime();
+        diff = get_time_difference(user.b_scrapyard_last_update, 60, bot_data.speed);
+        if (user.b_scrapyard > 0 && diff.diff >= [0, 60 * 6, 60 * 4, 60 * 6, 60 * 4, 60 * 6, 60 * 4, 60 * 3, 60 * 3, 60 * 3, 60 * 3][user.b_scrapyard]) {
+            user.b_scrapyard_last_update = Date.now();
             global_context.neko_modules_clients.db.edit_user(user);
 
             let items = [];
@@ -115,10 +105,7 @@ class BuildingManager {
             global_context.neko_modules_clients.db.add_notification(notification);
         }
 
-        start = new Date(user.b_pawn_shop_last_update);
-        diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff * bot_data.speed));
+        diff = get_time_difference(user.b_pawn_shop_last_update, 60, bot_data.speed);
         if (user.b_pawn_shop > 0) {
             const l_items = user.inventory.filter((e: UserItemData) => {
                 if (bot_data.items === null) {
@@ -158,7 +145,7 @@ class BuildingManager {
             });
 
             if (user.b_pawn_shop >= 8 && l_items.length > 0) {
-                if (diff >= [0, 0, 0, 0, 0, 0, 0, 0, 60 * 6, 60 * 6, 60 * 6][user.b_pawn_shop]) {
+                if (diff.diff >= [0, 0, 0, 0, 0, 0, 0, 0, 60 * 6, 60 * 6, 60 * 6][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(l_items[0]), 1);
                     const sold_item = bot_data.items.find((i) => {
                         return i.id === sold_items[0].item_ID;
@@ -185,7 +172,7 @@ class BuildingManager {
                     global_context.neko_modules_clients.db.add_notification(notification);
                 }
             } else if (user.b_pawn_shop >= 4 && r_items.length > 0) {
-                if (diff >= [0, 0, 0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 3][user.b_pawn_shop]) {
+                if (diff.diff >= [0, 0, 0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 3][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(r_items[0]), 1);
                     const sold_item = bot_data.items.find((i) => {
                         return i.id === sold_items[0].item_ID;
@@ -212,7 +199,7 @@ class BuildingManager {
                     global_context.neko_modules_clients.db.add_notification(notification);
                 }
             } else if (user.b_pawn_shop >= 2 && u_items.length > 0) {
-                if (diff >= [0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 2][user.b_pawn_shop]) {
+                if (diff.diff >= [0, 0, 60 * 6, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 2][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(u_items[0]), 1);
                     const sold_item = bot_data.items.find((i) => {
                         return i.id === sold_items[0].item_ID;
@@ -239,7 +226,7 @@ class BuildingManager {
                     global_context.neko_modules_clients.db.add_notification(notification);
                 }
             } else if (c_items.length > 0) {
-                if (diff >= [0, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 1, 60 * 1, 60 * 1][user.b_pawn_shop]) {
+                if (diff.diff >= [0, 60 * 6, 60 * 4, 60 * 4, 60 * 3, 60 * 3, 60 * 2, 60 * 2, 60 * 1, 60 * 1, 60 * 1][user.b_pawn_shop]) {
                     const sold_items = user.inventory.splice(user.inventory.indexOf(c_items[0]), 1);
                     const sold_item = bot_data.items.find((i) => {
                         return i.id === sold_items[0].item_ID;

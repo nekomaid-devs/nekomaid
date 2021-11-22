@@ -4,7 +4,7 @@ import { Permissions } from "discord.js-light";
 
 /* Local Imports */
 import Permission from "../scripts/helpers/permission";
-import { pick_random } from "../scripts/utils/util_general";
+import { pick_random } from "../scripts/utils/general";
 
 export default {
     name: "someone",

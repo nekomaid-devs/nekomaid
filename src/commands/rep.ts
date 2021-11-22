@@ -6,7 +6,7 @@ import { randomBytes } from "crypto";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { ms_to_string } from "../scripts/utils/util_time";
+import { get_time_difference } from "../scripts/utils/time";
 
 export default {
     name: "rep",
@@ -30,20 +30,13 @@ export default {
             return;
         }
 
-        const end = new Date();
-        const start = new Date(command_data.user_data.last_rep_time);
-        let diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff * command_data.bot_data.speed));
-
-        if (diff < 180) {
-            const end_needed = new Date(start.getTime() + 3600000 * 3);
-            const time_left = (end_needed.getTime() - end.getTime()) / command_data.bot_data.speed;
-            command_data.message.reply(`You need to wait more \`${ms_to_string(time_left)}\` before doing this.`);
+        const diff = get_time_difference(command_data.user_data.last_rep_time, 60 * 3, command_data.bot_data.speed);
+        if (diff.diff < 60 * 3) {
+            command_data.message.reply(`You need to wait more \`${diff.left}\` before doing this.`);
             return;
         }
+        command_data.user_data.last_rep_time = Date.now();
 
-        command_data.user_data.last_rep_time = end.getTime();
         const notification = {
             id: randomBytes(16).toString("hex"),
             user_ID: command_data.message.author.id,

@@ -5,7 +5,7 @@ import { ShardClientUtil } from "discord.js-light";
 import * as Sentry from "@sentry/node";
 
 /* Local Imports */
-import { get_formatted_time } from "../utils/util_general";
+import { get_formatted_time } from "../utils/general";
 
 export default class Logger {
     colors: string[];

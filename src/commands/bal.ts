@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { format_number, get_user_bank_limit } from "../scripts/utils/util_general";
+import { format_number, get_user_bank_limit } from "../scripts/utils/general";
 
 export default {
     name: "bal",

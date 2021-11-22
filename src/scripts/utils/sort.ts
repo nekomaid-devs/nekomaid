@@ -3,7 +3,7 @@ import { GlobalContext, UserData, GuildData, UserGuildData } from "../../ts/base
 import { Guild } from "discord.js-light";
 
 /* Local Imports */
-import { get_guild_level_XP } from "../utils/util_general";
+import { get_guild_level_XP } from "./general";
 
 export function create_comparator(props: string[]) {
     return (a: any, b: any) => {

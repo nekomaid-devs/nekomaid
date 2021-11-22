@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { ms_to_string } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/time";
 
 export default {
     name: "osurecent",
@@ -54,11 +54,10 @@ export default {
             return;
         }
 
-        const start = new Date();
         let plays_description = "";
         for (let i = 0; i < 5; i += 1) {
             const play = recent[i];
-            const elapsed = start.getTime() - new Date(play.date).getTime();
+            const elapsed = Date.now() - new Date(play.date).getTime();
             const ago = ms_to_string(elapsed);
 
             let mods = "";

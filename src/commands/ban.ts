@@ -5,7 +5,7 @@ import { Permissions } from "discord.js-light";
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
 import Permission from "../scripts/helpers/permission";
-import { convert_string_to_ms } from "../scripts/utils/util_time";
+import { string_to_ms } from "../scripts/utils/time";
 
 export default {
     name: "ban",
@@ -24,7 +24,7 @@ export default {
         if (command_data.message.guild === null) {
             return;
         }
-        const time = command_data.args.length < 2 ? null : command_data.args[1].toLowerCase() === "forever" ? null : convert_string_to_ms(command_data.args[1]);
+        const time = command_data.args.length < 2 ? null : command_data.args[1].toLowerCase() === "forever" ? null : string_to_ms(command_data.args[1]);
         const time_text = time === null ? "Forever" : time;
         let reason = "None";
         if (command_data.args.length > 2) {

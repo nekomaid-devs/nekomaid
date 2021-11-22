@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { ms_to_string } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/time";
 
 export default {
     name: "notifications",

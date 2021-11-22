@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { format_number, get_level_XP, get_user_bank_limit } from "../scripts/utils/util_general";
+import { format_number, get_level_XP, get_user_bank_limit } from "../scripts/utils/general";
 
 export default {
     name: "profile",
@@ -38,18 +38,11 @@ export default {
             }
         }
 
-        const end = new Date();
-        const start = new Date(command_data.user_data.last_upvoted_time);
-        let diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff * command_data.bot_data.speed));
-        const premium_text = diff < 1440 ? " (Premium ⭐)" : "";
-
         const url = command_data.tagged_user.avatarURL({ format: "png", dynamic: true, size: 1024 });
         const embedProfile = {
             color: 8388736,
             author: {
-                name: `${command_data.tagged_user.tag}'s Profile ${premium_text}`,
+                name: `${command_data.tagged_user.tag}'s Profile ${command_data.user_data.premium ? "(Premium)" : ""}`,
                 icon_url: url === null ? undefined : url,
             },
             fields: [

@@ -3,8 +3,8 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { get_kill_gifs } from "../scripts/utils/util_vars";
-import { format_users, pick_random } from "../scripts/utils/util_general";
+import { get_kill_gifs } from "../scripts/utils/vars";
+import { format_users, pick_random } from "../scripts/utils/general";
 
 export default {
     name: "kill",

@@ -6,8 +6,8 @@ import { randomBytes } from "crypto";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { ms_to_string } from "../scripts/utils/util_time";
-import { format_number } from "../scripts/utils/util_general";
+import { get_time_difference } from "../scripts/utils/time";
+import { format_number } from "../scripts/utils/general";
 
 export default {
     name: "steal",
@@ -31,20 +31,12 @@ export default {
             return;
         }
 
-        const end = new Date();
-        const start = new Date(command_data.user_data.last_steal_time);
-        let diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff * command_data.bot_data.speed));
-
-        if (diff < 360) {
-            const end_needed = new Date(start.getTime() + 3600000 * 6);
-            const time_left = (end_needed.getTime() - end.getTime()) / command_data.bot_data.speed;
-            command_data.message.reply(`You need to wait more \`${ms_to_string(time_left)}\` before doing this.`);
+        const diff = get_time_difference(command_data.user_data.last_steal_time, 60 * 6, command_data.bot_data.speed);
+        if (diff.diff < 60 * 6) {
+            command_data.message.reply(`You need to wait more \`${diff.left}\` before doing this.`);
             return;
         }
-
-        command_data.user_data.last_steal_time = end.getTime();
+        command_data.user_data.last_steal_time = Date.now();
 
         const min_credits = 0;
         const max_credits = Math.round((command_data.tagged_user_data.credits / 100) * [7][0]);

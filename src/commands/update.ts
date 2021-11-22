@@ -3,7 +3,7 @@ import { CommandData, Command, ExtraPermission } from "../ts/base";
 
 /* Local Imports */
 import Permission from "../scripts/helpers/permission";
-import { refresh_bot_list, refresh_status } from "../scripts/utils/util_web";
+import { refresh_bot_list, refresh_status } from "../scripts/utils/web";
 
 export default {
     name: "update",

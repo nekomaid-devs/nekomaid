@@ -28,6 +28,7 @@ export function ms_to_string(time: number) {
 
     return time_string;
 }
+
 export function ms_to_string_yt(time: number) {
     let time_string = "";
     let time_left = time;
@@ -59,7 +60,7 @@ export function ms_to_string_yt(time: number) {
     return time_string;
 }
 
-export function convert_string_to_ms(time_string: string) {
+export function string_to_ms(time_string: string) {
     let prev = 0;
     const time_string_mod = time_string.replace(" ", "");
 
@@ -73,4 +74,14 @@ export function convert_string_to_ms(time_string: string) {
     prev = time_string_mod.indexOf("s", prev) === -1 ? prev : time_string_mod.indexOf("s", prev) + 1;
 
     return parseInt(days) * (1000 * 60 * 60 * 24) * parseInt(hrs) * (1000 * 60 * 60) * parseInt(mins) * (1000 * 60) * parseInt(secs) * 1000;
+}
+
+export function get_time_difference(timestamp: number, cooldown: number, speed: number) {
+    let diff = (Date.now() - timestamp) / (1000 * 60);
+    diff = Math.abs(Math.round(diff * speed));
+
+    const timestamp_end = Date.now() + 1000 * 60 * 60 * cooldown;
+    const time_left = ms_to_string((timestamp_end - Date.now()) / speed);
+
+    return { diff: diff, left: time_left };
 }

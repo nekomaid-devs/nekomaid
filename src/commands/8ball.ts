@@ -3,8 +3,8 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { get_8ball_answers } from "../scripts/utils/util_vars";
-import { pick_random } from "../scripts/utils/util_general";
+import { get_8ball_answers } from "../scripts/utils/vars";
+import { pick_random } from "../scripts/utils/general";
 
 export default {
     name: "8ball",

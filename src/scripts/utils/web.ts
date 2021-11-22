@@ -6,7 +6,7 @@ import { Client } from "discord.js-light";
 import axios from "axios";
 
 /* Local Imports */
-import { pick_random } from "../../scripts/utils/util_general";
+import { pick_random } from "./general";
 
 export async function refresh_status(global_context: GlobalContext) {
     if (global_context.data.shards_ready === false || global_context.bot.shard === null || global_context.bot.user === null) {

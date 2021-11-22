@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { get_buildings_guide_embed } from "../scripts/utils/util_vars";
+import { get_buildings_guide_embed } from "../scripts/utils/vars";
 
 export default {
     name: "buildingsguide",

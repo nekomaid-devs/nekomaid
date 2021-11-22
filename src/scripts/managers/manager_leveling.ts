@@ -4,7 +4,7 @@ import { GuildLevelingData, LevelingData } from "../../ts/leveling";
 import { Permissions, TextChannel } from "discord.js-light";
 
 /* Local Imports */
-import { get_guild_level_XP } from "../utils/util_general";
+import { get_guild_level_XP } from "../utils/general";
 
 class LevelingManager {
     async update_guild_level(leveling_data: GuildLevelingData) {

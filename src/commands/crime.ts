@@ -5,8 +5,8 @@ import { CommandData, Command, ShrineBonus } from "../ts/base";
 import { randomBytes } from "crypto";
 
 /* Local Imports */
-import { ms_to_string } from "../scripts/utils/util_time";
-import { pick_random, format_number } from "../scripts/utils/util_general";
+import { get_time_difference } from "../scripts/utils/time";
+import { pick_random, format_number } from "../scripts/utils/general";
 
 export default {
     name: "crime",
@@ -32,22 +32,12 @@ export default {
             return;
         }
 
-        const end = new Date();
-        const start = new Date(command_data.user_data.last_crime_time);
-        let diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff * command_data.bot_data.speed));
-
-        if (diff < 180) {
-            const end_needed = new Date(start.getTime() + 3600000 * 3);
-            const time_left = (end_needed.getTime() - end.getTime()) / command_data.bot_data.speed;
-            command_data.message.channel.send(`You need to wait more \`${ms_to_string(time_left)}\` before doing this.`).catch((e: Error) => {
-                command_data.global_context.logger.api_error(e);
-            });
+        const diff = get_time_difference(command_data.user_data.last_crime_time, 60 * 3, command_data.bot_data.speed);
+        if (diff.diff < 60 * 3) {
+            command_data.message.reply(`You need to wait more \`${diff.left}\` before doing this.`);
             return;
         }
-
-        command_data.user_data.last_crime_time = end.getTime();
+        command_data.user_data.last_crime_time = Date.now();
 
         const min_credits = [0, 250, 350, 400, 500, 550, 675, 700, 750, 950, 1100][command_data.user_data.b_crime_den];
         const max_credits = [0, 300, 375, 425, 550, 650, 700, 725, 850, 1000, 1250][command_data.user_data.b_crime_den];

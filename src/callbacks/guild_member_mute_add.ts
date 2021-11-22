@@ -5,7 +5,7 @@ import { TextChannel } from "discord.js-light";
 
 /* Node Imports */
 import { randomBytes } from "crypto";
-import { ms_to_string } from "../scripts/utils/util_time";
+import { ms_to_string } from "../scripts/utils/time";
 
 export default {
     hook(global_context: GlobalContext) {

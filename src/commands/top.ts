@@ -3,8 +3,8 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { get_top, get_top_guild } from "../scripts/utils/util_sort";
-import { format_number } from "../scripts/utils/util_general";
+import { get_top, get_top_guild } from "../scripts/utils/sort";
+import { format_number } from "../scripts/utils/general";
 
 export default {
     name: "top",

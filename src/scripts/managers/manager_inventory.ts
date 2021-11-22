@@ -2,7 +2,7 @@
 import { CommandData, ItemData } from "../../ts/base";
 
 /* Local Imports */
-import { pick_random, format_number } from "../utils/util_general";
+import { pick_random, format_number } from "../utils/general";
 
 class InventoryManager {
     use_item(command_data: CommandData, item: ItemData, target_indexes: number[]) {

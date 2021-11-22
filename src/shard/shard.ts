@@ -24,8 +24,8 @@ import UpvoteManager from "../scripts/managers/manager_upvote";
 import MarriageManager from "../scripts/managers/manager_marriage";
 import Database from "../scripts/db/db";
 import Logger from "../scripts/helpers/logger";
-import { get_top } from "../scripts/utils/util_sort";
-import { refresh_bot_list, refresh_status, refresh_website } from "../scripts/utils/util_web";
+import { get_top } from "../scripts/utils/sort";
+import { refresh_bot_list, refresh_status, refresh_website } from "../scripts/utils/web";
 
 async function run() {
     // Load config

@@ -30,7 +30,7 @@ export enum ShrineBonus {
 }
 
 export enum ExtraPermission {
-    BOT_OWNER,
+    BOT_OWNER = -1,
 }
 
 export enum ItemRarity {
@@ -297,6 +297,7 @@ export type UserData = {
     notifications: NotificationData[] | null;
     married_ID: string | null;
     can_divorce: boolean;
+    premium: boolean;
 
     last_work_time: number;
     last_crime_time: number;

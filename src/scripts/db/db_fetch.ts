@@ -5,8 +5,9 @@ import { GuildFetchFlags, ConfigFetchFlags, GuildFetchType, UserFetchFlags } fro
 import { Connection } from "mysql2/promise";
 
 /* Local Imports */
-import { fetch_data, fetch_multiple_data, guild_fetch_type_to_selector } from "../utils/util_mysql";
+import { fetch_data, fetch_multiple_data, guild_fetch_type_to_selector } from "../utils/mysql";
 import { _add_user, _add_guild, _add_guild_user } from "./db_add";
+import { get_time_difference } from "../utils/time";
 
 export async function _fetch_config(connection: Connection, id: string, flags: number) {
     return await fetch_data(
@@ -198,6 +199,9 @@ async function format_user(connection: Connection, item: any, flags: number) {
     if (flags & UserFetchFlags.NOTIFICATIONS) {
         item.notifications = await _fetch_notifications(connection, item.id);
     }
+
+    const diff = get_time_difference(item.last_upvoted_time, 60 * 24, 1);
+    item.premium = diff.diff < 60 * 24;
 
     return item;
 }

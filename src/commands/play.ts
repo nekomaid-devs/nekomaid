@@ -11,7 +11,7 @@ import ytdl from "ytdl-core";
 /* Local Imports */
 import Permission from "../scripts/helpers/permission";
 import Argument from "../scripts/helpers/argument";
-import { create_comparator } from "../scripts/utils/util_sort";
+import { create_comparator } from "../scripts/utils/sort";
 
 export default {
     name: "play",

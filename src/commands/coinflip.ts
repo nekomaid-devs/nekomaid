@@ -3,7 +3,7 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { pick_random, format_number } from "../scripts/utils/util_general";
+import { pick_random, format_number } from "../scripts/utils/general";
 
 export default {
     name: "coinflip",

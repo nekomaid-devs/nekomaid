@@ -7,7 +7,7 @@ import axios from "axios";
 
 /* Local Imports */
 import Permission from "../scripts/helpers/permission";
-import { shuffle_array, pick_random } from "../scripts/utils/util_general";
+import { shuffle_array, pick_random } from "../scripts/utils/general";
 
 async function play_next(command_data: CommandData, connection: any, game_data: any) {
     const all_options = command_data.global_context.data.openings;

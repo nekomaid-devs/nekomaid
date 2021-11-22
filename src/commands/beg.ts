@@ -5,8 +5,8 @@ import { CommandData, Command } from "../ts/base";
 import { randomBytes } from "crypto";
 
 /* Local Imports */
-import { ms_to_string } from "../scripts/utils/util_time";
-import { pick_random, format_number } from "../scripts/utils/util_general";
+import { get_time_difference } from "../scripts/utils/time";
+import { pick_random, format_number } from "../scripts/utils/general";
 
 export default {
     name: "beg",
@@ -25,20 +25,13 @@ export default {
         if (command_data.message.guild === null) {
             return;
         }
-        const end = new Date();
-        const start = new Date(command_data.user_data.last_beg_time);
-        let diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff * command_data.bot_data.speed));
 
-        if (diff < 60) {
-            const end_needed = new Date(start.getTime() + 3600000 * 1);
-            const time_left = (end_needed.getTime() - end.getTime()) / command_data.bot_data.speed;
-            command_data.message.reply(`You need to wait more \`${ms_to_string(time_left)}\` before doing this.`);
+        const diff = get_time_difference(command_data.user_data.last_beg_time, 60, command_data.bot_data.speed);
+        if (diff.diff < 60) {
+            command_data.message.reply(`You need to wait more \`${diff.left}\` before doing this.`);
             return;
         }
-
-        command_data.user_data.last_beg_time = end.getTime();
+        command_data.user_data.last_beg_time = Date.now();
 
         const min_credits = [50][0];
         const max_credits = [80][0];

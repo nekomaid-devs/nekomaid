@@ -6,7 +6,7 @@ import { loadFont, measureText, read } from "jimp";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { pick_random } from "../scripts/utils/util_general";
+import { pick_random } from "../scripts/utils/general";
 
 export default {
     name: "impostor",

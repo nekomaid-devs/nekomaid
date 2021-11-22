@@ -6,7 +6,7 @@ import { randomBytes } from "crypto";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { format_number } from "../scripts/utils/util_general";
+import { format_number } from "../scripts/utils/general";
 
 export default {
     name: "buy",

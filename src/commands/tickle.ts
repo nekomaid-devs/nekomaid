@@ -3,8 +3,8 @@ import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
 import Argument from "../scripts/helpers/argument";
-import { get_tickle_gifs } from "../scripts/utils/util_vars";
-import { pick_random } from "../scripts/utils/util_general";
+import { get_tickle_gifs } from "../scripts/utils/vars";
+import { pick_random } from "../scripts/utils/general";
 
 export default {
     name: "tickle",

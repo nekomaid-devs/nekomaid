@@ -2,8 +2,8 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { get_pout_gifs } from "../scripts/utils/util_vars";
-import { pick_random } from "../scripts/utils/util_general";
+import { get_pout_gifs } from "../scripts/utils/vars";
+import { pick_random } from "../scripts/utils/general";
 
 export default {
     name: "pout",

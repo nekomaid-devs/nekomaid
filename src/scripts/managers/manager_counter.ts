@@ -1,6 +1,8 @@
 /* Types */
 import { CounterData, GlobalContext } from "../../ts/base";
 import { VoiceChannel } from "discord.js-light";
+/* Local Imports */
+import { get_time_difference } from "../utils/time";
 
 class CounterManager {
     async update_all_counters(global_context: GlobalContext) {
@@ -15,14 +17,9 @@ class CounterManager {
             return;
         }
 
-        const end = new Date();
-        const start = new Date(counter.last_update);
-        let diff = (end.getTime() - start.getTime()) / 1000;
-        diff /= 60;
-        diff = Math.abs(Math.round(diff));
-
-        if (diff >= 5 || force_update === true) {
-            counter.last_update = end.getTime();
+        const diff = get_time_difference(counter.last_update, 5, 1);
+        if (diff.diff >= 5 || force_update === true) {
+            counter.last_update = Date.now();
 
             const guild = await global_context.bot.guilds.fetch(counter.guild_ID);
             const channel = await global_context.bot.channels.fetch(counter.channel_ID).catch((e: Error) => {

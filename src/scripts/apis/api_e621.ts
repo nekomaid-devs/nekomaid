@@ -5,7 +5,7 @@ import { GlobalContext } from "../../ts/base";
 import axios from "axios";
 
 /* Local Imports */
-import { pick_random } from "../../scripts/utils/util_general";
+import { pick_random } from "../utils/general";
 
 export async function e621_result(global_context: GlobalContext, args: string[]) {
     const site_url_pages = `https://e621.net/posts?tags=${args.length > 0 ? args.join("+") : ""}&limit=1`;

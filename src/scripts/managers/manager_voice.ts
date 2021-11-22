@@ -9,7 +9,7 @@ import ytdl from "ytdl-core";
 import { randomBytes } from "crypto";
 
 /* Local Imports */
-import { ms_to_string_yt } from "../utils/util_time";
+import { ms_to_string_yt } from "../utils/time";
 
 class VoiceManager {
     connections: Map<string, VoiceConnectionData>;

@@ -4,7 +4,7 @@ import { Permissions, TextChannel } from "discord.js-light";
 
 /* Local Imports */
 import Permission from "../scripts/helpers/permission";
-import { get_error_embed } from "../scripts/utils/util_vars";
+import { get_error_embed } from "../scripts/utils/vars";
 
 export default {
     name: "auditlog",

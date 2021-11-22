@@ -2,7 +2,7 @@
 import { CommandData, Command } from "../ts/base";
 
 /* Local Imports */
-import { shuffle_array } from "../scripts/utils/util_general";
+import { shuffle_array } from "../scripts/utils/general";
 
 export default {
     name: "shuffle",
