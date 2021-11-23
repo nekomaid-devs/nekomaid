@@ -29,7 +29,7 @@ import { refresh_bot_list, refresh_status, refresh_website } from "../scripts/ut
 
 async function run() {
     // Load config
-    const config: Config = JSON.parse(readFileSync(`${process.cwd()}/configs/default.json`).toString());
+    const config: Config = JSON.parse(readFileSync(`${process.cwd()}/configs/root.json`).toString());
 
     // Setup SQL connection
     const sql_connection = sql
@@ -127,7 +127,7 @@ async function run() {
             user_cooldowns: new Map(),
             economy_list: [],
             last_moderation_actions: new Map(),
-            openings: JSON.parse(readFileSync(`${process.cwd()}/configs/data/openings.json`).toString()),
+            openings: JSON.parse(readFileSync(`${process.cwd()}/.docker/extra/data/openings.json`).toString()),
             default_headers: {
                 "Content-Type": "application/json",
                 Authorization: config.nekomaid_API_key,

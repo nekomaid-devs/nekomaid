@@ -1,0 +1,37 @@
+{
+	"token": "xxx",
+	"shard_count": 1,
+	"dev_mode": false,
+
+	"sql_host": "nekomaid-mysql",
+	"sql_user": "root",
+	"sql_password": "root",
+	"sql_database": "nekomaid-db",
+
+	"nekomaid_vote_keys": ["xxx"],
+
+	"nekomaid_API_update_bot_lists": false,
+	"discord_bot_list_API_key": "xxx",
+	"discord_bots_API_key": "xxx",
+	"discord_boats_API_key": "xxx",
+	"bots_for_discord_API_key": "xxx",
+	"top_gg_API_key": "xxx",
+
+	"osu_enabled": false,
+	"osu_API_key": "xxx",
+
+	"nekomaid_API_update_stats": false,
+	"nekomaid_API_key": "xxx",
+	"nekomaid_API_endpoint": "xxx",
+
+	"event_enabled": false,
+	"events_channel_ID": "xxx",
+
+	"invite_code": "xxx",
+	"owner_id": "xxx",
+
+	"sentry_enabled": false,
+	"sentry_dns": "xxx",
+	
+	"version": "2.0.0"
+}

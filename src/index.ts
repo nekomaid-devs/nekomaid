@@ -14,7 +14,7 @@ const get_formatted_time = () => {
 };
 
 // Load default config
-const config = JSON.parse(readFileSync(`${process.cwd()}/configs/default.json`).toString());
+const config = JSON.parse(readFileSync(`${process.cwd()}/configs/root.json`).toString());
 
 // Create log colors
 const log_color_shard = "\x1b[94m";

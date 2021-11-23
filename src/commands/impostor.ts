@@ -27,8 +27,8 @@ export default {
         }
         // TODO: make impostors change colors
         const impostor = pick_random([true, false]);
-        read(impostor ? "./configs/data/among_us_impostor.png" : "./configs/data/among_us_impostor_not.png").then((image) => {
-            loadFont("./configs/data/among_us_font.fnt").then(async (font) => {
+        read(impostor ? "./.docker/extra/data/among_us_impostor.png" : "./.docker/extra/data/among_us_impostor_not.png").then((image) => {
+            loadFont("./.docker/extra/data/among_us_font.fnt").then(async (font) => {
                 image.print(font, 325 - measureText(font, command_data.tagged_user.username), 157, command_data.tagged_user.username);
 
                 const embedImage = {
