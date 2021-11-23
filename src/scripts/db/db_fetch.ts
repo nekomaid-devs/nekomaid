@@ -207,9 +207,9 @@ async function format_user(connection: Connection, item: any, flags: number) {
 }
 
 export async function _fetch_inventory_items(connection: Connection, user_ID: string) {
-    return await fetch_multiple_data(connection, "SELECT FROM inventory_items WHERE user_ID=?", [user_ID], null);
+    return await fetch_multiple_data(connection, "SELECT * FROM inventory_items WHERE user_ID=?", [user_ID], null);
 }
 
 export async function _fetch_notifications(connection: Connection, user_ID: string) {
-    return await fetch_multiple_data(connection, "SELECT FROM notifications WHERE user_ID=?", [user_ID], null);
+    return await fetch_multiple_data(connection, "SELECT * FROM notifications WHERE user_ID=?", [user_ID], null);
 }
